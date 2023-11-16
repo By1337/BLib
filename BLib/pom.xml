@@ -6,10 +6,12 @@
 
     <groupId>org.by1337</groupId>
     <artifactId>BLib</artifactId>
-    <version>1.0</version>
+    <!--  for release MAJOR.MINOR.PATCH -->
+    <!--  for beta MAJOR.MINOR.PATCH-<alpha/beta/stable/pre-release>-<build> -->
+    <version>1.0.0-b1</version>
     <packaging>jar</packaging>
 
-    <name>Lib</name>
+    <name>BLib</name>
 
     <properties>
         <java.version>1.8</java.version>

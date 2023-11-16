@@ -21,7 +21,6 @@ import java.util.logging.Level;
 public class BLib extends JavaPlugin {
     @Getter
     private static Plugin instance;
-
     private Config config;
 
     public static final boolean DEBUG = false;

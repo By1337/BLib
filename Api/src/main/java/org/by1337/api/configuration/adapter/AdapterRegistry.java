@@ -46,6 +46,18 @@ public class AdapterRegistry {
         }
         adapters.put(adapterClass, adapter);
     }
+    /**
+     * Unregisters an adapter from the registry based on its class.
+     *
+     * @param adapterClass The class of the adapter to be unregistered.
+     * @throws AdapterNotFoundException If the adapter with the specified class is not found in the registry.
+     */
+    public static <T> void unregisterAdapter(Class<T> adapterClass) throws AdapterNotFoundException {
+        if (!hasAdapter(adapterClass)) {
+            throw new AdapterNotFoundException("Adapter with class " + adapterClass.getName() + " not found in the registry.");
+        }
+        adapters.remove(adapterClass);
+    }
 
     /**
      * Registers a new primitive adapter in the registry.
@@ -59,6 +71,19 @@ public class AdapterRegistry {
             throw new AdapterAlreadyExistsException("Adapter with class " + adapterClass.getName() + " already exists in the registry.");
         }
         primitiveAdapters.put(adapterClass, adapter);
+    }
+
+    /**
+     * Unregisters a primitive adapter from the registry based on its class.
+     *
+     * @param adapterClass The class of the primitive adapter to be unregistered.
+     * @throws AdapterNotFoundException If the primitive adapter with the specified class is not found in the registry.
+     */
+    public static <T> void unregisterPrimitiveAdapter(Class<T> adapterClass) throws AdapterNotFoundException {
+        if (!hasPrimitiveAdapter(adapterClass)) {
+            throw new AdapterNotFoundException("Primitive adapter with class " + adapterClass.getName() + " not found in the registry.");
+        }
+        primitiveAdapters.remove(adapterClass);
     }
 
     /**
@@ -172,10 +197,30 @@ public class AdapterRegistry {
      * Custom exception class for cases where an adapter with the same class already exists in the registry.
      */
     public static class AdapterAlreadyExistsException extends IllegalArgumentException {
+        /**
+         * Constructs an AdapterAlreadyExistsException with the specified detail message.
+         *
+         * @param message The detail message explaining the reason for the exception.
+         */
         public AdapterAlreadyExistsException(String message) {
             super(message);
         }
     }
+
+    /**
+     * Custom exception class for cases where an adapter with the specified class is not found in the registry.
+     */
+    public static class AdapterNotFoundException extends IllegalArgumentException {
+        /**
+         * Constructs an AdapterNotFoundException with the specified detail message.
+         *
+         * @param message The detail message explaining the reason for the exception.
+         */
+        public AdapterNotFoundException(String message) {
+            super(message);
+        }
+    }
+
 
     static {
         adapters = new HashMap<>();
@@ -201,7 +246,6 @@ public class AdapterRegistry {
         registerPrimitiveAdapter(Particle.class, new AdapterEnum<>(Particle.class));
 
         registerAdapter(ItemStack.class, new AdapterItemStack());
-
 
         registerAdapter(BLocation.class, new AdapterBLocation());
         registerAdapter(Vector.class, new AdapterVector());
