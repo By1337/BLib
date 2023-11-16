@@ -12,7 +12,7 @@
     <name>V1_19_1</name>
 
     <properties>
-        <java.version>1.8</java.version>
+        <java.version>16</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <server.version>1.19.1-R0.1-SNAPSHOT</server.version>
     </properties>

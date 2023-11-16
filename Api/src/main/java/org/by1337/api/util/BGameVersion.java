@@ -26,7 +26,9 @@ public class BGameVersion implements GameVersion {
     public BGameVersion(JsonObject jsonObject) {
         this.id = jsonObject.get("id").getAsString();
         this.name = jsonObject.get("name").getAsString();
-        this.releaseTarget = jsonObject.get("release_target").getAsString();
+        if (jsonObject.has("release_target"))
+            this.releaseTarget = jsonObject.get("release_target").getAsString();
+        else releaseTarget = null;
         this.stable = jsonObject.get("stable").getAsBoolean();
         this.worldVersion = jsonObject.get("world_version").getAsInt();
         this.protocolVersion = jsonObject.get("protocol_version").getAsInt();
