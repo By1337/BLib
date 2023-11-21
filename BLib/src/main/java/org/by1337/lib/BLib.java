@@ -4,6 +4,7 @@ import lombok.Getter;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.by1337.api.command.argument.ArgumentBoolean;
 import org.by1337.api.util.Version;
 import org.by1337.api.command.Command;
 import org.by1337.api.command.CommandException;
@@ -23,7 +24,7 @@ public class BLib extends JavaPlugin {
     private static Plugin instance;
     private Config config;
 
-    public static final boolean DEBUG = false;
+    public static boolean DEBUG = false;
 
     @Override
     public void onLoad() {
@@ -78,7 +79,7 @@ public class BLib extends JavaPlugin {
                 .addSubCommand(new Command("language")
                         .aliases("lang")
                         .requires(new RequiresPermission("blib.lang"))
-                        .argument(new ArgumentSetList("language", () -> Lang.LANGUAGES))
+                        .argument(new ArgumentSetList("language", Lang.LANGUAGES))
                         .executor(((sender, args) -> {
                             String lang = (String) args.getOrThrow("language", Lang.getMessage("missing-argument"), "language");
                             Lang.loadTranslations(lang);
@@ -86,16 +87,24 @@ public class BLib extends JavaPlugin {
                             config.save();
                             sender.sendMessage(Lang.getMessage("language-changed"));
                         }))
-                );
+                )
+                .addSubCommand(new Command("enableDebug")
+                        .requires(new RequiresPermission("blib.debug"))
+                        .argument(new ArgumentBoolean("enable"))
+                        .executor(((sender, args) -> {
+                            DEBUG = (boolean) args.getOrDefault("enable", !DEBUG);
+                        }))
+                )
+        ;
 
-        if (DEBUG) {
-            command.addSubCommand(new Command("test")
-                    .requires(new RequiresPermission("blib.tests"))
-                    .addSubCommand(CommandTests.packetArmorStandTest())
-                    .addSubCommand(CommandTests.sysInfo())
-                    .addSubCommand(CommandTests.msgTest())
-                    .addSubCommand(CommandTests.sleep())
-            );
-        }
+        command.addSubCommand(new Command("test")
+                .requires((pl) -> DEBUG)
+                .requires(new RequiresPermission("blib.tests"))
+                .addSubCommand(CommandTests.packetArmorStandTest())
+                .addSubCommand(CommandTests.sysInfo())
+                .addSubCommand(CommandTests.msgTest())
+                .addSubCommand(CommandTests.sleep())
+        );
+
     }
 }

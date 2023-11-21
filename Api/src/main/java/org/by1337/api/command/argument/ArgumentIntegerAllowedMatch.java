@@ -50,6 +50,7 @@ public class ArgumentIntegerAllowedMatch extends ArgumentInteger {
 
     @Override
     public List<String> tabCompleter(CommandSender sender, String str) throws CommandSyntaxError {
+        if (str.isEmpty()) return getExx();
         try {
             String str1 = BMatch.match(String.format("match[%s]", str));
             super.process(sender, str1);

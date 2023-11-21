@@ -61,6 +61,12 @@ public class ArgumentInteger extends Argument {
         this.max = max;
     }
 
+    @Override
+    public List<String> tabCompleter(CommandSender sender, String str) throws CommandSyntaxError {
+        if (str.isEmpty()) return super.getExx();
+        return super.tabCompleter(sender, str);
+    }
+
     /**
      * Processes the input string and returns an Integer representing the argument value within specified bounds.
      *
