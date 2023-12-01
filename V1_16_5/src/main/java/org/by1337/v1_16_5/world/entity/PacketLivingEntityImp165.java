@@ -161,5 +161,26 @@ public abstract class PacketLivingEntityImp165 extends PacketEntityImpl165 imple
         } catch (IllegalAccessException | NoSuchFieldException var1) {
             throw new RuntimeException(var1);
         }
+
+
+//        DATA_LIVING_ENTITY_FLAGS = new DataWatcherObject<>(7, DataWatcherRegistry.a);
+//        DATA_HEALTH_ID = new DataWatcherObject<>(8, DataWatcherRegistry.c);
+//        DATA_EFFECT_COLOR_ID = new DataWatcherObject<>(9, DataWatcherRegistry.b);
+//        DATA_EFFECT_AMBIENCE_ID = new DataWatcherObject<>(10, DataWatcherRegistry.i);
+//        DATA_ARROW_COUNT_ID = new DataWatcherObject<>(11, DataWatcherRegistry.b);
+//        DATA_STINGER_COUNT_ID = new DataWatcherObject<>(12, DataWatcherRegistry.b);
+//        SLEEPING_POS_ID = new DataWatcherObject<>(13, DataWatcherRegistry.m);
+
+
+        System.out.println(PacketLivingEntityImp165.class.getName() + " ============== ");
+
+        System.out.println("DATA_LIVING_ENTITY_FLAGS = " + DATA_LIVING_ENTITY_FLAGS.a());
+        System.out.println("DATA_HEALTH_ID = " + DATA_HEALTH_ID.a());
+        System.out.println("DATA_EFFECT_COLOR_ID = " + DATA_EFFECT_COLOR_ID.a());
+        System.out.println("DATA_EFFECT_AMBIENCE_ID = " + DATA_EFFECT_AMBIENCE_ID.a());
+        System.out.println("DATA_ARROW_COUNT_ID = " + DATA_ARROW_COUNT_ID.a());
+        System.out.println("DATA_STINGER_COUNT_ID = " + DATA_STINGER_COUNT_ID.a());
+        System.out.println("SLEEPING_POS_ID = " + SLEEPING_POS_ID.a());
+
     }
 }

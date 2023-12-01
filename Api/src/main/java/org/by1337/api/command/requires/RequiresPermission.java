@@ -7,7 +7,7 @@ import org.bukkit.command.CommandSender;
  * A command requirement that checks if a sender has a specific permission.
  */
 @ToString
-public class RequiresPermission implements Requires {
+public class RequiresPermission<T extends CommandSender> implements Requires<T> {
     private String permission;
 
     /**
@@ -26,7 +26,7 @@ public class RequiresPermission implements Requires {
      * @return `true` if the sender has the permission, otherwise `false`.
      */
     @Override
-    public boolean check(CommandSender sender) {
+    public boolean check(T sender) {
         return sender.hasPermission(permission);
     }
 }

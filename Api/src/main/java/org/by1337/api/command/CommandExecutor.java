@@ -7,7 +7,7 @@ import org.by1337.api.command.argument.ArgumentMap;
  * Functional interface for executing a command.
  */
 @FunctionalInterface
-public interface CommandExecutor {
+public interface CommandExecutor<T> {
 
     /**
      * Executes a command with the provided sender and arguments.
@@ -16,5 +16,5 @@ public interface CommandExecutor {
      * @param args   The map of command arguments.
      * @throws CommandSyntaxError If there's a syntax error in the command execution.
      */
-    void executes(CommandSender sender, ArgumentMap<String, Object> args) throws CommandException;
+    void executes(T sender, ArgumentMap<String, Object> args) throws CommandException;
 }

@@ -11,7 +11,7 @@ import java.util.function.Supplier;
 /**
  * Represents an argument that accepts values from a predefined set of options.
  */
-public class ArgumentSetList extends Argument {
+public class ArgumentSetList<T> extends Argument<T> {
     public final Supplier<List<String>> items;
 
     /**
@@ -55,7 +55,7 @@ public class ArgumentSetList extends Argument {
      * @throws CommandSyntaxError If the input string is not a valid option.
      */
     @Override
-    public Object process(CommandSender sender, String str) throws CommandSyntaxError {
+    public Object process(T sender, String str) throws CommandSyntaxError {
         if (str.isEmpty()) return null;
         List<String> list = items.get();
         if (!list.contains(str)) {

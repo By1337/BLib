@@ -1,6 +1,7 @@
 package org.by1337.lib.test;
 
 import org.bukkit.Bukkit;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 import org.by1337.api.BLib;
@@ -20,16 +21,16 @@ import java.util.List;
 
 public class CommandTests {
 
-    public static Command msgTest() {
-        return new Command("msg")
-                .argument(new ArgumentStrings("name"))
+    public static Command<CommandSender> msgTest() {
+        return new Command<CommandSender>("msg")
+                .argument(new ArgumentStrings<>("name"))
                 .executor(((sender, args) -> {
                    BLib.getApi().getMessage().sendMsg(sender, (String) args.getOrDefault("name", "123"));
                 }));
     }
-    public static Command packetArmorStandTest() {
-        return new Command("armor_stand_spawn_test")
-                .argument(new ArgumentStrings("name"))
+    public static Command<CommandSender> packetArmorStandTest() {
+        return new Command<CommandSender>("armor_stand_spawn_test")
+                .argument(new ArgumentStrings<>("name"))
                 .executor(((sender, args) -> {
                     if (!(sender instanceof Player player)) throw new CommandException("only for players!");
                     PacketArmorStand armorStand = BLib.createPacketEntity(new BLocation(player.getLocation()), PacketArmorStand.class);
@@ -52,8 +53,8 @@ public class CommandTests {
                     packet1.send(player);
                 }));
     }
-    public static Command sysInfo() {
-        return new Command("sys_info")
+    public static Command<CommandSender> sysInfo() {
+        return new Command<CommandSender>("sys_info")
                 .executor(((sender, args) -> {
                     sender.sendMessage(
                             "§fVersion info: Bukkit.getVersion()='§7" + Bukkit.getVersion() +
@@ -67,9 +68,9 @@ public class CommandTests {
                     sender.sendMessage("gameVersion='§7" + Version.getGameVersion() + "'");
                 }));
     }
-    public static Command sleep() {
-        return new Command("sleep")
-                .argument(new ArgumentInteger("time", 0, 10000))
+    public static Command<CommandSender> sleep() {
+        return new Command<CommandSender>("sleep")
+                .argument(new ArgumentInteger<>("time", 0, 10000))
                 .executor(((sender, args) -> {
                     int time = (int) args.get("time");
                     try {

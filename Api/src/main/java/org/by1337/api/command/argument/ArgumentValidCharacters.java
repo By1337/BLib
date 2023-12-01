@@ -11,7 +11,7 @@ import java.util.function.Supplier;
 /**
  * Represents an argument that validates input strings for valid characters.
  */
-public class ArgumentValidCharacters extends Argument {
+public class ArgumentValidCharacters<T> extends Argument<T> {
     /**
      * Constructs an ArgumentValidCharacters with the specified name.
      *
@@ -44,7 +44,7 @@ public class ArgumentValidCharacters extends Argument {
      * @throws CommandSyntaxError If the input string contains invalid characters.
      */
     @Override
-    public Object process(CommandSender sender, String str) throws CommandSyntaxError {
+    public Object process(T sender, String str) throws CommandSyntaxError {
         String invalidChars = InvalidCharacters.getInvalidCharacters(str);
         if (!invalidChars.isEmpty())
             throw new CommandSyntaxError(Lang.getMessage("invalid-characters"), invalidChars);

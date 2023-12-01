@@ -11,7 +11,7 @@ import java.util.stream.Collectors;
 /**
  * Represents an argument that accepts a valid world name as input.
  */
-public class ArgumentWorld extends ArgumentSetList {
+public class ArgumentWorld<T> extends ArgumentSetList<T> {
     /**
      * Constructs an ArgumentWorld with the specified name, using available world names as options.
      *
@@ -40,7 +40,7 @@ public class ArgumentWorld extends ArgumentSetList {
      * @throws CommandSyntaxError If the input string is not a valid world name.
      */
     @Override
-    public Object process(CommandSender sender, String str) throws CommandSyntaxError {
+    public Object process(T sender, String str) throws CommandSyntaxError {
         if (str.isEmpty()) return null;
         return Bukkit.getWorld(str);
     }

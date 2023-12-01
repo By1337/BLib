@@ -1,9 +1,6 @@
 package org.by1337.v1_16_5.world.entity;
 
-import net.minecraft.server.v1_16_R3.DataWatcherObject;
-import net.minecraft.server.v1_16_R3.EntityArmorStand;
-import net.minecraft.server.v1_16_R3.EntityTypes;
-import net.minecraft.server.v1_16_R3.Vector3f;
+import net.minecraft.server.v1_16_R3.*;
 import org.by1337.api.world.BLocation;
 import org.by1337.api.world.entity.PacketArmorStand;
 
@@ -34,6 +31,26 @@ public class PacketArmorStandImp165 extends PacketLivingEntityImp165 implements 
         DATA_RIGHT_ARM_POSE = EntityArmorStand.f;
         DATA_LEFT_LEG_POSE = EntityArmorStand.g;
         DATA_RIGHT_LEG_POSE = EntityArmorStand.bh;
+
+
+
+//        DATA_CLIENT_FLAGS = new DataWatcherObject<>(14, DataWatcherRegistry.a);
+//        DATA_HEAD_POSE = new DataWatcherObject<>(15, DataWatcherRegistry.k);
+//        DATA_BODY_POSE = new DataWatcherObject<>(16, DataWatcherRegistry.k);
+//        DATA_LEFT_ARM_POSE = new DataWatcherObject<>(17, DataWatcherRegistry.k);
+//        DATA_RIGHT_ARM_POSE = new DataWatcherObject<>(18, DataWatcherRegistry.k);
+//        DATA_LEFT_LEG_POSE = new DataWatcherObject<>(19, DataWatcherRegistry.k);
+//        DATA_RIGHT_LEG_POSE = new DataWatcherObject<>(20, DataWatcherRegistry.k);
+
+        System.out.println(PacketArmorStandImp165.class.getName() + " ============== ");
+
+        System.out.println("DATA_CLIENT_FLAGS = " + DATA_CLIENT_FLAGS.a());
+        System.out.println("DATA_HEAD_POSE = " + DATA_HEAD_POSE.a());
+        System.out.println("DATA_BODY_POSE = " + DATA_BODY_POSE.a());
+        System.out.println("DATA_LEFT_ARM_POSE = " + DATA_LEFT_ARM_POSE.a());
+        System.out.println("DATA_RIGHT_ARM_POSE = " + DATA_RIGHT_ARM_POSE.a());
+        System.out.println("DATA_LEFT_LEG_POSE = " + DATA_LEFT_LEG_POSE.a());
+        System.out.println("DATA_RIGHT_LEG_POSE = " + DATA_RIGHT_LEG_POSE.a());
     }
 
     @Override

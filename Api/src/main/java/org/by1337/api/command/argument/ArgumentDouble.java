@@ -7,7 +7,7 @@ import org.by1337.api.lang.Lang;
 import java.util.List;
 import java.util.function.Supplier;
 
-public class ArgumentDouble extends Argument {
+public class ArgumentDouble<T> extends Argument<T> {
     private double min = Double.MIN_VALUE;
     private double max = Double.MAX_VALUE;
 
@@ -61,7 +61,7 @@ public class ArgumentDouble extends Argument {
 
 
     @Override
-    public Object process(CommandSender sender, String str) throws CommandSyntaxError {
+    public Object process(T sender, String str) throws CommandSyntaxError {
         if (str.isEmpty()) return 0;
         try {
             double val = Double.parseDouble(str);

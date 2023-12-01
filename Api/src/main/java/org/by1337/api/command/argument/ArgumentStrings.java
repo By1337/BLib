@@ -6,7 +6,7 @@ import org.by1337.api.command.CommandSyntaxError;
 import java.util.List;
 import java.util.function.Supplier;
 
-public class ArgumentStrings extends Argument {
+public class ArgumentStrings<T> extends Argument<T> {
     public ArgumentStrings(String name) {
         super(name);
     }
@@ -20,7 +20,7 @@ public class ArgumentStrings extends Argument {
     }
 
     @Override
-    public Object process(CommandSender sender, String str) throws CommandSyntaxError {
+    public Object process(T sender, String str) throws CommandSyntaxError {
         return str;
     }
 }

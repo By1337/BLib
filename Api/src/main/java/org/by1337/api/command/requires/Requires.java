@@ -6,7 +6,7 @@ import org.bukkit.command.CommandSender;
  * Functional interface for checking command requirements.
  */
 @FunctionalInterface
-public interface Requires {
+public interface Requires<T> {
 
     /**
      * Checks whether a specific requirement is met by the command sender.
@@ -14,5 +14,5 @@ public interface Requires {
      * @param sender The sender of the command.
      * @return `true` if the requirement is met, otherwise `false`.
      */
-    boolean check(CommandSender sender);
+    boolean check(T sender);
 }

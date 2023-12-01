@@ -7,7 +7,7 @@ import org.by1337.api.lang.Lang;
 import java.util.List;
 import java.util.function.Supplier;
 
-public class ArgumentFloat extends Argument{
+public class ArgumentFloat<T> extends Argument<T> {
     private float min = Float.MIN_VALUE;
     private float max = Float.MAX_VALUE;
 
@@ -60,7 +60,7 @@ public class ArgumentFloat extends Argument{
     }
 
     @Override
-    public Object process(CommandSender sender, String str) throws CommandSyntaxError {
+    public Object process(T sender, String str) throws CommandSyntaxError {
         if (str.isEmpty()) return 0;
         try {
             float val = Float.parseFloat(str);

@@ -10,7 +10,7 @@ import java.util.function.Supplier;
 /**
  * Represents an integer argument for a command.
  */
-public class ArgumentInteger extends Argument {
+public class ArgumentInteger<T> extends Argument<T> {
     private int min = Integer.MIN_VALUE;
     private int max = Integer.MAX_VALUE;
 
@@ -62,7 +62,7 @@ public class ArgumentInteger extends Argument {
     }
 
     @Override
-    public List<String> tabCompleter(CommandSender sender, String str) throws CommandSyntaxError {
+    public List<String> tabCompleter(T sender, String str) throws CommandSyntaxError {
         if (str.isEmpty()) return super.getExx();
         return super.tabCompleter(sender, str);
     }
@@ -76,7 +76,7 @@ public class ArgumentInteger extends Argument {
      * @throws CommandSyntaxError If there's a syntax error in the argument processing or the value is out of bounds.
      */
     @Override
-    public Object process(CommandSender sender, String str) throws CommandSyntaxError {
+    public Object process(T sender, String str) throws CommandSyntaxError {
         if (str.isEmpty()) return 0;
         try {
             int val = Integer.parseInt(str);

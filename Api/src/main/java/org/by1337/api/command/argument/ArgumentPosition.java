@@ -10,7 +10,7 @@ import java.util.function.Supplier;
 /**
  * Represents a position argument for a command, which can be a numeric value or a relative position indicator.
  */
-public class ArgumentPosition extends Argument {
+public class ArgumentPosition<T extends CommandSender> extends Argument<T> {
     protected final ArgumentPositionType type;
 
     /**
@@ -50,7 +50,7 @@ public class ArgumentPosition extends Argument {
      * @throws CommandSyntaxError If there's a syntax error in the argument processing or the value is not a valid number.
      */
     @Override
-    public Object process(CommandSender sender, String str) throws CommandSyntaxError {
+    public Object process(T sender, String str) throws CommandSyntaxError {
         if (str.isEmpty()) return null;
         try {
             if (str.equals("~")) {

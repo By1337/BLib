@@ -16,20 +16,20 @@ import java.util.*;
  */
 @ToString
 @Getter
-public class Command {
+public class Command<T> {
     private final String command;
-    private final Map<String, Command> subcommands = new HashMap<>();
-    private final LinkedList<Argument> arguments = new LinkedList<>();
-    private final List<Requires> requires = new ArrayList<>();
+    private final Map<String, Command<T>> subcommands = new HashMap<>();
+    private final LinkedList<Argument<T>> arguments = new LinkedList<>();
+    private final List<Requires<T>> requires = new ArrayList<>();
     private final HashSet<String> aliases = new HashSet<>();
-    private CommandExecutor executor = (sender, args) -> {
+    private CommandExecutor<T> executor = (sender, args) -> {
     };
 
     public Command(String command) {
         this.command = command;
     }
 
-    public Command aliases(String alias) {
+    public Command<T> aliases(String alias) {
         aliases.add(alias);
         return this;
     }
@@ -41,7 +41,7 @@ public class Command {
      * @param subcommand The subcommand to add.
      * @return The current command instance for method chaining.
      */
-    public Command addSubCommand(Command subcommand) {
+    public Command<T> addSubCommand(Command<T> subcommand) {
         subcommands.put(subcommand.command, subcommand);
         return this;
     }
@@ -52,7 +52,7 @@ public class Command {
      * @param argument The argument to add.
      * @return The current command instance for method chaining.
      */
-    public Command argument(Argument argument) {
+    public Command<T> argument(Argument<T> argument) {
         arguments.add(argument);
         return this;
     }
@@ -64,7 +64,7 @@ public class Command {
      * @param requirement The requirement to add.
      * @return The current command instance for method chaining.
      */
-    public Command requires(Requires requirement) {
+    public Command<T> requires(Requires<T> requirement) {
         requires.add(requirement);
         return this;
     }
@@ -75,7 +75,7 @@ public class Command {
      * @param executor The executor to set.
      * @return The current command instance for method chaining.
      */
-    public Command executor(CommandExecutor executor) {
+    public Command<T> executor(CommandExecutor<T> executor) {
         this.executor = executor;
         return this;
     }
@@ -87,9 +87,9 @@ public class Command {
      * @param args   The command arguments.
      * @throws CommandSyntaxError If there's a syntax error in the command.
      */
-    public void process(CommandSender sender, String[] args) throws CommandException {
+    public void process(T sender, String[] args) throws CommandException {
         // Check requirements
-        for (Requires requirement : requires) {
+        for (Requires<T> requirement : requires) {
             if (!requirement.check(sender)) {
                 return; // Command execution halted due to unmet requirements.
             }
@@ -102,9 +102,9 @@ public class Command {
             if (subcommands.containsKey(subcommandName) || subcommands.values().stream()
                     .anyMatch(subcommand -> subcommand.aliases.contains(subcommandName))) {
                 String[] subArgs = Arrays.copyOfRange(args, 1, args.length);
-                Command subcommand = subcommands.getOrDefault(subcommandName, null);
+                Command<T> subcommand = subcommands.getOrDefault(subcommandName, null);
                 if (subcommand == null) {
-                    for (Command cmd : subcommands.values()) {
+                    for (Command<T> cmd : subcommands.values()) {
                         if (cmd.aliases.contains(subcommandName)) {
                             subcommand = cmd;
                             break;
@@ -119,10 +119,10 @@ public class Command {
         }
 
         // Process arguments
-        Iterator<Argument> argumentIterator = arguments.iterator();
+        Iterator<Argument<T>> argumentIterator = arguments.iterator();
         ArgumentMap<String, Object> argumentValues = new ArgumentMap<>();
 
-        Argument last = null;
+        Argument<T> last = null;
         StringBuilder sb = new StringBuilder();
         for (String arg : args) {
             if (!argumentIterator.hasNext() && last instanceof ArgumentStrings) {
@@ -130,7 +130,7 @@ public class Command {
                 continue;
             }
             if (argumentIterator.hasNext()) {
-                Argument argument = argumentIterator.next();
+                Argument<T> argument = argumentIterator.next();
                 last = argument;
                 if (argument.getRequires() != null && !argument.getRequires().check(sender)) {
                     break;
@@ -144,7 +144,7 @@ public class Command {
                 throw new CommandSyntaxError(String.format(Lang.getMessage("too-many-arguments"), arg));
             }
         }
-        if (last instanceof ArgumentStrings argumentStrings) {
+        if (last instanceof ArgumentStrings<T> argumentStrings) {
             if (!sb.isEmpty()){
                 sb.setLength(sb.length() - 1);
             }
@@ -162,9 +162,9 @@ public class Command {
      * @param args   The command arguments.
      * @return A list of tab completions.
      */
-    public List<String> getTabCompleter(CommandSender sender, String[] args) {
+    public List<String> getTabCompleter(T sender, String[] args) {
         // Check requirements
-        for (Requires requirement : requires) {
+        for (Requires<T> requirement : requires) {
             if (!requirement.check(sender)) {
                 return Collections.emptyList(); // No completions if requirements are not met.
             }
@@ -178,9 +178,9 @@ public class Command {
                     subcommands.values().stream().anyMatch(subcommand -> subcommand.aliases.contains(subcommandName))
             ) {
                 String[] subArgs = Arrays.copyOfRange(args, 1, args.length);
-                Command subcommand = subcommands.getOrDefault(subcommandName, null);
+                Command<T> subcommand = subcommands.getOrDefault(subcommandName, null);
                 if (subcommand == null) {
-                    for (Command cmd : subcommands.values()) {
+                    for (Command<T> cmd : subcommands.values()) {
                         if (cmd.aliases.contains(subcommandName)) {
                             subcommand = cmd;
                             break;
@@ -198,15 +198,15 @@ public class Command {
         List<String> completions = new ArrayList<>();
 
         try {
-            Iterator<Argument> argumentIterator = arguments.iterator();
+            Iterator<Argument<T>> argumentIterator = arguments.iterator();
 
-            Argument last = null;
+            Argument<T> last = null;
             for (String arg : args) {
                 if (!argumentIterator.hasNext() && last instanceof ArgumentStrings){
                     continue;
                 }
                 if (argumentIterator.hasNext()) {
-                    Argument argument = argumentIterator.next();
+                    Argument<T> argument = argumentIterator.next();
                     last = argument;
                     if (argument.getRequires() != null && !argument.getRequires().check(sender)) {
                         break;

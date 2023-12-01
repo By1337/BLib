@@ -11,10 +11,10 @@ import java.util.function.Supplier;
 /**
  * Abstract class representing a command argument.
  */
-public abstract class Argument {
+public abstract class Argument<T> {
     protected final String name;
     private Supplier<List<String>> exx;
-    protected Requires requires;
+    protected Requires<T> requires;
 
     /**
      * Constructs an Argument with the specified name and no examples.
@@ -40,14 +40,14 @@ public abstract class Argument {
      * @return An object representing the processed argument value.
      * @throws CommandSyntaxError If there's a syntax error in the argument processing.
      */
-    public abstract Object process(CommandSender sender, String str) throws CommandSyntaxError;
+    public abstract Object process(T sender, String str) throws CommandSyntaxError;
 
-    public List<String> tabCompleter(CommandSender sender, String str) throws CommandSyntaxError {
+    public List<String> tabCompleter(T sender, String str) throws CommandSyntaxError {
         process(sender, str);
         return new ArrayList<>();
     }
 
-    public Argument requires(Requires requires) {
+    public Argument<T> requires(Requires<T> requires) {
         this.requires = requires;
         return this;
     }
@@ -60,7 +60,7 @@ public abstract class Argument {
         return this.exx.get();
     }
 
-    public Requires getRequires() {
+    public Requires<T> getRequires() {
         return this.requires;
     }
 

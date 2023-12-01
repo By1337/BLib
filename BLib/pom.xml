@@ -8,7 +8,7 @@
     <artifactId>BLib</artifactId>
     <!--  for release MAJOR.MINOR.PATCH -->
     <!--  for beta MAJOR.MINOR.PATCH-<alpha/beta/stable/pre-release>-<build> -->
-    <version>1.0.1-b1</version>
+    <version>1.0.2-b</version>
     <packaging>jar</packaging>
 
     <name>BLib</name>

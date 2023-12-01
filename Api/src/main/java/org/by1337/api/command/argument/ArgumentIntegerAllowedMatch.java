@@ -10,7 +10,7 @@ import java.text.ParseException;
 import java.util.List;
 import java.util.function.Supplier;
 
-public class ArgumentIntegerAllowedMatch extends ArgumentInteger {
+public class ArgumentIntegerAllowedMatch<T> extends ArgumentInteger<T> {
 
     public ArgumentIntegerAllowedMatch(String name) {
         super(name);
@@ -49,7 +49,7 @@ public class ArgumentIntegerAllowedMatch extends ArgumentInteger {
     }
 
     @Override
-    public List<String> tabCompleter(CommandSender sender, String str) throws CommandSyntaxError {
+    public List<String> tabCompleter(T sender, String str) throws CommandSyntaxError {
         if (str.isEmpty()) return getExx();
         try {
             String str1 = BMatch.match(String.format("match[%s]", str));
@@ -61,7 +61,7 @@ public class ArgumentIntegerAllowedMatch extends ArgumentInteger {
     }
 
     @Override
-    public Object process(CommandSender sender, String str) throws CommandSyntaxError {
+    public Object process(T sender, String str) throws CommandSyntaxError {
         try {
             return super.process(sender, BMatch.match(String.format("match[%s]", str)));
         } catch (ParseException | NumberFormatException e) {

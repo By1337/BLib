@@ -47,7 +47,7 @@ public class BLib extends JavaPlugin {
         getLogger().log(Level.INFO, String.format(Lang.getMessage("detect-version"), Version.VERSION.getVer()));
     }
 
-    private static Command command;
+    private static Command<CommandSender> command;
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull org.bukkit.command.Command cmd, @NotNull String label, @NotNull String[] args) {
@@ -67,39 +67,39 @@ public class BLib extends JavaPlugin {
     }
 
     private void setCommand() {
-        command = new Command("blib")
-                .requires(new RequiresPermission("blib.use"))
-                .addSubCommand(new Command("reload")
-                        .requires(new RequiresPermission("blib.reload"))
+        command = new Command<CommandSender>("blib")
+                .requires(new RequiresPermission<>("blib.use"))
+                .addSubCommand(new Command<CommandSender>("reload")
+                        .requires(new RequiresPermission<>("blib.reload"))
                         .executor(((sender, args) -> {
                             init();
                             sender.sendMessage(Lang.getMessage("reload"));
                         }))
                 )
-                .addSubCommand(new Command("language")
+                .addSubCommand(new Command<CommandSender>("language")
                         .aliases("lang")
-                        .requires(new RequiresPermission("blib.lang"))
-                        .argument(new ArgumentSetList("language", Lang.LANGUAGES))
+                        .requires(new RequiresPermission<>("blib.lang"))
+                        .argument(new ArgumentSetList<>("language", Lang.LANGUAGES))
                         .executor(((sender, args) -> {
                             String lang = (String) args.getOrThrow("language", Lang.getMessage("missing-argument"), "language");
                             Lang.loadTranslations(lang);
                             config.lang = lang;
                             config.save();
-                            sender.sendMessage(Lang.getMessage("language-changed"));
+                          //  sender.sendMessage(Lang.getMessage("language-changed"));
                         }))
                 )
-                .addSubCommand(new Command("enableDebug")
-                        .requires(new RequiresPermission("blib.debug"))
-                        .argument(new ArgumentBoolean("enable"))
+                .addSubCommand(new Command<CommandSender>("enableDebug")
+                        .requires(new RequiresPermission<>("blib.debug"))
+                        .argument(new ArgumentBoolean<>("enable"))
                         .executor(((sender, args) -> {
                             DEBUG = (boolean) args.getOrDefault("enable", !DEBUG);
                         }))
                 )
         ;
 
-        command.addSubCommand(new Command("test")
+        command.addSubCommand(new Command<CommandSender>("test")
                 .requires((pl) -> DEBUG)
-                .requires(new RequiresPermission("blib.tests"))
+                .requires(new RequiresPermission<>("blib.tests"))
                 .addSubCommand(CommandTests.packetArmorStandTest())
                 .addSubCommand(CommandTests.sysInfo())
                 .addSubCommand(CommandTests.msgTest())

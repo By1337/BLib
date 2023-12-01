@@ -7,7 +7,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class ArgumentEnumValue extends ArgumentSetList {
+public class ArgumentEnumValue<T> extends ArgumentSetList<T> {
     private final Class<? extends Enum<?>> anEnum;
 
     public ArgumentEnumValue(String name, Class<? extends Enum<?>> anEnum) {
@@ -21,7 +21,7 @@ public class ArgumentEnumValue extends ArgumentSetList {
     }
 
     @Override
-    public Object process(CommandSender sender, String str) throws CommandSyntaxError {
+    public Object process(T sender, String str) throws CommandSyntaxError {
         String val = (String) super.process(sender, str);
         if (val == null || val.isEmpty()) return null;
         return Arrays.stream(anEnum.getEnumConstants()).filter(constant -> constant.name().equals(val)).findFirst().orElse(null);

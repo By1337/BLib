@@ -16,7 +16,7 @@ import java.util.regex.Pattern;
 /**
  * Represents a player argument for a command.
  */
-public class ArgumentPlayer extends Argument {
+public class ArgumentPlayer<T extends CommandSender> extends Argument<T> {
     private static final Pattern UUID_REGEX =
             Pattern.compile("^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$");
 
@@ -64,7 +64,7 @@ public class ArgumentPlayer extends Argument {
      * @throws CommandSyntaxError If there's a syntax error in the argument processing or the player is unknown.
      */
     @Override
-    public Object process(CommandSender sender, String str) throws CommandSyntaxError {
+    public Object process(T sender, String str) throws CommandSyntaxError {
         if (str.isEmpty()) return null;
         Player player = getPlayer(sender, str);
         if (player == null)
@@ -72,7 +72,7 @@ public class ArgumentPlayer extends Argument {
         return player;
     }
 
-    private Player getPlayer(CommandSender sender, String str) {
+    private Player getPlayer(T sender, String str) {
         if (str.equals("@p")) {
             return PositionUtil.getWorldIfPlayer(sender).getNearbyEntities(PositionUtil.getLocationIfPlayer(sender), 1, 1, 1).stream().findFirst().orElse(null) instanceof Player player ? player : null;
         }
