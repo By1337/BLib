@@ -16,9 +16,6 @@ public class PacketRemoveEntityImpl165 extends PacketImpl165 implements PacketRe
     }
 
     public PacketRemoveEntityImpl165(PacketEntity entity) {
-        if (Version.VERSION != Version.V1_16_5) {
-            throw new IllegalStateException(String.format(Lang.getMessage("server-version-requirement-error"), this.getClass().getName(), Version.V1_16_5.getVer()));
-        }
         this.ids = new int[]{entity.getId()};
     }
 

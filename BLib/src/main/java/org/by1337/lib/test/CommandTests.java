@@ -70,7 +70,7 @@ public class CommandTests {
     }
     public static Command<CommandSender> sleep() {
         return new Command<CommandSender>("sleep")
-                .argument(new ArgumentInteger<>("time", 0, 10000))
+                .argument(new ArgumentInteger<>("time", 0))
                 .executor(((sender, args) -> {
                     int time = (int) args.get("time");
                     try {

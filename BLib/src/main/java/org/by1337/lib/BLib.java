@@ -4,6 +4,7 @@ import lombok.Getter;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scheduler.BukkitRunnable;
 import org.by1337.api.command.argument.ArgumentBoolean;
 import org.by1337.api.util.Version;
 import org.by1337.api.command.Command;
@@ -85,7 +86,7 @@ public class BLib extends JavaPlugin {
                             Lang.loadTranslations(lang);
                             config.lang = lang;
                             config.save();
-                          //  sender.sendMessage(Lang.getMessage("language-changed"));
+                            sender.sendMessage(Lang.getMessage("language-changed"));
                         }))
                 )
                 .addSubCommand(new Command<CommandSender>("enableDebug")

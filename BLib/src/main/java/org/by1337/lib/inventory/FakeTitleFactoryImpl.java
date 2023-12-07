@@ -15,6 +15,8 @@ import org.by1337.v1_19_2.inventory.FakeTitleV1_19_2;
 import org.by1337.v1_19_3.inventory.FakeTitleV1_19_3;
 import org.by1337.v1_19_4.inventory.FakeTitleV1_19_4;
 import org.by1337.v1_20_1.inventory.FakeTitleV1_20_1;
+import org.by1337.v1_20_2.inventory.FakeTitleV1_20_2;
+import org.by1337.v1_20_3.inventory.FakeTitleV1_20_3;
 
 public class FakeTitleFactoryImpl implements FakeTitleFactory {
     public FakeTitle get() {
@@ -31,7 +33,9 @@ public class FakeTitleFactoryImpl implements FakeTitleFactory {
             case V1_19_3 -> new FakeTitleV1_19_3();
             case V1_19_4 -> new FakeTitleV1_19_4();
             case V1_20_1 -> new FakeTitleV1_20_1();
-            case UNKNOWN -> null;
+            case V1_20_2 -> new FakeTitleV1_20_2();
+            case V1_20_3 -> new FakeTitleV1_20_3();
+            default -> null;
         };
     }
 }

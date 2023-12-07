@@ -7,8 +7,8 @@
     <groupId>org.by1337</groupId>
     <artifactId>BLib</artifactId>
     <!--  for release MAJOR.MINOR.PATCH -->
-    <!--  for beta MAJOR.MINOR.PATCH-<alpha/beta/stable/pre-release>-<build> -->
-    <version>1.0.2-b</version>
+    <!--  for beta MAJOR.MINOR.PATCH-<alpha/beta/stable/pre-release>-->
+    <version>1.0.3-b</version>
     <packaging>jar</packaging>
 
     <name>BLib</name>
@@ -19,7 +19,7 @@
     </properties>
 
     <build>
-        <defaultGoal>clean package</defaultGoal>
+        <defaultGoal>clean install</defaultGoal>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -158,6 +158,16 @@
         <dependency>
             <groupId>org.by1337</groupId>
             <artifactId>V1_20_1</artifactId>
+            <version>1.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.by1337</groupId>
+            <artifactId>V1_20_2</artifactId>
+            <version>1.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.by1337</groupId>
+            <artifactId>V1_20_3</artifactId>
             <version>1.0</version>
         </dependency>
     </dependencies>

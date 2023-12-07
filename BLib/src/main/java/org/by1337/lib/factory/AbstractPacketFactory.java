@@ -11,17 +11,7 @@ public class AbstractPacketFactory {
         return switch (Version.VERSION){
             case V1_16_5 -> new PacketFactoryImpl165();
             case V1_17 -> new PacketFactoryImpl17();
-            case V1_17_1 -> null;
-            case V1_18 -> null;
-            case V1_18_1 -> null;
-            case V1_18_2 -> null;
-            case V1_19 -> null;
-            case V1_19_1 -> null;
-            case V1_19_2 -> null;
-            case V1_19_3 -> null;
-            case V1_19_4 -> null;
-            case V1_20_1 -> null;
-            case UNKNOWN -> null;
+            default  -> null;
         };
     }
 }

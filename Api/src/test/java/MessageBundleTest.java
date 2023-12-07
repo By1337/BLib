@@ -25,8 +25,6 @@ public class MessageBundleTest {
             assertNotNull(Lang.getMessage("missing-argument"));
             assertNotNull(Lang.getMessage("language-changed"));
             assertNotNull(Lang.getMessage("reload"));
-            assertNotNull(Lang.getMessage("entity-version-requirement-error"));
-            assertNotNull(Lang.getMessage("server-version-requirement-error"));
         }
     }
 }
