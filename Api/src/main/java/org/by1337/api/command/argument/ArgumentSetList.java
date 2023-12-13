@@ -37,7 +37,7 @@ public class ArgumentSetList<T> extends Argument<T> {
     }
 
     public ArgumentSetList(String name, Supplier<List<String>> items) {
-        super(name);
+        super(name, items);
         this.items = items;
     }
 
