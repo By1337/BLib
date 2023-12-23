@@ -135,7 +135,7 @@ public class Command<T> {
                 if (argument.getRequires() != null && !argument.getRequires().check(sender)) {
                     break;
                 }
-                if (last instanceof ArgumentStrings){
+                if (last instanceof ArgumentStrings) {
                     sb.append(arg).append(" ");
                     continue;
                 }
@@ -145,7 +145,7 @@ public class Command<T> {
             }
         }
         if (last instanceof ArgumentStrings<T> argumentStrings) {
-            if (!sb.isEmpty()){
+            if (!sb.isEmpty()) {
                 sb.setLength(sb.length() - 1);
             }
             argumentValues.put(argumentStrings.getName(), argumentStrings.process(sender, sb.toString()));
@@ -172,8 +172,9 @@ public class Command<T> {
 
         // Check for subcommands
         if (args.length >= 1) {
-            String subcommandName = args[0];
-            if (!subcommands.isEmpty() && args[0].isEmpty()) return subcommands.keySet().stream().toList();
+            String subcommandName = args[0];//return subcommands.keySet().stream().toList();
+            if (!subcommands.isEmpty() && args[0].isEmpty())
+                return subcommands.values().stream().filter(c -> c.checkReq(sender)).map(Command::getCommand).toList();
             if (subcommands.containsKey(subcommandName) ||
                     subcommands.values().stream().anyMatch(subcommand -> subcommand.aliases.contains(subcommandName))
             ) {
@@ -202,7 +203,7 @@ public class Command<T> {
 
             Argument<T> last = null;
             for (String arg : args) {
-                if (!argumentIterator.hasNext() && last instanceof ArgumentStrings){
+                if (!argumentIterator.hasNext() && last instanceof ArgumentStrings) {
                     continue;
                 }
                 if (argumentIterator.hasNext()) {
@@ -237,8 +238,16 @@ public class Command<T> {
             return Collections.singletonList(error.getLocalizedMessage());
         }
 
-        return new ArrayList<>(subcommands.keySet());
+        return subcommands.values().stream().filter(c -> c.checkReq(sender)).map(Command::getCommand).toList();
     }
 
+    public boolean checkReq(T sender) {
+        for (Requires<T> requirement : requires) {
+            if (!requirement.check(sender)) {
+                return false;
+            }
+        }
+        return true;
+    }
 
 }

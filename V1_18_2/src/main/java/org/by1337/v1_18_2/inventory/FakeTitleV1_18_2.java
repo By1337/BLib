@@ -4,6 +4,7 @@ import net.minecraft.network.chat.TextComponent;
 import net.minecraft.network.protocol.game.ClientboundOpenScreenPacket;
 import net.minecraft.server.level.ServerPlayer;
 import org.bukkit.craftbukkit.v1_18_R2.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_18_R2.util.CraftChatMessage;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.inventory.Inventory;
 import org.by1337.api.inventory.FakeTitle;
@@ -18,7 +19,7 @@ public class FakeTitleV1_18_2 implements FakeTitle {
         for (HumanEntity humanEntity : list) {
             if (humanEntity instanceof CraftPlayer craftPlayer) {
                 ServerPlayer serverPlayer = craftPlayer.getHandle();
-                ClientboundOpenScreenPacket packet = new ClientboundOpenScreenPacket(serverPlayer.containerMenu.containerId, serverPlayer.containerMenu.getType(), new TextComponent(newTitle));
+                ClientboundOpenScreenPacket packet = new ClientboundOpenScreenPacket(serverPlayer.containerMenu.containerId, serverPlayer.containerMenu.getType(), CraftChatMessage.fromStringOrNull(newTitle));
                 serverPlayer.connection.send(packet);
                 craftPlayer.updateInventory();
               //  serverPlayer.connection.send(new ClientboundContainerSetContentPacket(serverPlayer.containerMenu.containerId, serverPlayer.containerMenu.getItems()));

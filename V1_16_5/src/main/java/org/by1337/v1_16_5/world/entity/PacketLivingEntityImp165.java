@@ -172,7 +172,7 @@ public abstract class PacketLivingEntityImp165 extends PacketEntityImpl165 imple
 //        SLEEPING_POS_ID = new DataWatcherObject<>(13, DataWatcherRegistry.m);
 
 
-        System.out.println(PacketLivingEntityImp165.class.getName() + " ============== ");
+/*        System.out.println(PacketLivingEntityImp165.class.getName() + " ============== ");
 
         System.out.println("DATA_LIVING_ENTITY_FLAGS = " + DATA_LIVING_ENTITY_FLAGS.a());
         System.out.println("DATA_HEALTH_ID = " + DATA_HEALTH_ID.a());
@@ -180,7 +180,7 @@ public abstract class PacketLivingEntityImp165 extends PacketEntityImpl165 imple
         System.out.println("DATA_EFFECT_AMBIENCE_ID = " + DATA_EFFECT_AMBIENCE_ID.a());
         System.out.println("DATA_ARROW_COUNT_ID = " + DATA_ARROW_COUNT_ID.a());
         System.out.println("DATA_STINGER_COUNT_ID = " + DATA_STINGER_COUNT_ID.a());
-        System.out.println("SLEEPING_POS_ID = " + SLEEPING_POS_ID.a());
+        System.out.println("SLEEPING_POS_ID = " + SLEEPING_POS_ID.a());*/
 
     }
 }

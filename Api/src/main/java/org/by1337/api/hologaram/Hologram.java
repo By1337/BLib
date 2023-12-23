@@ -148,7 +148,7 @@ public class Hologram {
             lines.remove(line);
         }
         viewers.stream()
-                .filter(player -> (!player.isOnline() || !world.equals(player.getLocation().getWorld())) && actualViewers.contains(player))
+                .filter(player -> !player.isOnline() || !world.equals(player.getLocation().getWorld()) || !actualViewers.contains(player))
                 .forEach(player -> lines.forEach(holo -> holo.removeFor(player)));
 
         viewers = actualViewers;

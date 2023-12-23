@@ -273,14 +273,14 @@ public abstract class PacketEntityImpl165 implements PacketEntity {
 //        DATA_POSE = new DataWatcherObject<>(6, DataWatcherRegistry.s);
 
 
-        System.out.println(PacketEntityImpl165.class.getName() + " ============== ");
-
-        System.out.println("DATA_SHARED_FLAGS_ID = " + DATA_SHARED_FLAGS_ID.a());
-        System.out.println("DATA_AIR_SUPPLY_ID = " + DATA_AIR_SUPPLY_ID.a());
-        System.out.println("DATA_CUSTOM_NAME_VISIBLE = " + DATA_CUSTOM_NAME_VISIBLE.a());
-        System.out.println("DATA_SILENT = " + DATA_SILENT.a());
-        System.out.println("DATA_NO_GRAVITY = " + DATA_NO_GRAVITY.a());
-        System.out.println("DATA_POSE = " + DATA_POSE.a());
-        System.out.println("DATA_CUSTOM_NAME = " + DATA_CUSTOM_NAME.a());
+//        System.out.println(PacketEntityImpl165.class.getName() + " ============== ");
+//
+//        System.out.println("DATA_SHARED_FLAGS_ID = " + DATA_SHARED_FLAGS_ID.a());
+//        System.out.println("DATA_AIR_SUPPLY_ID = " + DATA_AIR_SUPPLY_ID.a());
+//        System.out.println("DATA_CUSTOM_NAME_VISIBLE = " + DATA_CUSTOM_NAME_VISIBLE.a());
+//        System.out.println("DATA_SILENT = " + DATA_SILENT.a());
+//        System.out.println("DATA_NO_GRAVITY = " + DATA_NO_GRAVITY.a());
+//        System.out.println("DATA_POSE = " + DATA_POSE.a());
+//        System.out.println("DATA_CUSTOM_NAME = " + DATA_CUSTOM_NAME.a());
     }
 }

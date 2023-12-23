@@ -42,7 +42,7 @@ public class PacketArmorStandImp165 extends PacketLivingEntityImp165 implements 
 //        DATA_LEFT_LEG_POSE = new DataWatcherObject<>(19, DataWatcherRegistry.k);
 //        DATA_RIGHT_LEG_POSE = new DataWatcherObject<>(20, DataWatcherRegistry.k);
 
-        System.out.println(PacketArmorStandImp165.class.getName() + " ============== ");
+/*        System.out.println(PacketArmorStandImp165.class.getName() + " ============== ");
 
         System.out.println("DATA_CLIENT_FLAGS = " + DATA_CLIENT_FLAGS.a());
         System.out.println("DATA_HEAD_POSE = " + DATA_HEAD_POSE.a());
@@ -50,7 +50,7 @@ public class PacketArmorStandImp165 extends PacketLivingEntityImp165 implements 
         System.out.println("DATA_LEFT_ARM_POSE = " + DATA_LEFT_ARM_POSE.a());
         System.out.println("DATA_RIGHT_ARM_POSE = " + DATA_RIGHT_ARM_POSE.a());
         System.out.println("DATA_LEFT_LEG_POSE = " + DATA_LEFT_LEG_POSE.a());
-        System.out.println("DATA_RIGHT_LEG_POSE = " + DATA_RIGHT_LEG_POSE.a());
+        System.out.println("DATA_RIGHT_LEG_POSE = " + DATA_RIGHT_LEG_POSE.a());*/
     }
 
     @Override

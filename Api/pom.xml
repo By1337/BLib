@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>org.by1337</groupId>
-    <artifactId>Api</artifactId>
+    <artifactId>BLib-Api</artifactId>
     <version>1.0</version>
     <packaging>jar</packaging>
 
@@ -92,6 +92,12 @@
             <artifactId>annotations</artifactId>
             <version>RELEASE</version>
             <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.google.errorprone</groupId>
+            <artifactId>error_prone_annotations</artifactId>
+            <scope>provided</scope>
+            <version>2.23.0</version>
         </dependency>
         <dependency>
             <groupId>com.google.code.gson</groupId>

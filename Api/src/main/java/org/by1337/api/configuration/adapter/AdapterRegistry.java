@@ -1,5 +1,6 @@
 package org.by1337.api.configuration.adapter;
 
+import com.google.errorprone.annotations.CanIgnoreReturnValue;
 import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.Particle;
@@ -7,6 +8,7 @@ import org.bukkit.block.Biome;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.MemorySection;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
 import org.by1337.api.configuration.adapter.impl.*;
@@ -40,23 +42,30 @@ public class AdapterRegistry {
      * @param adapter      The adapter instance to be registered.
      * @throws AdapterAlreadyExistsException If the adapter with the same class already exists in the registry.
      */
-    public static <T> void registerAdapter(Class<T> adapterClass, ClassAdapter<? extends T> adapter) throws AdapterAlreadyExistsException {
+    @CanIgnoreReturnValue
+    public static <T> boolean registerAdapter(Class<T> adapterClass, ClassAdapter<? extends T> adapter) throws AdapterAlreadyExistsException {
         if (hasAdapter(adapterClass)) {
-            throw new AdapterAlreadyExistsException("Adapter with class " + adapterClass.getName() + " already exists in the registry.");
+            //throw new AdapterAlreadyExistsException("Adapter with class " + adapterClass.getName() + " already exists in the registry.");
+            return false;
         }
         adapters.put(adapterClass, adapter);
+        return true;
     }
+
     /**
      * Unregisters an adapter from the registry based on its class.
      *
      * @param adapterClass The class of the adapter to be unregistered.
      * @throws AdapterNotFoundException If the adapter with the specified class is not found in the registry.
      */
-    public static <T> void unregisterAdapter(Class<T> adapterClass) throws AdapterNotFoundException {
+    @CanIgnoreReturnValue
+    public static <T> boolean unregisterAdapter(Class<T> adapterClass) throws AdapterNotFoundException {
         if (!hasAdapter(adapterClass)) {
-            throw new AdapterNotFoundException("Adapter with class " + adapterClass.getName() + " not found in the registry.");
+            //throw new AdapterNotFoundException("Adapter with class " + adapterClass.getName() + " not found in the registry.");
+            return false;
         }
         adapters.remove(adapterClass);
+        return true;
     }
 
     /**
@@ -66,11 +75,14 @@ public class AdapterRegistry {
      * @param adapter      The primitive adapter instance to be registered.
      * @throws AdapterAlreadyExistsException If a primitive adapter with the same class already exists in the registry.
      */
-    public static <T> void registerPrimitiveAdapter(Class<T> adapterClass, PrimitiveAdapter<? extends T> adapter) throws AdapterAlreadyExistsException {
+    @CanIgnoreReturnValue
+    public static <T> boolean registerPrimitiveAdapter(Class<T> adapterClass, PrimitiveAdapter<? extends T> adapter) throws AdapterAlreadyExistsException {
         if (hasPrimitiveAdapter(adapterClass)) {
-            throw new AdapterAlreadyExistsException("Adapter with class " + adapterClass.getName() + " already exists in the registry.");
+            //throw new AdapterAlreadyExistsException("Adapter with class " + adapterClass.getName() + " already exists in the registry.");
+            return false;
         }
         primitiveAdapters.put(adapterClass, adapter);
+        return true;
     }
 
     /**
@@ -79,11 +91,14 @@ public class AdapterRegistry {
      * @param adapterClass The class of the primitive adapter to be unregistered.
      * @throws AdapterNotFoundException If the primitive adapter with the specified class is not found in the registry.
      */
-    public static <T> void unregisterPrimitiveAdapter(Class<T> adapterClass) throws AdapterNotFoundException {
+    @CanIgnoreReturnValue
+    public static <T> boolean unregisterPrimitiveAdapter(Class<T> adapterClass) throws AdapterNotFoundException {
         if (!hasPrimitiveAdapter(adapterClass)) {
-            throw new AdapterNotFoundException("Primitive adapter with class " + adapterClass.getName() + " not found in the registry.");
+            //throw new AdapterNotFoundException("Primitive adapter with class " + adapterClass.getName() + " not found in the registry.");
+            return false;
         }
         primitiveAdapters.remove(adapterClass);
+        return true;
     }
 
     /**
@@ -239,11 +254,13 @@ public class AdapterRegistry {
         registerPrimitiveAdapter(PropertyType.class, new AdapterPropertyType());
 
         registerPrimitiveAdapter(String.class, String::valueOf);
+        registerPrimitiveAdapter(Object.class, obj -> obj);
         registerPrimitiveAdapter(Class.class, new AdapterClass());
         registerPrimitiveAdapter(UUID.class, new AdapterUUID());
         registerPrimitiveAdapter(Biome.class, new AdapterEnum<>(Biome.class));
         registerPrimitiveAdapter(Material.class, new AdapterEnum<>(Material.class));
         registerPrimitiveAdapter(Particle.class, new AdapterEnum<>(Particle.class));
+        registerPrimitiveAdapter(ItemFlag.class, new AdapterEnum<>(ItemFlag.class));
 
         registerAdapter(ItemStack.class, new AdapterItemStack());
 

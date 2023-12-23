@@ -196,8 +196,11 @@ public class YamlContext {
      * @param obj  The object to be stored in the MemorySection.
      */
     public void set(@NotNull String path, @Nullable Object obj) {
-        if (obj == null) return;
-        section.set(path, serialize(obj));
+        if (obj == null) {
+            section.set(path, null);
+        } else {
+            section.set(path, serialize(obj));
+        }
     }
 
     /**
@@ -301,10 +304,10 @@ public class YamlContext {
     /**
      * Get a map of values at the specified path, with both key and value types specified, and a default value.
      *
-     * @param path     The path to the map within the MemorySection.
+     * @param path      The path to the map within the MemorySection.
      * @param valueType The class type for the map values.
-     * @param keyType  The class type for the map keys.
-     * @param def      The default map to be returned if the path does not exist.
+     * @param keyType   The class type for the map keys.
+     * @param def       The default map to be returned if the path does not exist.
      * @return The map of values, or the default map if the path does not exist.
      */
     public <K, V> Map<K, V> getMap(String path, Class<V> valueType, Class<K> keyType, Map<K, V> def) {
@@ -315,9 +318,9 @@ public class YamlContext {
     /**
      * Get a map of values at the specified path, with both key and value types specified.
      *
-     * @param path     The path to the map within the MemorySection.
+     * @param path      The path to the map within the MemorySection.
      * @param valueType The class type for the map values.
-     * @param keyType  The class type for the map keys.
+     * @param keyType   The class type for the map keys.
      * @return The map of values.
      */
     public <K, V> Map<K, V> getMap(String path, Class<V> valueType, Class<K> keyType) {
