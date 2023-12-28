@@ -31,6 +31,6 @@ public class ArgumentBoolean<T> extends ArgumentSetList<T> {
 
     @Override
     public Object process(T sender, String str) throws CommandSyntaxError {
-        return super.process(sender, str).equals("true");
+        return "true".equals(super.process(sender, str));
     }
 }

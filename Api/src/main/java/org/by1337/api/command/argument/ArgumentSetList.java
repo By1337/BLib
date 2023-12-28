@@ -65,4 +65,9 @@ public class ArgumentSetList<T> extends Argument<T> {
         }
         return str;
     }
+
+    @Override
+    public List<String> tabCompleter(T sender, String str) throws CommandSyntaxError {
+       return items.get();
+    }
 }
