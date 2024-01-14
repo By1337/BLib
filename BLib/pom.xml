@@ -137,11 +137,6 @@
         </dependency>
         <dependency>
             <groupId>org.by1337</groupId>
-            <artifactId>V1_20_3</artifactId>
-            <version>1.0</version>
-        </dependency>
-        <dependency>
-            <groupId>org.by1337</groupId>
             <artifactId>V1_20_4</artifactId>
             <version>1.0</version>
         </dependency>

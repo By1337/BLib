@@ -1,5 +1,7 @@
 package org.by1337.api.world;
 
+import org.bukkit.util.Vector;
+
 import java.util.Objects;
 
 public class BlockPosition {
@@ -16,6 +18,9 @@ public class BlockPosition {
         this.z = z;
     }
 
+    public Vector toVector(){
+        return new Vector(x, y, z);
+    }
     public BlockPosition add(BlockPosition position) {
         return new BlockPosition(x + position.x, y + position.y, z + position.z);
     }

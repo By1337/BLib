@@ -64,13 +64,10 @@ public class ArgumentFloat<T> extends Argument<T> {
         if (str.isEmpty()) return 0;
         try {
             float val = Float.parseFloat(str);
-
             if (val < min)
                 throw new CommandSyntaxError(Lang.getMessage("number-too-big"), val, min);
-
             if (val > max)
                 throw new CommandSyntaxError(Lang.getMessage("number-too-small"), val, max);
-
             return val;
 
         } catch (NumberFormatException e) {

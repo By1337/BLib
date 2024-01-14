@@ -11,7 +11,6 @@ import org.by1337.v1_18_2.command.SummonCommandV1_18_2;
 import org.by1337.v1_19_4.command.SummonCommandV1_19_4;
 import org.by1337.v1_20_1.command.SummonCommandV1_20_1;
 import org.by1337.v1_20_2.command.SummonCommandV1_20_2;
-import org.by1337.v1_20_3.command.SummonCommandV1_20_3;
 import org.by1337.v1_20_4.command.SummonCommandV1_20_4;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -26,7 +25,6 @@ public class SummonCommand {
             case V1_19_4 -> new SummonCommandV1_19_4().spawn(entityType, location, nbt);
             case V1_20_1 -> new SummonCommandV1_20_1().spawn(entityType, location, nbt);
             case V1_20_2 -> new SummonCommandV1_20_2().spawn(entityType, location, nbt);
-            case V1_20_3 -> new SummonCommandV1_20_3().spawn(entityType, location, nbt);
             case V1_20_4 -> new SummonCommandV1_20_4().spawn(entityType, location, nbt);
             default -> throw new IllegalStateException("Unsupported version");
         }

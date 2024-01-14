@@ -215,7 +215,6 @@ public class Command<T> {
                     completions.clear();
 
                     completions.addAll(argument.tabCompleter(sender, arg));
-                    completions.addAll(argument.getExx());
 
                 } else {
                     if (!args[0].isEmpty()) {

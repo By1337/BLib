@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>org.by1337</groupId>
-    <artifactId>BLib-Api</artifactId>
+    <artifactId>Api</artifactId>
     <version>1.0</version>
     <packaging>jar</packaging>
 

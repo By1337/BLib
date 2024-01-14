@@ -43,8 +43,7 @@ public abstract class Argument<T> {
     public abstract Object process(T sender, String str) throws CommandSyntaxError;
 
     public List<String> tabCompleter(T sender, String str) throws CommandSyntaxError {
-        process(sender, str);
-        return new ArrayList<>();
+        return getExx();
     }
 
     public Argument<T> requires(Requires<T> requires) {

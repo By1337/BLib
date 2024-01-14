@@ -9,7 +9,6 @@ import org.by1337.v1_18_2.inventory.ItemStackSerializeV1_18_2;
 import org.by1337.v1_19_4.inventory.ItemStackSerializeV1_19_4;
 import org.by1337.v1_20_1.inventory.ItemStackSerializeV1_20_1;
 import org.by1337.v1_20_2.inventory.ItemStackSerializeV1_20_2;
-import org.by1337.v1_20_3.inventory.ItemStackSerializeV1_20_3;
 import org.by1337.v1_20_4.inventory.ItemStackSerializeV1_20_4;
 
 public class ItemStackSerializeFactory {
@@ -22,7 +21,6 @@ public class ItemStackSerializeFactory {
             case V1_19_4 -> new ItemStackSerializeV1_19_4();
             case V1_20_1 -> new ItemStackSerializeV1_20_1();
             case V1_20_2 -> new ItemStackSerializeV1_20_2();
-            case V1_20_3 -> new ItemStackSerializeV1_20_3();
             case V1_20_4 -> new ItemStackSerializeV1_20_4();
             default -> throw new IllegalStateException("Unsupported version");
         };

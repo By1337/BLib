@@ -68,6 +68,8 @@ public class ArgumentSetList<T> extends Argument<T> {
 
     @Override
     public List<String> tabCompleter(T sender, String str) throws CommandSyntaxError {
-       return items.get();
+        if (str.isEmpty())
+            return items.get();
+        return items.get().stream().filter(s -> s.startsWith(str)).toList();
     }
 }
