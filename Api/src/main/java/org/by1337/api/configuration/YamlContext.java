@@ -293,12 +293,7 @@ public class YamlContext {
      * @return The map of values.
      */
     public <V> Map<String, V> getMap(String path, Class<V> valueType) {
-        Map<String, ?> map = getMemorySection(section.get(path)).getValues(false);
-        Map<String, V> out = new HashMap<>();
-        for (Map.Entry<String, ?> entry : map.entrySet()) {
-            out.put(entry.getKey(), AdapterRegistry.getAs(entry.getValue(), valueType));
-        }
-        return out;
+        return getMap(path, valueType, String.class);
     }
 
     /**
@@ -328,6 +323,38 @@ public class YamlContext {
         Map<K, V> out = new HashMap<>();
         for (Map.Entry<String, ?> entry : map.entrySet()) {
             out.put(AdapterRegistry.getAs(entry.getKey(), keyType), AdapterRegistry.getAs(entry.getValue(), valueType));
+        }
+        return out;
+    }
+
+    /**
+     * Get a map of lists of values at the specified path, with value type specified.
+     *
+     * @param path      The path to the map within the MemorySection.
+     * @param valueType The class type for the map values.
+     * @return The map of lists of values.
+     */
+    public <V> Map<String, List<V>> getMapList(String path, Class<V> valueType) {
+        return getMapList(path, valueType, String.class);
+    }
+
+    /**
+     * Get a map of lists of values at the specified path, with both key and value types specified.
+     *
+     * @param path      The path to the map within the MemorySection.
+     * @param valueType The class type for the map values.
+     * @param keyType   The class type for the map keys.
+     * @return The map of lists of values.
+     */
+    public <K, V> Map<K, List<V>> getMapList(String path, Class<V> valueType, Class<K> keyType) {
+        Map<String, ?> map = getMemorySection(section.get(path)).getValues(false);
+        Map<K, List<V>> out = new HashMap<>();
+        for (Map.Entry<String, ?> entry : map.entrySet()) {
+            List<V> outList = new ArrayList<>();
+            for (Object o : (List<?>) entry.getValue()) {
+                outList.add(AdapterRegistry.getAs(o, valueType));
+            }
+            out.put(AdapterRegistry.getAs(entry.getKey(), keyType), outList);
         }
         return out;
     }
