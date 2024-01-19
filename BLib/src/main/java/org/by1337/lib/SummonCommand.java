@@ -26,7 +26,7 @@ public class SummonCommand {
             case V1_20_1 -> new SummonCommandV1_20_1().spawn(entityType, location, nbt);
             case V1_20_2 -> new SummonCommandV1_20_2().spawn(entityType, location, nbt);
             case V1_20_4 -> new SummonCommandV1_20_4().spawn(entityType, location, nbt);
-            default -> throw new IllegalStateException("Unsupported version");
+            default -> throw new IllegalStateException("Unsupported version! use 1.16.5, 1.17.1, 1.18.2, 1.19.4, 1.20.(1|2|3|4)");
         }
     }
 

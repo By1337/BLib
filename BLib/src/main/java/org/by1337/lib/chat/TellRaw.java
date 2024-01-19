@@ -23,7 +23,7 @@ public class TellRaw {
             case V1_20_1 -> new TellRawV1_20_1().tell(s, player);
             case V1_20_2 -> new TellRawV1_20_2().tell(s, player);
             case V1_20_4 -> new TellRawV1_20_4().tell(s, player);
-            default -> throw new IllegalStateException("Unsupported version");
+            default -> throw new IllegalStateException("Unsupported version! use 1.16.5, 1.17.1, 1.18.2, 1.19.4, 1.20.(1|2|3|4)");
         }
     }
 

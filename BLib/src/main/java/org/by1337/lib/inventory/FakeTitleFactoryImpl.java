@@ -23,7 +23,7 @@ public class FakeTitleFactoryImpl implements FakeTitleFactory {
             case V1_20_1 -> new FakeTitleV1_20_1();
             case V1_20_2 -> new FakeTitleV1_20_2();
             case V1_20_4 -> new FakeTitleV1_20_4();
-            default -> null;
+            default -> throw new IllegalStateException("Unsupported version! use 1.16.5, 1.17.1, 1.18.2, 1.19.4, 1.20.(1|2|3|4)");
         };
     }
 }

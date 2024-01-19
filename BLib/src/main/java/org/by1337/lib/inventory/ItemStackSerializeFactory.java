@@ -22,7 +22,7 @@ public class ItemStackSerializeFactory {
             case V1_20_1 -> new ItemStackSerializeV1_20_1();
             case V1_20_2 -> new ItemStackSerializeV1_20_2();
             case V1_20_4 -> new ItemStackSerializeV1_20_4();
-            default -> throw new IllegalStateException("Unsupported version");
+            default -> throw new IllegalStateException("Unsupported version! use 1.16.5, 1.17.1, 1.18.2, 1.19.4, 1.20.(1|2|3|4)");
         };
     }
 }

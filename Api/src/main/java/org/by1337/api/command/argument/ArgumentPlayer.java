@@ -6,10 +6,7 @@ import org.bukkit.entity.Player;
 import org.by1337.api.command.CommandSyntaxError;
 import org.by1337.api.lang.Lang;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-import java.util.UUID;
+import java.util.*;
 import java.util.function.Supplier;
 import java.util.regex.Pattern;
 
@@ -20,6 +17,8 @@ public class ArgumentPlayer<T extends CommandSender> extends Argument<T> {
     private static final Pattern UUID_REGEX =
             Pattern.compile("^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$");
 
+    private List<String> exx;
+
     /**
      * Constructs an ArgumentPlayer with the specified name, including predefined examples.
      *
@@ -27,12 +26,10 @@ public class ArgumentPlayer<T extends CommandSender> extends Argument<T> {
      */
     public ArgumentPlayer(String name) {
         super(name);
-        List<String> exx = new ArrayList<>();
+        exx = new ArrayList<>();
         exx.add("@p");
         exx.add("@r");
         exx.add("@s");
-        exx.addAll(List.of(Bukkit.getOnlinePlayers().stream().map(Player::getName).toArray(String[]::new)));
-        super.setExx(() -> exx);
     }
 
     /**
@@ -43,12 +40,7 @@ public class ArgumentPlayer<T extends CommandSender> extends Argument<T> {
      */
     public ArgumentPlayer(String name, List<String> exx) {
         super(name);
-        List<String> exxL = new ArrayList<>(exx);
-        exxL.add("@p");
-        exxL.add("@r");
-        exxL.add("@s");
-        exxL.addAll(List.of(Bukkit.getOnlinePlayers().stream().map(Player::getName).toArray(String[]::new)));
-        super.setExx(() -> exxL);
+        this.exx = exx;
     }
 
     public ArgumentPlayer(String name, Supplier<List<String>> exx) {
@@ -87,5 +79,14 @@ public class ArgumentPlayer<T extends CommandSender> extends Argument<T> {
         } else {
             return Bukkit.getPlayer(str);
         }
+    }
+
+    @Override
+    public List<String> tabCompleter(T sender, String str) throws CommandSyntaxError {
+        var list = Arrays.asList(Bukkit.getOnlinePlayers().stream().map(Player::getName).toArray(String[]::new));
+        list.addAll(exx);
+        if (str.isEmpty())
+            return list;
+        return list.stream().filter(s -> s.startsWith(str)).toList();
     }
 }
