@@ -83,7 +83,7 @@ public class ArgumentPlayer<T extends CommandSender> extends Argument<T> {
 
     @Override
     public List<String> tabCompleter(T sender, String str) throws CommandSyntaxError {
-        var list = Arrays.asList(Bukkit.getOnlinePlayers().stream().map(Player::getName).toArray(String[]::new));
+        var list = new ArrayList<>(Arrays.stream(Bukkit.getOnlinePlayers().stream().map(Player::getName).toArray(String[]::new)).toList());
         list.addAll(exx);
         if (str.isEmpty())
             return list;
