@@ -1,6 +1,6 @@
 name: BLib
 version: '${project.version}'
-main: org.by1337.lib.BLib
+main: org.by1337.blib.core.BLib
 api-version: '1.16'
 author: "By1337"
 softdepend:

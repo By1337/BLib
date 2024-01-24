@@ -1,9 +1,9 @@
 package chat;
 
-import org.by1337.api.chat.*;
-import org.by1337.api.chat.Component;
-import org.by1337.api.chat.hover.HoverEvent;
-import org.by1337.api.chat.hover.HoverEventContentsString;
+import org.by1337.blib.chat.*;
+import org.by1337.blib.chat.Component;
+import org.by1337.blib.chat.hover.HoverEvent;
+import org.by1337.blib.chat.hover.HoverEventContentsString;
 import org.junit.Assert;
 import org.junit.Test;
 

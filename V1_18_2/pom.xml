@@ -4,9 +4,15 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>org.by1337</groupId>
+    <parent>
+        <groupId>org.by1337.blib</groupId>
+        <artifactId>parent-project</artifactId>
+        <version>${revision}</version>
+    </parent>
+
+    <groupId>org.by1337.blib.nms</groupId>
     <artifactId>V1_18_2</artifactId>
-    <version>1.0</version>
+    <version>${revision}</version>
     <packaging>jar</packaging>
 
     <name>V1_18_2</name>
@@ -78,6 +84,14 @@
                     </execution>
                 </executions>
             </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-deploy-plugin</artifactId>
+                <version>3.1.1</version>
+                <configuration>
+                    <skip>true</skip>
+                </configuration>
+            </plugin>
         </plugins>
         <resources>
             <resource>
@@ -109,9 +123,9 @@
         </dependency>
         <!-- api -->
         <dependency>
-            <groupId>org.by1337</groupId>
-            <artifactId>Api</artifactId>
-            <version>1.0</version>
+            <groupId>org.by1337.blib</groupId>
+            <artifactId>Blib-api</artifactId>
+            <version>${revision}</version>
             <scope>provided</scope>
         </dependency>
         <!-- tests -->
