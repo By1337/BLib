@@ -5,6 +5,7 @@ import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.block.Biome;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.MemorySection;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.inventory.ItemFlag;
@@ -281,5 +282,7 @@ public class AdapterRegistry {
         registerAdapter(PropertyString.class, new AdapterProperty<>());
         registerAdapter(PropertyVector.class, new AdapterProperty<>());
         registerAdapter(Property.class, new AdapterProperty<>());
+        registerAdapter(YamlContext.class, new YamlContextAdapter());
+        registerAdapter(MemorySection.class, new MemorySectionAdapter());
     }
 }

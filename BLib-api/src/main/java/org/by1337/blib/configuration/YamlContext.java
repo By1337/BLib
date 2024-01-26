@@ -171,7 +171,7 @@ public class YamlContext {
 
 
     public ItemStack getAsItemStack(String path) {
-        return AdapterRegistry.getAs((MemorySection) section.get(path), ItemStack.class);
+        return AdapterRegistry.getAs(section.get(path), ItemStack.class);
     }
 
     public ItemStack getAsItemStack(String path, ItemStack def) {
@@ -181,7 +181,7 @@ public class YamlContext {
 
 
     public BLocation getAsBLocation(String path) {
-        return AdapterRegistry.getAs((MemorySection) section.get(path), BLocation.class);
+        return AdapterRegistry.getAs(section.get(path), BLocation.class);
     }
 
     public BLocation getAsBLocation(String path, BLocation def) {
