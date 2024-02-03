@@ -1,7 +1,9 @@
 package org.by1337.blib;
 
 import org.by1337.blib.chat.util.Message;
+import org.by1337.blib.command.BukkitCommandRegister;
 import org.by1337.blib.command.CommandUtil;
+import org.by1337.blib.factory.BukkitCommandRegisterFactory;
 import org.by1337.blib.factory.PacketEntityFactory;
 import org.by1337.blib.factory.PacketFactory;
 import org.by1337.blib.inventory.FakeTitleFactory;
@@ -21,4 +23,5 @@ public interface Api {
     @NotNull Message getMessage();
     @NotNull ItemStackSerialize getItemStackSerialize();
     @NotNull FakeTitleFactory getFakeTitleFactory();
+    @NotNull BukkitCommandRegister getBukkitCommandRegister();
 }

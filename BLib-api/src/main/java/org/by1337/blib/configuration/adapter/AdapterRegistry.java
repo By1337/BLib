@@ -178,7 +178,7 @@ public class AdapterRegistry {
         }
         if (!hasPrimitiveAdapter(clazz)) {
             if (!hasAdapter(clazz)) {
-                throw new IllegalStateException();
+                throw new IllegalStateException("class " + src.getClass() + " has no adapter");
             } else {
                 MemorySection section = YamlContext.getMemorySection(src);
                 return getAs(section, clazz);

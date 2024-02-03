@@ -77,7 +77,7 @@ public class ArgumentPlayer<T extends CommandSender> extends Argument<T> {
         if (UUID_REGEX.matcher(str).matches()) {
             return Bukkit.getPlayer(UUID.fromString(str));
         } else {
-            return Bukkit.getPlayer(str);
+            return Bukkit.getPlayerExact(str);
         }
     }
 

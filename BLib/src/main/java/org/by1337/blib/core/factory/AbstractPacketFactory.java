@@ -12,7 +12,7 @@ public class AbstractPacketFactory {
         return switch (Version.VERSION){
             case V1_16_5 -> new PacketFactoryImpl165();
             case V1_17 -> new PacketFactoryImpl17();
-            default  -> null;
+            default  -> throw new UnsupportedOperationException("It feature in test! Current version is not supported!");
         };
     }
 }
