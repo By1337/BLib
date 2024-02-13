@@ -59,6 +59,9 @@ public class NameKey {
         if (!(o instanceof NameKey nameKey)) return false;
         return Objects.equals(getName(), nameKey.getName());
     }
+    public int compareTo(NameKey nameKey) {
+        return name.compareTo(nameKey.name);
+    }
 
     @Override
     public int hashCode() {

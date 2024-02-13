@@ -17,6 +17,9 @@ public interface ItemStackSerialize {
     @NotNull
     String serialize(@NotNull ItemStack itemStack) throws IllegalArgumentException;
 
+    @NotNull
+    String serializeAndCompress(@NotNull ItemStack itemStack) throws IllegalArgumentException;
+
     /**
      * Deserializes an ItemStack from the provided string representation.
      *
@@ -26,4 +29,7 @@ public interface ItemStackSerialize {
      */
     @NotNull
     ItemStack deserialize(@NotNull String data) throws IllegalArgumentException;
+
+    @NotNull
+    ItemStack decompressAndDeserialize(@NotNull String data) throws IllegalArgumentException;
 }

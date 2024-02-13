@@ -1,4 +1,4 @@
-package org.by1337.blib.match;
+package org.by1337.blib.math;
 
 
 import org.by1337.blib.BLib;
@@ -10,37 +10,36 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class BMatch {
+public class MathParser {
 
     public static final int TRUE = 1;
     public static final int FALSE = 0;
 
-    public static String matchSave(String input) {
-        String pattern = "match\\[(.*?)]";
-        Pattern regexPattern = Pattern.compile(pattern);
-        Matcher matcher = regexPattern.matcher(input);
 
-        while (matcher.find()) {
-            try {
-                String s = replaceStrings(matcher.group(1));
-                s = s.replace(" ", "");
-                List<Lexeme> list = parseExp(s);
-                LexemeBuffer buffer = new LexemeBuffer(list);
-                input = input.replace(matcher.group(0), String.valueOf(analyze(buffer)));
-            } catch (ParseException e) {
-                BLib.getApi().getMessage().error(e);
-            }
+    public static String mathSave(String input) {
+       return mathSave(input, true);
+    }
+    public static String mathSave(String input, boolean replaceStrings) {
+        try {
+            return math(input, replaceStrings);
+        } catch (ParseException e) {
+            BLib.getApi().getMessage().error(e);
         }
+
         return input;
     }
 
-    public static String match(String input) throws ParseException {
-        String pattern = "match\\[(.*?)]";
+    public static String math(String input) throws ParseException {
+        return math(input, true);
+    }
+
+    public static String math(String input, boolean replaceStrings) throws ParseException {
+        String pattern = "math\\[(.*?)]";
         Pattern regexPattern = Pattern.compile(pattern);
         Matcher matcher = regexPattern.matcher(input);
 
         while (matcher.find()) {
-            String s = matcher.group(1);
+            String s = replaceStrings ? replaceStrings(matcher.group(1)) : matcher.group(1);
             s = s.replace(" ", "");
             List<Lexeme> list = parseExp(s);
             LexemeBuffer buffer = new LexemeBuffer(list);

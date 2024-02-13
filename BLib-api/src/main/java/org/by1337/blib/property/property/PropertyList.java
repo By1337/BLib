@@ -37,7 +37,7 @@ public class PropertyList<T> extends Property<List<T>> {
      */
     @Override
     public List<T> parse(@NotNull String str) {
-        throw new IllegalStateException();
+        throw new UnsupportedOperationException();
     }
 
 

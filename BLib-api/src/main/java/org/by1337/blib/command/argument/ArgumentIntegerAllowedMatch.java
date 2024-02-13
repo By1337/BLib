@@ -2,7 +2,7 @@ package org.by1337.blib.command.argument;
 
 import org.by1337.blib.command.CommandSyntaxError;
 import org.by1337.blib.lang.Lang;
-import org.by1337.blib.match.BMatch;
+import org.by1337.blib.math.MathParser;
 
 import java.text.ParseException;
 import java.util.List;
@@ -50,7 +50,7 @@ public class ArgumentIntegerAllowedMatch<T> extends ArgumentInteger<T> {
     public List<String> tabCompleter(T sender, String str) throws CommandSyntaxError {
         if (str.isEmpty()) return getExx();
         try {
-            String str1 = BMatch.match(String.format("match[%s]", str));
+            String str1 = MathParser.math(String.format("math[%s]", str));
             super.process(sender, str1);
             return List.of(str1);
         } catch (ParseException | NumberFormatException e) {
@@ -61,7 +61,7 @@ public class ArgumentIntegerAllowedMatch<T> extends ArgumentInteger<T> {
     @Override
     public Object process(T sender, String str) throws CommandSyntaxError {
         try {
-            return super.process(sender, BMatch.match(String.format("match[%s]", str)));
+            return super.process(sender, MathParser.math(String.format("math[%s]", str)));
         } catch (ParseException | NumberFormatException e) {
             throw new CommandSyntaxError(Lang.getMessage("nan"), str);
         }

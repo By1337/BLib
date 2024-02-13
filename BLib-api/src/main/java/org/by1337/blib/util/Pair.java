@@ -11,7 +11,9 @@ public class Pair<L, R> implements Map.Entry<L, R> {
         this.left = left;
         this.right = right;
     }
-
+    public static <L, R> Pair<L, R> of(L left, R right){
+        return new Pair<>(left, right);
+    }
     public L getLeft() {
         return left;
     }
@@ -32,7 +34,7 @@ public class Pair<L, R> implements Map.Entry<L, R> {
 
     @Override
     public R setValue(R value) {
-        throw new IllegalArgumentException();
+        throw new UnsupportedOperationException();
     }
 
     @Override

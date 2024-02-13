@@ -1,11 +1,9 @@
 package org.by1337.blib.command;
 
-import lombok.Getter;
-import lombok.ToString;
-import org.by1337.blib.command.argument.ArgumentMap;
-import org.by1337.blib.command.requires.Requires;
 import org.by1337.blib.command.argument.Argument;
+import org.by1337.blib.command.argument.ArgumentMap;
 import org.by1337.blib.command.argument.ArgumentStrings;
+import org.by1337.blib.command.requires.Requires;
 import org.by1337.blib.lang.Lang;
 
 import java.util.*;
@@ -13,8 +11,6 @@ import java.util.*;
 /**
  * Represents a command that can have subcommands, arguments, and an executor.
  */
-@ToString
-@Getter
 public class Command<T> {
     private final String command;
     private final Map<String, Command<T>> subcommands = new HashMap<>();
@@ -248,4 +244,31 @@ public class Command<T> {
         return true;
     }
 
+    public String getCommand() {
+        return this.command;
+    }
+
+    public Map<String, Command<T>> getSubcommands() {
+        return this.subcommands;
+    }
+
+    public LinkedList<Argument<T>> getArguments() {
+        return this.arguments;
+    }
+
+    public List<Requires<T>> getRequires() {
+        return this.requires;
+    }
+
+    public HashSet<String> getAliases() {
+        return this.aliases;
+    }
+
+    public CommandExecutor<T> getExecutor() {
+        return this.executor;
+    }
+
+    public String toString() {
+        return "Command(command=" + this.getCommand() + ", subcommands=" + this.getSubcommands() + ", arguments=" + this.getArguments() + ", requires=" + this.getRequires() + ", aliases=" + this.getAliases() + ", executor=" + this.getExecutor() + ")";
+    }
 }

@@ -9,7 +9,7 @@ import org.junit.Test;
 /**
  * The SerializeTest class contains unit tests for serialization and deserialization
  * of ItemStacks using the ItemStackSerializeV1_16_R3 class. It ensures that serialized
- * ItemStacks can be correctly deserialized and that the serialized strings match the
+ * ItemStacks can be correctly deserialized and that the serialized strings math the
  * expected values.
  */
 public class SerializeTest {
