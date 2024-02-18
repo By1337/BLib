@@ -5,27 +5,28 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.by1337.blib.BLib;
 import org.jetbrains.annotations.NotNull;
 
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
 
 /**
  * A class for managing YAML configuration files using YamlContext.
  */
-public class YamlConfig {
+public class YamlConfig extends YamlContext {
     private final File file;
-    private YamlContext context;
 
     /**
      * Constructs a YamlConfig object for the specified file, loading its contents into a YamlContext.
      *
      * @param file The file to be managed as a YAML configuration.
-     * @throws IOException                 If there's an issue reading or loading the file.
+     * @throws IOException                   If there's an issue reading or loading the file.
      * @throws InvalidConfigurationException If the file's contents are not a valid YAML configuration.
      */
     public YamlConfig(@NotNull File file) throws IOException, InvalidConfigurationException {
+        super(null);
         this.file = file;
         YamlConfiguration yamlConfiguration = new YamlConfiguration();
         yamlConfiguration.load(file);
-        context = new YamlContext(yamlConfiguration);
+        setSection(yamlConfiguration);
     }
 
     /**
@@ -35,7 +36,7 @@ public class YamlConfig {
      * @throws IOException If there's an issue writing to the file.
      */
     public void save(@NotNull File file) throws IOException {
-        ((YamlConfiguration) context.getHandle()).save(file);
+        ((YamlConfiguration) getHandle()).save(file);
     }
 
     /**
@@ -44,7 +45,7 @@ public class YamlConfig {
      * @throws IOException If there's an issue writing to the file.
      */
     public void save() throws IOException {
-        ((YamlConfiguration) context.getHandle()).save(file);
+        ((YamlConfiguration) getHandle()).save(file);
     }
 
     /**
@@ -74,8 +75,9 @@ public class YamlConfig {
      * @return The YamlContext containing the YAML configuration data.
      */
     @NotNull
+    @Deprecated
     public YamlContext getContext() {
-        return context;
+        return this;
     }
 
     /**
@@ -84,6 +86,6 @@ public class YamlConfig {
      * @param configuration The new YamlConfiguration to be used in the YamlContext.
      */
     public void setYamlConfiguration(@NotNull YamlConfiguration configuration) {
-        this.context = new YamlContext(configuration);
+        setSection(configuration);
     }
 }

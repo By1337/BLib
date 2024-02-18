@@ -8,41 +8,41 @@ import java.text.ParseException;
 import java.util.List;
 import java.util.function.Supplier;
 
-public class ArgumentIntegerAllowedMatch<T> extends ArgumentInteger<T> {
+public class ArgumentIntegerAllowedMath<T> extends ArgumentInteger<T> {
 
-    public ArgumentIntegerAllowedMatch(String name) {
+    public ArgumentIntegerAllowedMath(String name) {
         super(name);
     }
 
-    public ArgumentIntegerAllowedMatch(String name, Supplier<List<String>> exx) {
+    public ArgumentIntegerAllowedMath(String name, Supplier<List<String>> exx) {
         super(name, exx);
     }
 
-    public ArgumentIntegerAllowedMatch(String name, List<String> exx) {
+    public ArgumentIntegerAllowedMath(String name, List<String> exx) {
         super(name, exx);
     }
 
-    public ArgumentIntegerAllowedMatch(String name, int min) {
+    public ArgumentIntegerAllowedMath(String name, int min) {
         super(name, min);
     }
 
-    public ArgumentIntegerAllowedMatch(String name, Supplier<List<String>> exx, int min) {
+    public ArgumentIntegerAllowedMath(String name, Supplier<List<String>> exx, int min) {
         super(name, exx, min);
     }
 
-    public ArgumentIntegerAllowedMatch(String name, List<String> exx, int min) {
+    public ArgumentIntegerAllowedMath(String name, List<String> exx, int min) {
         super(name, exx, min);
     }
 
-    public ArgumentIntegerAllowedMatch(String name, int min, int max) {
+    public ArgumentIntegerAllowedMath(String name, int min, int max) {
         super(name, min, max);
     }
 
-    public ArgumentIntegerAllowedMatch(String name, Supplier<List<String>> exx, int min, int max) {
+    public ArgumentIntegerAllowedMath(String name, Supplier<List<String>> exx, int min, int max) {
         super(name, exx, min, max);
     }
 
-    public ArgumentIntegerAllowedMatch(String name, List<String> exx, int min, int max) {
+    public ArgumentIntegerAllowedMath(String name, List<String> exx, int min, int max) {
         super(name, exx, min, max);
     }
 

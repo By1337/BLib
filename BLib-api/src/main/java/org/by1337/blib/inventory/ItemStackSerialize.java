@@ -3,6 +3,8 @@ package org.by1337.blib.inventory;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
+import java.io.IOException;
+
 /**
  * An interface for serializing and deserializing Bukkit ItemStacks to/from string representations.
  */
@@ -32,4 +34,7 @@ public interface ItemStackSerialize {
 
     @NotNull
     ItemStack decompressAndDeserialize(@NotNull String data) throws IllegalArgumentException;
+
+    String compress(String raw) throws IOException;
+    String decompress(String raw) throws IOException;
 }

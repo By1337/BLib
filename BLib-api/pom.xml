@@ -6,7 +6,7 @@
 
     <groupId>org.by1337.blib</groupId>
     <artifactId>Blib-api</artifactId>
-    <version>1.0.5.2</version>
+    <version>1.0.5.3</version>
     <packaging>jar</packaging>
 
     <name>BLib-api</name>

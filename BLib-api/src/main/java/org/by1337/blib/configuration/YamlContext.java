@@ -19,7 +19,7 @@ import java.util.*;
  * A class for providing convenient access to values within a MemorySection, using AdapterRegistry for type conversion.
  */
 public class YamlContext {
-    private final MemorySection section;
+    private MemorySection section;
 
     /**
      * Constructs a YamlContext using the provided MemorySection.
@@ -401,5 +401,9 @@ public class YamlContext {
      */
     public MemorySection getHandle() {
         return section;
+    }
+
+    protected void setSection(MemorySection section) {
+        this.section = section;
     }
 }

@@ -64,7 +64,8 @@ public class ItemStackSerializeV1_20_4 implements ItemStackSerialize {
         }
     }
 
-    private String compress(String raw) throws IOException {
+    @Override
+    public String compress(String raw) throws IOException {
         try (ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
              GZIPOutputStream gzipOutputStream = new GZIPOutputStream(outputStream)) {
             gzipOutputStream.write(raw.getBytes(StandardCharsets.UTF_8));
@@ -73,7 +74,8 @@ public class ItemStackSerializeV1_20_4 implements ItemStackSerialize {
         }
     }
 
-    private String decompress(String raw) throws IOException {
+    @Override
+    public String decompress(String raw) throws IOException {
         try (ByteArrayInputStream inputStream = new ByteArrayInputStream(Base64.getDecoder().decode(raw.getBytes(StandardCharsets.UTF_8)));
              GZIPInputStream gzipInputStream = new GZIPInputStream(inputStream);
              ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
