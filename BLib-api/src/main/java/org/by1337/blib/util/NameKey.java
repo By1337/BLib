@@ -16,13 +16,9 @@ public class NameKey {
      * Constructs a NameKey with the given name.
      *
      * @param name The name to be used as the key.
-     * @throws IllegalArgumentException If the name ends with "_root" or contains invalid characters.
      */
     public NameKey(String name) {
         InvalidCharacters.validate(name);
-        if (name.endsWith("_root")) {
-            throw new IllegalArgumentException(String.format("The name cannot end with '_root': '%s'", name));
-        }
         this.name = name;
     }
 
@@ -30,16 +26,11 @@ public class NameKey {
      * Constructs a NameKey with the given name and a flag indicating if it is a root key.
      *
      * @param name   The name to be used as the key.
-     * @param isRoot Indicates whether this key is a root key.
-     * @throws IllegalArgumentException If the name ends with "_root" when it is not a root key
-     *                                or if it contains invalid characters.
+     * @param isRoot nothing
      */
+    @Deprecated
     public NameKey(String name, boolean isRoot) {
-        InvalidCharacters.validate(name);
-        if (!isRoot && name.endsWith("_root")) {
-            throw new IllegalArgumentException(String.format("The name cannot end with '_root': '%s'", name));
-        }
-        this.name = name;
+        this(name);
     }
 
 

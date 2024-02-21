@@ -11,6 +11,7 @@ import java.util.List;
  *
  * @param <T> The type of elements stored in the list.
  */
+@Deprecated(forRemoval = true)
 public class PropertyList<T> extends Property<List<T>> {
 
     /**

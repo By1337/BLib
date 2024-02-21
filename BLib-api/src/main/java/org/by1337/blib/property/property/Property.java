@@ -10,6 +10,7 @@ import org.jetbrains.annotations.Nullable;
  *
  * @param <T> The type of data stored by this property.
  */
+@Deprecated(forRemoval = true)
 public abstract class Property<T> {
     /**
      * The value stored in the property.

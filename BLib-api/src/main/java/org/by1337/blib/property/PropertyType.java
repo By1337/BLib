@@ -20,6 +20,7 @@ import java.util.List;
  *
  * @param <T> The generic type of the property.
  */
+@Deprecated(forRemoval = true)
 public record PropertyType<T>(@NotNull NameKey key, @NotNull Class<? extends T> innerClass,
                               @NotNull PropertySuppler<? extends Property<T>, T> supplier) implements Named {
     private static final HashMap<NameKey, PropertyType<?>> byKey = new HashMap<>();

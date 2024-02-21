@@ -8,6 +8,7 @@ import org.jetbrains.annotations.Nullable;
 /**
  * A specific implementation of the Property class for storing Particle values.
  */
+@Deprecated(forRemoval = true)
 public class PropertyParticle extends Property<Particle> {
 
     /**

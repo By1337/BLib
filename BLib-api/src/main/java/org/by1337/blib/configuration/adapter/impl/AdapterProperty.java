@@ -10,6 +10,7 @@ import org.by1337.blib.property.property.PropertyList;
 /**
  * A class adapter for serializing and deserializing Property objects.
  */
+@Deprecated(forRemoval = true)
 public class AdapterProperty<T extends Property<?>> implements ClassAdapter<T> {
 
     /**

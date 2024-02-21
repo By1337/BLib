@@ -7,6 +7,7 @@ import org.jetbrains.annotations.Nullable;
 /**
  * A specific implementation of the Property class for storing Integer values.
  */
+@Deprecated(forRemoval = true)
 public class PropertyInteger extends Property<Integer> {
 
     /**

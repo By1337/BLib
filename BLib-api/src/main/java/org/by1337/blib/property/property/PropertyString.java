@@ -7,6 +7,7 @@ import org.jetbrains.annotations.Nullable;
 /**
  * A specific implementation of the Property class for storing String values.
  */
+@Deprecated(forRemoval = true)
 public class PropertyString extends Property<String> {
 
     /**

@@ -7,6 +7,7 @@ import org.jetbrains.annotations.Nullable;
 /**
  * A specific implementation of the Property class for storing Double values.
  */
+@Deprecated(forRemoval = true)
 public class PropertyDouble extends Property<Double> {
 
     /**

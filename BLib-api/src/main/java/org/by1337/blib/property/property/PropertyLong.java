@@ -7,6 +7,7 @@ import org.jetbrains.annotations.Nullable;
 /**
  * A specific implementation of the Property class for storing Long values.
  */
+@Deprecated(forRemoval = true)
 public class PropertyLong extends Property<Long> {
 
     /**

@@ -20,6 +20,7 @@ import java.util.Set;
  * Each property is associated with a unique name and can be retrieved by its name.
  * New properties can be registered in the collection.
  */
+@Deprecated(forRemoval = true)
 public class StorageProperties {
 
     private final Map<String, Property<?>> properties;

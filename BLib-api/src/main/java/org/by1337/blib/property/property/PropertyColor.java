@@ -9,6 +9,7 @@ import org.jetbrains.annotations.Nullable;
 /**
  * A specific implementation of the Property class for storing Color values.
  */
+@Deprecated(forRemoval = true)
 public class PropertyColor extends Property<Color> {
 
     /**
