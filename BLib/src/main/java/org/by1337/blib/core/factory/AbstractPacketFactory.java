@@ -8,11 +8,11 @@ import org.by1337.blib.nms.v1_16_5.network.factory.PacketFactoryImpl165;
 import org.by1337.blib.nms.v1_17.network.factory.PacketFactoryImpl17;
 
 public class AbstractPacketFactory {
-    public static PacketFactory create(){
-        return switch (Version.VERSION){
+    public static PacketFactory create() {
+        return switch (Version.VERSION) {
             case V1_16_5 -> new PacketFactoryImpl165();
             case V1_17 -> new PacketFactoryImpl17();
-            default  -> throw new UnsupportedOperationException("It feature in test! Current version is not supported!");
+            default -> null;
         };
     }
 }

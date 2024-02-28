@@ -14,6 +14,7 @@ import org.bukkit.util.Vector;
 import org.by1337.blib.configuration.adapter.impl.*;
 import org.by1337.blib.configuration.adapter.impl.primitive.*;
 import org.by1337.blib.property.property.*;
+import org.by1337.blib.util.SpacedNameKey;
 import org.by1337.blib.world.BLocation;
 import org.by1337.blib.world.BlockPosition;
 import org.by1337.blib.world.Vector2D;
@@ -252,6 +253,7 @@ public class AdapterRegistry {
         registerPrimitiveAdapter(NameKey.class, new AdapterNameKey());
         registerPrimitiveAdapter(Boolean.class, new AdapterBoolean());
         registerPrimitiveAdapter(Color.class, new AdapterColor());
+        registerPrimitiveAdapter(SpacedNameKey.class, new SpacedNameKeyAdapter());
 
         registerPrimitiveAdapter(PropertyType.class, new AdapterPropertyType());
 
