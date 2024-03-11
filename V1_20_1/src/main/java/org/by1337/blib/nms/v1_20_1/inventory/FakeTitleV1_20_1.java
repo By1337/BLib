@@ -3,6 +3,7 @@ package org.by1337.blib.nms.v1_20_1.inventory;
 
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.ComponentUtils;
+import net.minecraft.network.protocol.game.ClientboundContainerSetContentPacket;
 import net.minecraft.network.protocol.game.ClientboundOpenScreenPacket;
 import net.minecraft.server.level.ServerPlayer;
 
@@ -25,7 +26,7 @@ public class FakeTitleV1_20_1 implements FakeTitle {
                 ClientboundOpenScreenPacket packet = new ClientboundOpenScreenPacket(serverPlayer.containerMenu.containerId, serverPlayer.containerMenu.getType(), CraftChatMessage.fromStringOrNull(newTitle));
                 serverPlayer.connection.send(packet);
                 craftPlayer.updateInventory();
-              //  serverPlayer.connection.send(new ClientboundContainerSetContentPacket(serverPlayer.containerMenu.containerId, serverPlayer.containerMenu.getItems()));
+                //serverPlayer.connection.send(new ClientboundContainerSetContentPacket(serverPlayer.containerMenu.containerId,1, serverPlayer.containerMenu.getItems()));
             }
         }
     }

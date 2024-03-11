@@ -9,6 +9,7 @@ import org.by1337.blib.factory.PacketFactory;
 import org.by1337.blib.inventory.FakeTitleFactory;
 import org.by1337.blib.inventory.ItemStackSerialize;
 
+import org.by1337.blib.nbt.ParseCompoundTag;
 import org.by1337.blib.util.AsyncCatcher;
 import org.jetbrains.annotations.NotNull;
 
@@ -24,4 +25,5 @@ public interface Api {
     @NotNull ItemStackSerialize getItemStackSerialize();
     @NotNull FakeTitleFactory getFakeTitleFactory();
     @NotNull BukkitCommandRegister getBukkitCommandRegister();
+    @NotNull ParseCompoundTag getParseCompoundTag();
 }

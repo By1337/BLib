@@ -8,7 +8,6 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.inventory.ItemStack;
 import org.by1337.blib.configuration.adapter.AdapterRegistry;
 import org.by1337.blib.world.BLocation;
-import org.by1337.blib.property.PropertyType;
 import org.by1337.blib.util.NameKey;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -137,16 +136,6 @@ public class YamlContext {
     public Particle getAsParticle(String path, Particle def) {
         if (!section.contains(path)) return def;
         return getAsParticle(path);
-    }
-
-
-    public PropertyType<?> getAsPropertyType(String path) {
-        return AdapterRegistry.getAs(section.get(path), PropertyType.class);
-    }
-
-    public PropertyType<?> getAsPropertyType(String path, PropertyType<?> def) {
-        if (!section.contains(path)) return def;
-        return getAsPropertyType(path);
     }
 
     public <T> T getAs(String path, Class<T> clazz) {

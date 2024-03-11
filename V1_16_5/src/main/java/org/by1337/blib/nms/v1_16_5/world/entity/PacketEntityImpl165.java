@@ -232,45 +232,45 @@ public abstract class PacketEntityImpl165 implements PacketEntity {
 
     static {
         random = new Random();
-        try {
-            Field field = Entity.class.getDeclaredField("S");
-            field.setAccessible(true);
-            DATA_SHARED_FLAGS_ID = (DataWatcherObject<Byte>) field.get(null);
+//        try {
+//            Field field = Entity.class.getDeclaredField("S");
+//            field.setAccessible(true);
+//            DATA_SHARED_FLAGS_ID = (DataWatcherObject<Byte>) field.get(null);
+//
+//            field = Entity.class.getDeclaredField("AIR_TICKS");
+//            field.setAccessible(true);
+//            DATA_AIR_SUPPLY_ID = (DataWatcherObject<Integer>) field.get(null);
+//
+//            field = Entity.class.getDeclaredField("ar");
+//            field.setAccessible(true);
+//            DATA_CUSTOM_NAME_VISIBLE = (DataWatcherObject<Boolean>) field.get(null);
+//
+//            field = Entity.class.getDeclaredField("as");
+//            field.setAccessible(true);
+//            DATA_SILENT = (DataWatcherObject<Boolean>) field.get(null);
+//
+//            field = Entity.class.getDeclaredField("at");
+//            field.setAccessible(true);
+//            DATA_NO_GRAVITY = (DataWatcherObject<Boolean>) field.get(null);
+//
+//            field = Entity.class.getDeclaredField("POSE");
+//            field.setAccessible(true);
+//            DATA_POSE = (DataWatcherObject<EntityPose>) field.get(null);
+//
+//            field = Entity.class.getDeclaredField("aq");
+//            field.setAccessible(true);
+//            DATA_CUSTOM_NAME = (DataWatcherObject<Optional<IChatBaseComponent>>) field.get(null);
+//        } catch (IllegalAccessException | NoSuchFieldException e) {
+//            throw new RuntimeException(e);
+//        }
 
-            field = Entity.class.getDeclaredField("AIR_TICKS");
-            field.setAccessible(true);
-            DATA_AIR_SUPPLY_ID = (DataWatcherObject<Integer>) field.get(null);
-
-            field = Entity.class.getDeclaredField("ar");
-            field.setAccessible(true);
-            DATA_CUSTOM_NAME_VISIBLE = (DataWatcherObject<Boolean>) field.get(null);
-
-            field = Entity.class.getDeclaredField("as");
-            field.setAccessible(true);
-            DATA_SILENT = (DataWatcherObject<Boolean>) field.get(null);
-
-            field = Entity.class.getDeclaredField("at");
-            field.setAccessible(true);
-            DATA_NO_GRAVITY = (DataWatcherObject<Boolean>) field.get(null);
-
-            field = Entity.class.getDeclaredField("POSE");
-            field.setAccessible(true);
-            DATA_POSE = (DataWatcherObject<EntityPose>) field.get(null);
-
-            field = Entity.class.getDeclaredField("aq");
-            field.setAccessible(true);
-            DATA_CUSTOM_NAME = (DataWatcherObject<Optional<IChatBaseComponent>>) field.get(null);
-        } catch (IllegalAccessException | NoSuchFieldException e) {
-            throw new RuntimeException(e);
-        }
-
-//        DATA_SHARED_FLAGS_ID = new DataWatcherObject<>(0, DataWatcherRegistry.a);
-//        DATA_AIR_SUPPLY_ID = new DataWatcherObject<>(1, DataWatcherRegistry.b);
-//        DATA_CUSTOM_NAME = new DataWatcherObject<>(2, DataWatcherRegistry.f);
-//        DATA_CUSTOM_NAME_VISIBLE = new DataWatcherObject<>(3, DataWatcherRegistry.i);
-//        DATA_SILENT = new DataWatcherObject<>(4, DataWatcherRegistry.i);
-//        DATA_NO_GRAVITY = new DataWatcherObject<>(5, DataWatcherRegistry.i);
-//        DATA_POSE = new DataWatcherObject<>(6, DataWatcherRegistry.s);
+        DATA_SHARED_FLAGS_ID = new DataWatcherObject<>(0, DataWatcherRegistry.a); // byte
+        DATA_AIR_SUPPLY_ID = new DataWatcherObject<>(1, DataWatcherRegistry.b); // int
+        DATA_CUSTOM_NAME = new DataWatcherObject<>(2, DataWatcherRegistry.f); // component
+        DATA_CUSTOM_NAME_VISIBLE = new DataWatcherObject<>(3, DataWatcherRegistry.i); // boolean
+        DATA_SILENT = new DataWatcherObject<>(4, DataWatcherRegistry.i); // boolean
+        DATA_NO_GRAVITY = new DataWatcherObject<>(5, DataWatcherRegistry.i); // boolean
+        DATA_POSE = new DataWatcherObject<>(6, DataWatcherRegistry.s); // pose
 
 
 //        System.out.println(PacketEntityImpl165.class.getName() + " ============== ");

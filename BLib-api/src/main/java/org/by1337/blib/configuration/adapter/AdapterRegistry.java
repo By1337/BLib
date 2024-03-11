@@ -5,7 +5,6 @@ import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.block.Biome;
-import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.MemorySection;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.inventory.ItemFlag;
@@ -13,17 +12,12 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
 import org.by1337.blib.configuration.adapter.impl.*;
 import org.by1337.blib.configuration.adapter.impl.primitive.*;
-import org.by1337.blib.property.property.*;
 import org.by1337.blib.util.SpacedNameKey;
 import org.by1337.blib.world.BLocation;
 import org.by1337.blib.world.BlockPosition;
 import org.by1337.blib.world.Vector2D;
 import org.by1337.blib.configuration.YamlContext;
-import org.by1337.blib.property.PropertyType;
 import org.by1337.blib.util.NameKey;
-import org.by1337.blib.configuration.adapter.impl.*;
-import org.by1337.blib.configuration.adapter.impl.primitive.*;
-import org.by1337.blib.property.property.*;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -255,8 +249,6 @@ public class AdapterRegistry {
         registerPrimitiveAdapter(Color.class, new AdapterColor());
         registerPrimitiveAdapter(SpacedNameKey.class, new SpacedNameKeyAdapter());
 
-        registerPrimitiveAdapter(PropertyType.class, new AdapterPropertyType());
-
         registerPrimitiveAdapter(String.class, String::valueOf);
         registerPrimitiveAdapter(Object.class, obj -> obj);
         registerPrimitiveAdapter(Class.class, new AdapterClass());
@@ -272,18 +264,7 @@ public class AdapterRegistry {
         registerAdapter(Vector.class, new AdapterVector());
         registerAdapter(BlockPosition.class, new AdapterBlockPosition());
         registerAdapter(Vector2D.class, new AdapterVector2D());
-        registerAdapter(PropertyColor.class, new AdapterProperty<>());
-        registerAdapter(PropertyBoolean.class, new AdapterProperty<>());
-        registerAdapter(PropertyDouble.class, new AdapterProperty<>());
-        registerAdapter(PropertyInteger.class, new AdapterProperty<>());
-        registerAdapter(PropertyList.class, new AdapterProperty<>());
-        registerAdapter(PropertyLocation.class, new AdapterProperty<>());
-        registerAdapter(PropertyLong.class, new AdapterProperty<>());
-        registerAdapter(PropertyMaterial.class, new AdapterProperty<>());
-        registerAdapter(PropertyParticle.class, new AdapterProperty<>());
-        registerAdapter(PropertyString.class, new AdapterProperty<>());
-        registerAdapter(PropertyVector.class, new AdapterProperty<>());
-        registerAdapter(Property.class, new AdapterProperty<>());
+
         registerAdapter(YamlContext.class, new YamlContextAdapter());
         registerAdapter(MemorySection.class, new MemorySectionAdapter());
     }

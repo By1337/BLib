@@ -1,5 +1,7 @@
 package org.by1337.blib.util;
 
+import java.util.Objects;
+
 public class SpacedNameKey {
     private final NameKey space;
     private final NameKey name;
@@ -33,5 +35,18 @@ public class SpacedNameKey {
     @Override
     public String toString() {
         return space.getName() + ":" + name.getName();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        SpacedNameKey that = (SpacedNameKey) o;
+        return Objects.equals(space, that.space) && Objects.equals(name, that.name);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(space, name);
     }
 }

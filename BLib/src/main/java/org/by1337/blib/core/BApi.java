@@ -5,10 +5,12 @@ import org.by1337.blib.chat.util.Message;
 import org.by1337.blib.command.BukkitCommandRegister;
 import org.by1337.blib.command.CommandUtil;
 import org.by1337.blib.core.factory.BBukkitCommandRegisterFactory;
+import org.by1337.blib.core.nbt.ParseCompoundTagManager;
 import org.by1337.blib.factory.PacketEntityFactory;
 import org.by1337.blib.factory.PacketFactory;
 import org.by1337.blib.inventory.FakeTitleFactory;
 import org.by1337.blib.inventory.ItemStackSerialize;
+import org.by1337.blib.nbt.ParseCompoundTag;
 import org.by1337.blib.util.AsyncCatcher;
 import org.by1337.blib.core.command.BCommandUtil;
 import org.by1337.blib.core.factory.AbstractPacketFactory;
@@ -78,5 +80,10 @@ public class BApi implements Api {
     @Override
     public @NotNull BukkitCommandRegister getBukkitCommandRegister() {
         return register;
+    }
+
+    @Override
+    public @NotNull ParseCompoundTag getParseCompoundTag() {
+        return ParseCompoundTagManager.get();
     }
 }
