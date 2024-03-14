@@ -5,15 +5,12 @@ import org.by1337.blib.nbt.NbtType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
-public class ListNBT extends NBT implements Iterable<NBT> {
+public class ListNBT extends NBT implements Collection<NBT> {
 
     private final List<NBT> list;
-    private NbtType type;
+    private NbtType innerType;
 
     public ListNBT() {
         this(new ArrayList<>());
@@ -22,35 +19,85 @@ public class ListNBT extends NBT implements Iterable<NBT> {
     public ListNBT(List<NBT> list) {
         this.list = list;
         if (!list.isEmpty()){
-            type = list.get(0).getType();
+            innerType = list.get(0).getType();
             for (NBT nbt : list) {
-                if (type != nbt.getType()) {
-                    throw new NBTCastException("type " + type + " to " + nbt.getType());
+                if (innerType != nbt.getType()) {
+                    throw new NBTCastException("type " + innerType + " to " + nbt.getType());
                 }
             }
         }
     }
 
-    public void add(NBT nbt) {
-        if (type != null) {
-            if (type != nbt.getType()) {
-                throw new NBTCastException("type " + type + " to " + nbt.getType());
+    public boolean add(NBT nbt) {
+        if (innerType != null) {
+            if (innerType != nbt.getType()) {
+                throw new NBTCastException("type " + innerType + " to " + nbt.getType());
             }
         } else {
-            type = nbt.getType();
+            innerType = nbt.getType();
         }
         list.add(nbt);
+        return true;
+    }
+
+    @Override
+    public boolean remove(Object o) {
+        return list.remove(o);
+    }
+
+    @Override
+    public boolean containsAll(@NotNull Collection<?> c) {
+        return new HashSet<>(list).containsAll(c);
+    }
+
+    @Override
+    public boolean addAll(@NotNull Collection<? extends NBT> c) {
+        for (NBT nbt : c) {
+            add(nbt);
+        }
+        return true;
+    }
+
+    @Override
+    public boolean removeAll(@NotNull Collection<?> c) {
+        return list.removeAll(c);
+    }
+
+    @Override
+    public boolean retainAll(@NotNull Collection<?> c) {
+        return list.retainAll(c);
+    }
+
+    @Override
+    public void clear() {
+        list.clear();
+        innerType = null;
     }
 
     @Nullable
     public NbtType getInnerType(){
-        return type;
+        return innerType;
+    }
+
+    @Override
+    public int size() {
+        return list.size();
+    }
+
+    public boolean isEmpty(){
+        return list.isEmpty();
+    }
+
+    @Override
+    public boolean contains(Object o) {
+        return list.contains(o);
     }
 
     @Override
     public Object getAsObject() {
         return list;
     }
+
     @Override
     public String toString() {
         return listToString();
@@ -104,7 +151,19 @@ public class ListNBT extends NBT implements Iterable<NBT> {
     @NotNull
     @Override
     public Iterator<NBT> iterator() {
-        return list.iterator();
+        return (Iterator<NBT>) list.iterator();
+    }
+
+    @NotNull
+    @Override
+    public Object[] toArray() {
+        return list.toArray();
+    }
+
+    @NotNull
+    @Override
+    public <T> T[] toArray(@NotNull T[] a) {
+        return list.toArray(a);
     }
 
     public static class NBTCastException extends ClassCastException{

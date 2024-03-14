@@ -5,6 +5,7 @@ import org.by1337.blib.nbt.NbtType;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
+import java.util.function.Function;
 
 public class CompoundTag extends NBT {
     private final Map<String, NBT> tags = new HashMap<>();
@@ -49,8 +50,16 @@ public class CompoundTag extends NBT {
         tags.put(id, IntNBT.valueOf(v));
     }
 
-    public void putList(String id, List<NBT> list) {
-        tags.put(id, new ListNBT(list));
+    public void putList(String id, List<? extends NBT> list) {
+        tags.put(id, new ListNBT((List<NBT>) list));
+    }
+
+    public <T> void putList(String id, List<T> list, Function<T, NBT> function) {
+        List<NBT> list1 = new ArrayList<>();
+        for (T raw : list) {
+            list1.add(function.apply(raw));
+        }
+        tags.put(id, new ListNBT(list1));
     }
 
     public void putLongArray(String id, long[] longArray) {
@@ -66,13 +75,15 @@ public class CompoundTag extends NBT {
     }
 
 
-    public boolean has(String name){
+    public boolean has(String name) {
         return get(name) != null;
     }
+
     @Nullable
     public NBT get(String name) {
         return tags.get(name);
     }
+
     public NBT getOrThrow(String name) {
         return Objects.requireNonNull(tags.get(name), "unknown tag " + name);
     }
@@ -81,62 +92,138 @@ public class CompoundTag extends NBT {
         return tags.getOrDefault(name, def);
     }
 
+    public byte getAsByte(String name, byte def) {
+        var v = get(name);
+        if (v == null) return def;
+        return ((Number) v.getAsObject()).byteValue();
+    }
+
     public byte getAsByte(String name) {
         var v = get(name);
         if (v == null) throw new NullPointerException("unknown tag " + name);
-        return ((Number)v.getAsObject()).byteValue();
+        return ((Number) v.getAsObject()).byteValue();
     }
 
     public boolean getAsBoolean(String name) {
         var v = get(name);
         if (v == null) throw new NullPointerException("unknown tag " + name);
-        return ((Number)v.getAsObject()).byteValue() == 1;
+        return ((Number) v.getAsObject()).byteValue() == 1;
+    }
+
+    public boolean getAsBoolean(String name, boolean def) {
+        var v = get(name);
+        if (v == null) return def;
+        return ((Number) v.getAsObject()).byteValue() == 1;
     }
 
     public double getAsDouble(String name) {
         var v = get(name);
         if (v == null) throw new NullPointerException("unknown tag " + name);
-        return ((Number)v.getAsObject()).doubleValue();
+        return ((Number) v.getAsObject()).doubleValue();
+    }
+
+    public double getAsDouble(String name, double def) {
+        var v = get(name);
+        if (v == null) return def;
+        return ((Number) v.getAsObject()).doubleValue();
     }
 
     public float getAsFloat(String name) {
         var v = get(name);
         if (v == null) throw new NullPointerException("unknown tag " + name);
-        return ((Number)v.getAsObject()).floatValue();
+        return ((Number) v.getAsObject()).floatValue();
+    }
+
+    public float getAsFloat(String name, float def) {
+        var v = get(name);
+        if (v == null) return def;
+        return ((Number) v.getAsObject()).floatValue();
     }
 
     public int getAsInt(String name) {
         var v = get(name);
         if (v == null) throw new NullPointerException("unknown tag " + name);
-        return ((Number)v.getAsObject()).intValue();
+        return ((Number) v.getAsObject()).intValue();
+    }
+
+    public int getAsInt(String name, int def) {
+        var v = get(name);
+        if (v == null) return def;
+        return ((Number) v.getAsObject()).intValue();
     }
 
     public long getAsLong(String name) {
         var v = get(name);
         if (v == null) throw new NullPointerException("unknown tag " + name);
-        return ((Number)v.getAsObject()).longValue();
+        return ((Number) v.getAsObject()).longValue();
+    }
+
+    public long getAsLong(String name, long def) {
+        var v = get(name);
+        if (v == null) return def;
+        return ((Number) v.getAsObject()).longValue();
     }
 
     public short getAsShort(String name) {
         var v = get(name);
         if (v == null) throw new NullPointerException("unknown tag " + name);
-        return ((Number)v.getAsObject()).shortValue();
+        return ((Number) v.getAsObject()).shortValue();
+    }
+
+    public short getAsShort(String name, short def) {
+        var v = get(name);
+        if (v == null) return def;
+        return ((Number) v.getAsObject()).shortValue();
     }
 
     public String getAsString(String name) {
         var v = get(name);
         if (v == null) throw new NullPointerException("unknown tag " + name);
-        return (String) v.getAsObject();
+        return String.valueOf(v.getAsObject());
     }
+
+    public String getAsString(String name, String def) {
+        var v = get(name);
+        if (v == null) return def;
+        return String.valueOf(v.getAsObject());
+    }
+
     public CompoundTag getAsCompoundTag(String name) {
         var v = get(name);
         if (v == null) throw new NullPointerException("unknown tag " + name);
         return (CompoundTag) v;
     }
 
-    public boolean isEmpty(){
+    public CompoundTag getAsCompoundTag(String name, CompoundTag def) {
+        var v = get(name);
+        if (v == null) return def;
+        return (CompoundTag) v;
+    }
+
+    public <R> List<R> getAsList(String name, Function<NBT, R> function) {
+        ListNBT v = (ListNBT) get(name);
+        if (v == null) throw new NullPointerException("unknown tag " + name);
+        List<R> list = new ArrayList<>();
+        for (NBT nbt : v) {
+            list.add(function.apply(nbt));
+        }
+        return list;
+    }
+
+    public <R> List<R> getAsList(String name, Function<NBT, R> function, List<R> def) {
+        ListNBT v = (ListNBT) get(name);
+        if (v == null) return def;
+        List<R> list = new ArrayList<>();
+        for (NBT nbt : v) {
+            list.add(function.apply(nbt));
+        }
+        return list;
+    }
+
+    public boolean isEmpty() {
         return tags.isEmpty();
     }
+
     @Override
     public Object getAsObject() {
         return tags;
