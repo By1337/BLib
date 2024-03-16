@@ -212,8 +212,10 @@ public class Command<T> {
             Iterator<Argument<T>> argumentIterator = arguments.iterator();
 
             Argument<T> last = null;
+            StringBuilder sb = new StringBuilder();
             for (String arg : args) {
                 if (!argumentIterator.hasNext() && last instanceof ArgumentStrings) {
+                    sb.append(arg).append(" ");
                     continue;
                 }
                 if (argumentIterator.hasNext()) {
@@ -222,9 +224,18 @@ public class Command<T> {
                     if (argument.getRequires() != null && !argument.getRequires().check(sender)) {
                         break;
                     }
+                    if (last instanceof ArgumentStrings) {
+                        sb.append(arg).append(" ");
+                        continue;
+                    }
                     completions.clear();
-
                     completions.addAll(argument.tabCompleter(sender, arg));
+                    if (completions.isEmpty()){
+                        completions.addAll(argument.getExx());
+                        if (completions.isEmpty()){
+                            completions.add("[" + argument.getName() + "]");
+                        }
+                    }
 
                 } else {
                     if (!args[0].isEmpty()) {
@@ -238,6 +249,18 @@ public class Command<T> {
                             return sub;
                     }
                     throw new CommandSyntaxError("");
+                }
+            }
+            if (last instanceof ArgumentStrings<T>) {
+                if (!sb.isEmpty()) {
+                    sb.setLength(sb.length() - 1);
+                }
+                completions.addAll(last.tabCompleter(sender, sb.toString()));
+                if (completions.isEmpty()){
+                    completions.addAll(last.getExx());
+                    if (completions.isEmpty()){
+                        completions.add("[" + last.getName() + "]");
+                    }
                 }
             }
             return completions;
