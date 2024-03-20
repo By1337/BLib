@@ -139,8 +139,6 @@
             <version>2.10.1</version>
             <scope>provided</scope>
         </dependency>
-
-
         <!-- tests -->
         <dependency>
             <groupId>junit</groupId>

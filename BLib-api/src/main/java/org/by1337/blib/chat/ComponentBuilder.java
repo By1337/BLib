@@ -8,7 +8,7 @@ import com.google.gson.internal.LinkedTreeMap;
 
 import java.util.ArrayList;
 import java.util.List;
-@Deprecated(forRemoval = true)
+@Deprecated(since = "1.0.7", forRemoval = true)
 public class ComponentBuilder {
     private final List<Component> list = new ArrayList<>();
 
