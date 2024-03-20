@@ -103,6 +103,7 @@ public class BLib extends JavaPlugin {
                 .addSubCommand(CommandTests.packetArmorStandTest())
                 .addSubCommand(CommandTests.sysInfo())
                 .addSubCommand(CommandTests.msgTest())
+                .addSubCommand(CommandTests.miniMsgTest())
                 .addSubCommand(CommandTests.sleep())
         );
 

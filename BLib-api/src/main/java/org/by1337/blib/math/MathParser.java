@@ -17,8 +17,9 @@ public class MathParser {
 
 
     public static String mathSave(String input) {
-       return mathSave(input, true);
+        return mathSave(input, true);
     }
+
     public static String mathSave(String input, boolean replaceStrings) {
         try {
             return math(input, replaceStrings);
@@ -63,7 +64,7 @@ public class MathParser {
     }
 
 
-    public enum LexemeType {
+    enum LexemeType {
         OPEN_BRACKET, // (
         CLOSE_BRACKET, // )
         NUMBER, // 0-9
@@ -222,7 +223,7 @@ public class MathParser {
         }
     }
 
-    public static List<Lexeme> parseExp(String expText) throws ParseException {
+    private static List<Lexeme> parseExp(String expText) throws ParseException {
         ArrayList<Lexeme> lexemes = new ArrayList<>();
         int pos = 0;
         while (pos < expText.length()) {
@@ -347,7 +348,7 @@ public class MathParser {
     }
 
 
-    public static class Lexeme {
+    static class Lexeme {
         LexemeType type;
         String value;
 
@@ -370,7 +371,7 @@ public class MathParser {
         }
     }
 
-    public static class LexemeBuffer {
+     static class LexemeBuffer {
         private int pos;
 
         public List<Lexeme> lexemes;

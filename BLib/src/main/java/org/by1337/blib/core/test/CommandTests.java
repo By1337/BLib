@@ -18,9 +18,16 @@ public class CommandTests {
 
     public static Command<CommandSender> msgTest() {
         return new Command<CommandSender>("msg")
-                .argument(new ArgumentStrings<>("name"))
+                .argument(new ArgumentStrings<>("msg"))
                 .executor(((sender, args) -> {
-                   BLib.getApi().getMessage().sendMsg(sender, (String) args.getOrDefault("name", "123"));
+                   BLib.getApi().getMessage().sendMsg(sender, (String) args.getOrDefault("msg", "123"));
+                }));
+    }
+    public static Command<CommandSender> miniMsgTest() {
+        return new Command<CommandSender>("mini_msg")
+                .argument(new ArgumentStrings<>("msg"))
+                .executor(((sender, args) -> {
+                    sender.sendMessage(BLib.getApi().getLegacyConvertor().convert((String) args.getOrDefault("msg", "123")));
                 }));
     }
     public static Command<CommandSender> packetArmorStandTest() {

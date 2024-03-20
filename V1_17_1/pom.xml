@@ -6,18 +6,18 @@
 
     <parent>
         <groupId>org.by1337.blib</groupId>
-        <artifactId>parent-project</artifactId>
-        <version>${revision}</version>
+        <artifactId>Blib-parent</artifactId>
+        <version>1.0.7-component</version>
     </parent>
 
     <groupId>org.by1337.blib.nms</groupId>
     <artifactId>V1_17_1</artifactId>
-    <version>${revision}</version>
     <packaging>jar</packaging>
 
     <name>V1_17_1</name>
 
     <properties>
+        <revision>1.0.7-component</revision>
         <java.version>16</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <server.version>1.17.1-R0.1-SNAPSHOT</server.version>

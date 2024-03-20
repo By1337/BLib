@@ -4,16 +4,19 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
+    <parent>
+        <groupId>org.by1337.blib</groupId>
+        <artifactId>Blib-parent</artifactId>
+        <version>1.0.7-component</version>
+    </parent>
 
-    <groupId>org.by1337.blib</groupId>
     <artifactId>BLib</artifactId>
-    <version>${revision}</version>
     <packaging>jar</packaging>
 
     <name>BLib</name>
 
     <properties>
-        <revision>1.0.6.1</revision>
+        <revision>1.0.7-component</revision>
         <java.version>16</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
@@ -46,7 +49,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
-                <version>3.2.4</version>
+                <version>3.5.0</version>
                 <executions>
                     <execution>
                         <phase>package</phase>
@@ -55,6 +58,12 @@
                         </goals>
                         <configuration>
                             <createDependencyReducedPom>false</createDependencyReducedPom>
+<!--                            <relocations>-->
+<!--                                <relocation>-->
+<!--                                    <pattern>net.kyori.adventure.text.serializer</pattern>-->
+<!--                                    <shadedPattern>org.by1337.blib.libs.net.kyori.adventure.text.serializer</shadedPattern>-->
+<!--                                </relocation>-->
+<!--                            </relocations>-->
                         </configuration>
                     </execution>
                 </executions>
@@ -95,16 +104,38 @@
 
     <dependencies>
         <dependency>
-            <groupId>org.spigotmc</groupId>
-            <artifactId>spigot-api</artifactId>
+            <groupId>com.destroystokyo.paper</groupId>
+            <artifactId>paper-api</artifactId>
             <version>1.16.5-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
-
+        <dependency>
+            <groupId>net.kyori</groupId>
+            <artifactId>adventure-text-serializer-gson</artifactId>
+            <version>4.7.0</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.by1337.blib.minimessage</groupId>
+            <artifactId>MinimessageSupport</artifactId>
+            <version>${revision}</version>
+        </dependency>
         <dependency>
             <groupId>org.jetbrains</groupId>
             <artifactId>annotations</artifactId>
             <version>RELEASE</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.google.errorprone</groupId>
+            <artifactId>error_prone_annotations</artifactId>
+            <version>2.23.0</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+            <version>2.10.1</version>
             <scope>provided</scope>
         </dependency>
         <dependency>

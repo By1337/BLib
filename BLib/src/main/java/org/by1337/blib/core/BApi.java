@@ -6,11 +6,13 @@ import org.by1337.blib.command.BukkitCommandRegister;
 import org.by1337.blib.command.CommandUtil;
 import org.by1337.blib.core.factory.BBukkitCommandRegisterFactory;
 import org.by1337.blib.core.nbt.ParseCompoundTagManager;
+import org.by1337.blib.core.text.LegacyConvertorImpl;
 import org.by1337.blib.factory.PacketEntityFactory;
 import org.by1337.blib.factory.PacketFactory;
 import org.by1337.blib.inventory.FakeTitleFactory;
 import org.by1337.blib.inventory.ItemStackSerialize;
 import org.by1337.blib.nbt.ParseCompoundTag;
+import org.by1337.blib.text.LegacyConvertor;
 import org.by1337.blib.util.AsyncCatcher;
 import org.by1337.blib.core.command.BCommandUtil;
 import org.by1337.blib.core.factory.AbstractPacketFactory;
@@ -31,6 +33,7 @@ public class BApi implements Api {
     private final ItemStackSerialize itemStackSerialize = ItemStackSerializeFactory.create();
     private final FakeTitleFactory fakeTitleFactory = new FakeTitleFactoryImpl();
     private final BukkitCommandRegister register = new BBukkitCommandRegisterFactory().create();
+    private final LegacyConvertor legacyConvertor = new LegacyConvertorImpl();
 
     public BApi() {
         message = new Message(BLib.getInstance().getLogger());
@@ -85,5 +88,10 @@ public class BApi implements Api {
     @Override
     public @NotNull ParseCompoundTag getParseCompoundTag() {
         return ParseCompoundTagManager.get();
+    }
+
+    @Override
+    public @NotNull LegacyConvertor getLegacyConvertor() {
+        return legacyConvertor;
     }
 }

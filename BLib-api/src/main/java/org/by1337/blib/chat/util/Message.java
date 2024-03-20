@@ -10,7 +10,6 @@ import org.bukkit.Sound;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.by1337.blib.BLib;
-import org.by1337.blib.chat.ComponentBuilder;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -95,7 +94,7 @@ public class Message {
      * @param sender The CommandSender to send the message to.
      * @param msg    The ComponentBuilder containing the raw message.
      */
-    public void sendRawMsg(@NotNull CommandSender sender, @NotNull ComponentBuilder msg) {
+    public void sendRawMsg(@NotNull CommandSender sender, @NotNull org.by1337.blib.chat.ComponentBuilder msg) {
         if (sender instanceof Player player)
             BLib.getCommandUtil().tellRaw(msg.build(), player);
         else
