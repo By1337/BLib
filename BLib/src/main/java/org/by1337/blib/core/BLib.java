@@ -4,7 +4,9 @@ import lombok.Getter;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.by1337.blib.command.CommandExecutor;
 import org.by1337.blib.command.argument.ArgumentBoolean;
+import org.by1337.blib.command.argument.ArgumentMap;
 import org.by1337.blib.util.Version;
 import org.by1337.blib.command.Command;
 import org.by1337.blib.command.CommandException;
@@ -23,13 +25,15 @@ public class BLib extends JavaPlugin {
     @Getter
     private static Plugin instance;
     private Config config;
+    private BApi api;
 
     public static boolean DEBUG = false;
 
     @Override
     public void onLoad() {
         instance = this;
-        org.by1337.blib.BLib.setApi(new BApi());
+        api = new BApi();
+        org.by1337.blib.BLib.setApi(api);
         setCommand();
     }
 
@@ -43,7 +47,7 @@ public class BLib extends JavaPlugin {
     private void init() {
         config = new Config();
         config.load();
-        Lang.loadTranslations(config.lang);
+        Lang.loadTranslations(this);
         getLogger().log(Level.INFO, String.format(Lang.getMessage("detect-version"), Version.VERSION.getVer()));
     }
 
@@ -76,18 +80,18 @@ public class BLib extends JavaPlugin {
                             sender.sendMessage(Lang.getMessage("reload"));
                         }))
                 )
-                .addSubCommand(new Command<CommandSender>("language")
-                        .aliases("lang")
-                        .requires(new RequiresPermission<>("blib.lang"))
-                        .argument(new ArgumentSetList<>("language", Lang.LANGUAGES))
-                        .executor(((sender, args) -> {
-                            String lang = (String) args.getOrThrow("language", Lang.getMessage("missing-argument"), "language");
-                            Lang.loadTranslations(lang);
-                            config.lang = lang;
-                            config.save();
-                            sender.sendMessage(Lang.getMessage("language-changed"));
-                        }))
-                )
+//                .addSubCommand(new Command<CommandSender>("language")
+//                        .aliases("lang")
+//                        .requires(new RequiresPermission<>("blib.lang"))
+//                        .argument(new ArgumentSetList<>("language", Lang.LANGUAGES))
+//                        .executor(((sender, args) -> {
+//                            String lang = (String) args.getOrThrow("language", Lang.getMessage("missing-argument"), "language");
+//                            Lang.loadTranslations(lang);
+//                            config.lang = lang;
+//                            config.save();
+//                            sender.sendMessage(Lang.getMessage("language-changed"));
+//                        }))
+//                )
                 .addSubCommand(new Command<CommandSender>("enableDebug")
                         .requires(new RequiresPermission<>("blib.debug"))
                         .argument(new ArgumentBoolean<>("enable"))
@@ -95,6 +99,9 @@ public class BLib extends JavaPlugin {
                             DEBUG = (boolean) args.getOrDefault("enable", !DEBUG);
                         }))
                 )
+                .executor((sender, args) -> {
+                    api.getMessage().sendMsg(sender, "&fThis server uses the BLib version %s &b&o<hover:show_text:'https://github.com/By1337/BLib'><click:open_url:'https://github.com/By1337/BLib'>Github</click> &fAuthor &b<hover:show_text:'https://github.com/By1337'><click:open_url:'https://github.com/By1337'>By1337</click>", getDescription().getVersion());
+                })
         ;
 
         command.addSubCommand(new Command<CommandSender>("test")
@@ -103,6 +110,7 @@ public class BLib extends JavaPlugin {
                 .addSubCommand(CommandTests.packetArmorStandTest())
                 .addSubCommand(CommandTests.sysInfo())
                 .addSubCommand(CommandTests.msgTest())
+                .addSubCommand(CommandTests.miniMsgTest())
                 .addSubCommand(CommandTests.sleep())
         );
 

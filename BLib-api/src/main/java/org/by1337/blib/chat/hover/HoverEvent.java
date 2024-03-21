@@ -3,6 +3,7 @@ package org.by1337.blib.chat.hover;
 /**
  * Represents a hover event with contents.
  */
+@Deprecated(since = "1.0.7", forRemoval = true)
 public class HoverEvent {
     private HoverEventContents contents;
 

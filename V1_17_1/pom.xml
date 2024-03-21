@@ -6,18 +6,18 @@
 
     <parent>
         <groupId>org.by1337.blib</groupId>
-        <artifactId>parent-project</artifactId>
-        <version>${revision}</version>
+        <artifactId>Blib-parent</artifactId>
+        <version>1.0.7-beta</version>
     </parent>
 
     <groupId>org.by1337.blib.nms</groupId>
     <artifactId>V1_17_1</artifactId>
-    <version>${revision}</version>
     <packaging>jar</packaging>
 
     <name>V1_17_1</name>
 
     <properties>
+        <revision>1.0.7-beta</revision>
         <java.version>16</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <server.version>1.17.1-R0.1-SNAPSHOT</server.version>
@@ -119,6 +119,18 @@
             <artifactId>spigot</artifactId>
             <version>${server.version}</version>
             <classifier>remapped-mojang</classifier>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>net.kyori</groupId>
+            <artifactId>adventure-text-serializer-gson</artifactId>
+            <version>4.7.0</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>net.kyori</groupId>
+            <artifactId>adventure-api</artifactId>
+            <version>4.7.0</version>
             <scope>provided</scope>
         </dependency>
         <!-- api -->

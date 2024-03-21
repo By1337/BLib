@@ -5,6 +5,7 @@ package org.by1337.blib.chat;
 
 import com.google.gson.internal.LinkedTreeMap;
 
+@Deprecated(since = "1.0.7", forRemoval = true)
 public class ClickEvent {
     private ClickEventType type;
     private String value;

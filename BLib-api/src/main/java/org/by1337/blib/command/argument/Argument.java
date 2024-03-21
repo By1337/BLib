@@ -4,6 +4,7 @@ import org.by1337.blib.command.CommandSyntaxError;
 import org.by1337.blib.command.requires.Requires;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.function.Supplier;
 
@@ -13,7 +14,7 @@ import java.util.function.Supplier;
 public abstract class Argument<T> {
     protected final String name;
     private Supplier<List<String>> exx;
-    protected Requires<T> requires;
+    protected List<Requires<T>> requires = new ArrayList<>();
 
     /**
      * Constructs an Argument with the specified name and no examples.
@@ -46,8 +47,20 @@ public abstract class Argument<T> {
     }
 
     public Argument<T> requires(Requires<T> requires) {
-        this.requires = requires;
+        this.requires.add(requires);
         return this;
+    }
+    public Argument<T> requires(Requires<T>... requires) {
+        this.requires.addAll(Arrays.stream(requires).toList());
+        return this;
+    }
+    public boolean checkRequires(T sender){
+        for (Requires<T> require : requires) {
+            if (!require.check(sender)){
+                return false;
+            }
+        }
+        return true;
     }
 
     public String getName() {
@@ -58,7 +71,7 @@ public abstract class Argument<T> {
         return this.exx.get();
     }
 
-    public Requires<T> getRequires() {
+    public List<Requires<T>> getRequires() {
         return this.requires;
     }
 

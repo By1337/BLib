@@ -7,7 +7,7 @@ import org.by1337.blib.chat.hover.HoverEvent;
 import org.by1337.blib.chat.hover.HoverEventContentsString;
 
 import java.awt.*;
-
+@Deprecated(since = "1.0.7", forRemoval = true)
 @AllArgsConstructor
 public class Component {
     private boolean bold = false;

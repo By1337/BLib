@@ -2,6 +2,8 @@ package org.by1337.blib.configuration.adapter.impl.primitive;
 
 import org.by1337.blib.configuration.adapter.PrimitiveAdapter;
 
+import java.util.Locale;
+
 /**
  * A generic adapter for serializing and deserializing Enum objects.
  *
@@ -38,6 +40,10 @@ public class AdapterEnum<T extends Enum<T>> implements PrimitiveAdapter<T> {
      */
     @Override
     public T deserialize(Object src) {
-        return Enum.valueOf(clazz, String.valueOf(src));
+        try {
+            return Enum.valueOf(clazz, String.valueOf(src));
+        } catch (IllegalArgumentException e) {
+            return Enum.valueOf(clazz, String.valueOf(src).toUpperCase(Locale.ENGLISH));
+        }
     }
 }

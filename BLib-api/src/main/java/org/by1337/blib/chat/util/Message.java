@@ -1,6 +1,9 @@
 package org.by1337.blib.chat.util;
 
 import me.clip.placeholderapi.PlaceholderAPI;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.title.Title;
+import net.kyori.adventure.util.Ticks;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
@@ -10,7 +13,7 @@ import org.bukkit.Sound;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.by1337.blib.BLib;
-import org.by1337.blib.chat.ComponentBuilder;
+import org.by1337.blib.text.LegacyConvertor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -58,6 +61,10 @@ public class Message {
         logger.log(Level.SEVERE, msg, t);
     }
 
+    public void error(Component msg, Throwable t) {
+        error(getContent(msg), t);
+    }
+
     /**
      * Logs a severe error message with the associated Throwable and additional objects.
      *
@@ -67,6 +74,10 @@ public class Message {
      */
     public void error(String msg, Throwable t, Object... objects) {
         logger.log(Level.SEVERE, String.format(msg, objects), t);
+    }
+
+    public void error(Component msg, Throwable t, Object... objects) {
+        error(getContent(msg), t, objects);
     }
 
     /**
@@ -85,8 +96,12 @@ public class Message {
      * @param msg    The message string to be sent.
      */
     public void sendMsg(@NotNull CommandSender sender, @NotNull String msg) {
-        msg = setPlaceholders(sender instanceof OfflinePlayer ? (OfflinePlayer) sender : null, msg);
-        sender.sendMessage(messageBuilder(msg));
+        OfflinePlayer player = sender instanceof OfflinePlayer o ? o : null;
+        sender.sendMessage(componentBuilder(msg, player));
+    }
+
+    public void sendMsg(@NotNull CommandSender sender, @NotNull Component msg) {
+        sender.sendMessage(msg);
     }
 
     /**
@@ -95,7 +110,8 @@ public class Message {
      * @param sender The CommandSender to send the message to.
      * @param msg    The ComponentBuilder containing the raw message.
      */
-    public void sendRawMsg(@NotNull CommandSender sender, @NotNull ComponentBuilder msg) {
+    @Deprecated(since = "1.0.7", forRemoval = true)
+    public void sendRawMsg(@NotNull CommandSender sender, @NotNull org.by1337.blib.chat.ComponentBuilder msg) {
         if (sender instanceof Player player)
             BLib.getCommandUtil().tellRaw(msg.build(), player);
         else
@@ -123,8 +139,8 @@ public class Message {
      * @param format The objects used for formatting the message.
      */
     public void sendMsg(@NotNull CommandSender sender, @NotNull String msg, @NotNull Object... format) {
-        msg = setPlaceholders(sender instanceof OfflinePlayer ? (OfflinePlayer) sender : null, msg);
-        sender.sendMessage(messageBuilder(String.format(msg, format)));
+        OfflinePlayer player = sender instanceof OfflinePlayer o ? o : null;
+        sender.sendMessage(componentBuilder(String.format(msg, format), player));
     }
 
     /**
@@ -170,6 +186,10 @@ public class Message {
         logger.log(Level.INFO, messageBuilder(msg));
     }
 
+    public void logger(@NotNull Component msg) {
+        logger(getContent(msg));
+    }
+
 
     /**
      * Log a message to the logger with formatting and additional objects.
@@ -190,6 +210,10 @@ public class Message {
         logger.log(Level.SEVERE, messageBuilder(msg));
     }
 
+    public void error(@NotNull Component msg) {
+        error(getContent(msg));
+    }
+
     /**
      * Log an error message to the logger with formatting.
      *
@@ -200,6 +224,10 @@ public class Message {
         logger.log(Level.SEVERE, messageBuilder(String.format(msg, objects)));
     }
 
+    public void error(@NotNull Component msg, @NotNull Object... objects) {
+        error(getContent(msg), objects);
+    }
+
     /**
      * Send a formatted message to all online players who are operators.
      *
@@ -208,7 +236,15 @@ public class Message {
     public void sendAllOp(@NotNull String msg) {
         for (Player pl : Bukkit.getOnlinePlayers()) {
             if (pl.isOp()) {
-                sendMsg(pl, messageBuilder(msg));
+                sendMsg(pl, componentBuilder(msg));
+            }
+        }
+    }
+
+    public void sendAllOp(@NotNull Component msg) {
+        for (Player pl : Bukkit.getOnlinePlayers()) {
+            if (pl.isOp()) {
+                sendMsg(pl, msg);
             }
         }
     }
@@ -222,8 +258,16 @@ public class Message {
         logger.log(Level.WARNING, messageBuilder(msg));
     }
 
+    public void warning(@NotNull Component msg) {
+        warning(getContent(msg));
+    }
+
     public void warning(@NotNull String msg, Object... objects) {
         logger.log(Level.WARNING, messageBuilder(String.format(msg, objects)));
+    }
+
+    public void warning(@NotNull Component msg, Object... objects) {
+        warning(getContent(msg), objects);
     }
 
     /**
@@ -233,7 +277,11 @@ public class Message {
      * @param msg The message to be displayed in the action bar.
      */
     public void sendActionBar(@NotNull Player pl, @NotNull String msg) {
-        pl.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(messageBuilder(msg)));
+        pl.sendActionBar(componentBuilder(msg, pl));
+    }
+
+    public void sendActionBar(@NotNull Player pl, @NotNull Component msg) {
+        pl.sendActionBar(msg);
     }
 
     /**
@@ -243,7 +291,12 @@ public class Message {
      */
     public void sendAllActionBar(@NotNull String msg) {
         for (Player pl : Bukkit.getOnlinePlayers())
-            pl.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(messageBuilder(msg)));
+            sendActionBar(pl, msg);
+    }
+
+    public void sendAllActionBar(@NotNull Component msg) {
+        for (Player pl : Bukkit.getOnlinePlayers())
+            sendActionBar(pl, msg);
     }
 
     /**
@@ -257,7 +310,19 @@ public class Message {
      * @param fadeOut  Time in ticks for the title to fade out.
      */
     public void sendTitle(@NotNull Player pl, @NotNull String title, @NotNull String subTitle, int fadeIn, int stay, int fadeOut) {
-        pl.sendTitle(messageBuilder(title), messageBuilder(subTitle), fadeIn, stay, fadeOut);
+        sendTitle(pl, componentBuilder(title), componentBuilder(subTitle), fadeIn, stay, fadeOut);
+    }
+    public void sendTitle(@NotNull Player pl, @NotNull Component title, @NotNull Component subTitle, int fadeIn, int stay, int fadeOut) {
+        pl.showTitle(
+                Title.title(title,
+                        subTitle,
+                        Title.Times.of(
+                                Ticks.duration(fadeIn),
+                                Ticks.duration(stay),
+                                Ticks.duration(fadeOut)
+                        )
+                )
+        );
     }
 
     /**
@@ -268,7 +333,10 @@ public class Message {
      * @param subTitle The subtitle text.
      */
     public void sendTitle(@NotNull Player pl, @NotNull String title, @NotNull String subTitle) {
-        pl.sendTitle(messageBuilder(title), messageBuilder(subTitle), 10, 20, 10);
+        sendTitle(pl, title, subTitle, 10, 70, 20);
+    }
+    public void sendTitle(@NotNull Player pl, @NotNull Component title, @NotNull Component subTitle) {
+        sendTitle(pl, title, subTitle, 10, 70, 20);
     }
 
     /**
@@ -279,7 +347,11 @@ public class Message {
      */
     public void sendAllTitle(@NotNull String title, @NotNull String subTitle) {
         for (Player pl : Bukkit.getOnlinePlayers())
-            pl.sendTitle(messageBuilder(title), messageBuilder(subTitle), 20, 30, 20);
+            sendTitle(pl, title, subTitle);
+    }
+    public void sendAllTitle(@NotNull Component title, @NotNull Component subTitle) {
+        for (Player pl : Bukkit.getOnlinePlayers())
+            sendTitle(pl, title, subTitle);
     }
 
     /**
@@ -292,13 +364,19 @@ public class Message {
         return messageBuilder(msg, null);
     }
 
+    public Component componentBuilder(@NotNull String msg) {
+        return componentBuilder(msg, null);
+    }
+
+    public Component componentBuilder(@NotNull String msg, @Nullable OfflinePlayer player) {
+        msg = setPlaceholders(player, msg);
+        msg = msg.replace("\\s", "\s").replace("\\n", "\n");
+        return LegacyConvertor.convert0(msg);
+    }
+
     public String messageBuilder(@NotNull String msg, @Nullable OfflinePlayer player) {
         msg = setPlaceholders(player, msg);
         msg = msg.replace("\\s", "\s")
-             //   .replace("\\r", "\r")
-            //    .replace("\\f", "\f")
-              //  .replace("\\t", "\t")
-              //  .replace("\\b", "\b")
                 .replace("\\n", "\n");
         return hex(msg);
     }
@@ -311,7 +389,10 @@ public class Message {
     public void sendAllMsg(@NotNull String msg) {
         for (Player pl : Bukkit.getOnlinePlayers())
             sendMsg(pl, msg);
-
+    }
+    public void sendAllMsg(@NotNull Component msg) {
+        for (Player pl : Bukkit.getOnlinePlayers())
+            sendMsg(pl, msg);
     }
 
     /**
@@ -414,6 +495,17 @@ public class Message {
         while (m.find())
             message = message.replace(m.group(), ChatColor.of(m.group(1)).toString());
         return ChatColor.translateAlternateColorCodes('&', message);
+    }
+
+    public String getContent(Component component) {
+        if (!(component instanceof net.kyori.adventure.text.TextComponent textComponent)) return "";
+        StringBuilder sb = new StringBuilder();
+
+        sb.append(textComponent.content());
+        for (Component child : textComponent.children()) {
+            sb.append(getContent(child));
+        }
+        return sb.toString();
     }
 
     public LogLevel getLogLevel() {

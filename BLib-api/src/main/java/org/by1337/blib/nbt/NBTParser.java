@@ -1,5 +1,6 @@
 package org.by1337.blib.nbt;
 
+import org.by1337.blib.lang.Lang;
 import org.by1337.blib.nbt.impl.*;
 
 import java.io.File;
@@ -27,7 +28,7 @@ public class NBTParser {
 
     private static CompoundTag parseCompoundTag(LexemeBuffer buffer) {
         if (buffer.next().type != LexemeType.STRUCT_OPEN) {
-            throw new ParseException("должен начинаться с {");
+            throw new ParseException(Lang.getMessage("should-start-with"), "{");
         }
         CompoundTag compoundTag = new CompoundTag();
         String name = null;
@@ -75,7 +76,7 @@ public class NBTParser {
                     compoundTag.putTag(name, parseNBT(buffer));
                 }
                 default -> {
-                    throw new ParseException("неожиданный токен! " + lexeme);
+                    throw new ParseException(Lang.getMessage("unexpected-token"), lexeme);
                 }
             }
         }
@@ -90,11 +91,11 @@ public class NBTParser {
     private static NBT parseNBT(LexemeBuffer buffer) {
         Lexeme lexeme = buffer.next();
         LexemeType type = lexeme.type;
-        if (type == LexemeType.LIST_OPEN){
+        if (type == LexemeType.LIST_OPEN) {
             buffer.back();
             return parseList(buffer);
         }
-        if (type == LexemeType.STRUCT_OPEN){
+        if (type == LexemeType.STRUCT_OPEN) {
             buffer.back();
             return parseCompoundTag(buffer);
         }
@@ -149,7 +150,7 @@ public class NBTParser {
 
     private static NBT parseList(LexemeBuffer buffer) {
         if (buffer.next().type != LexemeType.LIST_OPEN) {
-            throw new ParseException("Ожидался [ " + buffer);
+            throw new ParseException(Lang.getMessage("unexpected-character"), buffer);
         }
         List<NBT> list = new ArrayList<>();
         LexemeType type = null;
@@ -180,7 +181,7 @@ public class NBTParser {
                     type = lexeme.type;
                     Lexeme next = buffer.next();
                     if (next.type != LexemeType.ARR_TYPE_SEPARATOR) {
-                        throw new ParseException("неожиданный токен! " + lexeme);
+                        throw new ParseException(Lang.getMessage("unexpected-token"), lexeme);
                     }
                 }
                 default -> {
@@ -197,7 +198,7 @@ public class NBTParser {
             final Class<?> clazz = list.get(0).getClass();
             for (NBT nbt : list) {
                 if (nbt.getClass() != clazz) {
-                    throw new ParseException("Элементы в списке не одного класса!" + list);
+                    throw new ParseException(Lang.getMessage("inconsistent-class-list"), list);
                 }
             }
         }
@@ -261,10 +262,10 @@ public class NBTParser {
                                     sb.append("'");
                                     pos += 2;
                                 } else {
-                                    throw new ParseException("Ожидался '%s' или '%s', а не '%s', at", "\\", isSingleQuote ? "\\'" : "\"", expText.charAt(pos + 1), pos + 1);
+                                    throw new ParseException("Expect '%s' or '%s', а не '%s', at", "\\", isSingleQuote ? "\\'" : "\"", expText.charAt(pos + 1), pos + 1);
                                 }
                             } else {
-                                throw new ParseException("Строка неожиданно заканчивается на символе '%s' на позиции '%s'.", c, pos);
+                                throw new ParseException("The string ends unexpectedly with the character '%s' at position '%s'.", c, pos);
                             }
                         }
                         case '"' -> {
@@ -299,7 +300,7 @@ public class NBTParser {
                     if (pos < expText.length()) {
                         c = expText.charAt(pos);
                     } else {
-                        throw new ParseException("Строка неожиданно заканчивается на символе '%s' на позиции '%s'.", c, pos);
+                        throw new ParseException("The string ends unexpectedly with the character '%s' at position '%s'.", c, pos);
                     }
                 }
             }
