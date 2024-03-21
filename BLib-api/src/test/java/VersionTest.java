@@ -6,7 +6,6 @@ import org.junit.Test;
 public class VersionTest {
     @Test
     public void testGetVersion() throws Version.UnsupportedVersionException {
-        Lang.loadIfNull();
         SetServer.setServer();
         Assert.assertEquals(Version.getVersion("super server (MC: 1.19)", "1.19-R0.1-SNAPSHOT", "org.bukkit.craftbukkit.v1_19_R1"), Version.V1_19);
         Assert.assertEquals(Version.getVersion("super server (MC: 1.19.2)", "1.19.2-R0.1-SNAPSHOT", "org.bukkit.craftbukkit.v1_19_R1"), Version.V1_19_2);
@@ -20,7 +19,6 @@ public class VersionTest {
 
     @Test(expected = Version.UnsupportedVersionException.class)
     public void testUnsupportedVersion() throws Version.UnsupportedVersionException {
-        Lang.loadIfNull();
         SetServer.setServer();
         Version.getVersion("unknown server (MC: 1.21)", "1.21-R0.1-SNAPSHOT", "org.bukkit.craftbukkit.v1_21_R1");
         Version.getVersion("unknown server (MC: 1.16.4)", "1.16-R0.1-SNAPSHOT", "org.bukkit.craftbukkit.v1_16.4");

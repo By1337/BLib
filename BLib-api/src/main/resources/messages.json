@@ -1,0 +1,59 @@
+{
+  "unsupported-version": {
+    "message": "Server version is not supported: %s"
+  },
+  "detect-version": {
+    "message": "Detected server version: %s"
+  },
+  "unexpected-character": {
+    "message": "Unexpected character: %s"
+  },
+  "unexpected-token": {
+    "message": "Unexpected token: %s"
+  },
+  "expected": {
+    "message": "Expected '%s'"
+  },
+  "too-many-arguments": {
+    "message": "There is no subcommand that accepts this many arguments: %s"
+  },
+  "number-too-big": {
+    "message": "%s should be greater than %s"
+  },
+  "number-too-small": {
+    "message": "%s should be less than %s"
+  },
+  "nan": {
+    "message": "%s should be a number!"
+  },
+  "unknown-player": {
+    "message": "'%s' - unknown player!"
+  },
+  "constant-not-found-more": {
+    "message": "'%s' - invalid option! All possible values for %s: %s, and others..."
+  },
+  "constant-not-found": {
+    "message": "'%s' - invalid option! All possible values: %s:"
+  },
+  "invalid-characters": {
+    "message": "Invalid characters: %s"
+  },
+  "missing-argument": {
+    "message": "§7[§aBLib§7] §cMissing argument '%s'"
+  },
+  "language-changed": {
+    "message": "§7[§aBLib§7] §aLanguage successfully changed!"
+  },
+  "reload": {
+    "message": "§7[§aBLib§7] §aPlugin successfully reloaded!"
+  },
+  "end-of-command": {
+    "message": "The command ends here"
+  },
+  "should-start-with": {
+    "message": "should start with %s"
+  },
+  "inconsistent-class-list": {
+    "message": "The list is non-homogeneous; its elements do not share the same class. [%s]"
+  }
+}

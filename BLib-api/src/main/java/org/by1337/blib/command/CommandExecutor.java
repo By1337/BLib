@@ -15,5 +15,9 @@ public interface CommandExecutor<T> {
      * @param args   The map of command arguments.
      * @throws CommandSyntaxError If there's a syntax error in the command execution.
      */
+    @Deprecated(since = "1.0.7")
     void executes(T sender, ArgumentMap<String, Object> args) throws CommandException;
+    default void execute(T sender, ArgumentMap<String, Object> args) throws CommandException{
+        executes(sender, args);
+    }
 }
