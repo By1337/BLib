@@ -1,9 +1,5 @@
 package org.by1337.blib.text;
 
-import org.by1337.blib.math.MathParser;
-
-import java.security.PrivilegedActionException;
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -33,7 +29,14 @@ public class LegacyFormattingConvertor {
                 return "<color:#" + lexeme.value + ">" + parseText(buffer) + "</color>";
             }
             case TEXT -> {
-                return lexeme.value;
+                var next = buffer.next();
+                if (next.type.isColor) {
+                    buffer.back();
+                    return lexeme.value;
+                } else {
+                    buffer.back();
+                    return lexeme.value + parseText(buffer);
+                }
             }
             case EOF -> {
                 return "";
@@ -46,48 +49,51 @@ public class LegacyFormattingConvertor {
     }
 
     enum LexemeType {
-        COLOR_BLACK(false, '0', "black"), // §0 -> <black>
-        COLOR_DARK_BLUE(false, '1', "dark_blue"), // §1 -> <dark_blue>
-        COLOR_DARK_GREEN(false, '2', "dark_green"), // §2 -> <dark_green>
-        COLOR_DARK_AQUA(false, '3', "dark_aqua"), // §3 -> <dark_aqua>
-        COLOR_DARK_RED(false, '4', "dark_red"), // §4 -> <dark_red>
-        COLOR_DARK_PURPLE(false, '5', "dark_purple"), // §5 -> <dark_purple>
-        COLOR_GOLD(false, '6', "gold"), // §6 -> <gold>
-        COLOR_GRAY(false, '7', "gray"), // §7 -> <gray>
-        COLOR_DARK_GRAY(false, '8', "dark_gray"), // §8 -> <dark_gray>
-        COLOR_BLUE(false, '9', "blue"), // §9 -> <blue>
-        COLOR_GREEN(false, 'a', "green"), // §a -> <green>
-        COLOR_AQUA(false, 'b', "aqua"), // §b -> <aqua>
-        COLOR_RED(false, 'c', "red"), // §c -> <red>
-        COLOR_LIGHT_PURPLE(false, 'd', "light_purple"), // §d -> <light_purple>
-        COLOR_YELLOW(false, 'e', "yellow"), // §e -> <yellow>
-        COLOR_WHITE(false, 'f', "white"), // §f -> <white>
-        HEX_COLOR, // §#123456 -> <color:#123456>
-        RESET(true, 'r', "reset"), // §r <reset>
-        BOLD(true, 'l', "b"), // §l <b> format
-        UNDERLINE(true, 'n', "u"), // §n <u> format
-        STRIKETHROUGH(true, 'm', "st"), // §m <st>
-        ITALIC(true, 'o', "i"), // §o <i> format
-        OBFUSCATED(true, 'k', "obf"), // §k <obf> format
-        TEXT,
-        EOF;
+        COLOR_BLACK(false, '0', "black", true), // §0 -> <black>
+        COLOR_DARK_BLUE(false, '1', "dark_blue", true), // §1 -> <dark_blue>
+        COLOR_DARK_GREEN(false, '2', "dark_green", true), // §2 -> <dark_green>
+        COLOR_DARK_AQUA(false, '3', "dark_aqua", true), // §3 -> <dark_aqua>
+        COLOR_DARK_RED(false, '4', "dark_red", true), // §4 -> <dark_red>
+        COLOR_DARK_PURPLE(false, '5', "dark_purple", true), // §5 -> <dark_purple>
+        COLOR_GOLD(false, '6', "gold", true), // §6 -> <gold>
+        COLOR_GRAY(false, '7', "gray", true), // §7 -> <gray>
+        COLOR_DARK_GRAY(false, '8', "dark_gray", true), // §8 -> <dark_gray>
+        COLOR_BLUE(false, '9', "blue", true), // §9 -> <blue>
+        COLOR_GREEN(false, 'a', "green", true), // §a -> <green>
+        COLOR_AQUA(false, 'b', "aqua", true), // §b -> <aqua>
+        COLOR_RED(false, 'c', "red", true), // §c -> <red>
+        COLOR_LIGHT_PURPLE(false, 'd', "light_purple", true), // §d -> <light_purple>
+        COLOR_YELLOW(false, 'e', "yellow", true), // §e -> <yellow>
+        COLOR_WHITE(false, 'f', "white", true), // §f -> <white>
+        HEX_COLOR(true), // §#123456 -> <color:#123456>
+        RESET(true, 'r', "reset", false), // §r <reset>
+        BOLD(true, 'l', "b", false), // §l <b> format
+        UNDERLINE(true, 'n', "u", false), // §n <u> format
+        STRIKETHROUGH(true, 'm', "st", false), // §m <st>
+        ITALIC(true, 'o', "i", false), // §o <i> format
+        OBFUSCATED(true, 'k', "obf", false), // §k <obf> format
+        TEXT(false),
+        EOF(false);
         final boolean isFormat;
         final char code;
         final String miniMessagesSyntax;
+        final boolean isColor;
 
-        LexemeType(boolean isFormat, char code, String miniMessagesSyntax) {
+        LexemeType(boolean isFormat, char code, String miniMessagesSyntax, boolean isColor) {
             this.isFormat = isFormat;
             this.code = code;
             this.miniMessagesSyntax = miniMessagesSyntax;
+            this.isColor = isColor;
         }
 
-        LexemeType() {
+        LexemeType(boolean isColor) {
+            this.isColor = isColor;
             this.miniMessagesSyntax = "";
             isFormat = false;
             code = '\n';
         }
 
-        public static LexemeType byColor(char color) {
+        static LexemeType byColor(char color) {
             for (LexemeType value : values()) {
                 if (value.code == color) {
                     return value;
@@ -98,7 +104,7 @@ public class LegacyFormattingConvertor {
     }
 
     private static List<Lexeme> parseExp(String expText) {
-        ArrayList<Lexeme> lexemes = new ArrayList<>();
+        BufferedLexemeAdder buffer = new BufferedLexemeAdder();
         int pos = 0;
 
         StringBuilder text = new StringBuilder();
@@ -116,10 +122,11 @@ public class LegacyFormattingConvertor {
 
                 if (type != null) {
                     if (!text.isEmpty()) {
-                        lexemes.add(new Lexeme(LexemeType.TEXT, text.toString()));
+                        buffer.add(new Lexeme(LexemeType.TEXT, text.toString()));
                         text = new StringBuilder();
                     }
-                    lexemes.add(new Lexeme(type, "§" + code));
+
+                    buffer.add(new Lexeme(type, "§" + code));
                     pos++;
                 } else if (code == '#') {
                     if (pos + 6 >= expText.length()) {
@@ -129,17 +136,17 @@ public class LegacyFormattingConvertor {
                         String hexColor = expText.substring(pos, pos + 6);
                         if (isHex(hexColor)) {
                             if (!text.isEmpty()) {
-                                lexemes.add(new Lexeme(LexemeType.TEXT, text.toString()));
+                                buffer.add(new Lexeme(LexemeType.TEXT, text.toString()));
                                 text = new StringBuilder();
                             }
-                            lexemes.add(new Lexeme(LexemeType.HEX_COLOR, hexColor));
+                            buffer.add(new Lexeme(LexemeType.HEX_COLOR, hexColor));
                             pos += 6;
                         } else {
                             text.append(c);
                             pos--;
                         }
                     }
-                } else if (code == 'x'){
+                } else if (code == 'x') {
                     if (pos + 12 >= expText.length()) {
                         text.append(c);
                     } else {
@@ -147,10 +154,10 @@ public class LegacyFormattingConvertor {
                         String hexColor = expText.substring(pos, pos + 12).replace("§", "");
                         if (isHex(hexColor)) {
                             if (!text.isEmpty()) {
-                                lexemes.add(new Lexeme(LexemeType.TEXT, text.toString()));
+                                buffer.add(new Lexeme(LexemeType.TEXT, text.toString()));
                                 text = new StringBuilder();
                             }
-                            lexemes.add(new Lexeme(LexemeType.HEX_COLOR, hexColor));
+                            buffer.add(new Lexeme(LexemeType.HEX_COLOR, hexColor));
                             pos += 12;
                         } else {
                             text.append(c);
@@ -167,10 +174,10 @@ public class LegacyFormattingConvertor {
             }
         }
         if (!text.isEmpty()) {
-            lexemes.add(new Lexeme(LexemeType.TEXT, text.toString()));
+            buffer.add(new Lexeme(LexemeType.TEXT, text.toString()));
         }
-        lexemes.add(new Lexeme(LexemeType.EOF, ' '));
-        return lexemes;
+        buffer.add(new Lexeme(LexemeType.EOF, ' '));
+        return buffer.lexemes;
     }
 
     private static boolean isHex(String hex) {
@@ -201,6 +208,38 @@ public class LegacyFormattingConvertor {
         }
     }
 
+    static class BufferedLexemeAdder {
+        final List<Lexeme> lexemes = new ArrayList<>();
+        final List<Lexeme> buffer = new ArrayList<>();
+
+        void add(Lexeme lexeme) {
+            if (lexeme.type == LexemeType.TEXT) {
+                if (isEmpty(lexeme.value)) return; // skip
+                lexemes.addAll(buffer);
+                lexemes.add(lexeme);
+                buffer.clear();
+            } else if (lexeme.type.isColor) {
+                buffer.clear();
+                buffer.add(lexeme);
+            } else if (lexeme.type.isFormat) {
+                buffer.add(lexeme);
+            } else {
+                lexemes.add(lexeme);
+            }
+        }
+
+        boolean isEmpty(String s) {
+            if (s.isEmpty()) {
+                return true;
+            }
+            char[] arr = s.toCharArray();
+            for (char c : arr) {
+                if (c != ' ') return false;
+            }
+            return true;
+        }
+    }
+
     static class LexemeBuffer {
         private int pos;
 
@@ -223,10 +262,15 @@ public class LegacyFormattingConvertor {
             return this;
         }
 
+        public Lexeme current() {
+            return lexemes.get(pos);
+        }
+
         public LexemeBuffer add() {
             pos++;
             return this;
         }
+
 
         public int getPos() {
             return pos;
