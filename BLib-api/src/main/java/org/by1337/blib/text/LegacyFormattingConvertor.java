@@ -139,6 +139,24 @@ public class LegacyFormattingConvertor {
                             pos--;
                         }
                     }
+                } else if (code == 'x'){
+                    if (pos + 12 >= expText.length()) {
+                        text.append(c);
+                    } else {
+                        pos++;
+                        String hexColor = expText.substring(pos, pos + 12).replace("§", "");
+                        if (isHex(hexColor)) {
+                            if (!text.isEmpty()) {
+                                lexemes.add(new Lexeme(LexemeType.TEXT, text.toString()));
+                                text = new StringBuilder();
+                            }
+                            lexemes.add(new Lexeme(LexemeType.HEX_COLOR, hexColor));
+                            pos += 12;
+                        } else {
+                            text.append(c);
+                            pos--;
+                        }
+                    }
                 } else {
                     text.append(c);
                     pos++;
