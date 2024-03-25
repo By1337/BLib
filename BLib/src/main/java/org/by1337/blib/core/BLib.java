@@ -1,6 +1,7 @@
 package org.by1337.blib.core;
 
 import lombok.Getter;
+import net.kyori.adventure.text.Component;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -24,7 +25,6 @@ import java.util.logging.Level;
 public class BLib extends JavaPlugin {
     @Getter
     private static Plugin instance;
-    private Config config;
     private BApi api;
 
     public static boolean DEBUG = false;
@@ -45,9 +45,7 @@ public class BLib extends JavaPlugin {
     }
 
     private void init() {
-        config = new Config();
-        config.load();
-        Lang.loadTranslations(this);
+        Lang.loadTranslations(api.getMessage().getTranslation());
         getLogger().log(Level.INFO, String.format(Lang.getMessage("detect-version"), Version.VERSION.getVer()));
     }
 
@@ -100,7 +98,7 @@ public class BLib extends JavaPlugin {
                         }))
                 )
                 .executor((sender, args) -> {
-                    api.getMessage().sendMsg(sender, "&fThis server uses the BLib version %s &b&o<hover:show_text:'https://github.com/By1337/BLib'><click:open_url:'https://github.com/By1337/BLib'>Github</click> &fAuthor &b<hover:show_text:'https://github.com/By1337'><click:open_url:'https://github.com/By1337'>By1337</click>", getDescription().getVersion());
+                    api.getMessage().sendMsg(sender, Component.translatable("hello-message"), getDescription().getVersion());
                 })
         ;
 
@@ -110,7 +108,7 @@ public class BLib extends JavaPlugin {
                 .addSubCommand(CommandTests.packetArmorStandTest())
                 .addSubCommand(CommandTests.sysInfo())
                 .addSubCommand(CommandTests.msgTest())
-                .addSubCommand(CommandTests.miniMsgTest())
+                .addSubCommand(CommandTests.logTest())
                 .addSubCommand(CommandTests.sleep())
         );
 

@@ -17,7 +17,6 @@ public class CommandTest {
     private String args;
     @Test
     public void test1() throws CommandException {
-        Lang.loadIfNull();
         var cmd = new Command<Object>("cmd")
                 .usage(Component.text("/cmd <test/test2>"))
                 .addSubCommand(

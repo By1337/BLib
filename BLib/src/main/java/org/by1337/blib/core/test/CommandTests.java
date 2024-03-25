@@ -25,11 +25,13 @@ public class CommandTests {
                    BLib.getApi().getMessage().sendMsg(sender, (String) args.getOrDefault("msg", "123"));
                 }));
     }
-    public static Command<CommandSender> miniMsgTest() {
-        return new Command<CommandSender>("mini_msg")
+    public static Command<CommandSender> logTest() {
+        return new Command<CommandSender>("log")
                 .argument(new ArgumentStrings<>("msg"))
                 .executor(((sender, args) -> {
-                    sender.sendMessage(BLib.getApi().getLegacyConvertor().convert((String) args.getOrDefault("msg", "123")));
+                    BLib.getApi().getMessage().log(
+                            BLib.getApi().getMessage().componentBuilder((String) args.getOrDefault("msg", "123"))
+                    );
                 }));
     }
     public static Command<CommandSender> packetArmorStandTest() {

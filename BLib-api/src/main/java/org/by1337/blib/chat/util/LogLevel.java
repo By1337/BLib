@@ -1,6 +1,6 @@
 package org.by1337.blib.chat.util;
 
-
+@Deprecated(since = "1.0.7.1")
 public enum LogLevel {
     NONE(-1),
     LEVEL_0(0),

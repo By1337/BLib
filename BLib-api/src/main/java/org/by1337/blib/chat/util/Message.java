@@ -2,21 +2,27 @@ package org.by1337.blib.chat.util;
 
 import me.clip.placeholderapi.PlaceholderAPI;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.TranslatableComponent;
 import net.kyori.adventure.title.Title;
 import net.kyori.adventure.util.Ticks;
 import net.md_5.bungee.api.ChatColor;
-import net.md_5.bungee.api.ChatMessageType;
-import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.Sound;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.by1337.blib.BLib;
+import org.by1337.blib.text.ComponentToANSI;
 import org.by1337.blib.text.LegacyConvertor;
+import org.by1337.blib.text.LegacyFormattingConvertor;
+import org.by1337.blib.translation.Translation;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.io.Reader;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
@@ -26,9 +32,13 @@ import java.util.regex.Pattern;
  * The Message class is responsible for handling and sending formatted messages to both the console log and players.
  */
 public class Message {
+    @Deprecated(since = "1.0.7")
     private final Pattern hexPattern;
     private final Logger logger;
+    @Deprecated(since = "1.0.7.1")
     private LogLevel logLevel = LogLevel.NONE;
+    @Nullable
+    private Translation translation;
 
     /**
      * Constructs a Message instance with a default color pattern.
@@ -40,53 +50,33 @@ public class Message {
         hexPattern = Pattern.compile("&(#[a-f0-9]{6})", Pattern.CASE_INSENSITIVE);
     }
 
+    public Message(@NotNull Logger logger, Reader translationReader) {
+        this.logger = logger;
+        hexPattern = Pattern.compile("&(#[a-f0-9]{6})", Pattern.CASE_INSENSITIVE);
+        translation = Translation.fromJson(translationReader, this);
+    }
+
     /**
      * Constructs a Message instance with a custom color pattern.
      *
      * @param hexPattern The custom color pattern to use.
      * @param logger     The logger to use for output.
+     * @deprecated hexPattern is no longer used as there has been a transition to MiniMessages.
+     * Support for old color formats still remains. Refer to {@link LegacyFormattingConvertor} to understand which color formats are supported.
      */
+    @Deprecated(since = "1.0.7")
     public Message(@NotNull Pattern hexPattern, @NotNull Logger logger) {
         this.hexPattern = hexPattern;
         this.logger = logger;
     }
 
-    /**
-     * Logs a severe error message with the associated Throwable.
-     *
-     * @param msg The error message to log.
-     * @param t   The Throwable associated with the error.
-     */
-    public void error(String msg, Throwable t) {
-        logger.log(Level.SEVERE, msg, t);
+    @Nullable
+    public Translation getTranslation() {
+        return translation;
     }
 
-    public void error(Component msg, Throwable t) {
-        error(getContent(msg), t);
-    }
-
-    /**
-     * Logs a severe error message with the associated Throwable and additional objects.
-     *
-     * @param msg     The error message to log, which may contain placeholders for objects.
-     * @param t       The Throwable associated with the error.
-     * @param objects Additional objects to be included in the log message.
-     */
-    public void error(String msg, Throwable t, Object... objects) {
-        logger.log(Level.SEVERE, String.format(msg, objects), t);
-    }
-
-    public void error(Component msg, Throwable t, Object... objects) {
-        error(getContent(msg), t, objects);
-    }
-
-    /**
-     * Logs a severe error message with the associated Throwable and an empty message.
-     *
-     * @param t The Throwable associated with the error.
-     */
-    public void error(Throwable t) {
-        logger.log(Level.SEVERE, "", t);
+    public void setTranslation(@Nullable Translation translation) {
+        this.translation = translation;
     }
 
     /**
@@ -101,8 +91,25 @@ public class Message {
     }
 
     public void sendMsg(@NotNull CommandSender sender, @NotNull Component msg) {
-        sender.sendMessage(msg);
+        sender.sendMessage(translate(msg, sender instanceof OfflinePlayer offlinePlayer ? offlinePlayer : null));
     }
+
+    public void sendMsg(@NotNull CommandSender sender, @NotNull TranslatableComponent msg, Object... objects) {
+        sender.sendMessage(buildTranslatableAndTranslate(msg, sender instanceof Player pl ? pl.locale() : null, objects));
+    }
+
+    /**
+     * Sends a formatted message to a command sender with variable replacements using format placeholders.
+     *
+     * @param sender The CommandSender to send the message to.
+     * @param msg    The message string to be sent with format placeholders.
+     * @param format The objects used for formatting the message.
+     */
+    public void sendMsg(@NotNull CommandSender sender, @NotNull String msg, @NotNull Object... format) {
+        OfflinePlayer player = sender instanceof OfflinePlayer o ? o : null;
+        sender.sendMessage(componentBuilder(String.format(msg, format), player));
+    }
+
 
     /**
      * Sends a raw message to a command sender using a ComponentBuilder.
@@ -132,18 +139,6 @@ public class Message {
     }
 
     /**
-     * Sends a formatted message to a command sender with variable replacements using format placeholders.
-     *
-     * @param sender The CommandSender to send the message to.
-     * @param msg    The message string to be sent with format placeholders.
-     * @param format The objects used for formatting the message.
-     */
-    public void sendMsg(@NotNull CommandSender sender, @NotNull String msg, @NotNull Object... format) {
-        OfflinePlayer player = sender instanceof OfflinePlayer o ? o : null;
-        sender.sendMessage(componentBuilder(String.format(msg, format), player));
-    }
-
-    /**
      * Send a debug message to the logger.
      *
      * @param msg The debug message to be logged.
@@ -158,6 +153,7 @@ public class Message {
      * @param msg   The debug message to be logged.
      * @param level The log level control to determine if the message should be logged.
      */
+    @Deprecated(since = "1.0.7.1")
     public void debug(@Nullable String msg, @NotNull LogLevel level) {
         if (level.getLvl() < logLevel.getLvl()) {
             logger.info("[DEBUG] " + msg);
@@ -171,62 +167,157 @@ public class Message {
      * @param level   The log level control to determine if the message should be logged.
      * @param objects Additional objects to be included in the log message.
      */
+    @Deprecated(since = "1.0.7.1")
     public void debug(@Nullable String msg, @NotNull LogLevel level, Object... objects) {
         if (level.getLvl() < logLevel.getLvl()) {
             logger.info(String.format("[DEBUG] " + msg, objects));
         }
     }
 
-    /**
-     * Log a message to the logger with formatting.
-     *
-     * @param msg The message to be logged.
-     */
+    @Deprecated(since = "1.0.7.1")
     public void logger(@NotNull String msg) {
-        logger.log(Level.INFO, messageBuilder(msg));
+        logger.log(Level.INFO, msg);
     }
 
-    public void logger(@NotNull Component msg) {
-        logger(getContent(msg));
-    }
-
-
-    /**
-     * Log a message to the logger with formatting and additional objects.
-     *
-     * @param msg     The message format string.
-     * @param objects Objects to format the message.
-     */
+    @Deprecated(since = "1.0.7.1")
     public void logger(@NotNull String msg, @NotNull Object... objects) {
-        logger.log(Level.INFO, String.format(messageBuilder(msg), objects));
+        logger.log(Level.INFO, String.format(msg, objects));
     }
 
-    /**
-     * Log an error message to the logger.
-     *
-     * @param msg The error message to be logged.
-     */
+
+    //// error start
+    public void error(@Nullable Throwable t) {
+        logger.log(Level.SEVERE, "", t);
+    }
+
     public void error(@NotNull String msg) {
-        logger.log(Level.SEVERE, messageBuilder(msg));
+        logger.log(Level.SEVERE, msg);
+    }
+
+    public void error(@NotNull String msg, @Nullable Throwable t) {
+        logger.log(Level.SEVERE, msg, t);
+    }
+
+    public void error(@NotNull String msg, Object... objects) {
+        logger.log(Level.SEVERE, String.format(msg, objects));
+    }
+
+    public void error(@NotNull String msg, @Nullable Throwable t, Object... objects) {
+        logger.log(Level.SEVERE, String.format(msg, objects), t);
     }
 
     public void error(@NotNull Component msg) {
-        error(getContent(msg));
+        logger.log(Level.SEVERE, ComponentToANSI.get().convert(msg));
     }
 
-    /**
-     * Log an error message to the logger with formatting.
-     *
-     * @param msg     The error message format string.
-     * @param objects Objects to format the error message.
-     */
-    public void error(@NotNull String msg, @NotNull Object... objects) {
-        logger.log(Level.SEVERE, messageBuilder(String.format(msg, objects)));
+    public void error(@NotNull Component msg, @Nullable Throwable t) {
+        logger.log(Level.SEVERE, ComponentToANSI.get().convert(msg), t);
     }
 
-    public void error(@NotNull Component msg, @NotNull Object... objects) {
-        error(getContent(msg), objects);
+    public void error(@NotNull TranslatableComponent msg, @Nullable Throwable t, Object... objects) {
+        error(buildTranslatableAndTranslate(msg, objects), t);
     }
+
+    public void error(@NotNull TranslatableComponent msg, Object... objects) {
+        error(buildTranslatableAndTranslate(msg, objects));
+    }
+    //// error end
+
+
+    @NotNull
+    public Component buildTranslatableAndTranslate(@NotNull TranslatableComponent msg, Object... objects) {
+        return buildTranslatableAndTranslate(msg, null, objects);
+    }
+
+    @NotNull
+    public Component buildTranslatableAndTranslate(@NotNull TranslatableComponent msg, @Nullable Locale locale, Object... objects) {
+        List<Component> components = new ArrayList<>();
+        for (Object object : objects) {
+            components.add(Component.text(String.valueOf(object)));
+        }
+        msg = msg.args(components);
+        if (translation != null) {
+            return translation.translate(msg, locale, null);
+        } else {
+            return msg;
+        }
+    }
+
+    //// log start
+    public void log(@Nullable Throwable t) {
+        logger.log(Level.INFO, "", t);
+    }
+
+    public void log(@NotNull String msg) {
+        logger.log(Level.INFO, msg);
+    }
+
+    public void log(@NotNull String msg, Object... objects) {
+        logger.log(Level.INFO, String.format(msg, objects));
+    }
+
+    public void log(@NotNull String msg, @Nullable Throwable t) {
+        logger.log(Level.INFO, msg, t);
+    }
+
+    public void log(@NotNull String msg, @Nullable Throwable t, Object... objects) {
+        logger.log(Level.INFO, String.format(msg, objects), t);
+    }
+
+    public void log(@NotNull Component msg) {
+        logger.log(Level.INFO, ComponentToANSI.get().convert(msg));
+    }
+
+    public void log(@NotNull Component msg, @Nullable Throwable t) {
+        logger.log(Level.INFO, ComponentToANSI.get().convert(msg), t);
+    }
+
+    public void log(@NotNull TranslatableComponent msg, Object... objects) {
+        log(buildTranslatableAndTranslate(msg, objects));
+    }
+
+    public void log(@NotNull TranslatableComponent msg, @Nullable Throwable t, Object... objects) {
+        log(buildTranslatableAndTranslate(msg, objects), t);
+    }
+    //// log end
+
+    //// warning start
+    public void warning(@Nullable Throwable t) {
+        logger.log(Level.WARNING, "", t);
+    }
+
+    public void warning(@NotNull String msg) {
+        logger.log(Level.WARNING, msg);
+    }
+
+    public void warning(@NotNull String msg, Object... objects) {
+        logger.log(Level.WARNING, String.format(msg, objects));
+    }
+
+    public void warning(@NotNull String msg, @Nullable Throwable t) {
+        logger.log(Level.WARNING, msg, t);
+    }
+
+    public void warning(@NotNull String msg, @Nullable Throwable t, Object... objects) {
+        logger.log(Level.WARNING, String.format(msg, objects), t);
+    }
+
+    public void warning(@NotNull Component msg) {
+        logger.log(Level.WARNING, ComponentToANSI.get().convert(msg));
+    }
+
+    public void warning(@NotNull Component msg, @Nullable Throwable t) {
+        logger.log(Level.WARNING, ComponentToANSI.get().convert(msg), t);
+    }
+
+    public void warning(@NotNull TranslatableComponent msg, Object... objects) {
+        warning(buildTranslatableAndTranslate(msg, objects));
+    }
+
+    public void warning(@NotNull TranslatableComponent msg, @Nullable Throwable t, Object... objects) {
+        warning(buildTranslatableAndTranslate(msg, objects), t);
+    }
+    //// warning end
 
     /**
      * Send a formatted message to all online players who are operators.
@@ -247,27 +338,6 @@ public class Message {
                 sendMsg(pl, msg);
             }
         }
-    }
-
-    /**
-     * Log a warning message to the logger.
-     *
-     * @param msg The warning message to be logged.
-     */
-    public void warning(@NotNull String msg) {
-        logger.log(Level.WARNING, messageBuilder(msg));
-    }
-
-    public void warning(@NotNull Component msg) {
-        warning(getContent(msg));
-    }
-
-    public void warning(@NotNull String msg, Object... objects) {
-        logger.log(Level.WARNING, messageBuilder(String.format(msg, objects)));
-    }
-
-    public void warning(@NotNull Component msg, Object... objects) {
-        warning(getContent(msg), objects);
     }
 
     /**
@@ -312,6 +382,7 @@ public class Message {
     public void sendTitle(@NotNull Player pl, @NotNull String title, @NotNull String subTitle, int fadeIn, int stay, int fadeOut) {
         sendTitle(pl, componentBuilder(title), componentBuilder(subTitle), fadeIn, stay, fadeOut);
     }
+
     public void sendTitle(@NotNull Player pl, @NotNull Component title, @NotNull Component subTitle, int fadeIn, int stay, int fadeOut) {
         pl.showTitle(
                 Title.title(title,
@@ -335,6 +406,7 @@ public class Message {
     public void sendTitle(@NotNull Player pl, @NotNull String title, @NotNull String subTitle) {
         sendTitle(pl, title, subTitle, 10, 70, 20);
     }
+
     public void sendTitle(@NotNull Player pl, @NotNull Component title, @NotNull Component subTitle) {
         sendTitle(pl, title, subTitle, 10, 70, 20);
     }
@@ -349,6 +421,7 @@ public class Message {
         for (Player pl : Bukkit.getOnlinePlayers())
             sendTitle(pl, title, subTitle);
     }
+
     public void sendAllTitle(@NotNull Component title, @NotNull Component subTitle) {
         for (Player pl : Bukkit.getOnlinePlayers())
             sendTitle(pl, title, subTitle);
@@ -370,15 +443,28 @@ public class Message {
     }
 
     public Component componentBuilder(@NotNull String msg, @Nullable OfflinePlayer player) {
+        return translate(componentBuilderNoTranslate(msg, player), player);
+    }
+
+    public Component translate(Component component, @Nullable OfflinePlayer player) {
+        if (translation != null) {
+            if (player != null && player.isOnline()) {
+                return translation.translate(component, player.getPlayer().locale(), player);
+            }
+            return translation.translate(component, null, player);
+        }
+        return component;
+    }
+
+    public Component componentBuilderNoTranslate(@NotNull String msg, @Nullable OfflinePlayer player) {
         msg = setPlaceholders(player, msg);
         msg = msg.replace("\\s", "\s").replace("\\n", "\n");
         return LegacyConvertor.convert0(msg);
     }
+
     @Deprecated(since = "1.0.7")
     public String messageBuilder(@NotNull String msg, @Nullable OfflinePlayer player) {
         msg = setPlaceholders(player, msg);
-//        msg = msg.replace("\\s", "\s")
-//                .replace("\\n", "\n");
         return hex(msg);
     }
 
@@ -391,6 +477,7 @@ public class Message {
         for (Player pl : Bukkit.getOnlinePlayers())
             sendMsg(pl, msg);
     }
+
     public void sendAllMsg(@NotNull Component msg) {
         for (Player pl : Bukkit.getOnlinePlayers())
             sendMsg(pl, msg);
@@ -491,6 +578,7 @@ public class Message {
      * @param message The message to be processed for hex color codes.
      * @return The message with hex color codes replaced by ChatColor.
      */
+    @Deprecated(since = "1.0.7")
     private @NotNull String hex(@NotNull String message) {
         Matcher m = hexPattern.matcher(message);
         while (m.find())
@@ -509,10 +597,12 @@ public class Message {
         return sb.toString();
     }
 
+    @Deprecated(since = "1.0.7.1")
     public LogLevel getLogLevel() {
         return logLevel;
     }
 
+    @Deprecated(since = "1.0.7.1")
     public void setLogLevel(LogLevel logLevel) {
         this.logLevel = logLevel;
     }

@@ -8,8 +8,6 @@ import java.text.ParseException;
 public class MathParserTest {
     @Test
     public void run() {
-        Lang.loadIfNull();
-
         Assert.assertEquals(MathParser.mathSave("math[5 + 5 * 5 == 30 && 7 + 7 * 7 == 56 && (25 + 25 % 50 == 1 || 35 + 35 == 70)]"), "1");
         Assert.assertEquals(MathParser.mathSave("math[(10 == 10) && (63 == 63) && (63 == 63) && (63 == 63)]"), "1");
         Assert.assertEquals(MathParser.mathSave("math[5 + 5 * 5 == 30 && 7 + 7 * 7 == 56]"), "1");

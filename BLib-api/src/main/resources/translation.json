@@ -1,0 +1,82 @@
+{
+  "use-locale": "auto-detect",
+  "default-locale": "ru_RU",
+  "messages": {
+    "unsupported-version": {
+      "ru_RU": "Версия сервера не поддерживается: %s",
+      "en_UK": "Server version is not supported: %s"
+    },
+    "detect-version": {
+      "ru_RU": "Обнаруженная версия сервера: %s",
+      "en_UK": "Detected server version: %s"
+    },
+    "unexpected-character": {
+      "ru_RU": "Неожиданный символ: %s",
+      "en_UK": "Unexpected character: %s"
+    },
+    "unexpected-token": {
+      "ru_RU": "Неожиданный токен: %s",
+      "en_UK": "Unexpected token: %s"
+    },
+    "expected": {
+      "ru_RU": "Ожидается '%s'",
+      "en_UK": "Expected '%s'"
+    },
+    "too-many-arguments": {
+      "ru_RU": "Нет подкоманды, которая принимает такое количество аргументов: %s",
+      "en_UK": "There is no subcommand that accepts this many arguments: %s"
+    },
+    "number-too-big": {
+      "ru_RU": "%s должно быть больше %s",
+      "en_UK": "%s should be greater than %s"
+    },
+    "number-too-small": {
+      "ru_RU": "%s должно быть меньше %s",
+      "en_UK": "%s should be less than %s"
+    },
+    "nan": {
+      "ru_RU": "%s должно быть числом!",
+      "en_UK": "%s should be a number!"
+    },
+    "unknown-player": {
+      "ru_RU": "'%s' - неизвестный игрок!",
+      "en_UK": "'%s' - unknown player!"
+    },
+    "constant-not-found-more": {
+      "ru_RU": "'%s' - недопустимая опция! Все возможные значения для %s: %s и другие...",
+      "en_UK": "'%s' - invalid option! All possible values for %s: %s, and others..."
+    },
+    "constant-not-found": {
+      "ru_RU": "'%s' - недопустимая опция! Все возможные значения: %s:",
+      "en_UK": "'%s' - invalid option! All possible values: %s:"
+    },
+    "invalid-characters": {
+      "ru_RU": "Недопустимые символы: %s",
+      "en_UK": "Invalid characters: %s"
+    },
+    "missing-argument": {
+      "ru_RU": "<gray>[</gray><green>BLib</green><gray>] </gray><red>Отсутствует аргумент '%s'</red>",
+      "en_UK": "<gray>[</gray><green>BLib</green><gray>] </gray><red>Missing argument '%s'</red>"
+    },
+    "reload": {
+      "ru_RU": "<gray>[</gray><green>BLib</green><gray>] </gray><green>Плагин успешно перезагружен!</green>",
+      "en_UK": "<gray>[</gray><green>BLib</green><gray>] </gray><green>Plugin successfully reloaded!</green>"
+    },
+    "end-of-command": {
+      "ru_RU": "Команда заканчивается здесь",
+      "en_UK": "The command ends here"
+    },
+    "should-start-with": {
+      "ru_RU": "должно начинаться с %s",
+      "en_UK": "should start with %s"
+    },
+    "inconsistent-class-list": {
+      "ru_RU": "Список неоднороден; его элементы не имеют одинакового класса. [%s]",
+      "en_UK": "The list is non-homogeneous; its elements do not share the same class. [%s]"
+    },
+    "hello-message": {
+      "ru_RU": "<white>Этот сервер использует BLib версии %s </white><aqua><i><hover:show_text:'https://github.com/By1337/BLib'><click:open_url:'https://github.com/By1337/BLib'>Github</click> </i></aqua><white>Автор </white><aqua><hover:show_text:'https://github.com/By1337'><click:open_url:'https://github.com/By1337'>By1337</click></aqua>",
+      "en_UK": "<white>This server uses the BLib version %s </white><aqua><i><hover:show_text:'https://github.com/By1337/BLib'><click:open_url:'https://github.com/By1337/BLib'>Github</click> </i></aqua><white>Author </white><aqua><hover:show_text:'https://github.com/By1337'><click:open_url:'https://github.com/By1337'>By1337</click></aqua>"
+    }
+  }
+}

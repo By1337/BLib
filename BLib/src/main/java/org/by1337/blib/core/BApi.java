@@ -6,12 +6,14 @@ import org.by1337.blib.command.BukkitCommandRegister;
 import org.by1337.blib.command.CommandUtil;
 import org.by1337.blib.core.factory.BBukkitCommandRegisterFactory;
 import org.by1337.blib.core.nbt.ParseCompoundTagManager;
+import org.by1337.blib.core.text.ComponentToANSIImpl;
 import org.by1337.blib.core.text.LegacyConvertorImpl;
 import org.by1337.blib.factory.PacketEntityFactory;
 import org.by1337.blib.factory.PacketFactory;
 import org.by1337.blib.inventory.FakeTitleFactory;
 import org.by1337.blib.inventory.ItemStackSerialize;
 import org.by1337.blib.nbt.ParseCompoundTag;
+import org.by1337.blib.text.ComponentToANSI;
 import org.by1337.blib.text.LegacyConvertor;
 import org.by1337.blib.util.AsyncCatcher;
 import org.by1337.blib.core.command.BCommandUtil;
@@ -22,6 +24,10 @@ import org.by1337.blib.core.inventory.ItemStackSerializeFactory;
 import org.by1337.blib.nms.v1_16_5.AsyncCatcherImpl;
 import org.jetbrains.annotations.NotNull;
 
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.logging.Logger;
 
 public class BApi implements Api {
@@ -34,9 +40,19 @@ public class BApi implements Api {
     private final FakeTitleFactory fakeTitleFactory = new FakeTitleFactoryImpl();
     private final BukkitCommandRegister register = new BBukkitCommandRegisterFactory().create();
     private final LegacyConvertor legacyConvertor = new LegacyConvertorImpl();
+    private final ComponentToANSIImpl componentToANSI = new ComponentToANSIImpl();
 
     public BApi() {
-        message = new Message(BLib.getInstance().getLogger());
+        File file = new File(BLib.getInstance().getDataFolder(), "translation.json");
+        if (!file.exists()) {
+            BLib.getInstance().saveResource("translation.json", false);
+        }
+        try (FileReader reader = new FileReader(file, StandardCharsets.UTF_8)) {
+            message = new Message(BLib.getInstance().getLogger(), reader);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
         asyncCatcher = new AsyncCatcherImpl();
     }
 
@@ -93,5 +109,10 @@ public class BApi implements Api {
     @Override
     public @NotNull LegacyConvertor getLegacyConvertor() {
         return legacyConvertor;
+    }
+
+    @Override
+    public @NotNull ComponentToANSI getComponentToANSI() {
+        return componentToANSI;
     }
 }

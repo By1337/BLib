@@ -66,7 +66,7 @@ public class LegacyFormattingConvertor {
         COLOR_YELLOW(false, 'e', "yellow", true), // §e -> <yellow>
         COLOR_WHITE(false, 'f', "white", true), // §f -> <white>
         HEX_COLOR(true), // §#123456 -> <color:#123456>
-        RESET(true, 'r', "reset", false), // §r <reset>
+        RESET(false, 'r', "reset", true), // §r <reset>
         BOLD(true, 'l', "b", false), // §l <b> format
         UNDERLINE(true, 'n', "u", false), // §n <u> format
         STRIKETHROUGH(true, 'm', "st", false), // §m <st>
@@ -214,7 +214,7 @@ public class LegacyFormattingConvertor {
 
         void add(Lexeme lexeme) {
             if (lexeme.type == LexemeType.TEXT) {
-                if (isEmpty(lexeme.value)) return; // skip
+             //   if (isEmpty(lexeme.value)) return; // skip
                 lexemes.addAll(buffer);
                 lexemes.add(lexeme);
                 buffer.clear();
