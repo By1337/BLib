@@ -27,11 +27,11 @@
       "en_UK": "There is no subcommand that accepts this many arguments: %s"
     },
     "number-too-big": {
-      "ru_RU": "%s должно быть больше %s",
+      "ru_RU": "%s должно быть больше чем %s",
       "en_UK": "%s should be greater than %s"
     },
     "number-too-small": {
-      "ru_RU": "%s должно быть меньше %s",
+      "ru_RU": "%s должно быть меньше чем %s",
       "en_UK": "%s should be less than %s"
     },
     "nan": {
@@ -71,7 +71,7 @@
       "en_UK": "should start with %s"
     },
     "inconsistent-class-list": {
-      "ru_RU": "Список неоднороден; его элементы не имеют одинакового класса. [%s]",
+      "ru_RU": "Список неоднороден; его элементы не одного класса. [%s]",
       "en_UK": "The list is non-homogeneous; its elements do not share the same class. [%s]"
     },
     "hello-message": {

@@ -50,7 +50,7 @@ public class ArgumentIntegerAllowedMath<T> extends ArgumentInteger<T> {
     public List<String> tabCompleter(T sender, String str) throws CommandSyntaxError {
         if (str.isEmpty()) return getExx();
         try {
-            String str1 = MathParser.math(String.format("math[%s]", str));
+            String str1 = MathParser.math(String.format("math[%s]", str.replace("_", "")), false);
             super.process(sender, str1);
             return List.of(str1);
         } catch (ParseException | NumberFormatException e) {
@@ -61,7 +61,7 @@ public class ArgumentIntegerAllowedMath<T> extends ArgumentInteger<T> {
     @Override
     public Object process(T sender, String str) throws CommandSyntaxError {
         try {
-            return super.process(sender, MathParser.math(String.format("math[%s]", str)));
+            return super.process(sender, MathParser.math(String.format("math[%s]", str).replace("_", ""), false));
         } catch (ParseException | NumberFormatException e) {
             throw new CommandSyntaxError(Lang.getMessage("nan"), str);
         }

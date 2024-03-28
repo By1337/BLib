@@ -179,10 +179,11 @@ public class Command<T> {
         try {
             if (args.length == 0) return Collections.emptyList();
             List<String> list = getTabCompleter0(sender, args);
-            String lastParam = args[args.length - 1];
+            return list;
+          /*  String lastParam = args[args.length - 1];
             return list.stream()
                     .filter(s -> !s.isEmpty() && s.startsWith(lastParam))
-                    .toList();
+                    .toList();*/
         } catch (CommandSyntaxError e) {
             return Collections.singletonList(e.getMessage());
         }
