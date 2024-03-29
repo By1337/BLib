@@ -15,6 +15,7 @@ public abstract class Argument<T> {
     protected final String name;
     private Supplier<List<String>> exx;
     protected List<Requires<T>> requires = new ArrayList<>();
+    private boolean hide;
 
     /**
      * Constructs an Argument with the specified name and no examples.
@@ -61,6 +62,15 @@ public abstract class Argument<T> {
             }
         }
         return true;
+    }
+
+    public boolean isHide() {
+        return hide;
+    }
+
+    public Argument<T> setHide(boolean hide) {
+        this.hide = hide;
+        return this;
     }
 
     public String getName() {

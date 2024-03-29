@@ -100,12 +100,6 @@ public class NBTParser {
             return parseCompoundTag(buffer);
         }
         String val = lexeme.value;
-        boolean isByte = false;
-        if (type == LexemeType.STRING && (val.equals("true") || val.equals("false"))) {
-            type = LexemeType.NUMBER;
-            val = val.equals("true") ? "1" : "0";
-            isByte = true;
-        }
         if (type == LexemeType.NUMBER) {
             Lexeme next = buffer.next();
             switch (next.type) {
@@ -133,9 +127,6 @@ public class NBTParser {
             }
             if (val.contains(".")) {
                 return new DoubleNBT(Double.parseDouble(val));
-            }
-            if (isByte) {
-                return ByteNBT.valueOf(Byte.parseByte(val));
             }
             return IntNBT.valueOf(Integer.parseInt(val));
         } else if (type == LexemeType.STRING) {

@@ -101,18 +101,21 @@ public class CompoundTag extends NBT {
     public byte getAsByte(String name) {
         var v = get(name);
         if (v == null) throw new NullPointerException("unknown tag " + name);
+        if (v instanceof StringNBT stringNBT) return (byte) (stringNBT.getValue().equals("true") ? 1 : 0);
         return ((Number) v.getAsObject()).byteValue();
     }
 
     public boolean getAsBoolean(String name) {
         var v = get(name);
         if (v == null) throw new NullPointerException("unknown tag " + name);
+        if (v instanceof StringNBT stringNBT) return stringNBT.getValue().equals("true");
         return ((Number) v.getAsObject()).byteValue() == 1;
     }
 
     public boolean getAsBoolean(String name, boolean def) {
         var v = get(name);
         if (v == null) return def;
+        if (v instanceof StringNBT stringNBT) return stringNBT.getValue().equals("true");
         return ((Number) v.getAsObject()).byteValue() == 1;
     }
 
