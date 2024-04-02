@@ -8,6 +8,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.by1337.blib.command.CommandExecutor;
 import org.by1337.blib.command.argument.ArgumentBoolean;
 import org.by1337.blib.command.argument.ArgumentMap;
+import org.by1337.blib.translation.Translation;
 import org.by1337.blib.util.Version;
 import org.by1337.blib.command.Command;
 import org.by1337.blib.command.CommandException;
@@ -19,6 +20,10 @@ import org.by1337.blib.core.test.CommandTests;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.logging.Level;
 
@@ -74,6 +79,16 @@ public class BLib extends JavaPlugin {
                 .addSubCommand(new Command<CommandSender>("reload")
                         .requires(new RequiresPermission<>("blib.reload"))
                         .executor(((sender, args) -> {
+                            File file = new File(BLib.getInstance().getDataFolder(), "translation.json");
+                            if (!file.exists()) {
+                                BLib.getInstance().saveResource("translation.json", false);
+                            }
+                            try (FileReader reader = new FileReader(file, StandardCharsets.UTF_8)) {
+                                var translation = Translation.fromJson(reader, api.getMessage());
+                                api.getMessage().setTranslation(translation);
+                            } catch (IOException e) {
+                                throw new RuntimeException(e);
+                            }
                             init();
                             sender.sendMessage(Lang.getMessage("reload"));
                         }))

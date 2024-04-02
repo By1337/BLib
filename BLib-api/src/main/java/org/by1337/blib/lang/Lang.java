@@ -7,12 +7,10 @@ import org.jetbrains.annotations.Nullable;
 import java.util.function.Function;
 
 public class Lang {
-    private static Translation translation;
     private static Function<String, String> provider = s -> s;
 
     public static void loadTranslations(Translation translation) {
-        if (Lang.translation != null) throw new UnsupportedOperationException();
-        Lang.translation = translation;
+        //if (Lang.translation != null) throw new UnsupportedOperationException();
         provider = s -> getOrDefault(translation.translate(s), s);
     }
 

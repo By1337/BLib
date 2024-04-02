@@ -207,11 +207,11 @@ public class Message {
     }
 
     public void error(@NotNull Component msg) {
-        logger.log(Level.SEVERE, ComponentToANSI.get().convert(msg));
+        logger.log(Level.SEVERE, ComponentToANSI.get().convert(translate(msg, null)));
     }
 
     public void error(@NotNull Component msg, @Nullable Throwable t) {
-        logger.log(Level.SEVERE, ComponentToANSI.get().convert(msg), t);
+        logger.log(Level.SEVERE, ComponentToANSI.get().convert(translate(msg, null)), t);
     }
 
     public void error(@NotNull TranslatableComponent msg, @Nullable Throwable t, Object... objects) {
@@ -226,22 +226,13 @@ public class Message {
 
     @NotNull
     public Component buildTranslatableAndTranslate(@NotNull TranslatableComponent msg, Object... objects) {
-        return buildTranslatableAndTranslate(msg, null, objects);
-    }
-
-    @NotNull
-    public Component buildTranslatableAndTranslate(@NotNull TranslatableComponent msg, @Nullable Locale locale, Object... objects) {
         List<Component> components = new ArrayList<>();
         for (Object object : objects) {
             components.add(Component.text(String.valueOf(object)));
         }
-        msg = msg.args(components);
-        if (translation != null) {
-            return translation.translate(msg, locale, null);
-        } else {
-            return msg;
-        }
+        return msg.args(components);
     }
+
 
     //// log start
     public void log(@Nullable Throwable t) {
@@ -265,11 +256,11 @@ public class Message {
     }
 
     public void log(@NotNull Component msg) {
-        logger.log(Level.INFO, ComponentToANSI.get().convert(msg));
+        logger.log(Level.INFO, ComponentToANSI.get().convert(translate(msg, null)));
     }
 
     public void log(@NotNull Component msg, @Nullable Throwable t) {
-        logger.log(Level.INFO, ComponentToANSI.get().convert(msg), t);
+        logger.log(Level.INFO, ComponentToANSI.get().convert(translate(msg, null)), t);
     }
 
     public void log(@NotNull TranslatableComponent msg, Object... objects) {
@@ -303,11 +294,11 @@ public class Message {
     }
 
     public void warning(@NotNull Component msg) {
-        logger.log(Level.WARNING, ComponentToANSI.get().convert(msg));
+        logger.log(Level.WARNING, ComponentToANSI.get().convert(translate(msg, null)));
     }
 
     public void warning(@NotNull Component msg, @Nullable Throwable t) {
-        logger.log(Level.WARNING, ComponentToANSI.get().convert(msg), t);
+        logger.log(Level.WARNING, ComponentToANSI.get().convert(translate(msg, null)), t);
     }
 
     public void warning(@NotNull TranslatableComponent msg, Object... objects) {

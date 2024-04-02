@@ -33,10 +33,12 @@ public class Translation {
     }
 
     public static Translation fromJson(Reader reader, Message message) {
+        return createGson(message).fromJson(reader, Translation.class);
+    }
+    public static Gson createGson(Message message){
         return new GsonBuilder()
                 .registerTypeAdapter(Translation.class, new TranslationAdapter(message))
-                .create()
-                .fromJson(reader, Translation.class);
+                .create();
     }
 
     @Nullable
