@@ -51,13 +51,15 @@ public abstract class Argument<T> {
         this.requires.add(requires);
         return this;
     }
+
     public Argument<T> requires(Requires<T>... requires) {
         this.requires.addAll(Arrays.stream(requires).toList());
         return this;
     }
-    public boolean checkRequires(T sender){
+
+    public boolean checkRequires(T sender) {
         for (Requires<T> require : requires) {
-            if (!require.check(sender)){
+            if (!require.check(sender)) {
                 return false;
             }
         }
@@ -66,6 +68,11 @@ public abstract class Argument<T> {
 
     public boolean isHide() {
         return hide;
+    }
+
+    public Argument<T> hide() {
+        hide = true;
+        return this;
     }
 
     public Argument<T> setHide(boolean hide) {

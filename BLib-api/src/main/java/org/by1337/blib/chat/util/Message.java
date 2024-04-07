@@ -95,7 +95,7 @@ public class Message {
     }
 
     public void sendMsg(@NotNull CommandSender sender, @NotNull TranslatableComponent msg, Object... objects) {
-        sender.sendMessage(buildTranslatableAndTranslate(msg, sender instanceof Player pl ? pl.locale() : null, objects));
+        sender.sendMessage(buildTranslatableAndTranslate(msg, sender instanceof OfflinePlayer offlinePlayer ? offlinePlayer : null, objects));
     }
 
     /**
@@ -226,11 +226,15 @@ public class Message {
 
     @NotNull
     public Component buildTranslatableAndTranslate(@NotNull TranslatableComponent msg, Object... objects) {
+        return buildTranslatableAndTranslate(msg, null, objects);
+    }
+
+    public Component buildTranslatableAndTranslate(@NotNull TranslatableComponent msg, @Nullable OfflinePlayer player, Object... objects) {
         List<Component> components = new ArrayList<>();
         for (Object object : objects) {
             components.add(Component.text(String.valueOf(object)));
         }
-        return msg.args(components);
+        return translate(msg.args(components), player);
     }
 
 
