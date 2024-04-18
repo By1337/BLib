@@ -346,7 +346,7 @@ public class Message {
     }
 
     public void sendActionBar(@NotNull Player pl, @NotNull Component msg) {
-        pl.sendActionBar(msg);
+        pl.sendActionBar(translate(msg, pl));
     }
 
     /**
@@ -380,8 +380,9 @@ public class Message {
 
     public void sendTitle(@NotNull Player pl, @NotNull Component title, @NotNull Component subTitle, int fadeIn, int stay, int fadeOut) {
         pl.showTitle(
-                Title.title(title,
-                        subTitle,
+                Title.title(
+                        translate(title, pl),
+                        translate(subTitle, pl),
                         Title.Times.of(
                                 Ticks.duration(fadeIn),
                                 Ticks.duration(stay),
@@ -457,7 +458,7 @@ public class Message {
         return LegacyConvertor.convert0(msg);
     }
 
-    @Deprecated(since = "1.0.7")
+
     public String messageBuilder(@NotNull String msg, @Nullable OfflinePlayer player) {
         msg = setPlaceholders(player, msg);
         return hex(msg);
