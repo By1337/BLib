@@ -7,6 +7,7 @@ import org.jetbrains.annotations.Nullable;
  * A functional interface representing an executor for processing a placeholder's value.
  */
 @FunctionalInterface
+@Deprecated(forRemoval = true, since = "1.0.7.1-beta")
 public interface PlaceholderExecutor {
     /**
      * Executes the placeholder for the specified player.

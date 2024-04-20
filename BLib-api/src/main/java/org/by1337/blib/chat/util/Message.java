@@ -32,7 +32,6 @@ import java.util.regex.Pattern;
  * The Message class is responsible for handling and sending formatted messages to both the console log and players.
  */
 public class Message {
-    @Deprecated(since = "1.0.7")
     private final Pattern hexPattern;
     private final Logger logger;
     @Deprecated(since = "1.0.7.1")
@@ -574,7 +573,6 @@ public class Message {
      * @param message The message to be processed for hex color codes.
      * @return The message with hex color codes replaced by ChatColor.
      */
-    @Deprecated(since = "1.0.7")
     private @NotNull String hex(@NotNull String message) {
         Matcher m = hexPattern.matcher(message);
         while (m.find())

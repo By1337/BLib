@@ -1,76 +1,38 @@
-package org.by1337.blib.placeholder;
+package org.by1337.blib.hook.papi;
 
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 
-/**
- * Represents a placeholder that can be used to process dynamic values for a player.
- */
-@Deprecated(forRemoval = true, since = "1.0.7.1-beta")
 public class Placeholder {
-    /**
-     * The name of the placeholder.
-     */
     private final String name;
-    /**
-     * A map of subplaceholders associated with their names.
-     */
     private final Map<String, Placeholder> subPlaceholders = new HashMap<>();
-    /**
-     * The executor responsible for processing the placeholder's value.
-     */
     @Nullable
     private PlaceholderExecutor executor;
 
-
-    /**
-     * Constructs a new Placeholder with the specified name.
-     *
-     * @param name The name of the placeholder.
-     */
     public Placeholder(String name) {
         this.name = name;
     }
 
-    /**
-     * Adds a subplaceholder to the current placeholder.
-     *
-     * @param subPlaceholder The subplaceholder to be added.
-     * @return The current placeholder instance.
-     */
     public Placeholder addSubPlaceholder(Placeholder subPlaceholder) {
         subPlaceholders.put(subPlaceholder.name, subPlaceholder);
         return this;
     }
 
-    /**
-     * Sets the executor for the placeholder.
-     *
-     * @param executor The executor responsible for processing the placeholder's value.
-     * @return The current placeholder instance.
-     */
     public Placeholder executor(PlaceholderExecutor executor) {
         this.executor = executor;
         return this;
     }
 
-    /**
-     * Processes the placeholder for the specified player and arguments.
-     *
-     * @param player The player for whom the placeholder is processed.
-     * @param args   The arguments provided for processing.
-     * @return The processed placeholder value, or null if no value is available.
-     */
     @Nullable
-    public String process(Player player, String[] args){
+    public String process(Player player, String[] args) {
         if (args.length >= 1) {
             String subcommandName = args[0];
 
             if (subPlaceholders.containsKey(subcommandName)) {
                 String[] subArgs = Arrays.copyOfRange(args, 1, args.length);
-                Placeholder subcommand = subPlaceholders.getOrDefault(subcommandName, null);
+                Placeholder subcommand = subPlaceholders.get(subcommandName);
                 if (subcommand == null) {
                     for (Placeholder cmd : subPlaceholders.values()) {
                         if (cmd.name.equals(subcommandName)) {
@@ -85,15 +47,33 @@ public class Placeholder {
             }
         }
         if (executor == null) return null;
-        return executor.run(player);
+        return executor.run(player, args);
     }
 
-    /**
-     * Retrieves a list of all placeholders associated with this placeholder.
-     *
-     * @return A list of all placeholders.
-     */
-    public List<String> getAllPlaceHolders(){
+    public void build() {
+        var map = new HashMap<>(subPlaceholders);
+        subPlaceholders.clear();
+        for (Map.Entry<String, Placeholder> entry : map.entrySet()) {
+            String key = entry.getKey();
+            Placeholder inner = entry.getValue();
+            String[] arr = key.split("_");
+            Placeholder last = this;
+            for (int i = 0; i < arr.length; i++) {
+                String s = arr[i];
+                var pl = last.subPlaceholders.get(s);
+                if (pl == null){
+                    pl = new Placeholder(s);
+                    last.subPlaceholders.put(s, pl);
+                }
+                last = pl;
+                if (i == arr.length -1){
+                    last.executor = inner.executor;
+                }
+            }
+        }
+    }
+
+    public List<String> getAllPlaceHolders() {
         List<String> list = new ArrayList<>();
         if (executor != null && name != null)
             list.add(name);
@@ -109,4 +89,16 @@ public class Placeholder {
         return list;
     }
 
+    public String getName() {
+        return name;
+    }
+
+    @Override
+    public String toString() {
+        return "Placeholder{" +
+                "name='" + name + '\'' +
+                ", subPlaceholders=" + subPlaceholders +
+                ", executor=" + executor +
+                '}';
+    }
 }
