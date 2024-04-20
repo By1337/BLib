@@ -1,8 +1,6 @@
 package org.by1337.blib.nbt;
 
 
-import org.by1337.blib.io.ByteBuffer;
-
 public abstract class NBT {
     public abstract String toString();
 
@@ -16,7 +14,7 @@ public abstract class NBT {
 
     public abstract Object getAsObject();
 
-    public void write(ByteBuffer buffer) {
+    public void write(NbtByteBuffer buffer) {
         getType().write(buffer, this);
     }
 

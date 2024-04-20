@@ -1,6 +1,9 @@
-package org.by1337.blib.nbt;
+package nbt;
 
-import org.by1337.blib.io.ByteBuffer;
+
+import org.by1337.blib.nbt.NBT;
+import org.by1337.blib.nbt.NBTParser;
+import org.by1337.blib.nbt.NbtType;
 import org.by1337.blib.nbt.impl.*;
 import org.junit.Assert;
 import org.junit.Test;
@@ -11,11 +14,11 @@ public class NBTParserTest   {
     public void test() {
         CompoundTag compoundTag = NBTParser.parseAsCompoundTag(nbt);
 
-        ByteBuffer buffer = new ByteBuffer();
+        TestNbtByteBuffer buffer = new TestNbtByteBuffer();
 
         compoundTag.write(buffer);
 
-        ByteBuffer buffer1 = new ByteBuffer(buffer.toByteArray());
+        TestNbtByteBuffer buffer1 = new TestNbtByteBuffer(buffer.toByteArray());
 
         CompoundTag compoundTag1 = (CompoundTag) NbtType.COMPOUND.read(buffer1);
 

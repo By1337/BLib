@@ -1,6 +1,4 @@
 package org.by1337.blib.nbt;
-
-import org.by1337.blib.lang.Lang;
 import org.by1337.blib.nbt.impl.*;
 
 import java.io.File;
@@ -28,7 +26,7 @@ public class NBTParser {
 
     private static CompoundTag parseCompoundTag(LexemeBuffer buffer) {
         if (buffer.next().type != LexemeType.STRUCT_OPEN) {
-            throw new ParseException(Lang.getMessage("should-start-with"), "{");
+            throw new ParseException("should start with %s", "{");
         }
         CompoundTag compoundTag = new CompoundTag();
         String name = null;
@@ -76,7 +74,7 @@ public class NBTParser {
                     compoundTag.putTag(name, parseNBT(buffer));
                 }
                 default -> {
-                    throw new ParseException(Lang.getMessage("unexpected-token"), lexeme);
+                    throw new ParseException("Unexpected token: %s", lexeme);
                 }
             }
         }
@@ -141,7 +139,7 @@ public class NBTParser {
 
     private static NBT parseList(LexemeBuffer buffer) {
         if (buffer.next().type != LexemeType.LIST_OPEN) {
-            throw new ParseException(Lang.getMessage("unexpected-character"), buffer);
+            throw new ParseException("Unexpected character: %s", buffer);
         }
         List<NBT> list = new ArrayList<>();
         LexemeType type = null;
@@ -172,7 +170,7 @@ public class NBTParser {
                     type = lexeme.type;
                     Lexeme next = buffer.next();
                     if (next.type != LexemeType.ARR_TYPE_SEPARATOR) {
-                        throw new ParseException(Lang.getMessage("unexpected-token"), lexeme);
+                        throw new ParseException("Unexpected token: %s", lexeme);
                     }
                 }
                 default -> {
@@ -189,7 +187,7 @@ public class NBTParser {
             final Class<?> clazz = list.get(0).getClass();
             for (NBT nbt : list) {
                 if (nbt.getClass() != clazz) {
-                    throw new ParseException(Lang.getMessage("inconsistent-class-list"), list);
+                    throw new ParseException("The list is non-homogeneous; its elements do not share the same class. [%s]", list);
                 }
             }
         }

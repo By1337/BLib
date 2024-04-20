@@ -1,27 +1,24 @@
-package org.by1337.blib.io;
+package nbt;
 
 import org.by1337.blib.nbt.NbtByteBuffer;
 
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
-import java.util.UUID;
-import java.util.function.BiConsumer;
-import java.util.function.Function;
 
-public class ByteBuffer implements NbtByteBuffer {
+public class TestNbtByteBuffer implements NbtByteBuffer {
+
     private final Buffer buffer;
 
-    public ByteBuffer(byte[] arr) {
+    public TestNbtByteBuffer(byte[] arr) {
         this.buffer = new ReadBuffer(arr);
     }
 
-    public ByteBuffer(Buffer buffer) {
+    public TestNbtByteBuffer(Buffer buffer) {
         this.buffer = buffer;
     }
 
-    public ByteBuffer() {
+    public TestNbtByteBuffer() {
         this.buffer = new WriteBuffer();
     }
 
@@ -90,16 +87,6 @@ public class ByteBuffer implements NbtByteBuffer {
 
         this.writeByte(i);
     }
-
-    public void writeUUID(UUID uuid) {
-        writeVarLong(uuid.getMostSignificantBits());
-        writeVarLong(uuid.getLeastSignificantBits());
-    }
-
-    public UUID readUUID() {
-        return new UUID(readVarLong(), readVarLong());
-    }
-
     public void writeShort(int value) {
         buffer.write((byte) (value >>> 8));
         buffer.write((byte) (value));
@@ -123,51 +110,6 @@ public class ByteBuffer implements NbtByteBuffer {
         readBytes(arr);
         return new String(arr, StandardCharsets.UTF_8);
     }
-
-    public void writeBoolean(boolean b) {
-        writeByte(b ? 1 : 0);
-    }
-
-    public boolean readBoolean() {
-        return readByte() == 1;
-    }
-
-    public <T> void writeList(Collection<T> list, BiConsumer<ByteBuffer, T> consumer) {
-        writeVarInt(list.size());
-        for (T t : list) {
-            consumer.accept(this, t);
-        }
-    }
-
-    public <T> List<T> readList(Function<ByteBuffer, T> function) {
-        int size = readVarInt();
-        List<T> list = new ArrayList<>(size);
-        for (int i = 0; i < size; i++) {
-            list.add(function.apply(this));
-        }
-        return list;
-    }
-
-    public void writeStringList(Collection<String> list) {
-        writeList(list, (ByteBuffer::writeUtf));
-    }
-
-    public List<String> readStringList() {
-        return readList(ByteBuffer::readUtf);
-    }
-
-    public void readBytes(byte[] arr) {
-        for (int i = 0; i < arr.length; i++) {
-            arr[i] = readByte();
-        }
-    }
-
-    public void writeBytes(byte[] bytes) {
-        for (byte b : bytes) {
-            writeByte(b);
-        }
-    }
-
     public void writeFloat(float f) {
         writeVarInt(Float.floatToRawIntBits(f));
     }
@@ -187,8 +129,19 @@ public class ByteBuffer implements NbtByteBuffer {
     public int readableBytes() {
         return buffer.readableBytes();
     }
+    public void readBytes(byte[] arr) {
+        for (int i = 0; i < arr.length; i++) {
+            arr[i] = readByte();
+        }
+    }
 
-    public interface Buffer {
+    public void writeBytes(byte[] bytes) {
+        for (byte b : bytes) {
+            writeByte(b);
+        }
+    }
+
+    private interface Buffer {
         byte next();
 
         int pos();

@@ -32,10 +32,16 @@ public class Translation {
         });
     }
 
+    public void putTranslation(@NotNull Locale locale, @NotNull String key, @NotNull String message) {
+        messages.computeIfAbsent(locale, k -> new HashMap<>()).put(key, message);
+        byLanguage.put(locale.getLanguage(), messages.get(locale));
+    }
+
     public static Translation fromJson(Reader reader, Message message) {
         return createGson(message).fromJson(reader, Translation.class);
     }
-    public static Gson createGson(Message message){
+
+    public static Gson createGson(Message message) {
         return new GsonBuilder()
                 .registerTypeAdapter(Translation.class, new TranslationAdapter(message))
                 .create();
@@ -140,5 +146,25 @@ public class Translation {
 
             return new Translation(useLocale, defaultLocale, messages, message);
         }
+    }
+
+    public Locale getUseLocale() {
+        return useLocale;
+    }
+
+    public Locale getDefaultLocale() {
+        return defaultLocale;
+    }
+
+    public Map<Locale, Map<String, String>> getMessages() {
+        return messages;
+    }
+
+    public Map<String, Map<String, String>> getByLanguage() {
+        return byLanguage;
+    }
+
+    public Message getMessage() {
+        return message;
     }
 }
