@@ -19,6 +19,8 @@ public interface NbtByteBuffer {
     float readFloat();
     byte readByte();
     byte[] toByteArray();
+    void readBytes(byte[] arr);
+    void writeBytes(byte[] bytes);
 
 }
 

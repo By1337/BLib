@@ -18,6 +18,10 @@ public abstract class NBT {
         getType().write(buffer, this);
     }
 
+    public CompressedNBT getAsCompressedNBT() {
+        return CompressedNBT.compress(this);
+    }
+
     public String quoteAndEscape(String raw) {
         StringBuilder var1 = new StringBuilder(" ");
         int var2 = 0;

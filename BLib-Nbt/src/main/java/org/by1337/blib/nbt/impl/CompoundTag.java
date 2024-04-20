@@ -1,5 +1,7 @@
 package org.by1337.blib.nbt.impl;
 
+import com.google.errorprone.annotations.CanIgnoreReturnValue;
+import org.by1337.blib.nbt.CompressedNBT;
 import org.by1337.blib.nbt.NBT;
 import org.by1337.blib.nbt.NbtType;
 import org.jetbrains.annotations.Nullable;
@@ -73,7 +75,11 @@ public class CompoundTag extends NBT {
     public void putShort(String id, short v) {
         tags.put(id, ShortNBT.valueOf(v));
     }
-
+    @Nullable
+    @CanIgnoreReturnValue
+    public NBT remove(String name){
+       return tags.remove(name);
+    }
 
     public boolean has(String name) {
         return get(name) != null;
@@ -90,6 +96,22 @@ public class CompoundTag extends NBT {
 
     public NBT getOrDefault(String name, NBT def) {
         return tags.getOrDefault(name, def);
+    }
+
+    public NBT getAndDecompress(String name, NBT def) {
+        return has(name) ? getAndDecompress(name) : def;
+    }
+
+    public NBT getAndDecompress(String name) {
+        var v = get(name);
+        if (v == null) throw new NullPointerException("unknown tag " + name);
+        if (v instanceof CompressedNBT compressedNBT) {
+            return compressedNBT.decompress();
+        } else if (v instanceof ByteArrNBT byteArrNBT) {
+            return new CompressedNBT(byteArrNBT.getValue()).decompress();
+        } else {
+            throw new IllegalStateException("it is impossible to apply decompress to this type! " + v.getClass().getSimpleName());
+        }
     }
 
     public byte getAsByte(String name, byte def) {

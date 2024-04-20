@@ -1,14 +1,22 @@
 package org.by1337.blib.nms.v1_16_5.nbt;
 
 import net.minecraft.server.v1_16_R3.*;
+import org.bukkit.Bukkit;
+import org.bukkit.craftbukkit.v1_16_R3.CraftServer;
 import org.bukkit.craftbukkit.v1_16_R3.inventory.CraftItemStack;
 import org.bukkit.inventory.ItemStack;
 import org.by1337.blib.nbt.NBT;
 import org.by1337.blib.nbt.ParseCompoundTag;
 import org.by1337.blib.nbt.impl.*;
+import org.jetbrains.annotations.Nullable;
+
+import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
+import java.util.function.Function;
 
 public class ParseCompoundTagV165
         implements ParseCompoundTag {
+
     public CompoundTag copy(ItemStack itemStack) {
         net.minecraft.server.v1_16_R3.ItemStack nmsItem = CraftItemStack.asNMSCopy(itemStack);
         NBTTagCompound nmsTags = new NBTTagCompound();
@@ -22,6 +30,19 @@ public class ParseCompoundTagV165
         NBTTagCompound nms = new NBTTagCompound();
         this.copyAsNms(compoundTag, nms);
         return CraftItemStack.asBukkitCopy(net.minecraft.server.v1_16_R3.ItemStack.a(nms));
+    }
+
+    private final WorldNBTStorage worldNBTStorage = ((CraftServer) Bukkit.getServer()).getServer().worldNBTStorage;
+    @Override
+    public CompletableFuture<CompoundTag> readOfflinePlayerData(UUID player) {
+        return CompletableFuture.supplyAsync(() ->
+                applyIfNotNull(worldNBTStorage.getPlayerData(player.toString()), nbt -> (CompoundTag) convertFromNms(nbt))
+        );
+    }
+    @Nullable
+    private <T, R> R applyIfNotNull(@Nullable T raw, Function<T, R> function) {
+        if (raw == null) return null;
+        return function.apply(raw);
     }
 
     private void copyAsNms(CompoundTag compoundTag, NBTTagCompound nms) {

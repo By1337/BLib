@@ -1,24 +1,22 @@
-package nbt;
-
-import org.by1337.blib.nbt.NbtByteBuffer;
+package org.by1337.blib.nbt;
 
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TestNbtByteBuffer implements NbtByteBuffer {
+public class DefaultNbtByteBuffer implements NbtByteBuffer {
 
     private final Buffer buffer;
 
-    public TestNbtByteBuffer(byte[] arr) {
+    public DefaultNbtByteBuffer(byte[] arr) {
         this.buffer = new ReadBuffer(arr);
     }
 
-    public TestNbtByteBuffer(Buffer buffer) {
+    public DefaultNbtByteBuffer(Buffer buffer) {
         this.buffer = buffer;
     }
 
-    public TestNbtByteBuffer() {
+    public DefaultNbtByteBuffer() {
         this.buffer = new WriteBuffer();
     }
 
@@ -87,6 +85,7 @@ public class TestNbtByteBuffer implements NbtByteBuffer {
 
         this.writeByte(i);
     }
+
     public void writeShort(int value) {
         buffer.write((byte) (value >>> 8));
         buffer.write((byte) (value));
@@ -110,6 +109,7 @@ public class TestNbtByteBuffer implements NbtByteBuffer {
         readBytes(arr);
         return new String(arr, StandardCharsets.UTF_8);
     }
+
     public void writeFloat(float f) {
         writeVarInt(Float.floatToRawIntBits(f));
     }
@@ -129,6 +129,7 @@ public class TestNbtByteBuffer implements NbtByteBuffer {
     public int readableBytes() {
         return buffer.readableBytes();
     }
+
     public void readBytes(byte[] arr) {
         for (int i = 0; i < arr.length; i++) {
             arr[i] = readByte();
