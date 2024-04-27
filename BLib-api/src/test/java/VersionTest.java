@@ -15,6 +15,8 @@ public class VersionTest {
         Assert.assertEquals(Version.getVersion("super server (MC: ?.??)", "1.18-R0.1-SNAPSHOT", "org.bukkit.craftbukkit.v1_???"), Version.V1_18);
         Assert.assertEquals(Version.getVersion("super server (MC: 1.18)", "?.??-R0.1-SNAPSHOT", "org.bukkit.craftbukkit.v1_18_R0"), Version.V1_18);
         Assert.assertEquals(Version.getVersion("super server (MC: ?.??)", "?.??-R0.1-SNAPSHOT", "org.bukkit.craftbukkit.v1_18_R0"), Version.V1_18);
+        Assert.assertEquals(Version.getVersion("super server (MC: 1.20)", "1.20-R0.1-SNAPSHOT", "org.bukkit.craftbukkit.v1_20_R1"), Version.V1_20);
+        Assert.assertEquals(Version.getVersion("super server (MC: 1.20.5)", "1.20-R0.1-SNAPSHOT", "org.bukkit.craftbukkit.v1_20_R1"), Version.V1_20_5);
     }
 
     @Test(expected = Version.UnsupportedVersionException.class)

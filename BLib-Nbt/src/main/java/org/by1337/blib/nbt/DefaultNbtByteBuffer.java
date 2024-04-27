@@ -142,10 +142,8 @@ public class DefaultNbtByteBuffer implements NbtByteBuffer {
         }
     }
 
-    private interface Buffer {
+    public interface Buffer {
         byte next();
-
-        int pos();
 
         int readableBytes();
 
@@ -155,8 +153,6 @@ public class DefaultNbtByteBuffer implements NbtByteBuffer {
     }
 
     private static class WriteBuffer implements Buffer {
-
-        private int pos = 0;
         private final List<Byte> bytes = new ArrayList<>();
 
         @Override
@@ -164,10 +160,6 @@ public class DefaultNbtByteBuffer implements NbtByteBuffer {
             throw new UnsupportedOperationException();
         }
 
-        @Override
-        public int pos() {
-            return pos;
-        }
 
         @Override
         public int readableBytes() {
@@ -203,11 +195,6 @@ public class DefaultNbtByteBuffer implements NbtByteBuffer {
         @Override
         public byte next() {
             return source[pos++];
-        }
-
-        @Override
-        public int pos() {
-            return pos;
         }
 
         @Override

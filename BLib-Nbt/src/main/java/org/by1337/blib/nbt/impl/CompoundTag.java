@@ -6,6 +6,7 @@ import org.by1337.blib.nbt.NBT;
 import org.by1337.blib.nbt.NbtType;
 import org.jetbrains.annotations.Nullable;
 
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.function.Function;
 
@@ -75,10 +76,57 @@ public class CompoundTag extends NBT {
     public void putShort(String id, short v) {
         tags.put(id, ShortNBT.valueOf(v));
     }
+
+    public void putUUID(String key, UUID uuid) {
+        tags.put(key, new LongArrNBT(new long[]{uuid.getMostSignificantBits(), uuid.getLeastSignificantBits()}));
+    }
+
     @Nullable
     @CanIgnoreReturnValue
-    public NBT remove(String name){
-       return tags.remove(name);
+    public NBT remove(String name) {
+        return tags.remove(name);
+    }
+
+    public int getSize() {
+        int size = 0;
+        for (Map.Entry<String, NBT> entry : tags.entrySet()) {
+            size += entry.getKey().getBytes(StandardCharsets.UTF_8).length;
+            size += getSize(entry.getValue());
+        }
+        return size;
+    }
+
+    public static int getSize(NBT nbt) {
+        if (nbt instanceof ByteArrNBT arr) {
+            return arr.getValue().length;
+        } else if (nbt instanceof ByteNBT) {
+            return 1;
+        } else if (nbt instanceof CompoundTag compoundTag) {
+            return compoundTag.getSize();
+        } else if (nbt instanceof DoubleNBT) {
+            return 8;
+        } else if (nbt instanceof FloatNBT) {
+            return 4;
+        } else if (nbt instanceof IntArrNBT arr) {
+            return (arr.getValue().length * 4);
+        } else if (nbt instanceof IntNBT) {
+            return 4;
+        } else if (nbt instanceof LongArrNBT arr) {
+            return (arr.getValue().length * 8);
+        } else if (nbt instanceof LongNBT) {
+            return 8;
+        } else if (nbt instanceof ShortNBT) {
+            return 2;
+        } else if (nbt instanceof StringNBT stringNBT) {
+            return stringNBT.getValue().getBytes(StandardCharsets.UTF_8).length;
+        } else if (nbt instanceof ListNBT list) {
+            int size = 0;
+            for (NBT nbt1 : list) {
+                size += getSize(nbt1);
+            }
+            return size;
+        }
+        return 0;
     }
 
     public boolean has(String name) {
@@ -223,6 +271,18 @@ public class CompoundTag extends NBT {
         var v = get(name);
         if (v == null) return def;
         return (CompoundTag) v;
+    }
+
+    public UUID getAsUUID(String name, UUID def) {
+        if (!tags.containsKey(name)) return def;
+        return getAsUUID(name);
+    }
+
+    public UUID getAsUUID(String name) {
+        var v = get(name);
+        if (v == null) throw new NullPointerException("unknown tag " + name);
+        LongArrNBT arr = (LongArrNBT) v;
+        return new UUID(arr.getValue()[0], arr.getValue()[1]);
     }
 
     public <R> List<R> getAsList(String name, Function<NBT, R> function) {

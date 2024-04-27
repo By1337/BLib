@@ -1,4 +1,4 @@
-package nbt;
+package org.by1337.blib.nbt;
 
 
 import org.by1337.blib.nbt.*;
@@ -6,8 +6,12 @@ import org.by1337.blib.nbt.impl.*;
 import org.junit.Assert;
 import org.junit.Test;
 
-public class NBTParserTest {
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.util.Arrays;
 
+public class NBTParserTest {
     @Test
     public void test() {
         CompoundTag compoundTag = NBTParser.parseAsCompoundTag(nbt);
@@ -20,7 +24,7 @@ public class NBTParserTest {
 
         CompoundTag compoundTag1 = (CompoundTag) NbtType.COMPOUND.read(buffer1);
 
-        assertEquals(compoundTag1, compoundTag);
+        NbtUtil.assertEqualsTags(compoundTag1, compoundTag);
 
     }
 
@@ -28,7 +32,7 @@ public class NBTParserTest {
     public void compressDecompressTest() {
         CompoundTag compoundTag = NBTParser.parseAsCompoundTag(nbt);
         CompressedNBT compressed = compoundTag.getAsCompressedNBT();
-        assertEquals(compoundTag, compressed.decompress());
+        NbtUtil.assertEqualsTags(compoundTag, compressed.decompress());
     }
 
     @Test
@@ -38,8 +42,9 @@ public class NBTParserTest {
         compoundTag.putTag("compressed", compressed);
         NBT decompressed = compoundTag.getAndDecompress("compressed");
         compoundTag.remove("compressed");
-        assertEquals(compoundTag, decompressed);
+        NbtUtil.assertEqualsTags(compoundTag, decompressed);
     }
+
     @Test
     public void compressDecompressTest3() {
         CompoundTag compoundTag = NBTParser.parseAsCompoundTag(nbt);
@@ -47,7 +52,7 @@ public class NBTParserTest {
         compoundTag.putTag("compressed", new ByteArrNBT(compressed.getValue()));
         NBT decompressed = compoundTag.getAndDecompress("compressed");
         compoundTag.remove("compressed");
-        assertEquals(compoundTag, decompressed);
+        NbtUtil.assertEqualsTags(compoundTag, decompressed);
     }
 
     @Test
@@ -55,7 +60,7 @@ public class NBTParserTest {
         CompoundTag compoundTag = NBTParser.parseAsCompoundTag(nbt);
         Assert.assertEquals(compoundTag.toStringBeautifier(), nbtBeautifiered);
 
-        assertEquals(compoundTag, NBTParser.parseAsCompoundTag(nbtBeautifiered));
+        NbtUtil.assertEqualsTags(compoundTag, NBTParser.parseAsCompoundTag(nbtBeautifiered));
     }
 
     @Test
@@ -88,37 +93,10 @@ public class NBTParserTest {
 
         ListNBT list = (ListNBT) NBTParser.parseList(listNBT.toString());
 
-        assertEquals(list, listNBT);
+        NbtUtil.assertEqualsTags(list, listNBT);
 
     }
 
-    public void assertEquals(NBT nbt1, NBT nbt) {
-        if (nbt1 instanceof CompoundTag compoundTag) {
-            for (String key : compoundTag.getTags().keySet()) {
-                assertEquals(
-                        compoundTag.get(key),
-                        ((CompoundTag) nbt).get(key)
-                );
-            }
-        } else if (nbt1 instanceof ListNBT listTag) {
-            var iterator = listTag.iterator();
-            var iterator1 = ((ListNBT) nbt).iterator();
-            while (iterator.hasNext()) {
-                var nmsTag = iterator.next();
-                var tag = iterator1.next();
-
-                assertEquals(
-                        nmsTag,
-                        tag
-                );
-            }
-        } else {
-            Assert.assertEquals(
-                    nbt1.toString(),
-                    nbt.toString()
-            );
-        }
-    }
 
     private String nbt = "{Double:45.0d,Double2:45.5d,arr_list:[[L;123L,123L,321L],[L;4123L,123L,4231L],[L;123L,123L,321L]],b_1:1b,b_2:0b,b_3:0b,b_4:1b,byte:127b,byte_arr:[B;0B,127B,89B],float:2.0f,float2:2.5f,floatList:[1.0f,1.1f,23.5f],int:43,int_arr:[I;99,345,211],list:[123,123],list_compound_tag:[{Double:45.0d,Double2:45.5d,Lore:['{\"extra\":[{\"bold\":false,\"italic\":false,\"underlined\":false,\"strikethrough\":false,\"obfuscated\":false,\"text\":\"  \"},{\"italic\":false,\"color\":\"gold\",\"text\":\"âœ” Ð’Ñ�Ñ‘ Ð¿Ð¾Ð´Ñ€Ñ�Ð´\"}],\"text\":\"\"}','{\"extra\":[{\"italic\":false,\"color\":\"gray\",\"text\":\"â�º Ð˜Ð½Ñ�Ñ‚Ñ€ÑƒÐ¼ÐµÐ½Ñ‚Ñ‹\"}],\"text\":\"\"}','{\"extra\":[{\"italic\":false,\"color\":\"gray\",\"text\":\"â�º Ð�Ð»Ñ…Ð¸Ð¼Ð¸Ñ�\"}],\"text\":\"\"}','{\"extra\":[{\"italic\":false,\"color\":\"gray\",\"text\":\"â�º Ð”Ð¾Ð½Ð°Ñ‚Ð½Ñ‹Ðµ Ð¿Ñ€ÐµÐ´Ð¼ÐµÑ‚Ñ‹\"}],\"text\":\"\"}'],arr_list:[[L;123L,123L,321L],[L;4123L,123L,4231L],[L;123L,123L,321L]],float:2.0f,float2:2.5f,list_in_list:[[[[[[[[[[[[L;123L,123L,321L]]]]]]]]]]]]},{Double:45.0d,Double2:45.5d,Lore:['{\"extra\":[{\"bold\":false,\"italic\":false,\"underlined\":false,\"strikethrough\":false,\"obfuscated\":false,\"text\":\"  \"},{\"italic\":false,\"color\":\"gold\",\"text\":\"âœ” Ð’Ñ�Ñ‘ Ð¿Ð¾Ð´Ñ€Ñ�Ð´\"}],\"text\":\"\"}','{\"extra\":[{\"italic\":false,\"color\":\"gray\",\"text\":\"â�º Ð˜Ð½Ñ�Ñ‚Ñ€ÑƒÐ¼ÐµÐ½Ñ‚Ñ‹\"}],\"text\":\"\"}','{\"extra\":[{\"italic\":false,\"color\":\"gray\",\"text\":\"â�º Ð�Ð»Ñ…Ð¸Ð¼Ð¸Ñ�\"}],\"text\":\"\"}','{\"extra\":[{\"italic\":false,\"color\":\"gray\",\"text\":\"â�º Ð”Ð¾Ð½Ð°Ñ‚Ð½Ñ‹Ðµ Ð¿Ñ€ÐµÐ´Ð¼ÐµÑ‚Ñ‹\"}],\"text\":\"\"}'],arr_list:[[L;123L,123L,321L],[L;4123L,123L,4231L],[L;123L,123L,321L]],float:2.0f,float2:2.5f,list_in_list:[[[[[[[[[[[[L;123L,123L,321L]]]]]]]]]]]]},{Double:45.0d,Double2:45.5d,Lore:['{\"extra\":[{\"bold\":false,\"italic\":false,\"underlined\":false,\"strikethrough\":false,\"obfuscated\":false,\"text\":\"  \"},{\"italic\":false,\"color\":\"gold\",\"text\":\"âœ” Ð’Ñ�Ñ‘ Ð¿Ð¾Ð´Ñ€Ñ�Ð´\"}],\"text\":\"\"}','{\"extra\":[{\"italic\":false,\"color\":\"gray\",\"text\":\"â�º Ð˜Ð½Ñ�Ñ‚Ñ€ÑƒÐ¼ÐµÐ½Ñ‚Ñ‹\"}],\"text\":\"\"}','{\"extra\":[{\"italic\":false,\"color\":\"gray\",\"text\":\"â�º Ð�Ð»Ñ…Ð¸Ð¼Ð¸Ñ�\"}],\"text\":\"\"}','{\"extra\":[{\"italic\":false,\"color\":\"gray\",\"text\":\"â�º Ð”Ð¾Ð½Ð°Ñ‚Ð½Ñ‹Ðµ Ð¿Ñ€ÐµÐ´Ð¼ÐµÑ‚Ñ‹\"}],\"text\":\"\"}'],arr_list:[[L;123L,123L,321L],[L;4123L,123L,4231L],[L;123L,123L,321L]],float:2.0f,float2:2.5f,list_in_list:[[[[[[[[[[[[L;123L,123L,321L]]]]]]]]]]]]}],long:123L,long_arr:[L;882883L,34213L,4322L],\"s'tring2\":'asa\"a\\'s',short:34s,'str\"in\\'g2':'asa\"a\\'s','str\"ing2':'asa\"a\\'s',strList:[\"string\",\"string1\",\"string2\"],string:\"str\",string1:\"asa'as\",string2:'asa\"a\\'s',tags:{Double:45.0d,Double2:45.5d,Lore:['{\"extra\":[{\"bold\":false,\"italic\":false,\"underlined\":false,\"strikethrough\":false,\"obfuscated\":false,\"text\":\"  \"},{\"italic\":false,\"color\":\"gold\",\"text\":\"âœ” Ð’Ñ�Ñ‘ Ð¿Ð¾Ð´Ñ€Ñ�Ð´\"}],\"text\":\"\"}','{\"extra\":[{\"italic\":false,\"color\":\"gray\",\"text\":\"â�º Ð˜Ð½Ñ�Ñ‚Ñ€ÑƒÐ¼ÐµÐ½Ñ‚Ñ‹\"}],\"text\":\"\"}','{\"extra\":[{\"italic\":false,\"color\":\"gray\",\"text\":\"â�º Ð�Ð»Ñ…Ð¸Ð¼Ð¸Ñ�\"}],\"text\":\"\"}','{\"extra\":[{\"italic\":false,\"color\":\"gray\",\"text\":\"â�º Ð”Ð¾Ð½Ð°Ñ‚Ð½Ñ‹Ðµ Ð¿Ñ€ÐµÐ´Ð¼ÐµÑ‚Ñ‹\"}],\"text\":\"\"}'],arr_list:[[L;123L,123L,321L],[L;4123L,123L,4231L],[L;123L,123L,321L]],float:2.0f,float2:2.5f,list_in_list:[[[[[[[[[[[[L;123L,123L,321L]]]]]]]]]]]]}}";
     private String nbtBeautifiered = """
