@@ -358,6 +358,9 @@ public class YamlContext {
         if (o instanceof Map<?, ?> map) {
             return (MemorySection) convertMapsToSections(map, new YamlConfiguration());
         }
+        if (o instanceof YamlContext context) {
+            return context.section;
+        }
         return (MemorySection) o;
     }
 
