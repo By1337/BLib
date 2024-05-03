@@ -125,6 +125,8 @@ public class BLib extends JavaPlugin {
                 .addSubCommand(CommandTests.msgTest())
                 .addSubCommand(CommandTests.logTest())
                 .addSubCommand(CommandTests.sleep())
+                .addSubCommand(CommandTests.itemClone())
+
         );
 
     }

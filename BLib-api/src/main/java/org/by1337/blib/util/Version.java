@@ -39,6 +39,7 @@ public enum Version {
     V1_20_2("1.20.2"),
     V1_20_3("1.20.3"),
     V1_20_4("1.20.4"),
+    V1_20_6("1.20.6"),
     V1_20_5("1.20.5");
 
     @NotNull
@@ -119,6 +120,7 @@ public enum Version {
         if (ver.equals("20.3")) return V1_20_3;
         if (ver.equals("20.4")) return V1_20_4;
         if (ver.equals("20.5")) return V1_20_5;
+        if (ver.equals("20.6")) return V1_20_5;
         throw new UnsupportedVersionException(Lang.getMessage("unsupported-version"), version);
     }
 

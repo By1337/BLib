@@ -13,6 +13,7 @@ import org.by1337.blib.nms.v1_19_4.inventory.FakeTitleV1_19_4;
 import org.by1337.blib.nms.v1_20_1.inventory.FakeTitleV1_20_1;
 import org.by1337.blib.nms.v1_20_2.inventory.FakeTitleV1_20_2;
 import org.by1337.blib.nms.v1_20_4.inventory.FakeTitleV1_20_4;
+import org.by1337.blib.nms.V1_20_6.inventory.FakeTitleV1_20_6;
 
 public class FakeTitleFactoryImpl implements FakeTitleFactory {
     private final FakeTitle fakeTitle = switch (Version.VERSION) {
@@ -23,8 +24,10 @@ public class FakeTitleFactoryImpl implements FakeTitleFactory {
         case V1_19_4 -> new FakeTitleV1_19_4();
         case V1_20_1 -> new FakeTitleV1_20_1();
         case V1_20_2 -> new FakeTitleV1_20_2();
-        case V1_20_4 -> new FakeTitleV1_20_4();
-        default -> throw new IllegalStateException("Unsupported version! use 1.16.5, 1.17.1, 1.18.2, 1.19.4, 1.20.(1|2|4)");
+        case V1_20_4, V1_20_3 -> new FakeTitleV1_20_4();
+        case V1_20_5, V1_20_6 -> new FakeTitleV1_20_6();
+        default ->
+                throw new IllegalStateException("Unsupported version! use 1.16.5, 1.17.1, 1.18.2, 1.19.4, 1.20.(1|2|4)");
     };
 
     public FakeTitle get() {

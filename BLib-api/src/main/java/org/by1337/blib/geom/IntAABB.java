@@ -34,7 +34,7 @@ public class IntAABB {
     }
 
     public List<Vec3i> getAllPointsInAABB() {
-        List<Vec3i> list = new ArrayList<>();
+        List<Vec3i> list = new ArrayList<>((maxX - minX + 1) * (maxY - minY + 1) * (maxZ - minZ + 1));
         forEachPointInAABB(list::add);
         return Collections.unmodifiableList(list);
     }

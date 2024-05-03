@@ -168,7 +168,7 @@
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-            <version>1.18.20</version>
+            <version>1.18.32</version>
             <scope>provided</scope>
         </dependency>
 
@@ -231,6 +231,12 @@
         <dependency>
             <groupId>org.by1337.blib.nms</groupId>
             <artifactId>V1_20_4</artifactId>
+            <version>${revision}</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.by1337.blib.nms</groupId>
+            <artifactId>V1_20_6</artifactId>
             <version>${revision}</version>
             <scope>compile</scope>
         </dependency>

@@ -3,10 +3,12 @@ package org.by1337.blib.core.test;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 import org.by1337.blib.BLib;
 import org.by1337.blib.command.CommandExecutor;
 import org.by1337.blib.command.argument.ArgumentMap;
 import org.by1337.blib.command.argument.ArgumentStrings;
+import org.by1337.blib.nbt.impl.CompoundTag;
 import org.by1337.blib.network.clientbound.entity.PacketAddEntity;
 import org.by1337.blib.network.clientbound.entity.PacketSetEntityData;
 import org.by1337.blib.world.BLocation;
@@ -22,9 +24,10 @@ public class CommandTests {
         return new Command<CommandSender>("msg")
                 .argument(new ArgumentStrings<>("msg"))
                 .executor(((sender, args) -> {
-                   BLib.getApi().getMessage().sendMsg(sender, (String) args.getOrDefault("msg", "123"));
+                    BLib.getApi().getMessage().sendMsg(sender, (String) args.getOrDefault("msg", "123"));
                 }));
     }
+
     public static Command<CommandSender> logTest() {
         return new Command<CommandSender>("log")
                 .argument(new ArgumentStrings<>("msg"))
@@ -34,6 +37,7 @@ public class CommandTests {
                     );
                 }));
     }
+
     public static Command<CommandSender> packetArmorStandTest() {
         return new Command<CommandSender>("armor_stand_spawn_test")
                 .argument(new ArgumentStrings<>("name"))
@@ -59,6 +63,7 @@ public class CommandTests {
                     packet1.send(player);
                 }));
     }
+
     public static Command<CommandSender> sysInfo() {
         return new Command<CommandSender>("sys_info")
                 .executor(((sender, args) -> {
@@ -74,6 +79,7 @@ public class CommandTests {
                     sender.sendMessage("gameVersion='§7" + Version.getGameVersion() + "'");
                 }));
     }
+
     public static Command<CommandSender> sleep() {
         return new Command<CommandSender>("sleep")
                 .argument(new ArgumentInteger<>("time", 0))
@@ -85,6 +91,36 @@ public class CommandTests {
                         throw new RuntimeException(e);
                     }
                 }));
+    }
+
+    public static Command<CommandSender> itemClone() {
+        return new Command<CommandSender>("cloneItem")
+                .requires((sender -> sender instanceof Player))
+                .requires(sender -> !((Player) sender).getInventory().getItemInMainHand().getType().isEmpty())
+                .executor(((sender, args) -> {
+                    ItemStack itemStack = ((Player) sender).getInventory().getItemInMainHand();
+                    sender.sendMessage("save to nbt...");
+                    CompoundTag compoundTag = BLib.getApi().getParseCompoundTag().copy(itemStack);
+                    System.out.println(compoundTag);
+                    sender.sendMessage("save to nbt done!");
+                    sender.sendMessage("deserialize from nbt...");
+                    ((Player) sender).getWorld().dropItemNaturally(((Player) sender).getLocation(),
+                            BLib.getApi().getParseCompoundTag().create(compoundTag)
+                    );
+                    sender.sendMessage("deserialize from nbt done!");
+
+                    sender.sendMessage("save to string...");
+                    String s = BLib.getApi().getItemStackSerialize().serialize(itemStack);
+                    System.out.println(s);
+                    sender.sendMessage("save to string done!");
+                    sender.sendMessage("deserialize from string...");
+                    ((Player) sender).getWorld().dropItemNaturally(((Player) sender).getLocation(),
+                            BLib.getApi().getItemStackSerialize().deserialize(s)
+                    );
+                    sender.sendMessage("deserialize from string done!");
+
+                }));
+
     }
 
 }

@@ -10,30 +10,20 @@
         <version>1.0.7.1-beta</version>
     </parent>
 
-    <groupId>org.by1337.blib</groupId>
-    <artifactId>Blib-api</artifactId>
+    <groupId>org.by1337.blib.nms</groupId>
+    <artifactId>V1_20_6</artifactId>
     <packaging>jar</packaging>
 
-    <name>BLib-api</name>
+    <name>V1_20_6</name>
+
+
 
     <properties>
         <revision>1.0.7.1-beta</revision>
         <java.version>16</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <server.version>1.20.6-R0.1-SNAPSHOT</server.version>
     </properties>
-
-    <distributionManagement>
-        <repository>
-            <id>blib</id>
-            <name>releases</name>
-            <url>https://by1337.space/repository/maven-releases/</url>
-        </repository>
-        <snapshotRepository>
-            <id>blib</id>
-            <name>snapshots</name>
-            <url>https://by1337.space/repository/maven-snapshots/</url>
-        </snapshotRepository>
-    </distributionManagement>
 
     <build>
         <defaultGoal>clean install</defaultGoal>
@@ -41,10 +31,10 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.8.1</version>
+                <version>3.13.0</version>
                 <configuration>
-                    <source>${java.version}</source>
-                    <target>${java.version}</target>
+                    <source>16</source>
+                    <target>16</target>
                 </configuration>
             </plugin>
             <plugin>
@@ -64,16 +54,35 @@
                 </executions>
             </plugin>
             <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-source-plugin</artifactId>
-                <version>3.3.0</version>
+                <groupId>net.md-5</groupId>
+                <artifactId>specialsource-maven-plugin</artifactId>
+                <version>2.0.3</version>
                 <executions>
                     <execution>
-                        <id>attach-sources</id>
-                        <phase>verify</phase>
+                        <phase>package</phase>
                         <goals>
-                            <goal>jar-no-fork</goal>
+                            <goal>remap</goal>
                         </goals>
+                        <id>remap-obf</id>
+                        <configuration>
+                            <srgIn>org.spigotmc:minecraft-server:${server.version}:txt:maps-mojang</srgIn>
+                            <reverse>true</reverse>
+                            <remappedDependencies>org.spigotmc:spigot:${server.version}:jar:remapped-mojang</remappedDependencies>
+                            <remappedArtifactAttached>true</remappedArtifactAttached>
+                            <remappedClassifierName>remapped-obf</remappedClassifierName>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>remap</goal>
+                        </goals>
+                        <id>remap-spigot</id>
+                        <configuration>
+                            <inputFile>${project.build.directory}/${project.artifactId}-${project.version}-remapped-obf.jar</inputFile>
+                            <srgIn>org.spigotmc:minecraft-server:${server.version}:csrg:maps-spigot</srgIn>
+                            <remappedDependencies>org.spigotmc:spigot:${server.version}:jar:remapped-obf</remappedDependencies>
+                        </configuration>
                     </execution>
                 </executions>
             </plugin>
@@ -95,54 +104,46 @@
             <id>sonatype</id>
             <url>https://oss.sonatype.org/content/groups/public/</url>
         </repository>
-        <repository>
-            <id>placeholderapi</id>
-            <url>https://repo.extendedclip.com/content/repositories/placeholderapi/</url>
-        </repository>
     </repositories>
 
+    <distributionManagement>
+        <repository>
+            <id>blib</id>
+            <name>releases</name>
+            <url>https://by1337.space/repository/maven-releases/</url>
+        </repository>
+        <snapshotRepository>
+            <id>blib</id>
+            <name>snapshots</name>
+            <url>https://by1337.space/repository/maven-snapshots/</url>
+        </snapshotRepository>
+    </distributionManagement>
     <dependencies>
+        <!-- server -->
         <dependency>
-            <groupId>com.destroystokyo.paper</groupId>
-            <artifactId>paper-api</artifactId>
-            <version>1.16.5-R0.1-SNAPSHOT</version>
+            <groupId>org.spigotmc</groupId>
+            <artifactId>spigot</artifactId>
+            <version>${server.version}</version>
+            <classifier>remapped-mojang</classifier>
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>org.by1337.blib.nbt</groupId>
-            <artifactId>BLib-Nbt</artifactId>
-            <version>1.0.7.1-beta</version>
-            <scope>compile</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>me.clip</groupId>
-            <artifactId>placeholderapi</artifactId>
-            <version>2.11.3</version>
+            <groupId>net.kyori</groupId>
+            <artifactId>adventure-text-serializer-gson</artifactId>
+            <version>4.7.0</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-            <version>1.18.32</version>
+            <groupId>net.kyori</groupId>
+            <artifactId>adventure-api</artifactId>
+            <version>4.7.0</version>
             <scope>provided</scope>
         </dependency>
+        <!-- api -->
         <dependency>
-            <groupId>org.jetbrains</groupId>
-            <artifactId>annotations</artifactId>
-            <version>RELEASE</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.google.errorprone</groupId>
-            <artifactId>error_prone_annotations</artifactId>
-            <scope>provided</scope>
-            <version>2.23.0</version>
-        </dependency>
-        <dependency>
-            <groupId>com.google.code.gson</groupId>
-            <artifactId>gson</artifactId>
-            <version>2.10.1</version>
+            <groupId>org.by1337.blib</groupId>
+            <artifactId>Blib-api</artifactId>
+            <version>${revision}</version>
             <scope>provided</scope>
         </dependency>
         <!-- tests -->
@@ -157,6 +158,13 @@
             <artifactId>mockito-core</artifactId>
             <version>5.5.0</version>
             <scope>test</scope>
+        </dependency>
+        <!-- annotations -->
+        <dependency>
+            <groupId>org.jetbrains</groupId>
+            <artifactId>annotations</artifactId>
+            <version>RELEASE</version>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
 </project>
