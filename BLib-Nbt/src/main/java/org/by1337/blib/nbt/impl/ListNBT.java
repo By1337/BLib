@@ -11,26 +11,26 @@ public class ListNBT extends NBT implements Collection<NBT> {
 
     private final List<NBT> list;
     private NbtType innerType;
+    private boolean allowMultipleType = false;
 
     public ListNBT() {
         this(new ArrayList<>());
     }
 
+    public ListNBT(List<NBT> list, boolean allowMultipleType) {
+        this.allowMultipleType = true;
+        this.list = new ArrayList<>(list.size());
+        addAll(list);
+    }
+
     public ListNBT(List<NBT> list) {
-        this.list = list;
-        if (!list.isEmpty()){
-            innerType = list.get(0).getType();
-            for (NBT nbt : list) {
-                if (innerType != nbt.getType()) {
-                    throw new NBTCastException("type " + innerType + " to " + nbt.getType());
-                }
-            }
-        }
+        this.list = new ArrayList<>(list.size());
+        addAll(list);
     }
 
     public boolean add(NBT nbt) {
         if (innerType != null) {
-            if (innerType != nbt.getType()) {
+            if (!allowMultipleType && innerType != nbt.getType()) {
                 throw new NBTCastException("type " + innerType + " to " + nbt.getType());
             }
         } else {
@@ -75,7 +75,7 @@ public class ListNBT extends NBT implements Collection<NBT> {
     }
 
     @Nullable
-    public NbtType getInnerType(){
+    public NbtType getInnerType() {
         return innerType;
     }
 
@@ -84,7 +84,7 @@ public class ListNBT extends NBT implements Collection<NBT> {
         return list.size();
     }
 
-    public boolean isEmpty(){
+    public boolean isEmpty() {
         return list.isEmpty();
     }
 
@@ -166,7 +166,7 @@ public class ListNBT extends NBT implements Collection<NBT> {
         return list.toArray(a);
     }
 
-    public static class NBTCastException extends ClassCastException{
+    public static class NBTCastException extends ClassCastException {
         public NBTCastException() {
         }
 

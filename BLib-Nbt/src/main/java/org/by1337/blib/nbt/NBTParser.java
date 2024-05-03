@@ -1,4 +1,5 @@
 package org.by1337.blib.nbt;
+
 import org.by1337.blib.nbt.impl.*;
 
 import java.io.File;
@@ -15,16 +16,21 @@ public class NBTParser {
         return parseAsCompoundTag(new String(encoded, StandardCharsets.UTF_8));
     }
 
+
     public static CompoundTag parseAsCompoundTag(String raw) {
+        return parseAsCompoundTag(raw, NBTParserContext.empty());
+    }
+
+    public static CompoundTag parseAsCompoundTag(String raw, NBTParserContext context) {
         List<Lexeme> list = parseExp(raw);
 
         LexemeBuffer buffer = new LexemeBuffer(list);
 
-        return parseCompoundTag(buffer);
+        return parseCompoundTag(buffer, context);
     }
 
 
-    private static CompoundTag parseCompoundTag(LexemeBuffer buffer) {
+    private static CompoundTag parseCompoundTag(LexemeBuffer buffer, NBTParserContext context) {
         if (buffer.next().type != LexemeType.STRUCT_OPEN) {
             throw new ParseException("should start with %s", "{");
         }
@@ -40,7 +46,7 @@ public class NBTParser {
                         name = lexeme.value;
                     else {
                         buffer.back();
-                        compoundTag.putTag(name, parseNBT(buffer));
+                        compoundTag.putTag(name, parseNBT(buffer, context));
                     }
                 }
                 case STRUCT_OPEN -> {
@@ -48,7 +54,7 @@ public class NBTParser {
                         throw new ParseException("missing tag name! " + lexeme);
                     }
                     buffer.back();
-                    compoundTag.putTag(name, parseCompoundTag(buffer));
+                    compoundTag.putTag(name, parseCompoundTag(buffer, context));
                 }
                 case ELEMENT_SEPARATOR -> {
                     name = null;
@@ -61,7 +67,7 @@ public class NBTParser {
                         throw new ParseException("missing tag name! " + lexeme);
                     }
                     buffer.back();
-                    compoundTag.putTag(name, parseList(buffer));
+                    compoundTag.putTag(name, parseList(buffer, context));
                 }
                 case STRUCT_CLOSE -> {
                     break main;
@@ -71,7 +77,7 @@ public class NBTParser {
                     if (name == null) {
                         throw new ParseException("missing tag name! " + lexeme);
                     }
-                    compoundTag.putTag(name, parseNBT(buffer));
+                    compoundTag.putTag(name, parseNBT(buffer, context));
                 }
                 default -> {
                     throw new ParseException("Unexpected token: %s", lexeme);
@@ -83,19 +89,23 @@ public class NBTParser {
     }
 
     public static NBT parseNBT(String raw) {
-        return parseNBT(new LexemeBuffer(parseExp(raw)));
+        return parseNBT(raw, NBTParserContext.empty());
     }
 
-    private static NBT parseNBT(LexemeBuffer buffer) {
+    public static NBT parseNBT(String raw, NBTParserContext context) {
+        return parseNBT(new LexemeBuffer(parseExp(raw)), context);
+    }
+
+    private static NBT parseNBT(LexemeBuffer buffer, NBTParserContext context) {
         Lexeme lexeme = buffer.next();
         LexemeType type = lexeme.type;
         if (type == LexemeType.LIST_OPEN) {
             buffer.back();
-            return parseList(buffer);
+            return parseList(buffer, context);
         }
         if (type == LexemeType.STRUCT_OPEN) {
             buffer.back();
-            return parseCompoundTag(buffer);
+            return parseCompoundTag(buffer, context);
         }
         String val = lexeme.value;
         if (type == LexemeType.NUMBER) {
@@ -134,10 +144,14 @@ public class NBTParser {
     }
 
     public static NBT parseList(String raw) {
-        return parseList(new LexemeBuffer(parseExp(raw)));
+        return parseList(raw, NBTParserContext.empty());
     }
 
-    private static NBT parseList(LexemeBuffer buffer) {
+    public static NBT parseList(String raw, NBTParserContext context) {
+        return parseList(new LexemeBuffer(parseExp(raw)), context);
+    }
+
+    private static NBT parseList(LexemeBuffer buffer, NBTParserContext context) {
         if (buffer.next().type != LexemeType.LIST_OPEN) {
             throw new ParseException("Unexpected character: %s", buffer);
         }
@@ -149,11 +163,11 @@ public class NBTParser {
             switch (lexeme.type) {
                 case LIST_OPEN -> {
                     buffer.back();
-                    list.add(parseList(buffer));
+                    list.add(parseList(buffer, context));
                 }
                 case STRUCT_OPEN -> {
                     buffer.back();
-                    list.add(parseCompoundTag(buffer));
+                    list.add(parseCompoundTag(buffer, context));
                 }
                 case LIST_CLOSE -> {
                     break main;
@@ -175,7 +189,7 @@ public class NBTParser {
                 }
                 default -> {
                     buffer.back();
-                    list.add(parseNBT(buffer));
+                    list.add(parseNBT(buffer, context));
                 }
             }
         }
@@ -183,7 +197,7 @@ public class NBTParser {
         if (list.isEmpty() && type == null)
             return new ListNBT(list);
 
-        if (!list.isEmpty()) {
+        if (!list.isEmpty() && !context.isAllowMultipleTypeInList()) {
             final Class<?> clazz = list.get(0).getClass();
             for (NBT nbt : list) {
                 if (nbt.getClass() != clazz) {
@@ -191,6 +205,8 @@ public class NBTParser {
                 }
             }
         }
+        if (context.isDoNotConvertListToArray())
+            return new ListNBT(list, context.isAllowMultipleTypeInList());
 
         if (type == LexemeType.TYPE_BYTE) {
             byte[] arr = new byte[list.size()];
