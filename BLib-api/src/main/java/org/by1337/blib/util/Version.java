@@ -22,28 +22,43 @@ import java.util.regex.Pattern;
  * An enumeration representing different server versions.
  */
 public enum Version {
-    UNKNOWN("unknown"),
-    V1_16_5("1.16.5"),
-    V1_17("1.17"),
-    V1_17_1("1.17.1"),
-    V1_18("1.18"),
-    V1_18_1("1.18.1"),
-    V1_18_2("1.18.2"),
-    V1_19("1.19"),
-    V1_19_1("1.19.1"),
-    V1_19_2("1.19.2"),
-    V1_19_3("1.19.3"),
-    V1_19_4("1.19.4"),
-    V1_20("1.20"),
-    V1_20_1("1.20.1"),
-    V1_20_2("1.20.2"),
-    V1_20_3("1.20.3"),
-    V1_20_4("1.20.4"),
-    V1_20_6("1.20.6"),
-    V1_20_5("1.20.5");
+    UNKNOWN("unknown", 0, 0),
+    V1_14("1.14", 477, 1952),
+    V1_14_1("1.14.1", 480, 1957),
+    V1_14_2("1.14.2", 485, 1963),
+    V1_14_3("1.14.3", 490, 1968),
+    V1_14_4("1.14.4", 498, 1976),
+    V1_15("1.15", 573, 2225),
+    V1_15_1("1.15.1", 575, 2227),
+    V1_15_2("1.15.2", 578, 2230),
+    V1_16("1.16", 735, 2566),
+    V1_16_1("1.16.1", 736, 2567),
+    V1_16_2("1.16.2", 751, 2578),
+    V1_16_3("1.16.3", 753, 2580),
+    V1_16_4("1.16.4", 754, 2584),
+    V1_16_5("1.16.5", 754, 2586),
+    V1_17("1.17", 755, 2724),
+    V1_17_1("1.17.1", 756, 2730),
+    V1_18("1.18", 757, 2860),
+    V1_18_1("1.18.1", 757, 2865),
+    V1_18_2("1.18.2", 758, 2975),
+    V1_19("1.19", 759, 3105),
+    V1_19_1("1.19.1", 760, 3117),
+    V1_19_2("1.19.2", 760, 3120),
+    V1_19_3("1.19.3", 761, 3218),
+    V1_19_4("1.19.4", 762, 3337),
+    V1_20("1.20", 763, 3463),
+    V1_20_1("1.20.1", 763, 3465),
+    V1_20_2("1.20.2", 764, 3578),
+    V1_20_3("1.20.3", 765, 3698),
+    V1_20_4("1.20.4", 765, 3700),
+    V1_20_5("1.20.5", 766, 3837),
+    V1_20_6("1.20.6", 766, 3839);
 
     @NotNull
     private final String ver;
+    private final int protocolVersion;
+    private final int worldVersion;
 
     @Nullable
     private static GameVersion gameVersion;
@@ -53,8 +68,10 @@ public enum Version {
      */
     public static final Version VERSION;
 
-    Version(@NotNull String version) {
+    Version(@NotNull String version, int protocolVersion, int worldVersion) {
         this.ver = version;
+        this.protocolVersion = protocolVersion;
+        this.worldVersion = worldVersion;
     }
 
     static {
@@ -103,24 +120,15 @@ public enum Version {
      */
     public static Version getVersion(String version, String bukkitVersion, String serverPackage) throws UnsupportedVersionException {
         String ver = detectServerVersion(version, bukkitVersion, serverPackage);
-        if (ver.equals("16.5")) return V1_16_5;
-        if (ver.equals("17.0")) return V1_17;
-        if (ver.equals("17.1")) return V1_17_1;
-        if (ver.equals("18.0")) return V1_18;
-        if (ver.equals("18.1")) return V1_18_1;
-        if (ver.equals("18.2")) return V1_18_2;
-        if (ver.equals("19.0")) return V1_19;
-        if (ver.equals("19.1")) return V1_19_1;
-        if (ver.equals("19.2")) return V1_19_2;
-        if (ver.equals("19.3")) return V1_19_3;
-        if (ver.equals("19.4")) return V1_19_4;
-        if (ver.equals("20.0")) return V1_20;
-        if (ver.equals("20.1")) return V1_20_1;
-        if (ver.equals("20.2")) return V1_20_2;
-        if (ver.equals("20.3")) return V1_20_3;
-        if (ver.equals("20.4")) return V1_20_4;
-        if (ver.equals("20.5")) return V1_20_5;
-        if (ver.equals("20.6")) return V1_20_5;
+        for (Version value : values()) {
+            if (ver.endsWith(".0") && value.ver.split("\\.").length == 2){
+                if (ver.equals(value.ver.substring(2) + ".0")){
+                    return value;
+                }
+            }else if (ver.equals(value.ver.substring(2))){
+                return value;
+            }
+        }
         throw new UnsupportedVersionException(Lang.getMessage("unsupported-version"), version);
     }
 
@@ -178,6 +186,14 @@ public enum Version {
 
     public @NotNull String getVer() {
         return this.ver;
+    }
+
+    public int getProtocolVersion() {
+        return protocolVersion;
+    }
+
+    public int getWorldVersion() {
+        return worldVersion;
     }
 
     /**
