@@ -258,7 +258,7 @@ public class Command<T> {
         }
         var list = subcommands.values().stream().filter(c -> c.checkReq(sender)).map(Command::getCommand).collect(Collectors.toList());
         if (args.length != 0){
-            var lastWord = args[args.length - 1];
+            var lastWord = args[0];
             if (!lastWord.isEmpty()){
                 list.removeIf(s -> !s.startsWith(lastWord));
             }

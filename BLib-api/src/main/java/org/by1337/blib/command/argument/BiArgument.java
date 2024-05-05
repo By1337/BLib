@@ -26,10 +26,15 @@ public class BiArgument<T> extends Argument<T> {
     @Override
     public Object process(T sender, String str) throws CommandSyntaxError {
         try {
-            return first.process(sender, str);
+            if (first.checkRequires(sender)) {
+                return first.process(sender, str);
+            }
         } catch (CommandException e) {
+        }
+        if (second.checkRequires(sender)) {
             return second.process(sender, str);
         }
+        return null;
     }
 
     @Override
@@ -37,13 +42,17 @@ public class BiArgument<T> extends Argument<T> {
         List<String> list = new ArrayList<>();
         CommandSyntaxError err;
         try {
-            list.addAll(first.tabCompleter(sender, str));
+            if (first.checkRequires(sender)) {
+                list.addAll(first.tabCompleter(sender, str));
+            }
             err = null;
         } catch (CommandSyntaxError error) {
             err = error;
         }
         try {
-            list.addAll(second.tabCompleter(sender, str));
+            if (second.checkRequires(sender)) {
+                list.addAll(second.tabCompleter(sender, str));
+            }
         } catch (CommandSyntaxError error) {
             if (err != null) {
                 throw err;
