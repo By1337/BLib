@@ -73,8 +73,8 @@ public class NbtUtil {
             Assert.assertEquals(number.toString(), nbt.getAsObject().toString());
         } else {
             Assert.assertEquals(
-                    nbt1.getAsObject(),
-                    nbt.getAsObject()
+                    nbt1.toString(),
+                    nbt.toString()
             );
         }
     }
