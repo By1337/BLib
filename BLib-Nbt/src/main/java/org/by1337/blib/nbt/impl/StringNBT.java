@@ -13,22 +13,12 @@ public class StringNBT extends NBT {
     }
 
     @Override
-    public String toString() {
-        return quoteAndEscape(value);
-    }
-
-    @Override
     public NbtType getType() {
         return NbtType.STRING;
     }
 
     public String getValue() {
         return value;
-    }
-
-    @Override
-    public String toStringBeautifier(int lvl) {
-        return toString();
     }
 
     @Override

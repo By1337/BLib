@@ -17,21 +17,6 @@ public class ByteArrNBT extends NBT {
     }
 
     @Override
-    public String toString() {
-        return arrToString();
-    }
-
-    public String arrToString() {
-        StringBuilder sb = new StringBuilder("[B;");
-        for (Byte b : value) {
-            sb.append(b).append("B,");
-        }
-        if (value.length != 0)
-            sb.setLength(sb.length() - 1);
-        return sb.append("]").toString();
-    }
-
-    @Override
     public Object getAsObject() {
         return value;
     }
@@ -39,21 +24,6 @@ public class ByteArrNBT extends NBT {
     @Override
     public NbtType getType() {
         return NbtType.BYTE_ARR;
-    }
-
-    @Override
-    public String toStringBeautifier(int lvl) {
-        String space = " ".repeat(lvl + 4);
-        StringBuilder sb = new StringBuilder("[ B;\n");
-        for (Byte b : value) {
-            sb.append(space).append(b).append("B,\n");
-        }
-        if (value.length != 0)
-            sb.setLength(sb.length() - 2);
-        else {
-            sb.setLength(sb.length() - 1);
-        }
-        return sb.append("\n").append(" ".repeat(lvl)).append("]").toString();
     }
 
     @Override

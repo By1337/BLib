@@ -98,11 +98,6 @@ public class ListNBT extends NBT implements Collection<NBT> {
         return list;
     }
 
-    @Override
-    public String toString() {
-        return listToString();
-    }
-
     public List<NBT> getList() {
         return list;
     }
@@ -118,29 +113,6 @@ public class ListNBT extends NBT implements Collection<NBT> {
     @Override
     public int hashCode() {
         return Objects.hash(list);
-    }
-
-    public String listToString() {
-        StringBuilder sb = new StringBuilder("[");
-        for (NBT v : list) {
-            sb.append(v).append(",");
-        }
-        if (!list.isEmpty())
-            sb.setLength(sb.length() - 1);
-        return sb.append("]").toString();
-    }
-
-    @Override
-    public String toStringBeautifier(int lvl) {
-        String space = " ".repeat(lvl + 4);
-        StringBuilder sb = new StringBuilder(" [\n");
-        for (NBT v : list) {
-            sb.append(space).append(v.toStringBeautifier(lvl + 4)).append(",\n");
-        }
-        if (!list.isEmpty())
-            sb.setLength(sb.length() - 2);
-        else sb.setLength(sb.length() - 1);
-        return sb.append("\n").append(" ".repeat(lvl)).append("]").toString();
     }
 
     @Override

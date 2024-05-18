@@ -12,11 +12,6 @@ public class LongNBT extends NBT {
         this.value = value;
     }
 
-
-    @Override
-    public String toString() {
-        return value + "L";
-    }
     @Override
     public NbtType getType() {
         return NbtType.LONG;
@@ -39,11 +34,6 @@ public class LongNBT extends NBT {
         if (o == null || getClass() != o.getClass()) return false;
         LongNBT longNBT = (LongNBT) o;
         return value == longNBT.value;
-    }
-
-    @Override
-    public String toStringBeautifier(int lvl) {
-        return toString();
     }
 
     @Override

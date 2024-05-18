@@ -9,6 +9,7 @@ import org.jetbrains.annotations.Nullable;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.function.Function;
+import java.util.function.Supplier;
 
 public class CompoundTag extends NBT {
     private final Map<String, NBT> tags = new HashMap<>();
@@ -305,6 +306,19 @@ public class CompoundTag extends NBT {
         return list;
     }
 
+    public <T extends NBT> T computeIfAbsent(String name, Supplier<T> mappingFunction) {
+        return computeIfAbsent(name, k -> mappingFunction.get());
+    }
+
+    public <T extends NBT> T computeIfAbsent(String name, Function<String, T> mappingFunction) {
+        var v = tags.get(name);
+        if (v == null) {
+            v = mappingFunction.apply(name);
+            tags.put(name, v);
+        }
+        return (T) v;
+    }
+
     public boolean isEmpty() {
         return tags.isEmpty();
     }
@@ -312,50 +326,6 @@ public class CompoundTag extends NBT {
     @Override
     public Object getAsObject() {
         return tags;
-    }
-
-    @Override
-    public String toString() {
-        StringBuilder sb = new StringBuilder("{");
-
-        for (Map.Entry<String, NBT> entry : tags.entrySet()) {
-            String name = entry.getKey();
-            sb.append(quoteAndEscape(name)).append(":");
-            sb.append(entry.getValue());
-            sb.append(",");
-        }
-        sb.setLength(sb.length() - 1);
-        ;
-        sb.append("}");
-        return sb.toString();
-    }
-
-    public String toStringBeautifier(int lvl) {
-        StringBuilder sb = new StringBuilder("{\n");
-
-        for (Map.Entry<String, NBT> entry : tags.entrySet()) {
-            NBT nbt = entry.getValue();
-            String name = entry.getKey();
-            sb.append(" ".repeat(lvl + 4)).append(quoteAndEscape(name)).append(": ").append(nbt.toStringBeautifier(lvl + 4)).append(",\n");
-        }
-        sb.setLength(sb.length() - 2);
-        sb.append("\n").append(" ".repeat(lvl)).append("}");
-        return sb.toString();
-    }
-
-    @Override
-    public String quoteAndEscape(String name) {
-        return name.contains("'") ||
-                name.contains("\"") ||
-                name.contains("\\") ||
-                name.contains("{") ||
-                name.contains("}") ||
-                name.contains(":") ||
-                name.contains("[") ||
-                name.contains("]") ||
-                name.contains(";") ||
-                name.contains(" ") ||
-                name.contains(",") ? super.quoteAndEscape(name) : name;
     }
 
     @Override

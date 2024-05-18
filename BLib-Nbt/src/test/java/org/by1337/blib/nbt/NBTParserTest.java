@@ -102,15 +102,16 @@ public class NBTParserTest {
     }
 
     @Test
-    public void unicodeTest(){
+    public void unicodeTest() {
         CompoundTag compoundTag = NBTParser.parseAsCompoundTag("{text:\"\\u043e\\u0432\\u0430\\u043a\\u043e\\u043d\\u0435\\u043c\\u0442\\u043d\\u044b\\u043e\\u0434\\u043e\\u0413\"}");
         Assert.assertEquals(compoundTag.toString(), "{text:\"оваконемтныодоГ\"}");
     }
 
-    private String nbt = "{Double:45.0d,Double2:45.5d,arr_list:[[L;123L,123L,321L],[L;4123L,123L,4231L],[L;123L,123L,321L]],b_1:1b,b_2:0b,b_3:0b,b_4:1b,byte:127b,byte_arr:[B;0B,127B,89B],float:2.0f,float2:2.5f,floatList:[1.0f,1.1f,23.5f],int:43,int_arr:[I;99,345,211],list:[123,123],list_compound_tag:[{Double:45.0d,Double2:45.5d,Lore:['{\"extra\":[{\"bold\":false,\"italic\":false,\"underlined\":false,\"strikethrough\":false,\"obfuscated\":false,\"text\":\"  \"},{\"italic\":false,\"color\":\"gold\",\"text\":\"âœ” Ð’Ñ�Ñ‘ Ð¿Ð¾Ð´Ñ€Ñ�Ð´\"}],\"text\":\"\"}','{\"extra\":[{\"italic\":false,\"color\":\"gray\",\"text\":\"â�º Ð˜Ð½Ñ�Ñ‚Ñ€ÑƒÐ¼ÐµÐ½Ñ‚Ñ‹\"}],\"text\":\"\"}','{\"extra\":[{\"italic\":false,\"color\":\"gray\",\"text\":\"â�º Ð�Ð»Ñ…Ð¸Ð¼Ð¸Ñ�\"}],\"text\":\"\"}','{\"extra\":[{\"italic\":false,\"color\":\"gray\",\"text\":\"â�º Ð”Ð¾Ð½Ð°Ñ‚Ð½Ñ‹Ðµ Ð¿Ñ€ÐµÐ´Ð¼ÐµÑ‚Ñ‹\"}],\"text\":\"\"}'],arr_list:[[L;123L,123L,321L],[L;4123L,123L,4231L],[L;123L,123L,321L]],float:2.0f,float2:2.5f,list_in_list:[[[[[[[[[[[[L;123L,123L,321L]]]]]]]]]]]]},{Double:45.0d,Double2:45.5d,Lore:['{\"extra\":[{\"bold\":false,\"italic\":false,\"underlined\":false,\"strikethrough\":false,\"obfuscated\":false,\"text\":\"  \"},{\"italic\":false,\"color\":\"gold\",\"text\":\"âœ” Ð’Ñ�Ñ‘ Ð¿Ð¾Ð´Ñ€Ñ�Ð´\"}],\"text\":\"\"}','{\"extra\":[{\"italic\":false,\"color\":\"gray\",\"text\":\"â�º Ð˜Ð½Ñ�Ñ‚Ñ€ÑƒÐ¼ÐµÐ½Ñ‚Ñ‹\"}],\"text\":\"\"}','{\"extra\":[{\"italic\":false,\"color\":\"gray\",\"text\":\"â�º Ð�Ð»Ñ…Ð¸Ð¼Ð¸Ñ�\"}],\"text\":\"\"}','{\"extra\":[{\"italic\":false,\"color\":\"gray\",\"text\":\"â�º Ð”Ð¾Ð½Ð°Ñ‚Ð½Ñ‹Ðµ Ð¿Ñ€ÐµÐ´Ð¼ÐµÑ‚Ñ‹\"}],\"text\":\"\"}'],arr_list:[[L;123L,123L,321L],[L;4123L,123L,4231L],[L;123L,123L,321L]],float:2.0f,float2:2.5f,list_in_list:[[[[[[[[[[[[L;123L,123L,321L]]]]]]]]]]]]},{Double:45.0d,Double2:45.5d,Lore:['{\"extra\":[{\"bold\":false,\"italic\":false,\"underlined\":false,\"strikethrough\":false,\"obfuscated\":false,\"text\":\"  \"},{\"italic\":false,\"color\":\"gold\",\"text\":\"âœ” Ð’Ñ�Ñ‘ Ð¿Ð¾Ð´Ñ€Ñ�Ð´\"}],\"text\":\"\"}','{\"extra\":[{\"italic\":false,\"color\":\"gray\",\"text\":\"â�º Ð˜Ð½Ñ�Ñ‚Ñ€ÑƒÐ¼ÐµÐ½Ñ‚Ñ‹\"}],\"text\":\"\"}','{\"extra\":[{\"italic\":false,\"color\":\"gray\",\"text\":\"â�º Ð�Ð»Ñ…Ð¸Ð¼Ð¸Ñ�\"}],\"text\":\"\"}','{\"extra\":[{\"italic\":false,\"color\":\"gray\",\"text\":\"â�º Ð”Ð¾Ð½Ð°Ñ‚Ð½Ñ‹Ðµ Ð¿Ñ€ÐµÐ´Ð¼ÐµÑ‚Ñ‹\"}],\"text\":\"\"}'],arr_list:[[L;123L,123L,321L],[L;4123L,123L,4231L],[L;123L,123L,321L]],float:2.0f,float2:2.5f,list_in_list:[[[[[[[[[[[[L;123L,123L,321L]]]]]]]]]]]]}],long:123L,long_arr:[L;882883L,34213L,4322L],\"s'tring2\":'asa\"a\\'s',short:34s,'str\"in\\'g2':'asa\"a\\'s','str\"ing2':'asa\"a\\'s',strList:[\"string\",\"string1\",\"string2\"],string:\"str\",string1:\"asa'as\",string2:'asa\"a\\'s',tags:{Double:45.0d,Double2:45.5d,Lore:['{\"extra\":[{\"bold\":false,\"italic\":false,\"underlined\":false,\"strikethrough\":false,\"obfuscated\":false,\"text\":\"  \"},{\"italic\":false,\"color\":\"gold\",\"text\":\"âœ” Ð’Ñ�Ñ‘ Ð¿Ð¾Ð´Ñ€Ñ�Ð´\"}],\"text\":\"\"}','{\"extra\":[{\"italic\":false,\"color\":\"gray\",\"text\":\"â�º Ð˜Ð½Ñ�Ñ‚Ñ€ÑƒÐ¼ÐµÐ½Ñ‚Ñ‹\"}],\"text\":\"\"}','{\"extra\":[{\"italic\":false,\"color\":\"gray\",\"text\":\"â�º Ð�Ð»Ñ…Ð¸Ð¼Ð¸Ñ�\"}],\"text\":\"\"}','{\"extra\":[{\"italic\":false,\"color\":\"gray\",\"text\":\"â�º Ð”Ð¾Ð½Ð°Ñ‚Ð½Ñ‹Ðµ Ð¿Ñ€ÐµÐ´Ð¼ÐµÑ‚Ñ‹\"}],\"text\":\"\"}'],arr_list:[[L;123L,123L,321L],[L;4123L,123L,4231L],[L;123L,123L,321L]],float:2.0f,float2:2.5f,list_in_list:[[[[[[[[[[[[L;123L,123L,321L]]]]]]]]]]]]}}";
-    private String nbtBeautifiered = """
+    public static final String nbt = "{Double:45.0d,Double2:45.5d,arr_list:[[L;123L,123L,321L],[L;4123L,123L,4231L],[L;123L,123L,321L]],b_1:1b,b_2:0b,b_3:0b,b_4:1b,byte:127b,byte_arr:[B;0B,127B,89B],float:2.0f,float2:2.5f,floatList:[1.0f,1.1f,23.5f],int:43,int_arr:[I;99,345,211],list:[123,123],list_compound_tag:[{Double:45.0d,Double2:45.5d,Lore:['{\"extra\":[{\"bold\":false,\"italic\":false,\"underlined\":false,\"strikethrough\":false,\"obfuscated\":false,\"text\":\"  \"},{\"italic\":false,\"color\":\"gold\",\"text\":\"âœ” Ð’Ñ�Ñ‘ Ð¿Ð¾Ð´Ñ€Ñ�Ð´\"}],\"text\":\"\"}','{\"extra\":[{\"italic\":false,\"color\":\"gray\",\"text\":\"â�º Ð˜Ð½Ñ�Ñ‚Ñ€ÑƒÐ¼ÐµÐ½Ñ‚Ñ‹\"}],\"text\":\"\"}','{\"extra\":[{\"italic\":false,\"color\":\"gray\",\"text\":\"â�º Ð�Ð»Ñ…Ð¸Ð¼Ð¸Ñ�\"}],\"text\":\"\"}','{\"extra\":[{\"italic\":false,\"color\":\"gray\",\"text\":\"â�º Ð”Ð¾Ð½Ð°Ñ‚Ð½Ñ‹Ðµ Ð¿Ñ€ÐµÐ´Ð¼ÐµÑ‚Ñ‹\"}],\"text\":\"\"}'],arr_list:[[L;123L,123L,321L],[L;4123L,123L,4231L],[L;123L,123L,321L]],float:2.0f,float2:2.5f,list_in_list:[[[[[[[[[[[[L;123L,123L,321L]]]]]]]]]]]]},{Double:45.0d,Double2:45.5d,Lore:['{\"extra\":[{\"bold\":false,\"italic\":false,\"underlined\":false,\"strikethrough\":false,\"obfuscated\":false,\"text\":\"  \"},{\"italic\":false,\"color\":\"gold\",\"text\":\"âœ” Ð’Ñ�Ñ‘ Ð¿Ð¾Ð´Ñ€Ñ�Ð´\"}],\"text\":\"\"}','{\"extra\":[{\"italic\":false,\"color\":\"gray\",\"text\":\"â�º Ð˜Ð½Ñ�Ñ‚Ñ€ÑƒÐ¼ÐµÐ½Ñ‚Ñ‹\"}],\"text\":\"\"}','{\"extra\":[{\"italic\":false,\"color\":\"gray\",\"text\":\"â�º Ð�Ð»Ñ…Ð¸Ð¼Ð¸Ñ�\"}],\"text\":\"\"}','{\"extra\":[{\"italic\":false,\"color\":\"gray\",\"text\":\"â�º Ð”Ð¾Ð½Ð°Ñ‚Ð½Ñ‹Ðµ Ð¿Ñ€ÐµÐ´Ð¼ÐµÑ‚Ñ‹\"}],\"text\":\"\"}'],arr_list:[[L;123L,123L,321L],[L;4123L,123L,4231L],[L;123L,123L,321L]],float:2.0f,float2:2.5f,list_in_list:[[[[[[[[[[[[L;123L,123L,321L]]]]]]]]]]]]},{Double:45.0d,Double2:45.5d,Lore:['{\"extra\":[{\"bold\":false,\"italic\":false,\"underlined\":false,\"strikethrough\":false,\"obfuscated\":false,\"text\":\"  \"},{\"italic\":false,\"color\":\"gold\",\"text\":\"âœ” Ð’Ñ�Ñ‘ Ð¿Ð¾Ð´Ñ€Ñ�Ð´\"}],\"text\":\"\"}','{\"extra\":[{\"italic\":false,\"color\":\"gray\",\"text\":\"â�º Ð˜Ð½Ñ�Ñ‚Ñ€ÑƒÐ¼ÐµÐ½Ñ‚Ñ‹\"}],\"text\":\"\"}','{\"extra\":[{\"italic\":false,\"color\":\"gray\",\"text\":\"â�º Ð�Ð»Ñ…Ð¸Ð¼Ð¸Ñ�\"}],\"text\":\"\"}','{\"extra\":[{\"italic\":false,\"color\":\"gray\",\"text\":\"â�º Ð”Ð¾Ð½Ð°Ñ‚Ð½Ñ‹Ðµ Ð¿Ñ€ÐµÐ´Ð¼ÐµÑ‚Ñ‹\"}],\"text\":\"\"}'],arr_list:[[L;123L,123L,321L],[L;4123L,123L,4231L],[L;123L,123L,321L]],float:2.0f,float2:2.5f,list_in_list:[[[[[[[[[[[[L;123L,123L,321L]]]]]]]]]]]]}],long:123L,long_arr:[L;882883L,34213L,4322L],\"s'tring2\":'asa\"a\\'s',short:34s,'str\"in\\'g2':'asa\"a\\'s','str\"ing2':'asa\"a\\'s',strList:[\"string\",\"string1\",\"string2\"],string:\"str\",string1:\"asa'as\",string2:'asa\"a\\'s',tags:{Double:45.0d,Double2:45.5d,Lore:['{\"extra\":[{\"bold\":false,\"italic\":false,\"underlined\":false,\"strikethrough\":false,\"obfuscated\":false,\"text\":\"  \"},{\"italic\":false,\"color\":\"gold\",\"text\":\"âœ” Ð’Ñ�Ñ‘ Ð¿Ð¾Ð´Ñ€Ñ�Ð´\"}],\"text\":\"\"}','{\"extra\":[{\"italic\":false,\"color\":\"gray\",\"text\":\"â�º Ð˜Ð½Ñ�Ñ‚Ñ€ÑƒÐ¼ÐµÐ½Ñ‚Ñ‹\"}],\"text\":\"\"}','{\"extra\":[{\"italic\":false,\"color\":\"gray\",\"text\":\"â�º Ð�Ð»Ñ…Ð¸Ð¼Ð¸Ñ�\"}],\"text\":\"\"}','{\"extra\":[{\"italic\":false,\"color\":\"gray\",\"text\":\"â�º Ð”Ð¾Ð½Ð°Ñ‚Ð½Ñ‹Ðµ Ð¿Ñ€ÐµÐ´Ð¼ÐµÑ‚Ñ‹\"}],\"text\":\"\"}'],arr_list:[[L;123L,123L,321L],[L;4123L,123L,4231L],[L;123L,123L,321L]],float:2.0f,float2:2.5f,list_in_list:[[[[[[[[[[[[L;123L,123L,321L]]]]]]]]]]]]}}";
+    public static final String nbtBeautifiered = """
             {
-                long_arr: [ L;
+                long_arr: [
+                    L;
                     882883L,
                     34213L,
                     4322L
@@ -127,24 +128,26 @@ public class NBTParserTest {
                 b_3: 0b,
                 'str"in\\'g2': 'asa"a\\'s',
                 string2: 'asa"a\\'s',
-                byte_arr: [ B;
+                byte_arr: [
+                    B;
                     0B,
                     127B,
                     89B
                 ],
                 float2: 2.5f,
-                int_arr: [ I;
+                int_arr: [
+                    I;
                     99,
                     345,
                     211
                 ],
                 byte: 127b,
-                strList:  [
+                strList: [
                     "string",
                     "string1",
                     "string2"
                 ],
-                list:  [
+                list: [
                     123,
                     123
                 ],
@@ -152,42 +155,46 @@ public class NBTParserTest {
                 int: 43,
                 tags: {
                     Double2: 45.5d,
-                    Lore:  [
+                    Lore: [
                         '{"extra":[{"bold":false,"italic":false,"underlined":false,"strikethrough":false,"obfuscated":false,"text":"  "},{"italic":false,"color":"gold","text":"âœ” Ð’Ñ�Ñ‘ Ð¿Ð¾Ð´Ñ€Ñ�Ð´"}],"text":""}',
                         '{"extra":[{"italic":false,"color":"gray","text":"â�º Ð˜Ð½Ñ�Ñ‚Ñ€ÑƒÐ¼ÐµÐ½Ñ‚Ñ‹"}],"text":""}',
                         '{"extra":[{"italic":false,"color":"gray","text":"â�º Ð�Ð»Ñ…Ð¸Ð¼Ð¸Ñ�"}],"text":""}',
                         '{"extra":[{"italic":false,"color":"gray","text":"â�º Ð”Ð¾Ð½Ð°Ñ‚Ð½Ñ‹Ðµ Ð¿Ñ€ÐµÐ´Ð¼ÐµÑ‚Ñ‹"}],"text":""}'
                     ],
-                    arr_list:  [
-                        [ L;
+                    arr_list: [
+                        [
+                            L;
                             123L,
                             123L,
                             321L
                         ],
-                        [ L;
+                        [
+                            L;
                             4123L,
                             123L,
                             4231L
                         ],
-                        [ L;
+                        [
+                            L;
                             123L,
                             123L,
                             321L
                         ]
                     ],
                     float2: 2.5f,
-                    list_in_list:  [
-                         [
-                             [
-                                 [
-                                     [
-                                         [
-                                             [
-                                                 [
-                                                     [
-                                                         [
-                                                             [
-                                                                [ L;
+                    list_in_list: [
+                        [
+                            [
+                                [
+                                    [
+                                        [
+                                            [
+                                                [
+                                                    [
+                                                        [
+                                                            [
+                                                                [
+                                                                    L;
                                                                     123L,
                                                                     123L,
                                                                     321L
@@ -206,68 +213,75 @@ public class NBTParserTest {
                     float: 2.0f,
                     Double: 45.0d
                 },
-                arr_list:  [
-                    [ L;
+                arr_list: [
+                    [
+                        L;
                         123L,
                         123L,
                         321L
                     ],
-                    [ L;
+                    [
+                        L;
                         4123L,
                         123L,
                         4231L
                     ],
-                    [ L;
+                    [
+                        L;
                         123L,
                         123L,
                         321L
                     ]
                 ],
                 'str"ing2': 'asa"a\\'s',
-                floatList:  [
+                floatList: [
                     1.0f,
                     1.1f,
                     23.5f
                 ],
-                list_compound_tag:  [
+                list_compound_tag: [
                     {
                         Double2: 45.5d,
-                        Lore:  [
+                        Lore: [
                             '{"extra":[{"bold":false,"italic":false,"underlined":false,"strikethrough":false,"obfuscated":false,"text":"  "},{"italic":false,"color":"gold","text":"âœ” Ð’Ñ�Ñ‘ Ð¿Ð¾Ð´Ñ€Ñ�Ð´"}],"text":""}',
                             '{"extra":[{"italic":false,"color":"gray","text":"â�º Ð˜Ð½Ñ�Ñ‚Ñ€ÑƒÐ¼ÐµÐ½Ñ‚Ñ‹"}],"text":""}',
                             '{"extra":[{"italic":false,"color":"gray","text":"â�º Ð�Ð»Ñ…Ð¸Ð¼Ð¸Ñ�"}],"text":""}',
                             '{"extra":[{"italic":false,"color":"gray","text":"â�º Ð”Ð¾Ð½Ð°Ñ‚Ð½Ñ‹Ðµ Ð¿Ñ€ÐµÐ´Ð¼ÐµÑ‚Ñ‹"}],"text":""}'
                         ],
-                        arr_list:  [
-                            [ L;
+                        arr_list: [
+                            [
+                                L;
                                 123L,
                                 123L,
                                 321L
                             ],
-                            [ L;
+                            [
+                                L;
                                 4123L,
                                 123L,
                                 4231L
                             ],
-                            [ L;
+                            [
+                                L;
                                 123L,
                                 123L,
                                 321L
                             ]
                         ],
                         float2: 2.5f,
-                        list_in_list:  [
-                             [
-                                 [
-                                     [
-                                         [
-                                             [
-                                                 [
-                                                     [
-                                                         [
-                                                             [
-                                                                 [
-                                                                    [ L;
+                        list_in_list: [
+                            [
+                                [
+                                    [
+                                        [
+                                            [
+                                                [
+                                                    [
+                                                        [
+                                                            [
+                                                                [
+                                                                    [
+                                                                        L;
                                                                         123L,
                                                                         123L,
                                                                         321L
@@ -288,42 +302,46 @@ public class NBTParserTest {
                     },
                     {
                         Double2: 45.5d,
-                        Lore:  [
+                        Lore: [
                             '{"extra":[{"bold":false,"italic":false,"underlined":false,"strikethrough":false,"obfuscated":false,"text":"  "},{"italic":false,"color":"gold","text":"âœ” Ð’Ñ�Ñ‘ Ð¿Ð¾Ð´Ñ€Ñ�Ð´"}],"text":""}',
                             '{"extra":[{"italic":false,"color":"gray","text":"â�º Ð˜Ð½Ñ�Ñ‚Ñ€ÑƒÐ¼ÐµÐ½Ñ‚Ñ‹"}],"text":""}',
                             '{"extra":[{"italic":false,"color":"gray","text":"â�º Ð�Ð»Ñ…Ð¸Ð¼Ð¸Ñ�"}],"text":""}',
                             '{"extra":[{"italic":false,"color":"gray","text":"â�º Ð”Ð¾Ð½Ð°Ñ‚Ð½Ñ‹Ðµ Ð¿Ñ€ÐµÐ´Ð¼ÐµÑ‚Ñ‹"}],"text":""}'
                         ],
-                        arr_list:  [
-                            [ L;
+                        arr_list: [
+                            [
+                                L;
                                 123L,
                                 123L,
                                 321L
                             ],
-                            [ L;
+                            [
+                                L;
                                 4123L,
                                 123L,
                                 4231L
                             ],
-                            [ L;
+                            [
+                                L;
                                 123L,
                                 123L,
                                 321L
                             ]
                         ],
                         float2: 2.5f,
-                        list_in_list:  [
-                             [
-                                 [
-                                     [
-                                         [
-                                             [
-                                                 [
-                                                     [
-                                                         [
-                                                             [
-                                                                 [
-                                                                    [ L;
+                        list_in_list: [
+                            [
+                                [
+                                    [
+                                        [
+                                            [
+                                                [
+                                                    [
+                                                        [
+                                                            [
+                                                                [
+                                                                    [
+                                                                        L;
                                                                         123L,
                                                                         123L,
                                                                         321L
@@ -344,42 +362,46 @@ public class NBTParserTest {
                     },
                     {
                         Double2: 45.5d,
-                        Lore:  [
+                        Lore: [
                             '{"extra":[{"bold":false,"italic":false,"underlined":false,"strikethrough":false,"obfuscated":false,"text":"  "},{"italic":false,"color":"gold","text":"âœ” Ð’Ñ�Ñ‘ Ð¿Ð¾Ð´Ñ€Ñ�Ð´"}],"text":""}',
                             '{"extra":[{"italic":false,"color":"gray","text":"â�º Ð˜Ð½Ñ�Ñ‚Ñ€ÑƒÐ¼ÐµÐ½Ñ‚Ñ‹"}],"text":""}',
                             '{"extra":[{"italic":false,"color":"gray","text":"â�º Ð�Ð»Ñ…Ð¸Ð¼Ð¸Ñ�"}],"text":""}',
                             '{"extra":[{"italic":false,"color":"gray","text":"â�º Ð”Ð¾Ð½Ð°Ñ‚Ð½Ñ‹Ðµ Ð¿Ñ€ÐµÐ´Ð¼ÐµÑ‚Ñ‹"}],"text":""}'
                         ],
-                        arr_list:  [
-                            [ L;
+                        arr_list: [
+                            [
+                                L;
                                 123L,
                                 123L,
                                 321L
                             ],
-                            [ L;
+                            [
+                                L;
                                 4123L,
                                 123L,
                                 4231L
                             ],
-                            [ L;
+                            [
+                                L;
                                 123L,
                                 123L,
                                 321L
                             ]
                         ],
                         float2: 2.5f,
-                        list_in_list:  [
-                             [
-                                 [
-                                     [
-                                         [
-                                             [
-                                                 [
-                                                     [
-                                                         [
-                                                             [
-                                                                 [
-                                                                    [ L;
+                        list_in_list: [
+                            [
+                                [
+                                    [
+                                        [
+                                            [
+                                                [
+                                                    [
+                                                        [
+                                                            [
+                                                                [
+                                                                    [
+                                                                        L;
                                                                         123L,
                                                                         123L,
                                                                         321L

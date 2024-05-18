@@ -10,18 +10,8 @@ public class ByteNBT extends NBT{
     }
 
     @Override
-    public String toString() {
-        return value + "b";
-    }
-
-    @Override
     public NbtType getType() {
         return NbtType.BYTE;
-    }
-
-    @Override
-    public String toStringBeautifier(int lvl) {
-        return toString();
     }
 
     public byte getValue() {

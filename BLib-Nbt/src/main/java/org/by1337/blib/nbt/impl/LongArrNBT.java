@@ -29,38 +29,6 @@ public class LongArrNBT extends NBT {
     }
 
     @Override
-    public String toString() {
-        return arrToString();
-    }
-
-    public String arrToString(){
-        StringBuilder sb = new StringBuilder("[L;");
-
-        for (Long b : value) {
-            sb.append(b).append("L,");
-        }
-        if (value.length != 0)
-            sb.setLength(sb.length() - 1);
-
-        return sb.append("]").toString();
-    }
-
-    @Override
-    public String toStringBeautifier(int lvl) {
-        String space = " ".repeat(lvl + 4);
-        StringBuilder sb = new StringBuilder("[ L;\n");
-        for (long b : value) {
-            sb.append(space).append(b).append("L,\n");
-        }
-        if (value.length != 0)
-            sb.setLength(sb.length() - 2);
-        else {
-            sb.setLength(sb.length() - 1);
-        }
-        return sb.append("\n").append(" ".repeat(lvl)).append("]").toString();
-    }
-
-    @Override
     public NbtType getType() {
         return NbtType.LONG_ARR;
     }

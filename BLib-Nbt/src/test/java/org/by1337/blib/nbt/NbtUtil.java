@@ -69,10 +69,12 @@ public class NbtUtil {
                         tag
                 );
             }
+        } else if (nbt1.getAsObject() instanceof Number number) {
+            Assert.assertEquals(number.toString(), nbt.getAsObject().toString());
         } else {
             Assert.assertEquals(
-                    nbt1.toString(),
-                    nbt.toString()
+                    nbt1.getAsObject(),
+                    nbt.getAsObject()
             );
         }
     }

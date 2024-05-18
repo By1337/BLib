@@ -13,16 +13,8 @@ public class FloatNBT extends NBT {
     }
 
     @Override
-    public String toString() {
-        return value + "f";
-    }
-    @Override
     public NbtType getType() {
         return NbtType.FLOAT;
-    }
-    @Override
-    public String toStringBeautifier(int lvl) {
-        return toString();
     }
 
     public float getValue() {

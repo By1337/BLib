@@ -13,20 +13,12 @@ public class DoubleNBT extends NBT {
     }
 
     @Override
-    public String toString() {
-        return value + "d";
-    }
-    @Override
     public NbtType getType() {
         return NbtType.DOUBLE;
     }
 
     public double getValue() {
         return value;
-    }
-    @Override
-    public String toStringBeautifier(int lvl) {
-        return toString();
     }
 
     @Override

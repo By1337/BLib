@@ -9,11 +9,6 @@ public class ShortNBT extends NBT {
     private ShortNBT(short value) {
         this.value = value;
     }
-
-    @Override
-    public String toString() {
-        return value + "s";
-    }
     @Override
     public NbtType getType() {
         return NbtType.SHORT;
@@ -31,10 +26,6 @@ public class ShortNBT extends NBT {
         return value;
     }
 
-    @Override
-    public String toStringBeautifier(int lvl) {
-        return toString();
-    }
     static class Cache {
         private static final int HIGH = 1024;
         private static final int LOW = -128;

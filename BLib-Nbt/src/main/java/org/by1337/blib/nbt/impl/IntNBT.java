@@ -12,21 +12,12 @@ public class IntNBT extends NBT {
     }
 
     @Override
-    public String toString() {
-        return String.valueOf(value);
-    }
-
-    @Override
     public NbtType getType() {
         return NbtType.INT;
     }
 
     public int getValue() {
         return value;
-    }
-    @Override
-    public String toStringBeautifier(int lvl) {
-        return toString();
     }
 
     @Override
