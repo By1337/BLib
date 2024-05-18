@@ -123,33 +123,49 @@ public class NBTToString {
     }
 
     public static String quoteAndEscape(String raw) {
-        StringBuilder var1 = new StringBuilder(" ");
-        int var2 = 0;
-
-        for (int var3 = 0; var3 < raw.length(); ++var3) {
-            char var4 = raw.charAt(var3);
-            if (var4 == '\\') {
-                var1.append('\\');
-            } else if (var4 == '"' || var4 == '\'') {
-                if (var2 == 0) {
-                    var2 = var4 == '"' ? 39 : 34;
-                }
-
-                if (var2 == var4) {
-                    var1.append('\\');
-                }
+        StringBuilder result = new StringBuilder(" ");
+        int quoteChar = 0;
+        for (int i = 0; i < raw.length(); ++i) {
+            char currentChar = raw.charAt(i);
+            switch (currentChar) {
+                case '\\':
+                    result.append("\\\\");
+                    break;
+                case '\n':
+                    result.append("\\n");
+                    break;
+                case '\t':
+                    result.append("\\t");
+                    break;
+                case '\b':
+                    result.append("\\b");
+                    break;
+                case '\r':
+                    result.append("\\r");
+                    break;
+                case '\f':
+                    result.append("\\f");
+                    break;
+                case '\"':
+                case '\'':
+                    if (quoteChar == 0) {
+                        quoteChar = currentChar == '\"' ? '\'' : '\"';
+                    }
+                    if (quoteChar == currentChar) {
+                        result.append('\\');
+                    }
+                    result.append(currentChar);
+                    break;
+                default:
+                    result.append(currentChar);
             }
-
-            var1.append(var4);
         }
-
-        if (var2 == 0) {
-            var2 = 34;
+        if (quoteChar == 0) {
+            quoteChar = '\"';
         }
-
-        var1.setCharAt(0, (char) var2);
-        var1.append((char) var2);
-        return var1.toString();
+        result.setCharAt(0, (char) quoteChar);
+        result.append((char) quoteChar);
+        return result.toString();
     }
 
     private static class ArrayIterator implements Iterator<String> {
