@@ -266,11 +266,38 @@ public class NBTParser {
                                 } else if (next == '\'') {
                                     sb.append("'");
                                     pos += 2;
+                                } else if (next == 'u' && pos + 5 < expText.length()) {
+                                    String unicode = expText.substring(pos + 2, pos + 6);
+                                    try {
+                                        char unicodeChar = (char) Integer.parseInt(unicode, 16);
+                                        sb.append(unicodeChar);
+                                        pos += 6;
+                                    } catch (NumberFormatException e) {
+                                        throw new ParseException("Invalid Unicode escape sequence at position %s\n%s", pos, ParserExceptionReport.report(expText, pos));
+                                    }
+                                } else if (next == 'n') {
+                                    sb.append("\n");
+                                    pos += 2;
+                                } else if (next == 'r') {
+                                    sb.append("\r");
+                                    pos += 2;
+                                } else if (next == 't') {
+                                    sb.append("\t");
+                                    pos += 2;
+                                } else if (next == 's') {
+                                    sb.append(" ");
+                                    pos += 2;
+                                } else if (next == 'f') {
+                                    sb.append("\f");
+                                    pos += 2;
+                                } else if (next == 'b') {
+                                    sb.append("\b");
+                                    pos += 2;
                                 } else {
-                                    throw new ParseException("Expect '%s' or '%s', а не '%s', at", "\\", isSingleQuote ? "\\'" : "\"", expText.charAt(pos + 1), pos + 1);
+                                    throw new ParseException("Expect '%s' or '%s', а не '%s', at %s\n%s", "\\", isSingleQuote ? "\\'" : "\"", expText.charAt(pos + 1), pos + 1, ParserExceptionReport.report(expText, pos));
                                 }
                             } else {
-                                throw new ParseException("The string ends unexpectedly with the character '%s' at position '%s'.", c, pos);
+                                throw new ParseException("The string ends unexpectedly with the character '%s' at position '%s'.\n%s", c, pos, ParserExceptionReport.report(expText, pos));
                             }
                         }
                         case '"' -> {
@@ -305,7 +332,7 @@ public class NBTParser {
                     if (pos < expText.length()) {
                         c = expText.charAt(pos);
                     } else {
-                        throw new ParseException("The string ends unexpectedly with the character '%s' at position '%s'.", c, pos);
+                        throw new ParseException("The string ends unexpectedly with the character '%s' at position '%s'.\n%s", c, pos, ParserExceptionReport.report(expText, pos));
                     }
                 }
             }
@@ -390,7 +417,7 @@ public class NBTParser {
                     }
                     if (lastIsDigit) {
                         if (digit.isEmpty())
-                            throw new ParseException("specified type of digit even though there is no digit! At position %s", pos);
+                            throw new ParseException("specified type of digit even though there is no digit! At position %s\n%s", pos, ParserExceptionReport.report(expText, pos));
                         lexemes.add(new Lexeme(LexemeType.NUMBER, digit.toString()));
                         digit = new StringBuilder();
                         lexemes.add(new Lexeme(LexemeType.TYPE_INT, c));
@@ -406,7 +433,7 @@ public class NBTParser {
                     }
                     if (lastIsDigit) {
                         if (digit.isEmpty())
-                            throw new ParseException("specified type of digit even though there is no digit! At position %s", pos);
+                            throw new ParseException("specified type of digit even though there is no digit! At position %s\n%s", pos, ParserExceptionReport.report(expText, pos));
                         lexemes.add(new Lexeme(LexemeType.NUMBER, digit.toString()));
                         digit = new StringBuilder();
                         lexemes.add(new Lexeme(LexemeType.TYPE_BYTE, c));
@@ -417,7 +444,7 @@ public class NBTParser {
                 case 'd', 'D' -> {
                     if (lastIsDigit) {
                         if (digit.isEmpty())
-                            throw new ParseException("specified type of digit even though there is no digit! At position %s", pos);
+                            throw new ParseException("specified type of digit even though there is no digit! At position %s\n%s", pos, ParserExceptionReport.report(expText, pos));
                         lexemes.add(new Lexeme(LexemeType.NUMBER, digit.toString()));
                         digit = new StringBuilder();
                         lexemes.add(new Lexeme(LexemeType.TYPE_DOUBLE, c));
@@ -433,7 +460,7 @@ public class NBTParser {
                     }
                     if (lastIsDigit) {
                         if (digit.isEmpty())
-                            throw new ParseException("specified type of digit even though there is no digit! At position %s", pos);
+                            throw new ParseException("specified type of digit even though there is no digit! At position %s\n%s", pos, ParserExceptionReport.report(expText, pos));
                         lexemes.add(new Lexeme(LexemeType.NUMBER, digit.toString()));
                         digit = new StringBuilder();
                         lexemes.add(new Lexeme(LexemeType.TYPE_LONG, c));
@@ -444,7 +471,7 @@ public class NBTParser {
                 case 's', 'S' -> {
                     if (lastIsDigit) {
                         if (digit.isEmpty())
-                            throw new ParseException("specified type of digit even though there is no digit! At position %s", pos);
+                            throw new ParseException("specified type of digit even though there is no digit! At position %s\n%s", pos, ParserExceptionReport.report(expText, pos));
                         lexemes.add(new Lexeme(LexemeType.NUMBER, digit.toString()));
                         digit = new StringBuilder();
                         lexemes.add(new Lexeme(LexemeType.TYPE_SHORT, c));
@@ -455,7 +482,7 @@ public class NBTParser {
                 case 'f', 'F' -> {
                     if (lastIsDigit) {
                         if (digit.isEmpty())
-                            throw new ParseException("specified type of digit even though there is no digit! At position %s", pos);
+                            throw new ParseException("specified type of digit even though there is no digit! At position %s\n%s", pos, ParserExceptionReport.report(expText, pos));
                         lexemes.add(new Lexeme(LexemeType.NUMBER, digit.toString()));
                         digit = new StringBuilder();
                         lexemes.add(new Lexeme(LexemeType.TYPE_FLOAT, c));
@@ -495,7 +522,7 @@ public class NBTParser {
                     } else if (Character.isDigit(c) || (c == '.' && lastIsDigit)) {
                         if (!text.isEmpty()) {
                             if (!text.toString().equals("-")) {
-                                throw new ParseException(text + " pos= " + pos);
+                                throw new ParseException(text + " pos= " + pos + "\n" + ParserExceptionReport.report(expText, pos));
                             }
                             digit.append("-");
                             text = new StringBuilder();
@@ -598,6 +625,29 @@ public class NBTParser {
                     "type=" + type +
                     ", value='" + value + '\'' +
                     '}';
+        }
+    }
+
+    public static class ParserExceptionReport {
+        public static String report(String input, int position) {
+            StringBuilder sb = new StringBuilder();
+
+            int len = input.length();
+
+            int start = Math.max(0, position - 100);
+            int end = Math.min(len, position + 100);
+
+            sb.append("Parsing Error Report:\n");
+            String s = input.substring(start, end);
+            String replaced = s.replace("\n", "\\n");
+            System.out.println(replaced.length() - s.length());
+            sb.append(replaced);
+            sb.append("\n");
+            sb.append(" ".repeat(Math.max(0, position - start + (replaced.length() - s.length()) - 2))).append("^^^");
+
+            System.out.println(input.charAt(position));
+
+            return sb.toString();
         }
     }
 
