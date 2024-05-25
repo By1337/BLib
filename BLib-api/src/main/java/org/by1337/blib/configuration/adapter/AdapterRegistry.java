@@ -12,6 +12,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
 import org.by1337.blib.configuration.adapter.impl.*;
 import org.by1337.blib.configuration.adapter.impl.primitive.*;
+import org.by1337.blib.geom.*;
 import org.by1337.blib.util.SpacedNameKey;
 import org.by1337.blib.world.BLocation;
 import org.by1337.blib.world.BlockPosition;
@@ -128,6 +129,7 @@ public class AdapterRegistry {
      * @return The deserialized object.
      * @throws AdapterAlreadyExistsException If the class adapter for the specified class doesn't exist in the registry.
      */
+    @SuppressWarnings("unchecked")
     private static <T> T getAs(MemorySection memorySection, Class<T> clazz) {
         if (!hasAdapter(clazz)) {
             throw new AdapterAlreadyExistsException("The adapter with class " + clazz.getName() + " does not exist in the registry.");
@@ -146,6 +148,7 @@ public class AdapterRegistry {
      * @return The deserialized primitive object.
      * @throws AdapterAlreadyExistsException If the primitive adapter for the specified class doesn't exist in the registry.
      */
+    @SuppressWarnings("unchecked")
     private static <T> T getPrimitiveAs(Object src, Class<T> clazz) {
         if (!hasPrimitiveAdapter(clazz)) {
             throw new AdapterAlreadyExistsException("The adapter with class " + clazz.getName() + " does not exist in the registry.");
@@ -166,6 +169,7 @@ public class AdapterRegistry {
      * @throws IllegalStateException If no suitable adapter is found for the specified class.
      */
     @Contract("null, _ -> null")
+    @SuppressWarnings("unchecked")
     public static <T> T getAs(@Nullable Object src, @NotNull Class<T> clazz) {
         if (src == null) return null;
         if (clazz.isAssignableFrom(src.getClass())) {
@@ -173,6 +177,11 @@ public class AdapterRegistry {
         }
         if (!hasPrimitiveAdapter(clazz)) {
             if (!hasAdapter(clazz)) {
+                if (clazz.isEnum()) { // runtime adapter register
+                    AdapterEnum adapterEnum = new AdapterEnum(clazz);
+                    registerPrimitiveAdapter(clazz, adapterEnum);
+                    return (T) adapterEnum.deserialize(clazz);
+                }
                 throw new IllegalStateException("class " + src.getClass() + " has no adapter");
             } else {
                 MemorySection section = YamlContext.getMemorySection(src);
@@ -191,6 +200,7 @@ public class AdapterRegistry {
      * @param <T> The type of the object to serialize.
      * @return The serialized object.
      */
+    @SuppressWarnings("unchecked")
     public static <T> Object serialize(@NotNull T src) {
         if (!hasPrimitiveAdapter(src.getClass())) {
             if (!hasAdapter(src.getClass())) {
@@ -259,6 +269,13 @@ public class AdapterRegistry {
         registerPrimitiveAdapter(ItemFlag.class, new AdapterEnum<>(ItemFlag.class));
 
         registerAdapter(ItemStack.class, new AdapterItemStack());
+
+        registerAdapter(AABB.class, new AdapterAABB());
+        registerAdapter(IntAABB.class, new AdapterIntAABB());
+        registerAdapter(Vec2d.class, new AdapterVec2d());
+        registerAdapter(Vec2i.class, new AdapterVec2i());
+        registerAdapter(Vec3d.class, new AdapterVec3d());
+        registerAdapter(Vec3i.class, new AdapterVec3i());
 
         registerAdapter(BLocation.class, new AdapterBLocation());
         registerAdapter(Vector.class, new AdapterVector());

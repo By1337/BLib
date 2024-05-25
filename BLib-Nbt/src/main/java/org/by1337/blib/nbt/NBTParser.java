@@ -11,6 +11,10 @@ import java.util.List;
 
 public class NBTParser {
 
+    public static CompoundTag parseJson(String json) {
+        return parseAsCompoundTag(json, new NBTParserContext().setAllowMultipleTypeInList(true).setDoNotConvertListToArray(true));
+    }
+
     private static CompoundTag parseAsCompoundTag(File file) throws IOException {
         byte[] encoded = Files.readAllBytes(file.toPath());
         return parseAsCompoundTag(new String(encoded, StandardCharsets.UTF_8));

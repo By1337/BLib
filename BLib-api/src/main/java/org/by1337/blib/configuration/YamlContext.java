@@ -13,6 +13,8 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 /**
  * A class for providing convenient access to values within a MemorySection, using AdapterRegistry for type conversion.
@@ -20,6 +22,17 @@ import java.util.*;
 public class YamlContext {
     private MemorySection section;
 
+    public YamlValue getAsYamlValue() {
+        return new YamlValue(section);
+    }
+
+    public YamlValue getAsYamlValue(String path) {
+        return new YamlValue(section.get(path));
+    }
+
+    public YamlValue getAsYamlValue(String path, Object def) {
+        return new YamlValue(section.get(path, def));
+    }
     /**
      * Constructs a YamlContext using the provided MemorySection.
      *
@@ -205,13 +218,7 @@ public class YamlContext {
                 out.add(serialize(o));
             }
             return out;
-        } else if (obj instanceof Set<?> set) {
-            List<Object> out = new ArrayList<>();
-            for (Object o : set) {
-                out.add(serialize(o));
-            }
-            return out;
-        } else if (obj instanceof List<?> list) {
+        } else if (obj instanceof Collection<?> list) {
             List<Object> out = new ArrayList<>();
             for (Object o : list) {
                 out.add(serialize(o));
@@ -253,12 +260,11 @@ public class YamlContext {
      * @return The list of values.
      */
     public <T> List<T> getList(String path, Class<T> valueType) {
-        List<?> raw = section.getList(path);
-        List<T> out = new ArrayList<>();
-        for (Object o : raw) {
-            out.add(AdapterRegistry.getAs(o, valueType));
-        }
-        return out;
+        return getList(path, v -> AdapterRegistry.getAs(v, valueType));
+    }
+
+    public <T> List<T> getList(String path, Function<Object, T> valueFunction) {
+        return section.getList(path).stream().map(valueFunction).collect(Collectors.toList());
     }
 
     /**
@@ -308,10 +314,31 @@ public class YamlContext {
      * @return The map of values.
      */
     public <K, V> Map<K, V> getMap(String path, Class<V> valueType, Class<K> keyType) {
+        return getMap(path, v -> AdapterRegistry.getAs(v, valueType), k -> AdapterRegistry.getAs(k, keyType));
+    }
+
+    /**
+     * Get a map of values at the specified path using the provided functions to convert
+     * the keys and values to the desired types.
+     * <p>
+     * This method retrieves a map from the specified path within the MemorySection.
+     * The provided functions are used to convert the raw objects retrieved from the map
+     * to the desired key and value types. The conversion functions are applied to each
+     * key and value in the map.
+     *
+     * @param path          The path to the map within the MemorySection. The path is a string
+     *                      representing the location within the hierarchical structure of the MemorySection.
+     * @param valueFunction A function that converts the raw values to the desired value type.
+     * @param keyFunction   A function that converts the raw keys to the desired key type.
+     * @param <K>           The type of keys in the returned map.
+     * @param <V>           The type of values in the returned map.
+     * @return The map of values with keys and values converted using the provided functions.
+     */
+    public <K, V> Map<K, V> getMap(String path, Function<Object, V> valueFunction, Function<Object, K> keyFunction) {
         Map<String, ?> map = getMemorySection(section.get(path)).getValues(false);
         Map<K, V> out = new HashMap<>();
         for (Map.Entry<String, ?> entry : map.entrySet()) {
-            out.put(AdapterRegistry.getAs(entry.getKey(), keyType), AdapterRegistry.getAs(entry.getValue(), valueType));
+            out.put(keyFunction.apply(entry.getKey()), valueFunction.apply(entry.getValue()));
         }
         return out;
     }
@@ -336,16 +363,9 @@ public class YamlContext {
      * @return The map of lists of values.
      */
     public <K, V> Map<K, List<V>> getMapList(String path, Class<V> valueType, Class<K> keyType) {
-        Map<String, ?> map = getMemorySection(section.get(path)).getValues(false);
-        Map<K, List<V>> out = new HashMap<>();
-        for (Map.Entry<String, ?> entry : map.entrySet()) {
-            List<V> outList = new ArrayList<>();
-            for (Object o : (List<?>) entry.getValue()) {
-                outList.add(AdapterRegistry.getAs(o, valueType));
-            }
-            out.put(AdapterRegistry.getAs(entry.getKey(), keyType), outList);
-        }
-        return out;
+        return getMap(path,
+                v -> ((List<?>) v).stream().map(o -> AdapterRegistry.getAs(o, valueType)).collect(Collectors.toList()),
+                k -> AdapterRegistry.getAs(k, keyType));
     }
 
     /**
