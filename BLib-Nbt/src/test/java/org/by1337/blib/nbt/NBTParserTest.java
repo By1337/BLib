@@ -74,6 +74,15 @@ public class NBTParserTest {
         Assert.assertTrue(nbt1 instanceof DoubleNBT);
         Assert.assertEquals(nbt1.getAsObject(), Math.PI);
     }
+    @Test
+    public void parseLong() {
+        String number = Long.toString(0x7fffffffffffffffL);
+        System.out.println(number);
+        NBT nbt1 = NBTParser.parseNBT(number);
+        Assert.assertTrue(nbt1 instanceof LongNBT);
+        Assert.assertEquals(nbt1.getAsObject(), 0x7fffffffffffffffL);
+    }
+
 
     @Test
     public void parseList() {

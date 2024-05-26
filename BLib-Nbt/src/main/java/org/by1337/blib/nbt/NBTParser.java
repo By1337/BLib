@@ -140,7 +140,15 @@ public class NBTParser {
             if (val.contains(".")) {
                 return new DoubleNBT(Double.parseDouble(val));
             }
-            return IntNBT.valueOf(Integer.parseInt(val));
+            try {
+                return IntNBT.valueOf(Integer.parseInt(val));
+            } catch (NumberFormatException ignore) {
+                try {
+                    return LongNBT.valueOf(Long.parseLong(val));
+                } catch (NumberFormatException ignore2) {
+                    return new StringNBT(val);
+                }
+            }
         } else if (type == LexemeType.STRING) {
             return new StringNBT(val);
         }
