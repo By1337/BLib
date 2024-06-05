@@ -26,6 +26,14 @@ public class YamlContext {
         return new YamlValue(section);
     }
 
+    public YamlValue get() {
+        return new YamlValue(section);
+    }
+
+    public YamlValue get(String path) {
+        return new YamlValue(section.get(path));
+    }
+
     public YamlValue getAsYamlValue(String path) {
         return new YamlValue(section.get(path));
     }
@@ -33,6 +41,7 @@ public class YamlContext {
     public YamlValue getAsYamlValue(String path, Object def) {
         return new YamlValue(section.get(path, def));
     }
+
     /**
      * Constructs a YamlContext using the provided MemorySection.
      *

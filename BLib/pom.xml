@@ -7,7 +7,7 @@
     <parent>
         <groupId>org.by1337.blib</groupId>
         <artifactId>Blib-parent</artifactId>
-        <version>1.0.8</version>
+        <version>1.0.8.1</version>
     </parent>
 
     <artifactId>BLib</artifactId>
@@ -16,23 +16,10 @@
     <name>BLib</name>
 
     <properties>
-        <revision>1.0.8</revision>
+        <revision>1.0.8.1</revision>
         <java.version>16</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
-
-    <distributionManagement>
-        <repository>
-            <id>blib</id>
-            <name>releases</name>
-            <url>https://by1337.space/repository/maven-releases/</url>
-        </repository>
-        <snapshotRepository>
-            <id>blib</id>
-            <name>snapshots</name>
-            <url>https://by1337.space/repository/maven-snapshots/</url>
-        </snapshotRepository>
-    </distributionManagement>
 
     <build>
         <defaultGoal>clean install</defaultGoal>

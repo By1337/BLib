@@ -7,7 +7,7 @@
     <parent>
         <groupId>org.by1337.blib</groupId>
         <artifactId>Blib-parent</artifactId>
-        <version>1.0.8</version>
+        <version>1.0.8.1</version>
     </parent>
 
     <groupId>org.by1337.blib.nms</groupId>
@@ -17,10 +17,11 @@
     <name>V1_16_5</name>
 
     <properties>
-        <revision>1.0.8</revision>
+        <revision>1.0.8.1</revision>
         <java.version>16</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
+
     <build>
         <defaultGoal>clean install</defaultGoal>
         <plugins>
@@ -67,20 +68,11 @@
             <id>sonatype</id>
             <url>https://oss.sonatype.org/content/groups/public/</url>
         </repository>
-    </repositories>
-
-    <distributionManagement>
         <repository>
-            <id>blib</id>
-            <name>releases</name>
-            <url>https://by1337.space/repository/maven-releases/</url>
+            <id>sk89q-repo</id>
+            <url>https://maven.enginehub.org/repo/</url>
         </repository>
-        <snapshotRepository>
-            <id>blib</id>
-            <name>snapshots</name>
-            <url>https://by1337.space/repository/maven-snapshots/</url>
-        </snapshotRepository>
-    </distributionManagement>
+    </repositories>
 
     <dependencies>
         <!-- server -->
@@ -100,6 +92,12 @@
             <groupId>net.kyori</groupId>
             <artifactId>adventure-api</artifactId>
             <version>4.7.0</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.sk89q.worldedit</groupId>
+            <artifactId>worldedit-bukkit</artifactId>
+            <version>7.2.15</version>
             <scope>provided</scope>
         </dependency>
         <!-- api -->

@@ -4,7 +4,7 @@
     <groupId>org.by1337.blib</groupId>
     <artifactId>Blib-parent</artifactId>
     <packaging>pom</packaging>
-    <version>1.0.8</version>
+    <version>1.0.8.1</version>
     <name>Blib-parent</name>
     <modules>
         <module>BLib</module>
@@ -26,14 +26,14 @@
     </build>
     <distributionManagement>
         <repository>
-            <id>blib</id>
+            <id>by1337.repo.2</id>
             <name>releases</name>
-            <url>https://by1337.space/repository/maven-releases/</url>
+            <url>https://repo.by1337.space/repository/maven-releases/</url>
         </repository>
         <snapshotRepository>
-            <id>blib</id>
+            <id>by1337.repo.2</id>
             <name>snapshots</name>
-            <url>https://by1337.space/repository/maven-snapshots/</url>
+            <url>https://repo.by1337.space/repository/maven-snapshots/</url>
         </snapshotRepository>
     </distributionManagement>
 </project>

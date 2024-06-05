@@ -50,10 +50,16 @@ public class ArgumentIntegerAllowedMath<T> extends ArgumentInteger<T> {
     public List<String> tabCompleter(T sender, String str) throws CommandSyntaxError {
         if (str.isEmpty()) return getExx();
         try {
-            String str1 = MathParser.math(String.format("math[%s]", str.replace("_", "")), false);
+            String str1 = MathParser.math(String.format("math[%s]", str
+                    .replace("_", "")
+                    .replace("k", "000")
+                    .replace("K", "000")
+                    .replace("к", "000")
+                    .replace("К", "000")
+            ), false);
             super.process(sender, str1);
             return List.of(str1);
-        } catch (ParseException | NumberFormatException e) {
+        } catch (ParseException | NumberFormatException | ArithmeticException e) {
             throw new CommandSyntaxError(Lang.getMessage("nan"), str);
         }
     }
@@ -61,8 +67,14 @@ public class ArgumentIntegerAllowedMath<T> extends ArgumentInteger<T> {
     @Override
     public Object process(T sender, String str) throws CommandSyntaxError {
         try {
-            return super.process(sender, MathParser.math(String.format("math[%s]", str).replace("_", ""), false));
-        } catch (ParseException | NumberFormatException e) {
+            return super.process(sender, MathParser.math(String.format("math[%s]", str
+                    .replace("_", "")
+                    .replace("k", "000")
+                    .replace("K", "000")
+                    .replace("к", "000")
+                    .replace("К", "000")
+            ), false));
+        } catch (ParseException | NumberFormatException | ArithmeticException e) {
             throw new CommandSyntaxError(Lang.getMessage("nan"), str);
         }
     }

@@ -1,18 +1,18 @@
 ```xml
-    <repositories>
-        <repository>
-            <id>by1337</id>
-            <url>https://by1337.space/repository/maven-releases/</url>
-        </repository>
-    </repositories>
+<repositories>
+    <repository>
+        <id>by1337-repo</id>
+        <url>https://repo.by1337.space/repository/maven-releases/</url>
+    </repository>
+</repositories>
 ```
 ```xml
-    <dependencies>
-        <dependency>
-            <groupId>org.by1337.blib</groupId>
-            <artifactId>Blib-api</artifactId>
-            <version>1.0.8</version>
-            <scope>provided</scope>
-        </dependency>
-    </dependencies>
+<dependencies>
+    <dependency>
+        <groupId>org.by1337.blib</groupId>
+        <artifactId>Blib-api</artifactId>
+        <version>1.0.8.1</version>
+        <scope>provided</scope>
+    </dependency>
+</dependencies>
 ```
