@@ -32,6 +32,12 @@ public class Translation {
         });
     }
 
+    public void putTranslationIfNotExist(@NotNull Locale locale, @NotNull String key, @NotNull String message) {
+        if (!messages.getOrDefault(locale, Collections.emptyMap()).containsKey(key)) {
+            putTranslation(locale, key, message);
+        }
+    }
+
     public void putTranslation(@NotNull Locale locale, @NotNull String key, @NotNull String message) {
         messages.computeIfAbsent(locale, k -> new HashMap<>()).put(key, message);
         byLanguage.put(locale.getLanguage(), messages.get(locale));

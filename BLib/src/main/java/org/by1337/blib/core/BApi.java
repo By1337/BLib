@@ -1,5 +1,8 @@
 package org.by1337.blib.core;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import org.by1337.blib.Api;
 import org.by1337.blib.chat.util.Message;
 import org.by1337.blib.command.BukkitCommandRegister;
@@ -15,6 +18,7 @@ import org.by1337.blib.inventory.ItemStackSerialize;
 import org.by1337.blib.nbt.ParseCompoundTag;
 import org.by1337.blib.text.ComponentToANSI;
 import org.by1337.blib.text.LegacyConvertor;
+import org.by1337.blib.translation.Translation;
 import org.by1337.blib.util.AsyncCatcher;
 import org.by1337.blib.core.command.BCommandUtil;
 import org.by1337.blib.core.factory.AbstractPacketFactory;
@@ -27,7 +31,10 @@ import org.jetbrains.annotations.NotNull;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
+import java.util.Locale;
+import java.util.Map;
 import java.util.logging.Logger;
 
 public class BApi implements Api {
@@ -49,6 +56,21 @@ public class BApi implements Api {
         }
         try (FileReader reader = new FileReader(file, StandardCharsets.UTF_8)) {
             message = new Message(BLib.getInstance().getLogger(), reader);
+            Translation translation = message.getTranslation();
+            JsonObject jsonObject = new Gson().fromJson(new InputStreamReader(BLib.getInstance().getResource("translation.json"), StandardCharsets.UTF_8), JsonObject.class);
+            JsonObject object = jsonObject.getAsJsonObject("messages");
+
+            for (Map.Entry<String, JsonElement> key : object.entrySet()) {
+                JsonObject lang = key.getValue().getAsJsonObject();
+                for (Map.Entry<String, JsonElement> locale : lang.entrySet()) {
+                    String[] arr = locale.getKey().split("_");
+                    translation.putTranslationIfNotExist(
+                            new Locale(arr[0], arr[1]),
+                            key.getKey(),
+                            locale.getValue().getAsString()
+                    );
+                }
+            }
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

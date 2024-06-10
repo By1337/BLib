@@ -74,6 +74,18 @@
       "ru_RU": "Список неоднороден; его элементы не одного класса. [%s]",
       "en_UK": "The list is non-homogeneous; its elements do not share the same class. [%s]"
     },
+    "fast-util-complete": {
+      "ru_RU": "&aЗавершено за %s мс.",
+      "en_UK": "&aCompleted in %s ms."
+    },
+    "fast-util-failed-complete": {
+      "ru_RU": "&cЗавершено с ошибкой",
+      "en_UK": "&cCompleted with an error"
+    },
+    "fast-util-select-region": {
+      "ru_RU": "&cСначала выбери область!",
+      "en_UK": "&cPlease select a region first!"
+    },
     "hello-message": {
       "ru_RU": "<white>Этот сервер использует BLib версии %s </white><aqua><i><hover:show_text:'https://github.com/By1337/BLib'><click:open_url:'https://github.com/By1337/BLib'>Github</click> </i></aqua><white>Автор </white><aqua><hover:show_text:'https://github.com/By1337'><click:open_url:'https://github.com/By1337'>By1337</click></aqua>",
       "en_UK": "<white>This server uses the BLib version %s </white><aqua><i><hover:show_text:'https://github.com/By1337/BLib'><click:open_url:'https://github.com/By1337/BLib'>Github</click> </i></aqua><white>Author </white><aqua><hover:show_text:'https://github.com/By1337'><click:open_url:'https://github.com/By1337'>By1337</click></aqua>"

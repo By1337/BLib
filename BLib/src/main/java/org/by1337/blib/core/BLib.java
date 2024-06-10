@@ -5,16 +5,16 @@ import net.kyori.adventure.text.Component;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.by1337.blib.command.CommandExecutor;
 import org.by1337.blib.command.argument.ArgumentBoolean;
-import org.by1337.blib.command.argument.ArgumentMap;
+import org.by1337.blib.core.fastutil.FastUtilCommands;
+import org.by1337.blib.core.fastutil.InitFastUtil;
+import org.by1337.blib.fastutil.FastUtilApi;
+import org.by1337.blib.fastutil.FastUtilSetting;
 import org.by1337.blib.translation.Translation;
 import org.by1337.blib.util.Version;
 import org.by1337.blib.command.Command;
 import org.by1337.blib.command.CommandException;
-import org.by1337.blib.command.argument.ArgumentSetList;
 import org.by1337.blib.command.requires.RequiresPermission;
-import org.by1337.blib.core.config.Config;
 import org.by1337.blib.lang.Lang;
 import org.by1337.blib.core.test.CommandTests;
 import org.jetbrains.annotations.NotNull;
@@ -31,7 +31,7 @@ public class BLib extends JavaPlugin {
     @Getter
     private static Plugin instance;
     private BApi api;
-
+    private FastUtilApi fastUtilApi;
     public static boolean DEBUG = false;
 
     @Override
@@ -40,13 +40,30 @@ public class BLib extends JavaPlugin {
         api = new BApi();
         org.by1337.blib.BLib.setApi(api);
         setCommand();
+         fastUtilApi = new FastUtilApi(
+                api.getMessage(),
+                this,
+                new FastUtilSetting(
+                        6250,
+                        15
+                )
+        );
+        InitFastUtil.setup(fastUtilApi);
     }
 
     @Override
     public void onEnable() {
         init();
+        fastUtilApi.onEnable();
         getCommand("blib").setExecutor(this);
         getCommand("blib").setTabCompleter(this);
+        command.addSubCommand(FastUtilCommands.SET);
+        command.addSubCommand(FastUtilCommands.SHEM_PASTE);
+    }
+
+    @Override
+    public void onDisable() {
+        fastUtilApi.onDisable();
     }
 
     private void init() {

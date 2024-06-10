@@ -22,6 +22,5 @@ public abstract class BlockReplaceStatus {
     public BlockReplaceTask getTask() {
         return task;
     }
-    public abstract void undo();
     public abstract Map<Vec3i, BlockData> getOldBlocks();
 }

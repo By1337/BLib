@@ -67,7 +67,7 @@ public class ParseCompoundTagV165 implements ParseCompoundTag {
 
     @Nullable
     private <T, R> R applyIfNotNull(@Nullable T raw, Function<T, R> function) {
-        return (R)(raw == null ? null : function.apply(raw));
+        return (raw == null ? null : function.apply(raw));
     }
 
     private void copyAsNms(CompoundTag compoundTag, net.minecraft.nbt.CompoundTag nms) {
