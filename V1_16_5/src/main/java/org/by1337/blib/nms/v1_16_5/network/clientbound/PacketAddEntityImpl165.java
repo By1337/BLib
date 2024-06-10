@@ -1,14 +1,19 @@
 package org.by1337.blib.nms.v1_16_5.network.clientbound;
 
 import io.netty.buffer.Unpooled;
-import net.minecraft.server.v1_16_R3.*;
-import org.by1337.blib.network.clientbound.entity.PacketAddEntity;
-import org.by1337.blib.world.entity.PacketEntity;
-import org.by1337.blib.nms.v1_16_5.network.PacketImpl165;
-import org.by1337.blib.nms.v1_16_5.world.entity.PacketEntityImpl165;
-
 import java.io.IOException;
 import java.util.UUID;
+import net.minecraft.core.Registry;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.protocol.game.ClientboundAddEntityPacket;
+import net.minecraft.util.Mth;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.phys.Vec3;
+import org.by1337.blib.network.clientbound.entity.PacketAddEntity;
+import org.by1337.blib.nms.v1_16_5.network.PacketImpl165;
+import org.by1337.blib.nms.v1_16_5.world.entity.PacketEntityImpl165;
+import org.by1337.blib.world.entity.PacketEntity;
 
 public class PacketAddEntityImpl165 extends PacketImpl165 implements PacketAddEntity {
     private int id;
@@ -21,37 +26,37 @@ public class PacketAddEntityImpl165 extends PacketImpl165 implements PacketAddEn
     private int za;
     private int pitch;
     private int yaw;
-    private EntityTypes<?> type;
+    private EntityType<?> type;
     private int data;
 
     @Override
     protected Packet<?> create() {
         try {
-            PacketPlayOutSpawnEntity packet = new PacketPlayOutSpawnEntity();
-            packet.a(write(new PacketDataSerializer(Unpooled.buffer())));
+            ClientboundAddEntityPacket packet = new ClientboundAddEntityPacket();
+            packet.read_(this.write(new FriendlyByteBuf(Unpooled.buffer())));
             return packet;
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+        } catch (IOException var2) {
+            throw new RuntimeException(var2);
         }
     }
 
     public PacketAddEntityImpl165(PacketEntity packetEntity) {
-        this.init((PacketEntityImpl165) packetEntity, 0);
+        this.init((PacketEntityImpl165)packetEntity, 0);
     }
 
-    public void init(int id, UUID uuid, double x, double y, double z, float pitch, float yaw, EntityTypes<?> types, int data, Vec3D var12) {
+    public void init(int id, UUID uuid, double x, double y, double z, float pitch, float yaw, EntityType<?> types, int data, Vec3 var12) {
         this.id = id;
         this.uuid = uuid;
         this.x = x;
         this.y = y;
         this.z = z;
-        this.pitch = MathHelper.d(pitch * 256.0f / 360.0f);
-        this.yaw = MathHelper.d(yaw * 256.0f / 360.0f);
+        this.pitch = Mth.floor_(pitch * 256.0F / 360.0F);
+        this.yaw = Mth.floor_(yaw * 256.0F / 360.0F);
         this.type = types;
         this.data = data;
-        this.xa = (int) (MathHelper.a(var12.x, -3.9, 3.9) * 8000.0);
-        this.ya = (int) (MathHelper.a(var12.y, -3.9, 3.9) * 8000.0);
-        this.za = (int) (MathHelper.a(var12.z, -3.9, 3.9) * 8000.0);
+        this.xa = (int)(Mth.clamp_(var12.x, -3.9, 3.9) * 8000.0);
+        this.ya = (int)(Mth.clamp_(var12.y, -3.9, 3.9) * 8000.0);
+        this.za = (int)(Mth.clamp_(var12.z, -3.9, 3.9) * 8000.0);
     }
 
     private void init(PacketEntityImpl165 entity, int data) {
@@ -65,14 +70,14 @@ public class PacketAddEntityImpl165 extends PacketImpl165 implements PacketAddEn
                 entity.getLocation().getYaw(),
                 entity.getType(),
                 data,
-                new Vec3D(entity.getXa(), entity.getYa(), entity.getZa())
+                new Vec3((double)entity.getXa(), (double)entity.getYa(), (double)entity.getZa())
         );
     }
 
-    private PacketDataSerializer write(PacketDataSerializer byteBuf) {
-        byteBuf.d(this.id);
-        byteBuf.a(this.uuid);
-        byteBuf.d(IRegistry.ENTITY_TYPE.a(this.type));
+    private FriendlyByteBuf write(FriendlyByteBuf byteBuf) {
+        byteBuf.writeVarInt_(this.id);
+        byteBuf.writeUUID_(this.uuid);
+        byteBuf.writeVarInt_(Registry.ENTITY_TYPE.getId_(this.type));
         byteBuf.writeDouble(this.x);
         byteBuf.writeDouble(this.y);
         byteBuf.writeDouble(this.z);
@@ -85,136 +90,111 @@ public class PacketAddEntityImpl165 extends PacketImpl165 implements PacketAddEn
         return byteBuf;
     }
 
-    @Override
     public int getId() {
         return this.id;
     }
 
-    @Override
     public void setId(int id) {
         this.id = id;
     }
 
-    @Override
     public UUID getUuid() {
         return this.uuid;
     }
 
-    @Override
     public void setUuid(UUID uuid) {
         this.uuid = uuid;
     }
 
-    @Override
     public double getX() {
         return this.x;
     }
 
-    @Override
     public void setX(double x) {
         this.x = x;
     }
 
-    @Override
     public double getY() {
         return this.y;
     }
 
-    @Override
     public void setY(double y) {
         this.y = y;
     }
 
-    @Override
     public double getZ() {
         return this.z;
     }
 
-    @Override
     public void setZ(double z) {
         this.z = z;
     }
 
-    @Override
     public int getXa() {
         return this.xa;
     }
 
-    @Override
     public void setXa(int xa) {
         this.xa = xa;
     }
 
-    @Override
     public int getYa() {
         return this.ya;
     }
 
-    @Override
     public void setYa(int ya) {
         this.ya = ya;
     }
 
-    @Override
     public int getZa() {
         return this.za;
     }
 
-    @Override
     public void setZa(int za) {
         this.za = za;
     }
 
-    @Override
     public int getPitch() {
         return this.pitch;
     }
 
-    @Override
     public void setPitch(int pitch) {
         this.pitch = pitch;
     }
 
-    @Override
     public void setPitch(float pitch) {
-        this.pitch = MathHelper.d(pitch * 256.0f / 360.0f);
+        this.pitch = Mth.floor_(pitch * 256.0F / 360.0F);
     }
 
-    @Override
     public int getYaw() {
         return this.yaw;
     }
 
-    @Override
     public void setYaw(int yaw) {
         this.yaw = yaw;
     }
 
-    @Override
     public void setYaw(float yaw) {
-        this.yaw = MathHelper.d(yaw * 256.0f / 360.0f);
+        this.yaw = Mth.floor_(yaw * 256.0F / 360.0F);
     }
 
-    public EntityTypes<?> getType() {
+    public EntityType<?> getType() {
         return this.type;
     }
 
-    public void setType(EntityTypes<?> type) {
+    public void setType(EntityType<?> type) {
         this.type = type;
     }
 
-    @Override
     public int getData() {
         return this.data;
     }
 
-    @Override
     public void setData(int data) {
         this.data = data;
     }
 
-    @Override
     public <T> void setType(T type) {
-        this.setType((EntityTypes<?>) type);
+        this.setType((EntityType<?>)type);
     }
 }

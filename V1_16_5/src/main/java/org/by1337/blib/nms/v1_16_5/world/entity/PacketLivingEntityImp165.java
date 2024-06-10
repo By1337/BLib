@@ -1,29 +1,33 @@
 package org.by1337.blib.nms.v1_16_5.world.entity;
 
-import net.minecraft.server.v1_16_R3.*;
+import java.lang.reflect.Field;
+import java.util.Optional;
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
 import org.by1337.blib.world.BLocation;
+import org.by1337.blib.world.BlockPosition;
 import org.by1337.blib.world.entity.BInteractionHand;
 import org.by1337.blib.world.entity.PacketLivingEntity;
 
-import java.lang.reflect.Field;
-import java.util.Optional;
-
 public abstract class PacketLivingEntityImp165 extends PacketEntityImpl165 implements PacketLivingEntity {
-    protected static final DataWatcherObject<Byte> DATA_LIVING_ENTITY_FLAGS;
-    private static final DataWatcherObject<Float> DATA_HEALTH_ID;
-    private static final DataWatcherObject<Integer> DATA_EFFECT_COLOR_ID;
-    private static final DataWatcherObject<Boolean> DATA_EFFECT_AMBIENCE_ID;
-    private static final DataWatcherObject<Integer> DATA_ARROW_COUNT_ID;
-    private static final DataWatcherObject<Integer> DATA_STINGER_COUNT_ID;
-    private static final DataWatcherObject<Optional<BlockPosition>> SLEEPING_POS_ID;
+    protected static final EntityDataAccessor<Byte> DATA_LIVING_ENTITY_FLAGS;
+    private static final EntityDataAccessor<Float> DATA_HEALTH_ID;
+    private static final EntityDataAccessor<Integer> DATA_EFFECT_COLOR_ID;
+    private static final EntityDataAccessor<Boolean> DATA_EFFECT_AMBIENCE_ID;
+    private static final EntityDataAccessor<Integer> DATA_ARROW_COUNT_ID;
+    private static final EntityDataAccessor<Integer> DATA_STINGER_COUNT_ID;
+    private static final EntityDataAccessor<Optional<BlockPos>> SLEEPING_POS_ID;
 
-    public PacketLivingEntityImp165(EntityTypes<?> param0, BLocation location) {
+    public PacketLivingEntityImp165(EntityType<?> param0, BLocation location) {
         super(param0, location);
     }
 
     @Override
     protected void defineSynchedData() {
-        this.entityData.register(DATA_LIVING_ENTITY_FLAGS, (byte) 0);
+        this.entityData.register(DATA_LIVING_ENTITY_FLAGS, (byte)0);
         this.entityData.register(DATA_EFFECT_COLOR_ID, 0);
         this.entityData.register(DATA_EFFECT_AMBIENCE_ID, false);
         this.entityData.register(DATA_ARROW_COUNT_ID, 0);
@@ -32,43 +36,36 @@ public abstract class PacketLivingEntityImp165 extends PacketEntityImpl165 imple
         this.entityData.register(SLEEPING_POS_ID, Optional.empty());
     }
 
-    @Override
     public float getHealth() {
         return this.entityData.get(DATA_HEALTH_ID);
     }
 
-    @Override
     public final int getArrowCount() {
         return this.entityData.get(DATA_ARROW_COUNT_ID);
     }
 
-    @Override
     public final void setArrowCount(int param0) {
         this.entityData.set(DATA_ARROW_COUNT_ID, param0);
     }
 
-    @Override
     public final int getStingerCount() {
         return this.entityData.get(DATA_STINGER_COUNT_ID);
     }
 
-    @Override
     public final void setStingerCount(int param0) {
         this.entityData.set(DATA_STINGER_COUNT_ID, param0);
     }
 
-    @Override
     public boolean isAutoSpinAttack() {
         return (this.entityData.get(DATA_LIVING_ENTITY_FLAGS) & 4) != 0;
     }
 
-    @Override
     public boolean isUsingItem() {
         return (this.entityData.get(DATA_LIVING_ENTITY_FLAGS) & 1) > 0;
     }
 
-    public EnumHand getUsedItemHand_NMS() {
-        return (this.entityData.get(DATA_LIVING_ENTITY_FLAGS) & 2) > 0 ? EnumHand.OFF_HAND : EnumHand.MAIN_HAND;
+    public InteractionHand getUsedItemHand_NMS() {
+        return (this.entityData.get(DATA_LIVING_ENTITY_FLAGS) & 2) > 0 ? InteractionHand.OFF_HAND : InteractionHand.MAIN_HAND;
     }
 
     protected void setLivingEntityFlag(int param0, boolean param1) {
@@ -79,108 +76,76 @@ public abstract class PacketLivingEntityImp165 extends PacketEntityImpl165 imple
             var3 &= ~param0;
         }
 
-        this.entityData.set(DATA_LIVING_ENTITY_FLAGS, (byte) var3);
+        this.entityData.set(DATA_LIVING_ENTITY_FLAGS, (byte)var3);
     }
 
-    @Override
     public void stopUsingItem() {
         this.setLivingEntityFlag(1, false);
     }
 
-    @Override
     public void startAutoSpinAttack(int param0) {
         this.setLivingEntityFlag(4, true);
     }
 
-    public Optional<BlockPosition> getSleepingPos_NMS() {
-        return this.entityData.get(SLEEPING_POS_ID);
+    public Optional<BlockPos> getSleepingPos_NMS() {
+        return (Optional<BlockPos>)this.entityData.get(SLEEPING_POS_ID);
     }
 
-    public void setSleepingPos(BlockPosition param0) {
+    public void setSleepingPos(BlockPos param0) {
         this.entityData.set(SLEEPING_POS_ID, Optional.of(param0));
     }
 
-    @Override
     public void clearSleepingPos() {
         this.entityData.set(SLEEPING_POS_ID, Optional.empty());
     }
 
-    @Override
     public BInteractionHand getUsedItemHand() {
-        return switch (this.getUsedItemHand_NMS()) {
+        return switch(this.getUsedItemHand_NMS()) {
             case MAIN_HAND -> BInteractionHand.MAIN_HAND;
             case OFF_HAND -> BInteractionHand.OFF_HAND;
+            default -> throw new IncompatibleClassChangeError();
         };
     }
 
-    @Override
-    public Optional<org.by1337.blib.world.BlockPosition> getSleepingPos() {
-        Optional<BlockPosition> opt = this.getSleepingPos_NMS();
+    public Optional<BlockPosition> getSleepingPos() {
+        Optional<BlockPos> opt = this.getSleepingPos_NMS();
         if (opt.isEmpty()) {
             return Optional.empty();
         } else {
-            BlockPosition pos = opt.get();
-            return Optional.of(new org.by1337.blib.world.BlockPosition(pos.getX(), pos.getY(), pos.getZ()));
+            BlockPos pos = (BlockPos)opt.get();
+            return Optional.of(new BlockPosition(pos.getX(), pos.getY(), pos.getZ()));
         }
     }
 
-    @Override
-    public void setSleepingPos(org.by1337.blib.world.BlockPosition param0) {
-        this.setSleepingPos(new BlockPosition(param0.getX(), param0.getY(), param0.getZ()));
+    public void setSleepingPos(BlockPosition param0) {
+        this.setSleepingPos(new BlockPos(param0.getX(), param0.getY(), param0.getZ()));
     }
 
     static {
         try {
-            Field field = EntityLiving.class.getDeclaredField("ag");
+            Field field = LivingEntity.class.getDeclaredField("ag");
             field.setAccessible(true);
-            DATA_LIVING_ENTITY_FLAGS = (DataWatcherObject<Byte>) field.get(null);
-
-            field = EntityLiving.class.getDeclaredField("HEALTH");
+            DATA_LIVING_ENTITY_FLAGS = (EntityDataAccessor)field.get(null);
+            field = LivingEntity.class.getDeclaredField("HEALTH");
             field.setAccessible(true);
-            DATA_HEALTH_ID = (DataWatcherObject<Float>) field.get(null);
-
-            field = EntityLiving.class.getDeclaredField("f");
+            DATA_HEALTH_ID = (EntityDataAccessor)field.get(null);
+            field = LivingEntity.class.getDeclaredField("f");
             field.setAccessible(true);
-            DATA_EFFECT_COLOR_ID = (DataWatcherObject<Integer>) field.get(null);
-
-            field = EntityLiving.class.getDeclaredField("g");
+            DATA_EFFECT_COLOR_ID = (EntityDataAccessor)field.get(null);
+            field = LivingEntity.class.getDeclaredField("g");
             field.setAccessible(true);
-            DATA_EFFECT_AMBIENCE_ID = (DataWatcherObject<Boolean>) field.get(null);
-
-            field = EntityLiving.class.getDeclaredField("ARROWS_IN_BODY");
+            DATA_EFFECT_AMBIENCE_ID = (EntityDataAccessor)field.get(null);
+            field = LivingEntity.class.getDeclaredField("ARROWS_IN_BODY");
             field.setAccessible(true);
-            DATA_ARROW_COUNT_ID = (DataWatcherObject<Integer>) field.get(null);
-
-            field = EntityLiving.class.getDeclaredField("bi");
+            DATA_ARROW_COUNT_ID = (EntityDataAccessor)field.get(null);
+            field = LivingEntity.class.getDeclaredField("bi");
             field.setAccessible(true);
-            DATA_STINGER_COUNT_ID = (DataWatcherObject<Integer>) field.get(null);
-
-            field = EntityLiving.class.getDeclaredField("bj");
+            DATA_STINGER_COUNT_ID = (EntityDataAccessor)field.get(null);
+            field = LivingEntity.class.getDeclaredField("bj");
             field.setAccessible(true);
-            SLEEPING_POS_ID = (DataWatcherObject<Optional<BlockPosition>>) field.get(null);
-        } catch (IllegalAccessException | NoSuchFieldException var1) {
-            throw new RuntimeException(var1);
+            SLEEPING_POS_ID = (EntityDataAccessor)field.get(null);
+        } catch (NoSuchFieldException | IllegalAccessException var11) {
+            throw new RuntimeException(var11);
         }
-
-
-//        DATA_LIVING_ENTITY_FLAGS = new DataWatcherObject<>(7, DataWatcherRegistry.a);
-//        DATA_HEALTH_ID = new DataWatcherObject<>(8, DataWatcherRegistry.c);
-//        DATA_EFFECT_COLOR_ID = new DataWatcherObject<>(9, DataWatcherRegistry.b);
-//        DATA_EFFECT_AMBIENCE_ID = new DataWatcherObject<>(10, DataWatcherRegistry.i);
-//        DATA_ARROW_COUNT_ID = new DataWatcherObject<>(11, DataWatcherRegistry.b);
-//        DATA_STINGER_COUNT_ID = new DataWatcherObject<>(12, DataWatcherRegistry.b);
-//        SLEEPING_POS_ID = new DataWatcherObject<>(13, DataWatcherRegistry.m);
-
-
-/*        System.out.println(PacketLivingEntityImp165.class.getName() + " ============== ");
-
-        System.out.println("DATA_LIVING_ENTITY_FLAGS = " + DATA_LIVING_ENTITY_FLAGS.a());
-        System.out.println("DATA_HEALTH_ID = " + DATA_HEALTH_ID.a());
-        System.out.println("DATA_EFFECT_COLOR_ID = " + DATA_EFFECT_COLOR_ID.a());
-        System.out.println("DATA_EFFECT_AMBIENCE_ID = " + DATA_EFFECT_AMBIENCE_ID.a());
-        System.out.println("DATA_ARROW_COUNT_ID = " + DATA_ARROW_COUNT_ID.a());
-        System.out.println("DATA_STINGER_COUNT_ID = " + DATA_STINGER_COUNT_ID.a());
-        System.out.println("SLEEPING_POS_ID = " + SLEEPING_POS_ID.a());*/
-
     }
 }

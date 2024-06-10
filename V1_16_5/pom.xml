@@ -22,9 +22,32 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
+    <pluginRepositories>
+        <pluginRepository>
+            <id>by1337-repo</id>
+            <url>https://repo.by1337.space/repository/maven-releases/</url>
+        </pluginRepository>
+    </pluginRepositories>
+
     <build>
         <defaultGoal>clean install</defaultGoal>
         <plugins>
+            <plugin>
+                <groupId>org.by1337.bnms</groupId>
+                <artifactId>bnms-plugin</artifactId>
+                <version>1.0-beta</version>
+                <configuration>
+                    <version>1.16.5</version>
+                </configuration>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>remap</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -77,23 +100,12 @@
     <dependencies>
         <!-- server -->
         <dependency>
-            <groupId>org.spigotmc</groupId>
-            <artifactId>spigot</artifactId>
-            <version>1.16.5-R0.1-SNAPSHOT</version>
+            <groupId>org.by1337.nms</groupId>
+            <artifactId>paper-nms</artifactId>
+            <version>1.16.5</version>
             <scope>provided</scope>
         </dependency>
-        <dependency>
-            <groupId>net.kyori</groupId>
-            <artifactId>adventure-text-serializer-gson</artifactId>
-            <version>4.7.0</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>net.kyori</groupId>
-            <artifactId>adventure-api</artifactId>
-            <version>4.7.0</version>
-            <scope>provided</scope>
-        </dependency>
+
         <dependency>
             <groupId>com.sk89q.worldedit</groupId>
             <artifactId>worldedit-bukkit</artifactId>

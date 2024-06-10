@@ -1,14 +1,13 @@
 package org.by1337.blib.nms.v1_16_5.network.clientbound;
 
 import io.netty.buffer.Unpooled;
-import net.minecraft.server.v1_16_R3.Packet;
-import net.minecraft.server.v1_16_R3.PacketDataSerializer;
-import net.minecraft.server.v1_16_R3.PacketPlayOutEntityTeleport;
-import org.by1337.blib.network.clientbound.entity.TeleportEntityPacket;
-import org.by1337.blib.world.entity.PacketEntity;
-import org.by1337.blib.nms.v1_16_5.network.PacketImpl165;
-
 import java.io.IOException;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.protocol.game.ClientboundTeleportEntityPacket;
+import org.by1337.blib.network.clientbound.entity.TeleportEntityPacket;
+import org.by1337.blib.nms.v1_16_5.network.PacketImpl165;
+import org.by1337.blib.world.entity.PacketEntity;
 
 public class TeleportEntityPacketImp165 extends PacketImpl165 implements TeleportEntityPacket {
     private int id;
@@ -24,8 +23,8 @@ public class TeleportEntityPacketImp165 extends PacketImpl165 implements Telepor
         this.x = entity.getLocation().getX();
         this.y = entity.getLocation().getY();
         this.z = entity.getLocation().getZ();
-        this.pitch = (byte) ((int) (entity.getLocation().getPitch() * 256.0F / 360.0F));
-        this.yaw = (byte) ((int) (entity.getLocation().getYaw() * 256.0F / 360.0F));
+        this.pitch = (byte)((int)(entity.getLocation().getPitch() * 256.0F / 360.0F));
+        this.yaw = (byte)((int)(entity.getLocation().getYaw() * 256.0F / 360.0F));
         this.onGround = true;
     }
 
@@ -34,24 +33,24 @@ public class TeleportEntityPacketImp165 extends PacketImpl165 implements Telepor
         this.x = x;
         this.y = y;
         this.z = z;
-        this.pitch = (byte) ((int) (pitch * 256.0F / 360.0F));
-        this.yaw = (byte) ((int) (yaw * 256.0F / 360.0F));;
+        this.pitch = (byte)((int)(pitch * 256.0F / 360.0F));
+        this.yaw = (byte)((int)(yaw * 256.0F / 360.0F));
         this.onGround = onGround;
     }
 
     @Override
     protected Packet<?> create() {
         try {
-            PacketPlayOutEntityTeleport packet = new PacketPlayOutEntityTeleport();
-            packet.a(this.write(new PacketDataSerializer(Unpooled.buffer())));
+            ClientboundTeleportEntityPacket packet = new ClientboundTeleportEntityPacket();
+            packet.read_(this.write(new FriendlyByteBuf(Unpooled.buffer())));
             return packet;
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+        } catch (IOException var2) {
+            throw new RuntimeException(var2);
         }
     }
 
-    public PacketDataSerializer write(PacketDataSerializer byteBuf) {
-        byteBuf.d(this.id);
+    public FriendlyByteBuf write(FriendlyByteBuf byteBuf) {
+        byteBuf.writeVarInt_(this.id);
         byteBuf.writeDouble(this.x);
         byteBuf.writeDouble(this.y);
         byteBuf.writeDouble(this.z);
@@ -61,82 +60,66 @@ public class TeleportEntityPacketImp165 extends PacketImpl165 implements Telepor
         return byteBuf;
     }
 
-    @Override
     public int getId() {
         return this.id;
     }
 
-    @Override
     public void setId(int id) {
         this.id = id;
     }
 
-    @Override
     public double getX() {
         return this.x;
     }
 
-    @Override
     public void setX(double x) {
         this.x = x;
     }
 
-    @Override
     public double getY() {
         return this.y;
     }
 
-    @Override
     public void setY(double y) {
         this.y = y;
     }
 
-    @Override
     public double getZ() {
         return this.z;
     }
 
-    @Override
     public void setZ(double z) {
         this.z = z;
     }
 
-    @Override
     public byte getPitch() {
         return this.pitch;
     }
 
-    @Override
     public void setPitch(byte pitch) {
         this.pitch = pitch;
     }
 
-    @Override
     public void setPitch(float pitch) {
-        this.pitch = (byte) ((int) (pitch * 256.0F / 360.0F));
+        this.pitch = (byte)((int)(pitch * 256.0F / 360.0F));
     }
 
-    @Override
     public void setYaw(float yaw) {
-        this.yaw = (byte) ((int) (yaw * 256.0F / 360.0F));
+        this.yaw = (byte)((int)(yaw * 256.0F / 360.0F));
     }
 
-    @Override
     public byte getYaw() {
         return this.yaw;
     }
 
-    @Override
     public void setYaw(byte yaw) {
         this.yaw = yaw;
     }
 
-    @Override
     public boolean isOnGround() {
         return this.onGround;
     }
 
-    @Override
     public void setOnGround(boolean onGround) {
         this.onGround = onGround;
     }

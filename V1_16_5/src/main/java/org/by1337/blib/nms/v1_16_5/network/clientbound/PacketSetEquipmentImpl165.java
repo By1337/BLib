@@ -1,17 +1,18 @@
 package org.by1337.blib.nms.v1_16_5.network.clientbound;
 
 import com.mojang.datafixers.util.Pair;
-import net.minecraft.server.v1_16_R3.EnumItemSlot;
-import net.minecraft.server.v1_16_R3.Packet;
-import net.minecraft.server.v1_16_R3.PacketPlayOutEntityEquipment;
-import org.bukkit.craftbukkit.v1_16_R3.inventory.CraftItemStack;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.protocol.game.ClientboundSetEquipmentPacket;
+import net.minecraft.world.entity.EquipmentSlot;
+import org.bukkit.craftbukkit.inventory.CraftItemStack;
 import org.bukkit.inventory.ItemStack;
 import org.by1337.blib.network.clientbound.entity.PacketSetEquipment;
-import org.by1337.blib.world.entity.BEquipmentSlot;
 import org.by1337.blib.nms.v1_16_5.network.PacketImpl165;
-
-import java.util.ArrayList;
-import java.util.Map;
+import org.by1337.blib.world.entity.BEquipmentSlot;
 
 public class PacketSetEquipmentImpl165 extends PacketImpl165 implements PacketSetEquipment {
     private int entityId;
@@ -24,26 +25,25 @@ public class PacketSetEquipmentImpl165 extends PacketImpl165 implements PacketSe
 
     @Override
     protected Packet<?> create() {
-        java.util.List<com.mojang.datafixers.util.Pair<net.minecraft.server.v1_16_R3.EnumItemSlot, net.minecraft.server.v1_16_R3.ItemStack>> list = new ArrayList<>();
-        for (Map.Entry<BEquipmentSlot, ItemStack> entry : slots.entrySet()) {
-            list.add(new Pair<>(
-                            switch (entry.getKey()) {
-                                case MAINHAND -> EnumItemSlot.MAINHAND;
-                                case OFFHAND -> EnumItemSlot.OFFHAND;
-                                case FEET -> EnumItemSlot.FEET;
-                                case LEGS -> EnumItemSlot.LEGS;
-                                case CHEST -> EnumItemSlot.CHEST;
-                                case HEAD -> EnumItemSlot.HEAD;
-                            },
-                            CraftItemStack.asNMSCopy(entry.getValue())
-                    )
-            );
+        List<Pair<EquipmentSlot, net.minecraft.world.item.ItemStack>> list = new ArrayList();
+
+        for(Entry<BEquipmentSlot, ItemStack> entry : this.slots.entrySet()) {
+            list.add(new Pair<>(switch(entry.getKey()) {
+                case MAINHAND -> EquipmentSlot.MAINHAND;
+                case OFFHAND -> EquipmentSlot.OFFHAND;
+                case FEET -> EquipmentSlot.FEET;
+                case LEGS -> EquipmentSlot.LEGS;
+                case CHEST -> EquipmentSlot.CHEST;
+                case HEAD -> EquipmentSlot.HEAD;
+                default -> throw new IncompatibleClassChangeError();
+            }, CraftItemStack.asNMSCopy(entry.getValue())));
         }
-        return new PacketPlayOutEntityEquipment(entityId, list);
+
+        return new ClientboundSetEquipmentPacket(this.entityId, list);
     }
 
     public int getEntityId() {
-        return entityId;
+        return this.entityId;
     }
 
     public void setEntityId(int entityId) {
@@ -51,7 +51,7 @@ public class PacketSetEquipmentImpl165 extends PacketImpl165 implements PacketSe
     }
 
     public Map<BEquipmentSlot, ItemStack> getSlots() {
-        return slots;
+        return this.slots;
     }
 
     public void setSlots(Map<BEquipmentSlot, ItemStack> slots) {
