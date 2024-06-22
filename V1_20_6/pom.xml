@@ -7,7 +7,7 @@
     <parent>
         <groupId>org.by1337.blib</groupId>
         <artifactId>Blib-parent</artifactId>
-        <version>1.0.8.1</version>
+        <version>1.0.9</version>
     </parent>
 
     <groupId>org.by1337.blib.nms</groupId>
@@ -19,7 +19,7 @@
 
 
     <properties>
-        <revision>1.0.8.1</revision>
+        <revision>1.0.9</revision>
         <java.version>16</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <server.version>1.20.6-R0.1-SNAPSHOT</server.version>

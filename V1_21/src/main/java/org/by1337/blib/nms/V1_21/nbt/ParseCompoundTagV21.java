@@ -1,14 +1,12 @@
-package org.by1337.blib.nms.V1_20_6.nbt;
+package org.by1337.blib.nms.V1_21.nbt;
 
-import net.minecraft.core.component.DataComponentPatch;
-import net.minecraft.core.component.DataComponentType;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.*;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.level.storage.PlayerDataStorage;
 import org.bukkit.Bukkit;
-import org.bukkit.craftbukkit.v1_20_R4.CraftServer;
-import org.bukkit.craftbukkit.v1_20_R4.inventory.CraftItemStack;
+import org.bukkit.craftbukkit.v1_21_R1.CraftServer;
+import org.bukkit.craftbukkit.v1_21_R1.inventory.CraftItemStack;
 import org.bukkit.inventory.ItemStack;
 import org.by1337.blib.nbt.MojangNbtReader;
 import org.by1337.blib.nbt.NBT;
@@ -19,14 +17,13 @@ import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.Field;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Function;
 import java.util.logging.Level;
 
-public class ParseCompoundTagV206 implements ParseCompoundTag {
+public class ParseCompoundTagV21 implements ParseCompoundTag {
     @Override
     public org.by1337.blib.nbt.impl.@NotNull CompoundTag copy(@NotNull ItemStack itemStack) {
         var nmsItem = CraftItemStack.asNMSCopy(itemStack);

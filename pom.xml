@@ -4,20 +4,21 @@
     <groupId>org.by1337.blib</groupId>
     <artifactId>Blib-parent</artifactId>
     <packaging>pom</packaging>
-    <version>1.0.8.1</version>
+    <version>1.0.9</version>
     <name>Blib-parent</name>
     <modules>
         <module>BLib</module>
         <module>BLib-api</module>
-        <module>V1_16_5</module>
-        <module>V1_17</module>
-        <module>V1_17_1</module>
-        <module>V1_18_2</module>
-        <module>V1_19_4</module>
+        <module>V1_16_5</module><!--LTS-->
+        <module>V1_17</module><!--LTS-->
+        <module>V1_17_1</module><!--LTS-->
+        <module>V1_18_2</module><!--LTS-->
+        <module>V1_19_4</module><!--LTS-->
         <module>V1_20_1</module>
         <module>V1_20_2</module>
         <module>V1_20_4</module>
-        <module>V1_20_6</module>
+        <module>V1_20_6</module><!--LTS-->
+        <module>V1_21</module><!--LTS-->
         <module>MinimessageSupport</module>
         <module>BLib-Nbt</module>
     </modules>

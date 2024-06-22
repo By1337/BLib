@@ -167,16 +167,6 @@ public class BlockReplaceTask extends BlockReplaceSetting {
     }
 
     @Override
-    public BlockReplaceTask setDoDropFromChests(boolean doDropFromChests) {
-        return (BlockReplaceTask) super.setDoDropFromChests(doDropFromChests);
-    }
-
-    @Override
-    public BlockReplaceTask setCustomLimit(int customLimit) {
-        return (BlockReplaceTask) super.setCustomLimit(customLimit);
-    }
-
-    @Override
     public BlockReplaceTask setBlockBreakCallBack(Consumer<Block> blockBreakCallBack) {
         return (BlockReplaceTask) super.setBlockBreakCallBack(blockBreakCallBack);
     }

@@ -10,8 +10,6 @@ public abstract class BlockReplaceSetting {
     protected boolean deobfuscatePaperAntiXRay = true;
     protected boolean recalculateLight = true;
     protected boolean sendPacketsOnBlockChange = true;
-    protected boolean doDropFromChests = false;
-    protected int customLimit = -1;
     protected Consumer<Block> blockBreakCallBack;
     protected boolean perfectPhysics = false;
     protected Predicate<Block> filter;
@@ -73,14 +71,6 @@ public abstract class BlockReplaceSetting {
         return this;
     }
 
-    public boolean isDoDropFromChests() {
-        return doDropFromChests;
-    }
-
-    public BlockReplaceSetting setDoDropFromChests(boolean doDropFromChests) {
-        this.doDropFromChests = doDropFromChests;
-        return this;
-    }
 
     public boolean isDoPlace() {
         return doPlace;
@@ -88,15 +78,6 @@ public abstract class BlockReplaceSetting {
 
     public BlockReplaceSetting setDoPlace(boolean doPlace) {
         this.doPlace = doPlace;
-        return this;
-    }
-
-    public int getCustomLimit() {
-        return customLimit;
-    }
-
-    public BlockReplaceSetting setCustomLimit(int customLimit) {
-        this.customLimit = customLimit;
         return this;
     }
 

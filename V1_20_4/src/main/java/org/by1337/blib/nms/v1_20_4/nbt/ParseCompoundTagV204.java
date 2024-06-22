@@ -10,8 +10,10 @@ import org.bukkit.inventory.ItemStack;
 import org.by1337.blib.nbt.NBT;
 import org.by1337.blib.nbt.ParseCompoundTag;
 import org.by1337.blib.nbt.impl.*;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.lang.reflect.Field;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
@@ -19,7 +21,7 @@ import java.util.function.Function;
 
 public class ParseCompoundTagV204 implements ParseCompoundTag {
     @Override
-    public org.by1337.blib.nbt.impl.CompoundTag copy(ItemStack itemStack) {
+    public org.by1337.blib.nbt.impl.@NotNull CompoundTag copy(@NotNull ItemStack itemStack) {
         var nmsItem = CraftItemStack.asNMSCopy(itemStack);
         var nmsTags = new CompoundTag();
         nmsItem.save(nmsTags);
@@ -29,7 +31,7 @@ public class ParseCompoundTagV204 implements ParseCompoundTag {
     }
 
     @Override
-    public ItemStack create(org.by1337.blib.nbt.impl.CompoundTag compoundTag) {
+    public @NotNull ItemStack create(org.by1337.blib.nbt.impl.@NotNull CompoundTag compoundTag) {
         var nms = new CompoundTag();
         copyAsNms(compoundTag, nms);
         return CraftItemStack.asBukkitCopy(
@@ -47,7 +49,7 @@ public class ParseCompoundTagV204 implements ParseCompoundTag {
 
     private final PlayerDataStorage worldNBTStorage = ((CraftServer) Bukkit.getServer()).getServer().playerDataStorage;
     @Override
-    public CompletableFuture<org.by1337.blib.nbt.impl.CompoundTag> readOfflinePlayerData(UUID player) {
+    public CompletableFuture<org.by1337.blib.nbt.impl.CompoundTag> readOfflinePlayerData(@NotNull UUID player) {
         return CompletableFuture.supplyAsync(() ->
                 applyIfNotNull(worldNBTStorage.getPlayerData(player.toString()), nbt -> (org.by1337.blib.nbt.impl.CompoundTag) convertFromNms(nbt))
         );

@@ -4,6 +4,7 @@ import java.util.UUID;
 import java.util.Map.Entry;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Function;
+
 import net.minecraft.nbt.ByteArrayTag;
 import net.minecraft.nbt.ByteTag;
 import net.minecraft.nbt.DoubleTag;
@@ -35,16 +36,17 @@ import org.by1337.blib.nbt.impl.LongArrNBT;
 import org.by1337.blib.nbt.impl.LongNBT;
 import org.by1337.blib.nbt.impl.ShortNBT;
 import org.by1337.blib.nbt.impl.StringNBT;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class ParseCompoundTagV165 implements ParseCompoundTag {
     private final PlayerDataStorage worldNBTStorage;
 
     public ParseCompoundTagV165() {
-        this.worldNBTStorage = ((CraftServer)Bukkit.getServer()).getServer().worldNBTStorage;
+        this.worldNBTStorage = ((CraftServer) Bukkit.getServer()).getServer().worldNBTStorage;
     }
 
-    public CompoundTag copy(ItemStack itemStack) {
+    public @NotNull CompoundTag copy(@NotNull ItemStack itemStack) {
         net.minecraft.world.item.ItemStack nmsItem = CraftItemStack.asNMSCopy(itemStack);
         net.minecraft.nbt.CompoundTag nmsTags = new net.minecraft.nbt.CompoundTag();
         nmsItem.save(nmsTags);
@@ -53,15 +55,15 @@ public class ParseCompoundTagV165 implements ParseCompoundTag {
         return compoundTag;
     }
 
-    public ItemStack create(CompoundTag compoundTag) {
+    public @NotNull ItemStack create(@NotNull CompoundTag compoundTag) {
         net.minecraft.nbt.CompoundTag nms = new net.minecraft.nbt.CompoundTag();
         this.copyAsNms(compoundTag, nms);
         return CraftItemStack.asBukkitCopy(net.minecraft.world.item.ItemStack.of_(nms));
     }
 
-    public CompletableFuture<CompoundTag> readOfflinePlayerData(UUID player) {
+    public CompletableFuture<CompoundTag> readOfflinePlayerData(@NotNull UUID player) {
         return CompletableFuture.supplyAsync(
-                () -> this.applyIfNotNull(this.worldNBTStorage.getPlayerData(player.toString()), nbt -> (CompoundTag)this.convertFromNms(nbt))
+                () -> this.applyIfNotNull(this.worldNBTStorage.getPlayerData(player.toString()), nbt -> (CompoundTag) this.convertFromNms(nbt))
         );
     }
 
@@ -71,45 +73,45 @@ public class ParseCompoundTagV165 implements ParseCompoundTag {
     }
 
     private void copyAsNms(CompoundTag compoundTag, net.minecraft.nbt.CompoundTag nms) {
-        for(Entry<String, NBT> entry : compoundTag.entrySet()) {
-            NBT nbt = (NBT)entry.getValue();
-            String key = (String)entry.getKey();
+        for (Entry<String, NBT> entry : compoundTag.entrySet()) {
+            NBT nbt = (NBT) entry.getValue();
+            String key = (String) entry.getKey();
             nms.set(key, this.convert(nbt));
         }
     }
 
     private Tag convert(NBT nbt) {
         if (nbt instanceof ByteArrNBT) {
-            return new ByteArrayTag(((ByteArrNBT)nbt).getValue());
+            return new ByteArrayTag(((ByteArrNBT) nbt).getValue());
         } else if (nbt instanceof IntArrNBT) {
-            return new IntArrayTag(((IntArrNBT)nbt).getValue());
+            return new IntArrayTag(((IntArrNBT) nbt).getValue());
         } else if (nbt instanceof LongArrNBT) {
-            return new LongArrayTag(((LongArrNBT)nbt).getValue());
+            return new LongArrayTag(((LongArrNBT) nbt).getValue());
         } else if (nbt instanceof ByteNBT) {
-            return ByteTag.valueOf_(((ByteNBT)nbt).getValue());
+            return ByteTag.valueOf_(((ByteNBT) nbt).getValue());
         } else if (nbt instanceof DoubleNBT) {
-            return DoubleTag.valueOf_(((DoubleNBT)nbt).getValue());
+            return DoubleTag.valueOf_(((DoubleNBT) nbt).getValue());
         } else if (nbt instanceof FloatNBT) {
-            return FloatTag.valueOf_(((FloatNBT)nbt).getValue());
+            return FloatTag.valueOf_(((FloatNBT) nbt).getValue());
         } else if (nbt instanceof IntNBT) {
-            return IntTag.valueOf_(((IntNBT)nbt).getValue());
+            return IntTag.valueOf_(((IntNBT) nbt).getValue());
         } else if (nbt instanceof LongNBT) {
-            return LongTag.valueOf_(((LongNBT)nbt).getValue());
+            return LongTag.valueOf_(((LongNBT) nbt).getValue());
         } else if (nbt instanceof ShortNBT) {
-            return ShortTag.valueOf_(((ShortNBT)nbt).getValue());
+            return ShortTag.valueOf_(((ShortNBT) nbt).getValue());
         } else if (nbt instanceof StringNBT) {
-            return StringTag.valueOf_(((StringNBT)nbt).getValue());
+            return StringTag.valueOf_(((StringNBT) nbt).getValue());
         } else if (nbt instanceof CompoundTag) {
             net.minecraft.nbt.CompoundTag subNms = new net.minecraft.nbt.CompoundTag();
-            this.copyAsNms((CompoundTag)nbt, subNms);
+            this.copyAsNms((CompoundTag) nbt, subNms);
             return subNms;
         } else if (!(nbt instanceof ListNBT)) {
             throw new UnsupportedOperationException("Unsupported tag type: " + nbt.getClass().getSimpleName());
         } else {
-            ListNBT listNBT = (ListNBT)nbt;
+            ListNBT listNBT = (ListNBT) nbt;
             ListTag listTag = new ListTag();
 
-            for(NBT element : listNBT.getList()) {
+            for (NBT element : listNBT.getList()) {
                 listTag.add(this.convert(element));
             }
 
@@ -118,7 +120,7 @@ public class ParseCompoundTagV165 implements ParseCompoundTag {
     }
 
     private void copyAsApiType(net.minecraft.nbt.CompoundTag nms, CompoundTag compoundTag) {
-        for(String key : nms.getKeys()) {
+        for (String key : nms.getKeys()) {
             Tag tag = nms.get(key);
             compoundTag.putTag(key, this.convertFromNms(tag));
         }
@@ -152,10 +154,10 @@ public class ParseCompoundTagV165 implements ParseCompoundTag {
         } else if (!(tag instanceof ListTag)) {
             throw new UnsupportedOperationException("Unsupported tag type: " + tag.getClass().getSimpleName());
         } else {
-            ListTag listTag = (ListTag)tag;
+            ListTag listTag = (ListTag) tag;
             ListNBT listNBT = new ListNBT();
 
-            for(Tag value : listTag) {
+            for (Tag value : listTag) {
                 listNBT.add(this.convertFromNms(value));
             }
 
