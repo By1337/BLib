@@ -6,6 +6,7 @@ import org.by1337.blib.BLib;
 import org.by1337.blib.block.CustomBlock;
 import org.by1337.blib.block.impl.MissingCustomBlock;
 import org.by1337.blib.util.SpacedNameKey;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 
@@ -26,6 +27,7 @@ public class BlockRegistry {
         LOOKUP.put(spacedNameKey, type);
     }
 
+    @NotNull
     public CustomBlock getCustomBlock(SpacedNameKey id){
         var type = LOOKUP.get(id);
         if (type == null){

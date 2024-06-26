@@ -10,7 +10,7 @@ import org.by1337.blib.world.BLocation;
 public class CustomBlockData {
     private final CompoundTag data;
 
-    protected CustomBlockData(CompoundTag data) {
+    public CustomBlockData(CompoundTag data) {
         this.data = data;
     }
 

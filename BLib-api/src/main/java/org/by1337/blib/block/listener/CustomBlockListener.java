@@ -38,12 +38,11 @@ public class CustomBlockListener implements Listener {
     }
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
-    public void onBreak(PlayerInteractEvent event) {
+    public void onInteract(PlayerInteractEvent event) {
         if (event.getClickedBlock() == null) return;
         CustomBlockData data = worldRegistry.get(event.getClickedBlock().getLocation());
         if (data == null) return;
         CustomBlock block = BlockRegistry.get().getCustomBlock(data.getId());
-        if (block == null) return;
         block.onClick(event, data);
     }
 
@@ -52,7 +51,6 @@ public class CustomBlockListener implements Listener {
         CustomBlockData data = worldRegistry.get(event.getBlock().getLocation());
         if (data == null) return;
         CustomBlock block = BlockRegistry.get().getCustomBlock(data.getId());
-        if (block == null) return;
         block.onBreak(event, data);
         if (event.isCancelled()) return;
         block.remove(data);
@@ -112,7 +110,7 @@ public class CustomBlockListener implements Listener {
                 worldRegistry.remove(location);
                 location.add(event.getDirection().getDirection());
                 customBlock.onMove(event, location);
-                if (event.isCancelled()){
+                if (event.isCancelled()) {
                     BlockRegistry.getPlugin(customBlock.getClass()).getLogger().severe("At this moment it is forbidden to cancel the event!");
                     event.setCancelled(false);
                 }
@@ -153,6 +151,7 @@ public class CustomBlockListener implements Listener {
             return true;
         });
     }
+
     @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
     public void onChange(EntityChangeBlockEvent event) {
         Block block = event.getBlock();
@@ -160,7 +159,7 @@ public class CustomBlockListener implements Listener {
         if (data == null) return;
         CustomBlock customBlock = BlockRegistry.get().getCustomBlock(data.getId());
         customBlock.onChange(event, data);
-        if (!event.isCancelled()){
+        if (!event.isCancelled()) {
             customBlock.remove(data);
             event.setCancelled(true);
             worldRegistry.remove(block.getLocation());
@@ -172,6 +171,7 @@ public class CustomBlockListener implements Listener {
             block.setType(Material.AIR);
         }
     }
+
     @EventHandler(priority = EventPriority.MONITOR)
     public void pluginUnload(PluginDisableEvent event) {
         BlockRegistry.get().unregisterAll(event.getPlugin());

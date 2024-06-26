@@ -14,6 +14,7 @@ import org.by1337.blib.block.registry.BlockRegistry;
 import org.by1337.blib.block.registry.WorldRegistry;
 import org.by1337.blib.command.argument.ArgumentBoolean;
 import org.by1337.blib.command.argument.ArgumentSetList;
+import org.by1337.blib.core.block.CustomBlockManager;
 import org.by1337.blib.core.fastutil.FastUtilCommands;
 import org.by1337.blib.core.fastutil.InitFastUtil;
 import org.by1337.blib.fastutil.FastUtilApi;
@@ -43,7 +44,7 @@ public class BLib extends JavaPlugin {
     private BApi api;
     private FastUtilApi fastUtilApi;
     public static boolean DEBUG = false;
-
+    private CustomBlockManager customBlockManager;
     @Override
     public void onLoad() {
         instance = this;
@@ -59,6 +60,7 @@ public class BLib extends JavaPlugin {
                 )
         );
         InitFastUtil.setup(fastUtilApi);
+        customBlockManager = new CustomBlockManager();
     }
 
     @Override
@@ -73,12 +75,13 @@ public class BLib extends JavaPlugin {
         CustomBlockExample example = new CustomBlockExample();
         BlockRegistry.get().register(example.getId(), example);
         Bukkit.getPluginManager().registerEvents(new CustomBlockListener(WorldRegistry.CUSTOM_BLOCK_REGISTRY), this);
-
+        customBlockManager.load();
     }
 
     @Override
     public void onDisable() {
         fastUtilApi.onDisable();
+        customBlockManager.save();
     }
 
     private void init() {
