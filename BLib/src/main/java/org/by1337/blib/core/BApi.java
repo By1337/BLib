@@ -57,20 +57,10 @@ public class BApi implements Api {
         try (FileReader reader = new FileReader(file, StandardCharsets.UTF_8)) {
             message = new Message(BLib.getInstance().getLogger(), reader);
             Translation translation = message.getTranslation();
-            JsonObject jsonObject = new Gson().fromJson(new InputStreamReader(BLib.getInstance().getResource("translation.json"), StandardCharsets.UTF_8), JsonObject.class);
-            JsonObject object = jsonObject.getAsJsonObject("messages");
-
-            for (Map.Entry<String, JsonElement> key : object.entrySet()) {
-                JsonObject lang = key.getValue().getAsJsonObject();
-                for (Map.Entry<String, JsonElement> locale : lang.entrySet()) {
-                    String[] arr = locale.getKey().split("_");
-                    translation.putTranslationIfNotExist(
-                            new Locale(arr[0], arr[1]),
-                            key.getKey(),
-                            locale.getValue().getAsString()
-                    );
-                }
+            try (var in = new InputStreamReader(BLib.getInstance().getResource("translation.json"), StandardCharsets.UTF_8)){
+                translation.saveDefaults(in);
             }
+
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

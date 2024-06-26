@@ -32,6 +32,26 @@ public class Translation {
         });
     }
 
+    public void saveDefaults(Reader reader) {
+        Gson gson = new Gson();
+        saveDefaults(gson.fromJson(reader, JsonObject.class));
+    }
+
+    public void saveDefaults(JsonObject jsonObject) {
+        JsonObject object = jsonObject.getAsJsonObject("messages");
+        for (Map.Entry<String, JsonElement> key : object.entrySet()) {
+            JsonObject lang = key.getValue().getAsJsonObject();
+            for (Map.Entry<String, JsonElement> locale : lang.entrySet()) {
+                String[] arr = locale.getKey().split("_");
+                putTranslationIfNotExist(
+                        new Locale(arr[0], arr[1]),
+                        key.getKey(),
+                        locale.getValue().getAsString()
+                );
+            }
+        }
+    }
+
     public void putTranslationIfNotExist(@NotNull Locale locale, @NotNull String key, @NotNull String message) {
         if (!messages.getOrDefault(locale, Collections.emptyMap()).containsKey(key)) {
             putTranslation(locale, key, message);
