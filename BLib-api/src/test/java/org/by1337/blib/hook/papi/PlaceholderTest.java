@@ -27,12 +27,30 @@ public class PlaceholderTest {
         placeholder.addSubPlaceholder(
                 new Placeholder("test_test_test2_sub1_123123").executor(((player, args) -> "sub_123123"))
         );
+
+
+        placeholder.build();
         placeholder.addSubPlaceholder(
                 new Placeholder("test1").executor(((player, args) -> "123321"))
         );
-
         placeholder.build();
 
+        placeholder.addSubPlaceholder(new Placeholder("new")
+                .addSubPlaceholder(new Placeholder("new")
+                        .addSubPlaceholder(new Placeholder("new")
+                        ).addSubPlaceholder(new Placeholder("new")
+                        ).addSubPlaceholder(new Placeholder("new")
+                                .executor((player, args) -> "ok")
+                        ).addSubPlaceholder(new Placeholder("new")
+                                .executor((player, args) -> "ok")
+                        )
+                )
+        );
+        placeholder.build();
+
+
+        Assert.assertEquals(placeholder.process(null, "new_new_new_new_new_new".split("_")), "ok");
+        Assert.assertEquals(placeholder.process(null, "new_new_new_new_new".split("_")), "ok");
         Assert.assertEquals(placeholder.process(null, "test_test_test1".split("_")), "ok");
         Assert.assertEquals(placeholder.process(null, "test_test_test2".split("_")), "ok2");
 

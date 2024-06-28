@@ -176,7 +176,7 @@ public class BLib extends JavaPlugin {
                         )
                 )
                 .executor((sender, args) -> {
-                    api.getMessage().sendMsg(sender, Component.translatable("hello-message"), getDescription().getVersion());
+                    api.getMessage().sendTranslatable(sender, "hello-message", getDescription().getVersion());
                 })
         ;
 

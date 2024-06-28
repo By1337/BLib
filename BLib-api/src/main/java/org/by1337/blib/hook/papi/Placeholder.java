@@ -70,6 +70,10 @@ public class Placeholder {
                     last.executor = inner.executor;
                 }
             }
+            if (!inner.subPlaceholders.isEmpty()){
+                inner.build();
+                last.subPlaceholders.putAll(inner.subPlaceholders);
+            }
         }
     }
 

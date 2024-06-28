@@ -53,20 +53,20 @@ public class FastUtilCommands {
                     long l = System.nanoTime();
                     task.start(player.getWorld()).whenComplete((s, t) -> {
                         if (s != null) {
-                            FastUtilApi.getMessage().sendMsg(sender, Lang.getMessage("fast-util-complete"), TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - l));
+                            FastUtilApi.getMessage().sendTranslatable(sender, "fast-util-complete", TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - l));
                             if (args.containsKey("debug")) {
                                 FastUtilApi.getMessage().log(s.getProfiler().report());
                                 FastUtilApi.getMessage().sendMsg(sender, s.getProfiler().report());
                             }
                         } else {
-                            FastUtilApi.getMessage().sendMsg(sender, Lang.getMessage("fast-util-failed-complete"));
+                            FastUtilApi.getMessage().sendTranslatable(sender, "fast-util-failed-complete");
                         }
                         if (t != null) {
                             FastUtilApi.getMessage().error(t);
                         }
                     });
                 } catch (IncompleteRegionException e) {
-                    FastUtilApi.getMessage().sendMsg(sender, Lang.getMessage("fast-util-select-region"));
+                    FastUtilApi.getMessage().sendTranslatable(sender, "fast-util-select-region");
                 }
             });
     public static final Command<CommandSender> SHEM_PASTE = new Command<CommandSender>("shem")

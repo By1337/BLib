@@ -96,6 +96,9 @@ public class Message {
     public void sendMsg(@NotNull CommandSender sender, @NotNull TranslatableComponent msg, Object... objects) {
         sender.sendMessage(buildTranslatableAndTranslate(msg, sender instanceof OfflinePlayer offlinePlayer ? offlinePlayer : null, objects));
     }
+    public void sendTranslatable(@NotNull CommandSender sender, @NotNull String msg, Object... objects) {
+        sender.sendMessage(buildTranslatableAndTranslate(Component.translatable(msg), sender instanceof OfflinePlayer offlinePlayer ? offlinePlayer : null, objects));
+    }
 
     /**
      * Sends a formatted message to a command sender with variable replacements using format placeholders.
