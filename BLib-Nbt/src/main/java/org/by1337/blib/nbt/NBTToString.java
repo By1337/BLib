@@ -34,7 +34,7 @@ public class NBTToString {
         } else if (nbt instanceof ShortNBT shortNBT) {
             appendNumber(shortNBT.getValue(), style, sb, "s");
         } else if (nbt instanceof StringNBT stringNBT) {
-            sb.append(quoteAndEscape(stringNBT.getValue()));
+            sb.append(quoteAndEscape(stringNBT.getValue(), style.isJson()));
         } else if (nbt instanceof CompoundTag compoundTag) {
             String line = style.isCompact() ? "" : "\n";
             String space = " ".repeat(style.isCompact() ? 0 : lvl + 4);
@@ -42,9 +42,9 @@ public class NBTToString {
             for (Map.Entry<String, NBT> entry : compoundTag.getTags().entrySet()) {
                 sb.append(space);
                 if (style.isJson()) {
-                    sb.append(quoteAndEscape(entry.getKey()));
+                    sb.append(quoteAndEscape(entry.getKey(), true));
                 } else {
-                    sb.append(quoteAndEscapeIfNeed(entry.getKey()));
+                    sb.append(quoteAndEscapeIfNeed(entry.getKey(), false));
                 }
                 sb.append(":");
                 if (!style.isCompact()) {
@@ -108,7 +108,7 @@ public class NBTToString {
     }
 
 
-    public static String quoteAndEscapeIfNeed(String name) {
+    public static String quoteAndEscapeIfNeed(String name, boolean json) {
         return name.contains("'") ||
                 name.contains("\"") ||
                 name.contains("\\") ||
@@ -119,10 +119,10 @@ public class NBTToString {
                 name.contains("]") ||
                 name.contains(";") ||
                 name.contains(" ") ||
-                name.contains(",") ? quoteAndEscape(name) : name;
+                name.contains(",") ? quoteAndEscape(name, json) : name;
     }
 
-    public static String quoteAndEscape(String raw) {
+    public static String quoteAndEscape(String raw, boolean json) {
         StringBuilder result = new StringBuilder(" ");
         int quoteChar = 0;
         for (int i = 0; i < raw.length(); ++i) {
@@ -150,6 +150,9 @@ public class NBTToString {
                 case '\'':
                     if (quoteChar == 0) {
                         quoteChar = currentChar == '\"' ? '\'' : '\"';
+                    }
+                    if (json){
+                        quoteChar = '\"';
                     }
                     if (quoteChar == currentChar) {
                         result.append('\\');

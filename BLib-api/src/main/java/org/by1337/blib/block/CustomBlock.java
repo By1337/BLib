@@ -44,7 +44,7 @@ public abstract class CustomBlock {
      * @param y     the y-coordinate of the block.
      * @param z     the z-coordinate of the block.
      */
-    public abstract void onPlace(World world, int x, int y, int z);
+    public abstract void onPlace(World world, int x, int y, int z, CustomBlockData data);
 
     /**
      * Checks if a player can break this block.

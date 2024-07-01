@@ -25,6 +25,7 @@ public class BlockRegistry {
             throw new IllegalStateException("Failed to register custom block! id: " + spacedNameKey + " block: " + type.getClass().getCanonicalName());
         }
         LOOKUP.put(spacedNameKey, type);
+        LOOKUP_BY_PLUGIN.computeIfAbsent(plugin.getName(), k -> new HashSet<>()).add(spacedNameKey);
     }
 
     @NotNull

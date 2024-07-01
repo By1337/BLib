@@ -55,7 +55,7 @@ public class CustomBlockExample extends CustomBlock {
      * @param z     the z-coordinate of the block.
      */
     @Override
-    public void onPlace(World world, int x, int y, int z) {
+    public void onPlace(World world, int x, int y, int z, CustomBlockData data) {
         BLib.getApi().getMessage().log("CustomBlockExample#onPlace");
     }
 
