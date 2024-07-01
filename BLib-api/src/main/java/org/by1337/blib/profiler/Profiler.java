@@ -20,9 +20,10 @@ public class Profiler implements IProfiler {
     }
 
     public void end(String name) {
+        long nanoTime = System.nanoTime();
         Long startTime = started.get(name);
         if (startTime == null) throw new IllegalStateException(name + " is not started!");
-        long duration = System.nanoTime() - startTime;
+        long duration = nanoTime - startTime;
         var info = time.computeIfAbsent(name, k -> new MethodInfo());
         info.time += duration;
         info.cals++;

@@ -1,7 +1,7 @@
 package org.by1337.blib.core.block;
 
-import org.by1337.blib.block.data.CustomBlockData;
-import org.by1337.blib.block.registry.WorldRegistry;
+import org.by1337.blib.block.custom.data.CustomBlockData;
+import org.by1337.blib.block.custom.registry.WorldRegistry;
 import org.by1337.blib.core.BLib;
 import org.by1337.blib.nbt.DefaultNbtByteBuffer;
 import org.by1337.blib.nbt.NBT;

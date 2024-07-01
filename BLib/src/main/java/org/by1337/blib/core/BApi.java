@@ -1,13 +1,12 @@
 package org.by1337.blib.core;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
 import org.by1337.blib.Api;
+import org.by1337.blib.block.replacer.PooledBlockReplacer;
 import org.by1337.blib.chat.util.Message;
 import org.by1337.blib.command.BukkitCommandRegister;
 import org.by1337.blib.command.CommandUtil;
 import org.by1337.blib.core.factory.BBukkitCommandRegisterFactory;
+import org.by1337.blib.core.factory.BlockReplacerFactory;
 import org.by1337.blib.core.nbt.ParseCompoundTagManager;
 import org.by1337.blib.core.text.ComponentToANSIImpl;
 import org.by1337.blib.core.text.LegacyConvertorImpl;
@@ -33,8 +32,6 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
-import java.util.Locale;
-import java.util.Map;
 import java.util.logging.Logger;
 
 public class BApi implements Api {
@@ -48,7 +45,7 @@ public class BApi implements Api {
     private final BukkitCommandRegister register = new BBukkitCommandRegisterFactory().create();
     private final LegacyConvertor legacyConvertor = new LegacyConvertorImpl();
     private final ComponentToANSIImpl componentToANSI = new ComponentToANSIImpl();
-
+    private final PooledBlockReplacer pooledBlockReplacer;
     public BApi() {
         File file = new File(BLib.getInstance().getDataFolder(), "translation.json");
         if (!file.exists()) {
@@ -66,6 +63,12 @@ public class BApi implements Api {
         }
 
         asyncCatcher = new AsyncCatcherImpl();
+        pooledBlockReplacer = new PooledBlockReplacer(
+                BLib.getInstance(),
+                15,
+                BlockReplacerFactory.create(),
+                message
+        );
     }
 
     @Override
@@ -126,5 +129,10 @@ public class BApi implements Api {
     @Override
     public @NotNull ComponentToANSI getComponentToANSI() {
         return componentToANSI;
+    }
+
+    @Override
+    public @NotNull PooledBlockReplacer getPooledBlockReplacer() {
+        return pooledBlockReplacer;
     }
 }

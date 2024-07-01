@@ -431,7 +431,6 @@ public class Message {
      * @param msg The message to be formatted with placeholders and color codes.
      * @return The formatted message with placeholders and colors.
      */
-    @Deprecated(since = "1.0.7")
     public String messageBuilder(@NotNull String msg) {
         return messageBuilder(msg, null);
     }
