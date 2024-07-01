@@ -9,6 +9,7 @@ import com.sk89q.worldedit.extent.clipboard.io.ClipboardFormat;
 import com.sk89q.worldedit.extent.clipboard.io.ClipboardFormats;
 import com.sk89q.worldedit.extent.clipboard.io.ClipboardReader;
 import com.sk89q.worldedit.math.BlockVector3;
+import com.sk89q.worldedit.regions.EllipsoidRegion;
 import com.sk89q.worldedit.regions.Region;
 import com.sk89q.worldedit.world.block.BlockState;
 import org.bukkit.Location;
@@ -23,6 +24,7 @@ import org.by1337.blib.command.requires.RequiresPermission;
 import org.by1337.blib.fastutil.FastUtilApi;
 import org.by1337.blib.fastutil.block.BlockReplaceTask;
 import org.by1337.blib.geom.IntAABB;
+import org.by1337.blib.geom.Sphere;
 import org.by1337.blib.geom.Vec3i;
 import org.by1337.blib.lang.Lang;
 
@@ -43,13 +45,34 @@ public class FastUtilCommands {
                 BukkitPlayer bPlayer = BukkitAdapter.adapt(player);
                 try {
                     Region region = WorldEdit.getInstance().getSessionManager().get(bPlayer).getSelection(bPlayer.getWorld());
-                    var min = region.getMinimumPoint();
-                    var max = region.getMaximumPoint();
-                    IntAABB aabb = new IntAABB(min.getX(), min.getY(), min.getZ(), max.getX(), max.getY(), max.getZ());
+                    if (region instanceof EllipsoidRegion ellipsoidRegion) {
+                        System.out.println(ellipsoidRegion.getCenter());
+                        System.out.println(ellipsoidRegion.getRadius());
+                    }
+
                     BlockReplaceTask task = new BlockReplaceTask();
                     task.setApplyPhysics(false);
                     task.setDebug(args.containsKey("debug"));
-                    task.addToReplace(aabb, material);
+                    if (region instanceof EllipsoidRegion ellipsoidRegion) {
+                        Sphere sphere = new Sphere(
+                                ellipsoidRegion.getCenter().getX(),
+                                ellipsoidRegion.getCenter().getY(),
+                                ellipsoidRegion.getCenter().getZ(),
+                                ellipsoidRegion.getRadius().getY()
+                        );
+                        IntAABB aabb = IntAABB.fromAABB(sphere.toAABB());
+                        for (Vec3i vec3i : aabb.getAllPointsInAABB()) {
+                            if (sphere.intersects(vec3i.toVec3d())) {
+                                task.addToReplace(vec3i, material);
+                            }
+                        }
+                    } else {
+                        var min = region.getMinimumPoint();
+                        var max = region.getMaximumPoint();
+                        IntAABB aabb = new IntAABB(min.getX(), min.getY(), min.getZ(), max.getX(), max.getY(), max.getZ());
+                        task.addToReplace(aabb, material);
+                    }
+
                     long l = System.nanoTime();
                     task.start(player.getWorld()).whenComplete((s, t) -> {
                         if (s != null) {

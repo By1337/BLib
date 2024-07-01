@@ -19,6 +19,9 @@ public class Vec3i {
         this.z = z;
     }
 
+    public Vec3d toVec3d(){
+        return new Vec3d(x, y, z);
+    }
     public Vec3i(Vec3i v) {
         set(v);
     }

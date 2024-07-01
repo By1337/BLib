@@ -29,6 +29,21 @@ public class IntAABB {
         resize();
     }
 
+    public static IntAABB fromAABB(AABB aabb){
+        return new IntAABB(
+                floor(aabb.getMinX()),
+                floor(aabb.getMinY()),
+                floor(aabb.getMinZ()),
+                floor(aabb.getMaxX()),
+                floor(aabb.getMaxY()),
+                floor(aabb.getMaxZ())
+        );
+    }
+
+    private static int floor(double num) {
+        final int floor = (int) num;
+        return floor == num ? floor : floor - (int) (Double.doubleToRawLongBits(num) >>> 63);
+    }
     public IntAABB(Vec3i v, Vec3i v1) {
         resize(v.getX(), v.getY(), v.getZ(), v1.getX(), v1.getY(), v1.getZ());
     }
