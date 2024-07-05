@@ -13,7 +13,6 @@
     <groupId>org.by1337.blib</groupId>
     <artifactId>Blib-api</artifactId>
     <packaging>jar</packaging>
-
     <name>BLib-api</name>
 
     <properties>

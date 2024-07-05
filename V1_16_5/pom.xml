@@ -13,9 +13,7 @@
     <groupId>org.by1337.blib.nms</groupId>
     <artifactId>V1_16_5</artifactId>
     <packaging>jar</packaging>
-
     <name>V1_16_5</name>
-
     <properties>
         <revision>1.0.9</revision>
         <java.version>16</java.version>
@@ -35,7 +33,7 @@
             <plugin>
                 <groupId>org.by1337.bnms</groupId>
                 <artifactId>bnms-plugin</artifactId>
-                <version>1.1-betaV11.r</version>
+                <version>1.2-beta</version>
                 <configuration>
                     <version>1.16.5</version>
                 </configuration>
@@ -44,6 +42,20 @@
                         <phase>package</phase>
                         <goals>
                             <goal>remap</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <version>3.3.0</version>
+                <executions>
+                    <execution>
+                        <id>attach-sources</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>jar-no-fork</goal>
                         </goals>
                     </execution>
                 </executions>

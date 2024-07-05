@@ -102,7 +102,6 @@ public class PooledBlockReplacer {
                 main:
                 while (iterator.hasNext()) {
                     ReplaceTaskInfo info = iterator.next();
-                    if (info.doSkip) continue;
                     if (info.task.isEnd()) {
                         iterator.remove();
                         if (info.task instanceof BlockReplaceTask task0) {
@@ -110,43 +109,45 @@ public class PooledBlockReplacer {
                         }
                         continue;
                     }
-                    int currentLimit = limitForTask;
-                    if (info.task.getMaxReplacesInTick() != -1) {
-                        currentLimit = info.task.getMaxReplacesInTick();
-                    }
-                    while (currentLimit > 0) {
-                        var pair = info.task.next();
-                        if (pair == null) break;
-                        Block bukkitBlock = world.getBlockAt(pair.getLeft().getX(), pair.getLeft().getY(), pair.getLeft().getZ());
-                        var filter = info.task.getFilter();
-                        if (filter != null) {
-                            if (filter.test(bukkitBlock)) continue;
+                    if (!info.doSkip) {
+                        int currentLimit = limitForTask;
+                        if (info.task.getMaxReplacesInTick() != -1) {
+                            currentLimit = info.task.getMaxReplacesInTick();
                         }
-                        var callBack = info.task.getBlockBreakCallBack();
-                        if (callBack != null) {
-                            callBack.accept(bukkitBlock);
-                        }
-                        BlockReplacer replacer;
-                        if (info.task.getCustomBlockReplacer() != null) {
-                            replacer = info.task.getCustomBlockReplacer();
-                        } else {
-                            replacer = blockReplacer;
-                        }
-                        replacer.replace(pair.getLeft(), pair.getRight(), info.task, world);
-                        currentLimit--;
+                        while (currentLimit > 0) {
+                            var pair = info.task.next();
+                            if (pair == null) break;
+                            Block bukkitBlock = world.getBlockAt(pair.getLeft().getX(), pair.getLeft().getY(), pair.getLeft().getZ());
+                            var filter = info.task.getFilter();
+                            if (filter != null) {
+                                if (filter.test(bukkitBlock)) continue;
+                            }
+                            var callBack = info.task.getBlockBreakCallBack();
+                            if (callBack != null) {
+                                callBack.accept(bukkitBlock);
+                            }
+                            BlockReplacer replacer;
+                            if (info.task.getCustomBlockReplacer() != null) {
+                                replacer = info.task.getCustomBlockReplacer();
+                            } else {
+                                replacer = blockReplacer;
+                            }
+                            replacer.replace(pair.getLeft(), pair.getRight(), info.task, world);
+                            currentLimit--;
 
-                        long time1 = System.currentTimeMillis() - time;
-                        if (time1 > 0L) {
-                            timeOverflow += time1;
-                            ++warns;
-                            break main;
-                        } else {
-                            warns = 0;
-                            timeOverflow = 0L;
+                            long time1 = System.currentTimeMillis() - time;
+                            if (time1 > 0L) {
+                                timeOverflow += time1;
+                                ++warns;
+                                break main;
+                            } else {
+                                warns = 0;
+                                timeOverflow = 0L;
+                            }
                         }
-                    }
-                    if (currentLimit <= 0 && info.task.getMaxReplacesInTick() != -1) {
-                        info.doSkip = true;
+                        if (currentLimit <= 0 && info.task.getMaxReplacesInTick() != -1) {
+                            info.doSkip = true;
+                        }
                     }
                     boolean allDoSkip = true;
                     for (ReplaceTaskInfo taskInfo : taskList) {
