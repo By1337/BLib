@@ -11,7 +11,7 @@
     <dependency>
         <groupId>org.by1337.blib</groupId>
         <artifactId>Blib-api</artifactId>
-        <version>1.0.9</version>
+        <version>1.1</version>
         <scope>provided</scope>
     </dependency>
 </dependencies>
