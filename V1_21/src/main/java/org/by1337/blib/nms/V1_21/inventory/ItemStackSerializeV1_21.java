@@ -3,7 +3,7 @@ package org.by1337.blib.nms.V1_21.inventory;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.TagParser;
 import net.minecraft.server.MinecraftServer;
-import org.bukkit.craftbukkit.v1_21_R1.inventory.CraftItemStack;
+import org.bukkit.craftbukkit.inventory.CraftItemStack;
 import org.bukkit.inventory.ItemStack;
 import org.by1337.blib.inventory.ItemStackSerialize;
 import org.jetbrains.annotations.NotNull;

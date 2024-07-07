@@ -2,8 +2,8 @@ package org.by1337.blib.nms.V1_20_6.command;
 
 import org.bukkit.Bukkit;
 import org.bukkit.command.defaults.BukkitCommand;
-import org.bukkit.craftbukkit.v1_20_R4.CraftServer;
-import org.bukkit.craftbukkit.v1_20_R4.command.CraftCommandMap;
+import org.bukkit.craftbukkit.CraftServer;
+import org.bukkit.craftbukkit.command.CraftCommandMap;
 import org.by1337.blib.command.BukkitCommandRegister;
 
 public class BukkitCommandRegisterV1_20_6 implements BukkitCommandRegister {

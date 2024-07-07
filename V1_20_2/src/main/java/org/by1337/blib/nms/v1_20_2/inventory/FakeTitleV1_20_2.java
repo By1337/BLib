@@ -1,7 +1,6 @@
 package org.by1337.blib.nms.v1_20_2.inventory;
 
-
-import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
+import io.papermc.paper.adventure.PaperAdventure;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.ComponentUtils;
 import net.minecraft.network.protocol.game.ClientboundOpenScreenPacket;
@@ -37,6 +36,6 @@ public class FakeTitleV1_20_2 implements FakeTitle {
 
     @Override
     public void send(Inventory inventory, net.kyori.adventure.text.Component newTitle) {
-        send(inventory, Component.Serializer.fromJson(GsonComponentSerializer.gson().serialize(newTitle)));
+        send(inventory, PaperAdventure.asVanilla(newTitle));
     }
 }

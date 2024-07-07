@@ -11,7 +11,7 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.MobSpawnType;
 import org.bukkit.Location;
-import org.bukkit.craftbukkit.v1_20_R4.CraftWorld;
+import org.bukkit.craftbukkit.CraftWorld;
 import org.by1337.blib.command.SummonCommand;
 import org.by1337.blib.world.BLocation;
 import org.jetbrains.annotations.NotNull;

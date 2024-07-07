@@ -1,13 +1,7 @@
 package org.by1337.blib.core;
 
-import com.sk89q.worldedit.IncompleteRegionException;
-import com.sk89q.worldedit.WorldEdit;
-import com.sk89q.worldedit.bukkit.BukkitAdapter;
-import com.sk89q.worldedit.bukkit.BukkitPlayer;
-import com.sk89q.worldedit.regions.Region;
 import lombok.Getter;
 import org.bukkit.Bukkit;
-import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
@@ -17,27 +11,18 @@ import org.by1337.blib.block.custom.impl.CustomBlockExample;
 import org.by1337.blib.block.custom.listener.CustomBlockListener;
 import org.by1337.blib.block.custom.registry.BlockRegistry;
 import org.by1337.blib.block.custom.registry.WorldRegistry;
-import org.by1337.blib.block.replacer.BlockReplaceFlags;
-import org.by1337.blib.block.replacer.BlockReplaceTask;
-import org.by1337.blib.block.replacer.BlockReplacer;
-import org.by1337.blib.block.replacer.impl.BukkitBlockReplacer;
-import org.by1337.blib.block.replacer.type.impl.MaterialBlock;
+import org.by1337.blib.command.Command;
+import org.by1337.blib.command.CommandException;
 import org.by1337.blib.command.argument.ArgumentBoolean;
-import org.by1337.blib.command.argument.ArgumentIntegerAllowedMath;
 import org.by1337.blib.command.argument.ArgumentSetList;
+import org.by1337.blib.command.requires.RequiresPermission;
 import org.by1337.blib.core.block.CustomBlockManager;
 import org.by1337.blib.core.fastutil.FastUtilCommands;
-import org.by1337.blib.geom.IntAABB;
-import org.by1337.blib.geom.Vec3i;
-import org.by1337.blib.nms.v1_16_5.block.replacer.BlockReplacerV165;
+import org.by1337.blib.core.test.CommandTests;
+import org.by1337.blib.lang.Lang;
 import org.by1337.blib.translation.Translation;
 import org.by1337.blib.util.SpacedNameKey;
 import org.by1337.blib.util.Version;
-import org.by1337.blib.command.Command;
-import org.by1337.blib.command.CommandException;
-import org.by1337.blib.command.requires.RequiresPermission;
-import org.by1337.blib.lang.Lang;
-import org.by1337.blib.core.test.CommandTests;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -47,7 +32,6 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.Collection;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 
 public class BLib extends JavaPlugin {
