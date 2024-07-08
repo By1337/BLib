@@ -148,6 +148,9 @@ public class PooledBlockReplacer {
                         if (currentLimit <= 0 && info.task.getMaxReplacesInTick() != -1) {
                             info.doSkip = true;
                         }
+                        if (info.task instanceof BlockReplaceStream){
+                            info.doSkip = true;
+                        }
                     }
                     boolean allDoSkip = true;
                     for (ReplaceTaskInfo taskInfo : taskList) {
