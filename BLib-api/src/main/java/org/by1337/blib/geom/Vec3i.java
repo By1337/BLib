@@ -1,17 +1,16 @@
 package org.by1337.blib.geom;
 
+import com.google.errorprone.annotations.Immutable;
 import org.bukkit.util.Vector;
+@Immutable
+public final class Vec3i {
 
-public class Vec3i {
+    public final int x;
 
-    private int x;
+    public final int y;
 
-    private int y;
+    public final int z;
 
-    private int z;
-
-    public Vec3i() {
-    }
 
     public Vec3i(int x, int y, int z) {
         this.x = x;
@@ -19,74 +18,74 @@ public class Vec3i {
         this.z = z;
     }
 
-    public Vec3d toVec3d(){
+    public Vec3i(Vector v) {
+        this((int) v.getX(), (int) v.getY(), (int) v.getZ());
+    }
+
+    public Vec3d toVec3d() {
         return new Vec3d(x, y, z);
     }
-    public Vec3i(Vec3i v) {
-        set(v);
+
+    public Vec3i mul(int scale) {
+        return new Vec3i(
+                x * scale,
+                y * scale,
+                z * scale
+        );
     }
 
-    public Vec3i(Vector v) {
-        set((int) v.getX(), (int) v.getY(), (int) v.getZ());
+    public Vec3i sub(Vec3i t1, Vec3i t2) {
+        return new Vec3i(
+                t1.x - t2.x,
+                t1.y - t2.y,
+                t1.z - t2.z
+        );
     }
 
-    public void set(Vec3i v) {
-        this.x = v.x;
-        this.y = v.y;
-        this.z = v.z;
+    public Vec3i sub(Vec3i t1) {
+        return new Vec3i(
+                x - t1.x,
+                y - t1.y,
+                z - t1.z
+        );
     }
 
-    public void set(int x, int y, int z) {
-        this.x = x;
-        this.y = y;
-        this.z = z;
+    public Vec3i sub(int x, int y, int z) {
+        return new Vec3i(
+                this.x - x,
+                this.y - y,
+                this.z - z
+        );
     }
 
-    public void mul(int scale) {
-        x *= scale;
-        y *= scale;
-        z *= scale;
+    public Vec3i add(Vec3i t1, Vec3i t2) {
+        return new Vec3i(
+                t1.x + t2.x,
+                t1.y + t2.y,
+                t1.z + t2.z
+        );
     }
 
-    public void sub(Vec3i t1, Vec3i t2) {
-        this.x = t1.x - t2.x;
-        this.y = t1.y - t2.y;
-        this.z = t1.z - t2.z;
+    public Vec3i add(int x, int y, int z) {
+        return new Vec3i(
+                this.x + x,
+                this.y + y,
+                this.z + z
+        );
     }
 
-    public void sub(Vec3i t1) {
-        this.x -= t1.x;
-        this.y -= t1.y;
-        this.z -= t1.z;
-    }
-
-    public void add(Vec3i t1, Vec3i t2) {
-        this.x = t1.x + t2.x;
-        this.y = t1.y + t2.y;
-        this.z = t1.z + t2.z;
-    }
-
-    public void add(Vec3i t1) {
-        this.x += t1.x;
-        this.y += t1.y;
-        this.z += t1.z;
+    public Vec3i add(Vec3i t1) {
+        return new Vec3i(
+                x + t1.x,
+                y + t1.y,
+                z + t1.z
+        );
     }
 
     public double length() {
         return Math.sqrt(this.x * this.x + this.y * this.y + this.z * this.z);
     }
 
-
-    public void cross(Vec3i v1, Vec3i v2) {
-        int tmpX;
-        int tmpY;
-
-        tmpX = v1.y * v2.z - v1.z * v2.y;
-        tmpY = v2.x * v1.z - v2.z * v1.x;
-        this.z = v1.x * v2.y - v1.y * v2.x;
-        this.x = tmpX;
-        this.y = tmpY;
-    }
 
     public double dot(Vec3i v1) {
         return this.x * v1.x + this.y * v1.y + this.z * v1.z;

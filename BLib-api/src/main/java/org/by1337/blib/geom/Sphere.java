@@ -1,12 +1,20 @@
 package org.by1337.blib.geom;
 
-public class Sphere {
-    private double radius;
-    private Vec3d center;
+import com.google.errorprone.annotations.Immutable;
+
+@Immutable
+public final class Sphere {
+    public final double radius;
+    public final Vec3d center;
 
     public Sphere(double cx, double cy, double cz, double radius) {
         center = new Vec3d(cx, cy, cz);
         this.radius = radius;
+    }
+
+    public Sphere(Vec3d center, double radius) {
+        this.radius = radius;
+        this.center = center;
     }
 
     public boolean intersects(AABB aabb) {
@@ -45,6 +53,13 @@ public class Sphere {
 
     private double clamp(double value, double min, double max) {
         return Math.max(min, Math.min(max, value));
+    }
+
+    public Sphere setRadius(double radius) {
+        return new Sphere(center, radius);
+    }
+    public Sphere setCenter(Vec3d center) {
+        return new Sphere(center, radius);
     }
 
     public Vec3d getCenter() {

@@ -3,7 +3,7 @@ package org.by1337.blib.world;
 import org.bukkit.util.Vector;
 
 import java.util.Objects;
-
+@Deprecated
 public class BlockPosition {
     private int x = 0;
     private int y = 0;

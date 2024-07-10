@@ -11,7 +11,6 @@ import java.util.List;
 import java.util.function.Consumer;
 
 public class IntAABB {
-
     private int minX;
     private int minY;
     private int minZ;

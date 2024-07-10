@@ -1,27 +1,14 @@
 package org.by1337.blib.geom;
 
-public class Vec2i {
-    private int x;
+import com.google.errorprone.annotations.Immutable;
 
-    private int y;
+@Immutable
+public final class Vec2i {
+    public final int x;
 
-    public Vec2i() {
-    }
+    public final int y;
 
     public Vec2i(int x, int y) {
-        this.x = x;
-        this.y = y;
-    }
-
-    public Vec2i(Vec2i v) {
-        set(v);
-    }
-
-    public void set(Vec2i v) {
-        this.x = v.x;
-    }
-
-    public void set(int x, int y) {
         this.x = x;
         this.y = y;
     }

@@ -77,7 +77,7 @@ public class BlockReplaceStream implements ReplaceTask {
 
     @Override
     public boolean isEnd() {
-        return cancel;
+        return cancel && blockList.isEmpty();
     }
 
     @Override

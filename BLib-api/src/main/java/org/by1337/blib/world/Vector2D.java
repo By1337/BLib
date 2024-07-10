@@ -1,7 +1,7 @@
 package org.by1337.blib.world;
 
 import java.util.Objects;
-
+@Deprecated
 public class Vector2D {
 
     public double x;
