@@ -29,19 +29,7 @@ import java.util.Objects;
 
 public class BlockReplacerV165 implements BlockReplacer {
     @Override
-    public Block replace(Vec3i pos, ReplaceBlock replaceBlock, ReplaceTask task, World world) {
-        BlockData data;
-        if (replaceBlock instanceof BlockDataBlock dataBlock) {
-            data = dataBlock.blockData;
-        } else if (replaceBlock instanceof MaterialBlock materialBlock) {
-            data = materialBlock.material.createBlockData();
-        } else if (replaceBlock instanceof WeBlockStateBlock weBlockStateBlock) {
-            data = BukkitAdapter.adapt(weBlockStateBlock.blockState);
-        } else {
-            throw new UnsupportedOperationException("Unsupported type " + replaceBlock.getClass());
-        }
-
-
+    public Block replace(Vec3i pos, BlockData data, ReplaceTask task, World world) {
         ServerLevel nmsWorld = ((CraftWorld) world).getHandle();
         BlockPos blockPos = toNMS(pos);
         if (Level.isOutsideWorld(blockPos)) return null;

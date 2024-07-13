@@ -2,10 +2,12 @@ package org.by1337.blib.core;
 
 import lombok.Getter;
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.util.Vector;
 import org.by1337.blib.block.custom.CustomBlock;
 import org.by1337.blib.block.custom.impl.CustomBlockExample;
 import org.by1337.blib.block.custom.listener.CustomBlockListener;
@@ -19,6 +21,9 @@ import org.by1337.blib.command.requires.RequiresPermission;
 import org.by1337.blib.core.block.CustomBlockManager;
 import org.by1337.blib.core.fastutil.FastUtilCommands;
 import org.by1337.blib.core.test.CommandTests;
+import org.by1337.blib.geom.IntAABB;
+import org.by1337.blib.geom.Sphere;
+import org.by1337.blib.geom.Vec3i;
 import org.by1337.blib.lang.Lang;
 import org.by1337.blib.translation.Translation;
 import org.by1337.blib.util.SpacedNameKey;
@@ -30,8 +35,10 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Random;
 import java.util.logging.Level;
 
 public class BLib extends JavaPlugin {
@@ -120,6 +127,36 @@ public class BLib extends JavaPlugin {
                         .argument(new ArgumentBoolean<>("enable"))
                         .executor(((sender, args) -> {
                             DEBUG = (boolean) args.getOrDefault("enable", !DEBUG);
+                        }))
+                ).addSubCommand(new Command<CommandSender>("прикол")
+
+                        .executor(((sender, args) -> {
+                            Player player = (Player) sender;
+                            Sphere sphere = new Sphere(player.getLocation().getX(), player.getLocation().getY(), player.getLocation().getZ(), 10);
+                            IntAABB intAABB = IntAABB.fromAABB(sphere.toAABB());
+                            List<Vec3i> blocks = new ArrayList<>();
+                            Vector playerDirection = player.getLocation().getDirection();
+                            Random random = new Random();
+                            for (Vec3i vec3i : intAABB.getAllPointsInAABB()) {
+                                double distanceSquared = sphere.getCenter().distanceSquared(vec3i.toVec3d());
+                                if (distanceSquared <= 10 * 10 && distanceSquared >= 9 * 9) {
+                                    Vector blockVector = new Vector(vec3i.getX() - player.getLocation().getX(),
+                                            vec3i.getY() - player.getLocation().getY(),
+                                            vec3i.getZ() - player.getLocation().getZ());
+                                    blockVector.normalize();
+                                    double angle = playerDirection.angle(blockVector);
+                                    double fov = Math.toRadians(70);
+
+                                    if (angle <= fov) {
+                                        blocks.add(vec3i);
+                                    }
+                                }
+                            }
+                            for (Vec3i block : blocks) {
+                                player.getWorld().getBlockAt(block.getX(), block.getY(), block.getZ()).setType(
+                                        random.nextBoolean() ? Material.OBSIDIAN :  Material.CRYING_OBSIDIAN
+                                );
+                            }
                         }))
                 )
                 .addSubCommand(new Command<CommandSender>("cb")

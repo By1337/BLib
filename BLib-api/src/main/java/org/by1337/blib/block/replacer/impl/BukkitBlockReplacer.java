@@ -16,17 +16,7 @@ import org.by1337.blib.geom.Vec3i;
 
 public class BukkitBlockReplacer implements BlockReplacer {
     @Override
-    public Block replace(Vec3i pos, ReplaceBlock replaceBlock, ReplaceTask task, World world) {
-        BlockData blockData;
-        if (replaceBlock instanceof BlockDataBlock dataBlock) {
-            blockData = dataBlock.blockData;
-        } else if (replaceBlock instanceof MaterialBlock materialBlock) {
-            blockData = materialBlock.material.createBlockData();
-        } else if (replaceBlock instanceof WeBlockStateBlock weBlockStateBlock) {
-            blockData = BukkitAdapter.adapt(weBlockStateBlock.blockState);
-        } else {
-            throw new UnsupportedOperationException("Unsupported type " + replaceBlock.getClass());
-        }
+    public Block replace(Vec3i pos, BlockData blockData, ReplaceTask task, World world) {
         Block block = world.getBlockAt(pos.getX(), pos.getY(), pos.getZ());
         block.setBlockData(blockData, (task.getFlag() & BlockReplaceFlags.UPDATE_KNOWN_SHAPE) == 0);
         return block;
