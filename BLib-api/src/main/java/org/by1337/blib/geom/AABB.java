@@ -61,12 +61,12 @@ public class AABB {
 
     public void expand(Direction direction, double d) {
         switch (direction) {
-            case NEGATIVE_Y, DOWN -> minY -= d;
-            case POSITIVE_Y, UP -> maxY += d;
-            case NEGATIVE_X, WEST -> minX -= d;
-            case POSITIVE_X, EAST -> maxX += d;
-            case NEGATIVE_Z, NORTH -> minZ -= d;
-            case POSITIVE_Z, SOUTH -> maxZ += d;
+            case DOWN -> minY -= d;
+            case UP -> maxY += d;
+            case WEST -> minX -= d;
+            case EAST -> maxX += d;
+            case NORTH -> minZ -= d;
+            case SOUTH -> maxZ += d;
         }
         resize();
     }

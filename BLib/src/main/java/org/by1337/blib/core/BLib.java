@@ -128,38 +128,7 @@ public class BLib extends JavaPlugin {
                         .executor(((sender, args) -> {
                             DEBUG = (boolean) args.getOrDefault("enable", !DEBUG);
                         }))
-                ).addSubCommand(new Command<CommandSender>("прикол")
-
-                        .executor(((sender, args) -> {
-                            Player player = (Player) sender;
-                            Sphere sphere = new Sphere(player.getLocation().getX(), player.getLocation().getY(), player.getLocation().getZ(), 10);
-                            IntAABB intAABB = IntAABB.fromAABB(sphere.toAABB());
-                            List<Vec3i> blocks = new ArrayList<>();
-                            Vector playerDirection = player.getLocation().getDirection();
-                            Random random = new Random();
-                            for (Vec3i vec3i : intAABB.getAllPointsInAABB()) {
-                                double distanceSquared = sphere.getCenter().distanceSquared(vec3i.toVec3d());
-                                if (distanceSquared <= 10 * 10 && distanceSquared >= 9 * 9) {
-                                    Vector blockVector = new Vector(vec3i.getX() - player.getLocation().getX(),
-                                            vec3i.getY() - player.getLocation().getY(),
-                                            vec3i.getZ() - player.getLocation().getZ());
-                                    blockVector.normalize();
-                                    double angle = playerDirection.angle(blockVector);
-                                    double fov = Math.toRadians(70);
-
-                                    if (angle <= fov) {
-                                        blocks.add(vec3i);
-                                    }
-                                }
-                            }
-                            for (Vec3i block : blocks) {
-                                player.getWorld().getBlockAt(block.getX(), block.getY(), block.getZ()).setType(
-                                        random.nextBoolean() ? Material.OBSIDIAN :  Material.CRYING_OBSIDIAN
-                                );
-                            }
-                        }))
-                )
-                .addSubCommand(new Command<CommandSender>("cb")
+                ).addSubCommand(new Command<CommandSender>("cb")
                         .requires(new RequiresPermission<>("blib.cb"))
                         .addSubCommand(new Command<CommandSender>("list")
                                 .requires(new RequiresPermission<>("blib.cb.list"))

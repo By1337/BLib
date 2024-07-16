@@ -6,6 +6,7 @@ import org.bukkit.World;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.PistonMoveReaction;
 import org.bukkit.block.data.BlockData;
+import org.bukkit.block.data.Directional;
 import org.bukkit.block.data.Rotatable;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockBreakEvent;
@@ -41,7 +42,9 @@ public class CustomBlockExample extends CustomBlock {
     @Override
     public BlockData createBlockData() {
         BlockData blockData = Material.PINK_SHULKER_BOX.createBlockData();
-        ((Rotatable) blockData).setRotation(BlockFace.UP);
+        if (blockData instanceof Directional directional){
+            directional.setFacing(BlockFace.UP);
+        }
         return blockData;
     }
 
@@ -52,10 +55,12 @@ public class CustomBlockExample extends CustomBlock {
      * @param x     the x-coordinate of the block.
      * @param y     the y-coordinate of the block.
      * @param z     the z-coordinate of the block.
+     * @return
      */
     @Override
-    public void onPlace(World world, int x, int y, int z, CustomBlockData data) {
-        BLib.getApi().getMessage().log("CustomBlockExample#onPlace");
+    public CustomBlockData doPlace(World world, int x, int y, int z) {
+        BLib.getApi().getMessage().log("CustomBlockExample#doPlace");
+        return CustomBlockData.create(this, world.getName(), x, y, z);
     }
 
     /**
@@ -79,7 +84,7 @@ public class CustomBlockExample extends CustomBlock {
      */
     @Override
     public OperationStatus<CustomBlockData> onPlace(BlockPlaceEvent event) {
-        BLib.getApi().getMessage().log("CustomBlockExample#onPlace");
+        BLib.getApi().getMessage().log("CustomBlockExample#doPlace");
         return new OperationStatus<>(Status.ALLOW, CustomBlockData.create(this, event.getBlockPlaced().getLocation()));
     }
 

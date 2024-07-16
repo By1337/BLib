@@ -30,8 +30,8 @@ public class AABBTest extends TestCase {
         AABB aabb1 = new AABB(101, 10, 101, 150, 100, 150);
         Assert.assertFalse(aabb.intersect(aabb1));
 
-        aabb1.expand(Direction.NEGATIVE_Z, 10);
-        aabb1.expand(Direction.NEGATIVE_X, 10);
+        aabb1.expand(Direction.NORTH, 10);
+        aabb1.expand(Direction.WEST, 10);
         System.out.println(aabb);
         System.out.println(aabb1);
         Assert.assertTrue(aabb.intersect(aabb1));

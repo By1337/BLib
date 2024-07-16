@@ -17,8 +17,13 @@ import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.by1337.blib.BLib;
+import org.by1337.blib.block.custom.CustomBlock;
+import org.by1337.blib.block.custom.registry.BlockRegistry;
 import org.by1337.blib.block.replacer.BlockReplaceFlags;
 import org.by1337.blib.block.replacer.BlockReplaceTask;
+import org.by1337.blib.block.replacer.type.ReplaceBlock;
+import org.by1337.blib.block.replacer.type.impl.CustomBlockReplace;
+import org.by1337.blib.block.replacer.type.impl.MaterialBlock;
 import org.by1337.blib.command.Command;
 import org.by1337.blib.command.CommandException;
 import org.by1337.blib.command.CommandSyntaxError;
@@ -27,10 +32,12 @@ import org.by1337.blib.command.requires.RequiresPermission;
 import org.by1337.blib.geom.IntAABB;
 import org.by1337.blib.geom.Sphere;
 import org.by1337.blib.geom.Vec3i;
+import org.by1337.blib.util.SpacedNameKey;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class FastUtilCommands {
     private static final Map<String, Integer> replaceFlags;
@@ -101,7 +108,7 @@ public class FastUtilCommands {
         SET = new Command<CommandSender>("set")
                 .requires(new RequiresPermission<>("blib.set"))
                 .requires(sender -> sender instanceof Player)
-                .argument(new ArgumentMaterialValue<>("material"))
+                .argument(new ArgumentReplaceBlockValue<>("block"))
                 .argument(/*new BiArgument<>(
                         "flags",
                         new ArgumentFlagList<>("flags", replaceFlags.keySet().stream().toList()),
@@ -110,7 +117,7 @@ public class FastUtilCommands {
                         new ArgumentIntegerAllowedMath<>("flags", 0)
                 )
                 .executor((sender, args) -> {
-                    Material material = (Material) args.getOrThrow("material", "use /bset <material>");
+                    ReplaceBlock replaceBlock = (ReplaceBlock) args.getOrThrow("block", "use /bset <block>");
                     Player player = (Player) sender;
                     BukkitPlayer bPlayer = BukkitAdapter.adapt(player);
                     try {
@@ -127,14 +134,14 @@ public class FastUtilCommands {
                             IntAABB aabb = IntAABB.fromAABB(sphere.toAABB());
                             for (Vec3i vec3i : aabb.getAllPointsInAABB()) {
                                 if (sphere.intersects(vec3i.toVec3d())) {
-                                    task.addToReplace(vec3i, material);
+                                    task.addToReplace(vec3i, replaceBlock);
                                 }
                             }
                         } else {
                             var min = region.getMinimumPoint();
                             var max = region.getMaximumPoint();
                             IntAABB aabb = new IntAABB(min.getX(), min.getY(), min.getZ(), max.getX(), max.getY(), max.getZ());
-                            task.addToReplace(aabb, material);
+                            task.addToReplace(aabb, replaceBlock);
                         }
 
                         Object flags = args.getOrDefault("flags", new ArrayList<>());
@@ -166,10 +173,9 @@ public class FastUtilCommands {
                 });
     }
 
-    public static class ArgumentMaterialValue<T> extends ArgumentSetList<T> {
+    public static class ArgumentReplaceBlockValue<T> extends ArgumentSetList<T> {
 
-
-        public ArgumentMaterialValue(String name) {
+        public ArgumentReplaceBlockValue(String name) {
             super(name, Collections.emptyList());
         }
 
@@ -178,19 +184,33 @@ public class FastUtilCommands {
         public Object process(T sender, String str) throws CommandSyntaxError {
             if (str.isEmpty()) return null;
             try {
-                return Material.valueOf(str.toUpperCase(Locale.ENGLISH));
+                return new MaterialBlock(Material.valueOf(str.toUpperCase(Locale.ENGLISH)));
             } catch (Throwable ignore) {
-
+                if (str.startsWith("{cb:")) {
+                    String[] params = str.substring(1, str.length() - 1).split(":");
+                    // cb[0] space[1] name[2]
+                    SpacedNameKey spacedNameKey = new SpacedNameKey(params[1], params[2]);
+                    Optional<CustomBlock> customBlock = BlockRegistry.get().getCustomBlockOptional(spacedNameKey);
+                    return customBlock.map(CustomBlockReplace::new).orElse(null);
+                }
             }
             return null;
-
         }
 
         @Override
         public List<String> tabCompleter(T sender, String str) throws CommandSyntaxError {
             if (str.isEmpty())
-                return Arrays.stream(Material.values()).filter(Material::isBlock).map(material -> material.name().toLowerCase(Locale.ENGLISH)).toList();
-            return Arrays.stream(Material.values()).filter(Material::isBlock).map(material -> material.name().toLowerCase(Locale.ENGLISH)).filter(s -> s.startsWith(str)).toList();
+                return blocks();
+            return blocks().stream().filter(s -> s.startsWith(str)).toList();
+        }
+
+        private List<String> blocks() {
+            List<String> list = Arrays.stream(Material.values()).filter(Material::isBlock).map(material -> material.name().toLowerCase(Locale.ENGLISH)).collect(Collectors.toList());
+            Collection<CustomBlock> customBlocks = BlockRegistry.get().getAll();
+            for (CustomBlock customBlock : customBlocks) {
+                list.add("{cb:" + customBlock.getId() + "}");
+            }
+            return list;
         }
     }
 

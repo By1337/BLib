@@ -9,6 +9,8 @@ import org.by1337.blib.util.SpacedNameKey;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
+import java.util.function.Function;
+import java.util.function.Supplier;
 
 public class BlockRegistry {
     private static BlockRegistry instance = new BlockRegistry();
@@ -28,14 +30,22 @@ public class BlockRegistry {
         LOOKUP_BY_PLUGIN.computeIfAbsent(plugin.getName(), k -> new HashSet<>()).add(spacedNameKey);
     }
 
-    @NotNull
-    public CustomBlock getCustomBlock(SpacedNameKey id){
+    public CustomBlock getCustomBlockOr(SpacedNameKey id, Function<SpacedNameKey, CustomBlock> block){
         var type = LOOKUP.get(id);
         if (type == null){
             BLib.getApi().getMessage().error("Missing custom block! Id: %s", id);
-            return new MissingCustomBlock(id);
+            return block.apply(id);
         }
         return type;
+    }
+
+    @NotNull
+    public CustomBlock getCustomBlock(SpacedNameKey id){
+        return getCustomBlockOr(id, MissingCustomBlock::new);
+    }
+
+    public Optional<CustomBlock> getCustomBlockOptional(SpacedNameKey id){
+        return Optional.ofNullable(getCustomBlockOr(id, k -> null));
     }
 
     public void unregister(CustomBlock type) {

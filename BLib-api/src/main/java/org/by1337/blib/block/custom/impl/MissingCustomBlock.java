@@ -12,6 +12,7 @@ import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityChangeBlockEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
+import org.by1337.blib.BLib;
 import org.by1337.blib.block.custom.CustomBlock;
 import org.by1337.blib.block.custom.data.CustomBlockData;
 import org.by1337.blib.util.SpacedNameKey;
@@ -48,10 +49,12 @@ public class MissingCustomBlock extends CustomBlock {
      * @param x     the x-coordinate of the block.
      * @param y     the y-coordinate of the block.
      * @param z     the z-coordinate of the block.
+     * @return
      */
     @Override
-    public void onPlace(World world, int x, int y, int z, CustomBlockData data) {
-
+    public CustomBlockData doPlace(World world, int x, int y, int z) {
+        BLib.getApi().getMessage().warning("Unsafe doPlace");
+        return CustomBlockData.create(this, world.getName(), x, y, z);
     }
 
     /**

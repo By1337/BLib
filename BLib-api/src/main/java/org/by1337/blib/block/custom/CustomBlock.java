@@ -17,6 +17,7 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.PluginClassLoader;
 import org.by1337.blib.block.custom.data.CustomBlockData;
 import org.by1337.blib.util.SpacedNameKey;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
@@ -43,8 +44,9 @@ public abstract class CustomBlock {
      * @param x     the x-coordinate of the block.
      * @param y     the y-coordinate of the block.
      * @param z     the z-coordinate of the block.
+     * @return
      */
-    public abstract void onPlace(World world, int x, int y, int z, CustomBlockData data);
+    public abstract @NotNull CustomBlockData doPlace(World world, int x, int y, int z);
 
     /**
      * Checks if a player can break this block.
