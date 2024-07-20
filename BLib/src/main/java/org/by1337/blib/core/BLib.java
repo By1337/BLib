@@ -2,12 +2,10 @@ package org.by1337.blib.core;
 
 import lombok.Getter;
 import org.bukkit.Bukkit;
-import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.util.Vector;
 import org.by1337.blib.block.custom.CustomBlock;
 import org.by1337.blib.block.custom.impl.CustomBlockExample;
 import org.by1337.blib.block.custom.listener.CustomBlockListener;
@@ -21,9 +19,6 @@ import org.by1337.blib.command.requires.RequiresPermission;
 import org.by1337.blib.core.block.CustomBlockManager;
 import org.by1337.blib.core.fastutil.FastUtilCommands;
 import org.by1337.blib.core.test.CommandTests;
-import org.by1337.blib.geom.IntAABB;
-import org.by1337.blib.geom.Sphere;
-import org.by1337.blib.geom.Vec3i;
 import org.by1337.blib.lang.Lang;
 import org.by1337.blib.translation.Translation;
 import org.by1337.blib.util.SpacedNameKey;
@@ -35,10 +30,8 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.Random;
 import java.util.logging.Level;
 
 public class BLib extends JavaPlugin {

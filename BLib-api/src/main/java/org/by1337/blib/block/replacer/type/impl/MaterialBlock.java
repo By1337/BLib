@@ -10,4 +10,9 @@ public class MaterialBlock implements ReplaceBlock {
     public MaterialBlock(Material material) {
         this.material = material;
     }
+
+    @Override
+    public Material getType() {
+        return material;
+    }
 }

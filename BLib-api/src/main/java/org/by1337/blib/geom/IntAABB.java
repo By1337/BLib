@@ -43,6 +43,9 @@ public class IntAABB {
         final int floor = (int) num;
         return floor == num ? floor : floor - (int) (Double.doubleToRawLongBits(num) >>> 63);
     }
+    public int getBlockCount(){
+        return (maxX - minX + 1) * (maxY - minY + 1) * (maxZ - minZ + 1);
+    }
     public IntAABB(Vec3i v, Vec3i v1) {
         resize(v.getX(), v.getY(), v.getZ(), v1.getX(), v1.getY(), v1.getZ());
     }
