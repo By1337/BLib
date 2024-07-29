@@ -2,41 +2,46 @@ package org.by1337.blib.nbt;
 
 public enum NBTToStringStyle {
     /**
-     * {text:"text",array:[I;100I,100I],byte:13b}
+     * {array:[I;100,100],byte:13b,text:"text"}
      */
     COMPACT,
     /**
+     * <blockquote><pre>
      * {
-     *   text: "text",
-     *   array: [
-     *     I;
-     *     100I,
-     *     100I
-     *   ],
-     *   byte: 13b
+     *     array: [
+     *         I;
+     *         100,
+     *         100
+     *     ],
+     *     byte: 13b,
+     *     text: "text"
      * }
+     * </pre></blockquote>
      */
     BEAUTIFIER,
     /**
-     * {"text":"text","array":[100,100],"byte":13}
+     * {"array":[100,100],"byte":13,"text":"text"}
      */
     JSON_STYLE_COMPACT,
     /**
+     * <blockquote><pre>
      * {
-     *   "text": "text",
-     *   "array": [
-     *     100,
-     *     100
-     *   ],
-     *   "byte": 13
+     *     "array": [
+     *         100,
+     *         100
+     *     ],
+     *     "byte": 13,
+     *     "text": "text"
      * }
+     * </pre></blockquote>
      */
     JSON_STYLE_BEAUTIFIER;
 
-    public boolean isCompact(){
+    public boolean isCompact() {
         return this == COMPACT || this == JSON_STYLE_COMPACT;
     }
-    public boolean isJson(){
+
+    public boolean isJson() {
         return this == JSON_STYLE_COMPACT || this == JSON_STYLE_BEAUTIFIER;
     }
 }

@@ -1,8 +1,8 @@
 package org.by1337.blib.hook.papi;
 
-import junit.framework.TestCase;
-import org.junit.Assert;
 import org.junit.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 public class PlaceholderTest {
     @Test
@@ -49,20 +49,20 @@ public class PlaceholderTest {
         placeholder.build();
 
 
-        Assert.assertEquals(placeholder.process(null, "new_new_new_new_new_new".split("_")), "ok");
-        Assert.assertEquals(placeholder.process(null, "new_new_new_new_new".split("_")), "ok");
-        Assert.assertEquals(placeholder.process(null, "test_test_test1".split("_")), "ok");
-        Assert.assertEquals(placeholder.process(null, "test_test_test2".split("_")), "ok2");
+        assertEquals(placeholder.process(null, "new_new_new_new_new_new".split("_")), "ok");
+        assertEquals(placeholder.process(null, "new_new_new_new_new".split("_")), "ok");
+        assertEquals(placeholder.process(null, "test_test_test1".split("_")), "ok");
+        assertEquals(placeholder.process(null, "test_test_test2".split("_")), "ok2");
 
-        Assert.assertEquals(placeholder.process(null, "test_test_test1_sub1".split("_")), "sub_ok1");
-        Assert.assertEquals(placeholder.process(null, "test_test_test1_sub2".split("_")), "sub_ok2");
-        Assert.assertEquals(placeholder.process(null, "test_test_test2_sub1".split("_")), "sub_ok3");
-        Assert.assertEquals(placeholder.process(null, "test_test_test2_sub1_321321".split("_")), "sub_ok3");
-        Assert.assertEquals(placeholder.process(null, "test_test_test2_sub1_123123".split("_")), "sub_123123");
-        Assert.assertEquals(placeholder.process(null, "test1".split("_")), "123321");
+        assertEquals(placeholder.process(null, "test_test_test1_sub1".split("_")), "sub_ok1");
+        assertEquals(placeholder.process(null, "test_test_test1_sub2".split("_")), "sub_ok2");
+        assertEquals(placeholder.process(null, "test_test_test2_sub1".split("_")), "sub_ok3");
+        assertEquals(placeholder.process(null, "test_test_test2_sub1_321321".split("_")), "sub_ok3");
+        assertEquals(placeholder.process(null, "test_test_test2_sub1_123123".split("_")), "sub_123123");
+        assertEquals(placeholder.process(null, "test1".split("_")), "123321");
 
         for (String placeHolderS : placeholder.getAllPlaceHolders()) {
-            Assert.assertNotNull(placeholder.process(
+            assertNotNull(placeholder.process(
                     null,
                     placeHolderS.substring(placeholder.getName().length() + 1).split("_")
             ));

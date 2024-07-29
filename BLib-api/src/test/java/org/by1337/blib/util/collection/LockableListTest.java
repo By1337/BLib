@@ -1,14 +1,11 @@
 package org.by1337.blib.util.collection;
 
-import junit.framework.TestCase;
-import org.junit.Assert;
 import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class LockableListTest {
     private LockableList<Integer> lockableList;
@@ -37,13 +34,13 @@ public class LockableListTest {
                 list.add("str6");
             }
         }
-        Assert.assertEquals(list.size(), 3);
+        assertEquals(list.size(), 3);
         list.unlock();
-        Assert.assertEquals(list.size(), 4);
-        Assert.assertEquals(list.get(0), "str");
-        Assert.assertEquals(list.get(1), "str2");
-        Assert.assertEquals(list.get(2), "str5");
-        Assert.assertEquals(list.get(3), "str6");
+        assertEquals(list.size(), 4);
+        assertEquals(list.get(0), "str");
+        assertEquals(list.get(1), "str2");
+        assertEquals(list.get(2), "str5");
+        assertEquals(list.get(3), "str6");
     }
 
     @Test

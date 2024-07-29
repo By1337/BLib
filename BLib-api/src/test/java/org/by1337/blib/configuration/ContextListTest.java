@@ -1,14 +1,14 @@
+package org.by1337.blib.configuration;
+
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.util.Vector;
-import org.by1337.blib.configuration.YamlContext;
-import org.by1337.blib.configuration.YamlValue;
-import org.junit.Assert;
 import org.junit.Test;
 
 import java.util.List;
 import java.util.Map;
 
+import static org.junit.jupiter.api.Assertions.*;
 public class ContextListTest {
     private static String yaml = """
             map:
@@ -42,9 +42,9 @@ public class ContextListTest {
 
         Map<String, List<Vector>> map = context.getMapList("map", Vector.class);
 
-        Assert.assertEquals(map.size(), 2);
-        Assert.assertNotNull(map.get("item-1"));
-        Assert.assertEquals(map.get("item-1").get(2), new Vector(3, 3, 3));
+        assertEquals(map.size(), 2);
+        assertNotNull(map.get("item-1"));
+        assertEquals(map.get("item-1").get(2), new Vector(3, 3, 3));
 
     }
 
@@ -56,9 +56,9 @@ public class ContextListTest {
 
         Map<String, List<Vector>> map = context.getAsYamlValue("map").getAsMap(v -> v.getAsList(YamlValue::getAsVector));
 
-        Assert.assertEquals(map.size(), 2);
-        Assert.assertNotNull(map.get("item-1"));
-        Assert.assertEquals(map.get("item-1").get(2), new Vector(3, 3, 3));
+        assertEquals(map.size(), 2);
+        assertNotNull(map.get("item-1"));
+        assertEquals(map.get("item-1").get(2), new Vector(3, 3, 3));
 
     }
 }

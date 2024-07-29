@@ -1,10 +1,11 @@
 package org.by1337.blib.random;
 
-import org.junit.Assert;
 import org.junit.Test;
 
 import java.util.List;
 import java.util.Random;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 public class WeightedItemSelectorTest {
 
@@ -25,14 +26,20 @@ public class WeightedItemSelectorTest {
         for (int i = 0; i < iterations; i++) {
             String item = weightedItemSelector.getRandomItem();
             switch (item) {
-                case "A": aCount++; break;
-                case "B": bCount++; break;
-                case "C": cCount++; break;
+                case "A":
+                    aCount++;
+                    break;
+                case "B":
+                    bCount++;
+                    break;
+                case "C":
+                    cCount++;
+                    break;
             }
         }
-        Assert.assertTrue(((double) iterations / aCount) < 120 && ((double) iterations / aCount) > 70);
-        Assert.assertTrue(((double) iterations / bCount) < 30 && ((double) iterations / bCount) > 5);
-        Assert.assertTrue(((double) iterations / cCount) < 10 && ((double) iterations / cCount) > 0.1);
+        assertTrue(((double) iterations / aCount) < 120 && ((double) iterations / aCount) > 70);
+        assertTrue(((double) iterations / bCount) < 30 && ((double) iterations / bCount) > 5);
+        assertTrue(((double) iterations / cCount) < 10 && ((double) iterations / cCount) > 0.1);
     }
 
 }

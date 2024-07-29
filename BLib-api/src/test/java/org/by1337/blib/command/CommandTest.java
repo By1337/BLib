@@ -1,20 +1,18 @@
 package org.by1337.blib.command;
 
-import junit.framework.TestCase;
 import net.kyori.adventure.text.Component;
-import org.by1337.blib.command.argument.ArgumentMap;
 import org.by1337.blib.command.argument.ArgumentString;
 import org.by1337.blib.command.argument.ArgumentStrings;
-import org.by1337.blib.lang.Lang;
-import org.junit.Assert;
 import org.junit.Test;
 
 import java.util.Arrays;
-import java.util.Objects;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 public class CommandTest {
     private boolean flag;
     private String args;
+
     @Test
     public void test1() throws CommandException {
         var cmd = new Command<Object>("cmd")
@@ -43,17 +41,16 @@ public class CommandTest {
                 .addSubCommand(
                         new Command<Object>("test4")
                                 .requires(s -> false)
-                )
-                ;
+                );
 
-        Assert.assertArrayEquals(cmd.getTabCompleter(null, new String[]{"test", ""}).toArray(), new String[]{"[str]"});
-        if (Arrays.equals(cmd.getTabCompleter(null, new String[]{"test3", ""}).toArray(), new String[]{"[str]"})){
+        assertArrayEquals(cmd.getTabCompleter(null, new String[]{"test", ""}).toArray(), new String[]{"[str]"});
+        if (Arrays.equals(cmd.getTabCompleter(null, new String[]{"test3", ""}).toArray(), new String[]{"[str]"})) {
             throw new IllegalStateException("The terms on the arguments broke!");
         }
-        Assert.assertArrayEquals(cmd.getTabCompleter(null, new String[]{""}).toArray(), new String[]{"test2", "test3", "test"});
+        assertArrayEquals(cmd.getTabCompleter(null, new String[]{""}).toArray(), new String[]{"test2", "test3", "test"});
         cmd.process(null, new String[]{"test", "string"});
         cmd.process(null, new String[]{"test2", "string", "string", "string"});
-        Assert.assertTrue(flag);
-        Assert.assertEquals(args, "string string string");
+        assertTrue(flag);
+        assertEquals(args, "string string string");
     }
 }

@@ -85,7 +85,7 @@ public class MathParser {
         EOF; // end exp
     }
 
-    public static int analyze(LexemeBuffer lexemes) throws ParseException {
+    private static int analyze(LexemeBuffer lexemes) throws ParseException {
         Lexeme lexeme = lexemes.next();
         if (lexeme.type == LexemeType.EOF) {
             return 0;
@@ -95,7 +95,7 @@ public class MathParser {
         }
     }
 
-    public static int multdiv(LexemeBuffer buffer) throws ParseException {
+    private static int multdiv(LexemeBuffer buffer) throws ParseException {
         int value = factor(buffer);
         while (true) {
             Lexeme lexeme = buffer.next();
@@ -116,7 +116,7 @@ public class MathParser {
 
     }
 
-    public static int plusMinus(LexemeBuffer buffer) throws ParseException {
+    private static int plusMinus(LexemeBuffer buffer) throws ParseException {
         int value = multdiv(buffer);
         while (true) {
             Lexeme lexeme = buffer.next();
@@ -141,7 +141,7 @@ public class MathParser {
         }
     }
 
-    public static int logical(LexemeBuffer buffer) throws ParseException {
+    private static int logical(LexemeBuffer buffer) throws ParseException {
         int value = plusMinus(buffer);
         while (true) {
             Lexeme lexeme = buffer.next();
@@ -196,7 +196,7 @@ public class MathParser {
         }
     }
 
-    public static int factor(LexemeBuffer buffer) throws ParseException {
+    private static int factor(LexemeBuffer buffer) throws ParseException {
         Lexeme lexeme = buffer.next();
         switch (lexeme.type) {
             case NUMBER -> {
@@ -348,7 +348,7 @@ public class MathParser {
     }
 
 
-    static class Lexeme {
+    private static class Lexeme {
         LexemeType type;
         String value;
 
@@ -365,13 +365,13 @@ public class MathParser {
         @Override
         public String toString() {
             return "Lexeme{" +
-                    "type=" + type +
-                    ", value='" + value + '\'' +
-                    '}';
+                   "type=" + type +
+                   ", value='" + value + '\'' +
+                   '}';
         }
     }
 
-     static class LexemeBuffer {
+    private static class LexemeBuffer {
         private int pos;
 
         public List<Lexeme> lexemes;
@@ -394,7 +394,7 @@ public class MathParser {
             return this;
         }
 
-        public int getPos() {
+        private int getPos() {
             return pos;
         }
     }
