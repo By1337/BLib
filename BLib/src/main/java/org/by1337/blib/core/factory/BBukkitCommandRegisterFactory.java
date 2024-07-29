@@ -5,7 +5,6 @@ import org.by1337.blib.factory.BukkitCommandRegisterFactory;
 import org.by1337.blib.nms.V1_20_6.command.BukkitCommandRegisterV1_20_6;
 import org.by1337.blib.nms.V1_21.command.BukkitCommandRegisterV1_21;
 import org.by1337.blib.nms.v1_16_5.command.BukkitCommandRegisterV1_16_5;
-import org.by1337.blib.nms.v1_17.command.BukkitCommandRegisterV1_17;
 import org.by1337.blib.nms.v1_17_1.command.BukkitCommandRegisterV1_17_1;
 import org.by1337.blib.nms.v1_18_2.command.BukkitCommandRegisterV1_18_2;
 import org.by1337.blib.nms.v1_19_4.command.BukkitCommandRegisterV1_19_4;
@@ -18,7 +17,6 @@ public class BBukkitCommandRegisterFactory implements BukkitCommandRegisterFacto
     private final BukkitCommandRegister register = switch (Version.VERSION){
         case UNKNOWN -> null;
         case V1_16_5 -> new BukkitCommandRegisterV1_16_5();
-        case V1_17 -> new BukkitCommandRegisterV1_17();
         case V1_17_1 -> new BukkitCommandRegisterV1_17_1();
         case V1_18_2 -> new BukkitCommandRegisterV1_18_2();
         case V1_19_4 -> new BukkitCommandRegisterV1_19_4();

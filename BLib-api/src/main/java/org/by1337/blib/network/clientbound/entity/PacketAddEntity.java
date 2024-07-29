@@ -5,7 +5,7 @@ import org.by1337.blib.network.Packet;
 import org.by1337.blib.world.entity.PacketEntity;
 
 import java.util.UUID;
-
+@Deprecated(forRemoval = true)
 public interface PacketAddEntity extends Packet {
     static PacketAddEntity newInstance(PacketEntity entity) {
         return BLib.getPacketFactory().createPacketAddEntity(entity);

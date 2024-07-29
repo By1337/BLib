@@ -8,6 +8,7 @@ import org.by1337.blib.network.clientbound.entity.*;
 
 import java.util.Map;
 
+@Deprecated(forRemoval = true)
 public interface PacketFactory {
     PacketAddEntity createPacketAddEntity(PacketEntity packetEntity);
 

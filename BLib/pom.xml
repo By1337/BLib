@@ -183,12 +183,6 @@
         </dependency>
         <dependency>
             <groupId>org.by1337.blib.nms</groupId>
-            <artifactId>V1_17</artifactId>
-            <version>${revision}</version>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.by1337.blib.nms</groupId>
             <artifactId>V1_17_1</artifactId>
             <version>${revision}</version>
             <scope>compile</scope>

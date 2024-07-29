@@ -14,13 +14,13 @@ public class PacketArmorStandImp165 extends PacketLivingEntityImp165 implements 
     private static final Rotations DEFAULT_RIGHT_ARM_POSE = new Rotations(-15.0F, 0.0F, 10.0F);
     private static final Rotations DEFAULT_LEFT_LEG_POSE = new Rotations(-1.0F, 0.0F, -1.0F);
     private static final Rotations DEFAULT_RIGHT_LEG_POSE = new Rotations(1.0F, 0.0F, 1.0F);
-    public static final EntityDataAccessor<Byte> DATA_CLIENT_FLAGS = ArmorStand.DATA_CLIENT_FLAGS_;
-    public static final EntityDataAccessor<Rotations> DATA_HEAD_POSE = ArmorStand.DATA_HEAD_POSE_;
-    public static final EntityDataAccessor<Rotations> DATA_BODY_POSE = ArmorStand.DATA_BODY_POSE_;
-    public static final EntityDataAccessor<Rotations> DATA_LEFT_ARM_POSE = ArmorStand.DATA_LEFT_ARM_POSE_;
-    public static final EntityDataAccessor<Rotations> DATA_RIGHT_ARM_POSE = ArmorStand.DATA_RIGHT_ARM_POSE_;
-    public static final EntityDataAccessor<Rotations> DATA_LEFT_LEG_POSE = ArmorStand.DATA_LEFT_LEG_POSE_;
-    public static final EntityDataAccessor<Rotations> DATA_RIGHT_LEG_POSE = ArmorStand.DATA_RIGHT_LEG_POSE_;
+    public static final EntityDataAccessor<Byte> DATA_CLIENT_FLAGS = null;//ArmorStand.DATA_CLIENT_FLAGS_;
+    public static final EntityDataAccessor<Rotations> DATA_HEAD_POSE = null;//ArmorStand.DATA_HEAD_POSE_;
+    public static final EntityDataAccessor<Rotations> DATA_BODY_POSE = null;//ArmorStand.DATA_BODY_POSE_;
+    public static final EntityDataAccessor<Rotations> DATA_LEFT_ARM_POSE = null;//ArmorStand.DATA_LEFT_ARM_POSE_;
+    public static final EntityDataAccessor<Rotations> DATA_RIGHT_ARM_POSE = null;//ArmorStand.DATA_RIGHT_ARM_POSE_;
+    public static final EntityDataAccessor<Rotations> DATA_LEFT_LEG_POSE = null;//ArmorStand.DATA_LEFT_LEG_POSE_;
+    public static final EntityDataAccessor<Rotations> DATA_RIGHT_LEG_POSE = null;//ArmorStand.DATA_RIGHT_LEG_POSE_;
 
     public PacketArmorStandImp165(BLocation location) {
         super(EntityType.ARMOR_STAND, location);

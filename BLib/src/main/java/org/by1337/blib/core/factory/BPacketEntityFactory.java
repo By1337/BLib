@@ -8,7 +8,6 @@ import org.by1337.blib.util.Version;
 
 import org.by1337.blib.factory.PacketEntityFactory;
 import org.by1337.blib.nms.v1_16_5.world.entity.PacketArmorStandImp165;
-import org.by1337.blib.nms.v1_17.world.entity.PacketArmorStandImpl17;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -50,8 +49,6 @@ public class BPacketEntityFactory implements PacketEntityFactory {
         entityMap = new HashMap<>();
         if (Version.VERSION == Version.V1_16_5) {
             BPacketEntityFactory.registerEntity(PacketArmorStand.class, PacketArmorStandImp165::new);
-        } else if (Version.VERSION == Version.V1_17) {
-            BPacketEntityFactory.registerEntity(PacketArmorStand.class, PacketArmorStandImpl17::new);
         }
     }
 }

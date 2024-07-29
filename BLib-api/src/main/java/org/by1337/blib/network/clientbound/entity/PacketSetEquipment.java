@@ -6,7 +6,7 @@ import org.by1337.blib.network.Packet;
 import org.by1337.blib.world.entity.BEquipmentSlot;
 
 import java.util.Map;
-
+@Deprecated(forRemoval = true)
 public interface PacketSetEquipment extends Packet {
 
     static PacketSetEquipment newInstance(int entityId, Map<BEquipmentSlot, ItemStack> slots) {

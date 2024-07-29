@@ -5,7 +5,6 @@ import org.by1337.blib.nms.V1_20_6.chat.TellRawV1_20_6;
 import org.by1337.blib.nms.V1_21.chat.TellRawV1_21;
 import org.by1337.blib.util.Version;
 import org.by1337.blib.nms.v1_16_5.chat.TellRawV1_16_5;
-import org.by1337.blib.nms.v1_17.chat.TellRawV1_17;
 import org.by1337.blib.nms.v1_17_1.chat.TellRawV1_17_1;
 import org.by1337.blib.nms.v1_18_2.chat.TellRawV1_18_2;
 import org.by1337.blib.nms.v1_19_4.chat.TellRawV1_19_4;
@@ -18,7 +17,6 @@ public class TellRaw {
     public static void tell(@NotNull String s, @NotNull Player player) {
         switch (Version.VERSION) {
             case V1_16_5 -> new TellRawV1_16_5().tell(s, player);
-            case V1_17 -> new TellRawV1_17().tell(s, player);
             case V1_17_1 -> new TellRawV1_17_1().tell(s, player);
             case V1_18_2 -> new TellRawV1_18_2().tell(s, player);
             case V1_19_4 -> new TellRawV1_19_4().tell(s, player);

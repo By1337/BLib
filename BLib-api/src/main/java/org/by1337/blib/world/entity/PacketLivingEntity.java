@@ -3,7 +3,7 @@ package org.by1337.blib.world.entity;
 import org.by1337.blib.world.BlockPosition;
 
 import java.util.Optional;
-
+@Deprecated(forRemoval = true)
 public interface PacketLivingEntity extends PacketEntity{
     float getHealth();
     int getArrowCount();

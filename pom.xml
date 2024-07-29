@@ -10,7 +10,6 @@
         <module>BLib</module>
         <module>BLib-api</module>
         <module>V1_16_5</module><!--LTS-->
-        <module>V1_17</module><!--LTS-->
         <module>V1_17_1</module><!--LTS-->
         <module>V1_18_2</module><!--LTS-->
         <module>V1_19_4</module><!--LTS-->

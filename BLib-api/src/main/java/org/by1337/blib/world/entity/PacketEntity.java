@@ -4,7 +4,7 @@ import org.by1337.blib.world.BLocation;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.UUID;
-
+@Deprecated(forRemoval = true)
 public interface PacketEntity {
     UUID uuid();
     BLocation getLocation();

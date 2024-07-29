@@ -1,5 +1,5 @@
 package org.by1337.blib.world.entity;
-
+@Deprecated(forRemoval = true)
 public interface PacketArmorStand extends PacketLivingEntity {
     void setSmall(boolean small);
     boolean isSmall();

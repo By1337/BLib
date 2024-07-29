@@ -2,11 +2,9 @@ package org.by1337.blib.nms.V1_21.inventory;
 
 
 import io.papermc.paper.adventure.PaperAdventure;
-import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.game.ClientboundOpenScreenPacket;
 import net.minecraft.server.level.ServerPlayer;
-
 import org.bukkit.craftbukkit.entity.CraftPlayer;
 import org.bukkit.craftbukkit.util.CraftChatMessage;
 import org.bukkit.entity.HumanEntity;
