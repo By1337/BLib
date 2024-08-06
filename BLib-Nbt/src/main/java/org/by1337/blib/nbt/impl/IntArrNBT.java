@@ -35,4 +35,9 @@ public class IntArrNBT extends NBT {
     public Object getAsObject() {
         return value;
     }
+
+    @Override
+    public IntArrNBT copy() {
+        return new IntArrNBT(value.clone());
+    }
 }

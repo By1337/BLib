@@ -22,6 +22,11 @@ public class ByteArrNBT extends NBT {
     }
 
     @Override
+    public ByteArrNBT copy() {
+        return new ByteArrNBT(value.clone());
+    }
+
+    @Override
     public NbtType getType() {
         return NbtType.BYTE_ARR;
     }

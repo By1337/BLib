@@ -1,7 +1,5 @@
 package org.by1337.blib.nbt;
 
-import java.util.UUID;
-
 public interface NbtByteBuffer {
     void writeByte(byte b);
     void writeByte(int b);

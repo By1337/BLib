@@ -26,6 +26,12 @@ public class ByteNBT extends NBT{
     public Object getAsObject() {
         return value;
     }
+
+    @Override
+    public ByteNBT copy() {
+        return this;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

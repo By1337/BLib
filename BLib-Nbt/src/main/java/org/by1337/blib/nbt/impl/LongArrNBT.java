@@ -37,4 +37,9 @@ public class LongArrNBT extends NBT {
     public Object getAsObject() {
         return value;
     }
+
+    @Override
+    public LongArrNBT copy() {
+        return new LongArrNBT(value.clone());
+    }
 }

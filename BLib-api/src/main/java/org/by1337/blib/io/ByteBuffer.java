@@ -42,35 +42,35 @@ public class ByteBuffer implements NbtByteBuffer {
     }
 
     public long readVarLong() {
-        long var1 = 0L;
-        int var3 = 0;
+        long value = 0L;
+        int shift = 0;
 
-        byte var4;
+        byte b;
         do {
-            var4 = this.readByte();
-            var1 |= (long) (var4 & 127) << var3++ * 7;
-            if (var3 > 10) {
+            b = this.readByte();
+            value |= (long) (b & 127) << shift++ * 7;
+            if (shift > 10) {
                 throw new RuntimeException("VarLong too big");
             }
-        } while ((var4 & 128) == 128);
+        } while ((b & 128) == 128);
 
-        return var1;
+        return value;
     }
 
     public int readVarInt() {
-        int var1 = 0;
-        int var2 = 0;
+        int value = 0;
+        int shift = 0;
 
-        byte var3;
+        byte b;
         do {
-            var3 = this.readByte();
-            var1 |= (var3 & 127) << var2++ * 7;
-            if (var2 > 5) {
+            b = this.readByte();
+            value |= (b & 127) << shift++ * 7;
+            if (shift > 5) {
                 throw new RuntimeException("VarInt too big");
             }
-        } while ((var3 & 128) == 128);
+        } while ((b & 128) == 128);
 
-        return var1;
+        return value;
     }
 
     public void writeVarLong(long l) {

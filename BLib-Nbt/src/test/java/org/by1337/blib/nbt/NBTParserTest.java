@@ -1,19 +1,8 @@
 package org.by1337.blib.nbt;
 
-
-import com.google.common.base.Joiner;
-import org.by1337.blib.nbt.*;
 import org.by1337.blib.nbt.impl.*;
 import org.junit.Assert;
 import org.junit.Test;
-
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
 
 public class NBTParserTest {
     @Test
@@ -30,6 +19,13 @@ public class NBTParserTest {
 
         NbtUtil.assertEqualsTags(compoundTag1, compoundTag);
 
+    }
+
+    @Test
+    public void emptyArrayParseTest() {
+        Assert.assertTrue(NBTParser.parseNBT("[L;]") instanceof LongArrNBT);
+        Assert.assertTrue(NBTParser.parseNBT("[I;]") instanceof IntArrNBT);
+        Assert.assertTrue(NBTParser.parseNBT("[B;]") instanceof ByteArrNBT);
     }
 
     @Test

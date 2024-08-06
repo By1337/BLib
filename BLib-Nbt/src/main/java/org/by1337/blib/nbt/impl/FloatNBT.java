@@ -33,6 +33,12 @@ public class FloatNBT extends NBT {
     public Object getAsObject() {
         return value;
     }
+
+    @Override
+    public FloatNBT copy() {
+        return this;
+    }
+
     @Override
     public int hashCode() {
         return Objects.hash(value);

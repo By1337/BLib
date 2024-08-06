@@ -12,10 +12,14 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 
 public class CompoundTag extends NBT {
-    private final Map<String, NBT> tags = new HashMap<>();
+    private final Map<String, NBT> tags;
 
     public CompoundTag() {
+        tags = new HashMap<>();
+    }
 
+    private CompoundTag(Map<String, NBT> tags) {
+        this.tags = tags;
     }
 
     public void putTag(String id, NBT nbt) {
@@ -82,10 +86,20 @@ public class CompoundTag extends NBT {
         tags.put(key, new LongArrNBT(new long[]{uuid.getMostSignificantBits(), uuid.getLeastSignificantBits()}));
     }
 
+    public void putMojangUUID(String key, UUID uuid) {
+        long most = uuid.getMostSignificantBits();
+        long least = uuid.getLeastSignificantBits();
+        tags.put(key, new IntArrNBT(leastMostToIntArray(most, least)));
+    }
+
+    private static int[] leastMostToIntArray(long most, long least) {
+        return new int[]{(int) (most >> 32), (int) most, (int) (least >> 32), (int) least};
+    }
+
     @Nullable
     @CanIgnoreReturnValue
-    public NBT remove(String name) {
-        return tags.remove(name);
+    public NBT remove(String key) {
+        return tags.remove(key);
     }
 
     public int getSize() {
@@ -130,30 +144,40 @@ public class CompoundTag extends NBT {
         return 0;
     }
 
-    public boolean has(String name) {
-        return get(name) != null;
+    public boolean has(String key) {
+        return get(key) != null;
+    }
+
+    public boolean has(String key, Class<? extends NBT> type) {
+        NBT nbt = get(key);
+        return nbt != null && nbt.getClass() == type;
+    }
+
+    public boolean has(String key, NbtType type) {
+        NBT nbt = get(key);
+        return nbt != null && nbt.getType() == type;
     }
 
     @Nullable
-    public NBT get(String name) {
-        return tags.get(name);
+    public NBT get(String key) {
+        return tags.get(key);
     }
 
-    public NBT getOrThrow(String name) {
-        return Objects.requireNonNull(tags.get(name), "unknown tag " + name);
+    public NBT getOrThrow(String key) {
+        return Objects.requireNonNull(tags.get(key), "unknown tag " + key);
     }
 
-    public NBT getOrDefault(String name, NBT def) {
-        return tags.getOrDefault(name, def);
+    public NBT getOrDefault(String key, NBT def) {
+        return tags.getOrDefault(key, def);
     }
 
-    public NBT getAndDecompress(String name, NBT def) {
-        return has(name) ? getAndDecompress(name) : def;
+    public NBT getAndDecompress(String key, NBT def) {
+        return has(key) ? getAndDecompress(key) : def;
     }
 
-    public NBT getAndDecompress(String name) {
-        var v = get(name);
-        if (v == null) throw new NullPointerException("unknown tag " + name);
+    public NBT getAndDecompress(String key) {
+        var v = get(key);
+        if (v == null) throw new NullPointerException("unknown tag " + key);
         if (v instanceof CompressedNBT compressedNBT) {
             return compressedNBT.decompress();
         } else if (v instanceof ByteArrNBT byteArrNBT) {
@@ -163,132 +187,161 @@ public class CompoundTag extends NBT {
         }
     }
 
-    public byte getAsByte(String name, byte def) {
-        var v = get(name);
+    public byte getAsByte(String key, byte def) {
+        var v = get(key);
         if (v == null) return def;
         return ((Number) v.getAsObject()).byteValue();
     }
 
-    public byte getAsByte(String name) {
-        var v = get(name);
-        if (v == null) throw new NullPointerException("unknown tag " + name);
+    public byte getAsByte(String key) {
+        var v = get(key);
+        if (v == null) throw new NullPointerException("unknown tag " + key);
         if (v instanceof StringNBT stringNBT) return (byte) (stringNBT.getValue().equals("true") ? 1 : 0);
         return ((Number) v.getAsObject()).byteValue();
     }
 
-    public boolean getAsBoolean(String name) {
-        var v = get(name);
-        if (v == null) throw new NullPointerException("unknown tag " + name);
+    public boolean getAsBoolean(String key) {
+        var v = get(key);
+        if (v == null) throw new NullPointerException("unknown tag " + key);
         if (v instanceof StringNBT stringNBT) return stringNBT.getValue().equals("true");
         return ((Number) v.getAsObject()).byteValue() == 1;
     }
 
-    public boolean getAsBoolean(String name, boolean def) {
-        var v = get(name);
+    public boolean getAsBoolean(String key, boolean def) {
+        var v = get(key);
         if (v == null) return def;
         if (v instanceof StringNBT stringNBT) return stringNBT.getValue().equals("true");
         return ((Number) v.getAsObject()).byteValue() == 1;
     }
 
-    public double getAsDouble(String name) {
-        var v = get(name);
-        if (v == null) throw new NullPointerException("unknown tag " + name);
+    public double getAsDouble(String key) {
+        var v = get(key);
+        if (v == null) throw new NullPointerException("unknown tag " + key);
         return ((Number) v.getAsObject()).doubleValue();
     }
 
-    public double getAsDouble(String name, double def) {
-        var v = get(name);
+    public double getAsDouble(String key, double def) {
+        var v = get(key);
         if (v == null) return def;
         return ((Number) v.getAsObject()).doubleValue();
     }
 
-    public float getAsFloat(String name) {
-        var v = get(name);
-        if (v == null) throw new NullPointerException("unknown tag " + name);
+    public float getAsFloat(String key) {
+        var v = get(key);
+        if (v == null) throw new NullPointerException("unknown tag " + key);
         return ((Number) v.getAsObject()).floatValue();
     }
 
-    public float getAsFloat(String name, float def) {
-        var v = get(name);
+    public float getAsFloat(String key, float def) {
+        var v = get(key);
         if (v == null) return def;
         return ((Number) v.getAsObject()).floatValue();
     }
 
-    public int getAsInt(String name) {
-        var v = get(name);
-        if (v == null) throw new NullPointerException("unknown tag " + name);
+    public int getAsInt(String key) {
+        var v = get(key);
+        if (v == null) throw new NullPointerException("unknown tag " + key);
         return ((Number) v.getAsObject()).intValue();
     }
 
-    public int getAsInt(String name, int def) {
-        var v = get(name);
+    public int getAsInt(String key, int def) {
+        var v = get(key);
         if (v == null) return def;
         return ((Number) v.getAsObject()).intValue();
     }
 
-    public long getAsLong(String name) {
-        var v = get(name);
-        if (v == null) throw new NullPointerException("unknown tag " + name);
+    public long getAsLong(String key) {
+        var v = get(key);
+        if (v == null) throw new NullPointerException("unknown tag " + key);
         return ((Number) v.getAsObject()).longValue();
     }
 
-    public long getAsLong(String name, long def) {
-        var v = get(name);
+    public long getAsLong(String key, long def) {
+        var v = get(key);
         if (v == null) return def;
         return ((Number) v.getAsObject()).longValue();
     }
 
-    public short getAsShort(String name) {
-        var v = get(name);
-        if (v == null) throw new NullPointerException("unknown tag " + name);
+    public short getAsShort(String key) {
+        var v = get(key);
+        if (v == null) throw new NullPointerException("unknown tag " + key);
         return ((Number) v.getAsObject()).shortValue();
     }
 
-    public short getAsShort(String name, short def) {
-        var v = get(name);
+    public short getAsShort(String key, short def) {
+        var v = get(key);
         if (v == null) return def;
         return ((Number) v.getAsObject()).shortValue();
     }
 
-    public String getAsString(String name) {
-        var v = get(name);
-        if (v == null) throw new NullPointerException("unknown tag " + name);
+    public String getAsString(String key) {
+        var v = get(key);
+        if (v == null) throw new NullPointerException("unknown tag " + key);
         return String.valueOf(v.getAsObject());
     }
 
-    public String getAsString(String name, String def) {
-        var v = get(name);
+    public String getAsString(String key, String def) {
+        var v = get(key);
         if (v == null) return def;
         return String.valueOf(v.getAsObject());
     }
 
-    public CompoundTag getAsCompoundTag(String name) {
-        var v = get(name);
-        if (v == null) throw new NullPointerException("unknown tag " + name);
+    public CompoundTag getAsCompoundTag(String key) {
+        var v = get(key);
+        if (v == null) throw new NullPointerException("unknown tag " + key);
         return (CompoundTag) v;
     }
 
-    public CompoundTag getAsCompoundTag(String name, CompoundTag def) {
-        var v = get(name);
+    public CompoundTag getAsCompoundTag(String key, CompoundTag def) {
+        var v = get(key);
         if (v == null) return def;
         return (CompoundTag) v;
     }
 
-    public UUID getAsUUID(String name, UUID def) {
-        if (!tags.containsKey(name)) return def;
-        return getAsUUID(name);
+    public UUID getAsUUID(String key, UUID def) {
+        if (!tags.containsKey(key)) return def;
+        return getAsUUID(key);
     }
 
-    public UUID getAsUUID(String name) {
-        var v = get(name);
-        if (v == null) throw new NullPointerException("unknown tag " + name);
+    public UUID getAsUUID(String key) {
+        var v = get(key);
+        if (v == null) throw new NullPointerException("unknown tag " + key);
         LongArrNBT arr = (LongArrNBT) v;
         return new UUID(arr.getValue()[0], arr.getValue()[1]);
     }
 
-    public <R> List<R> getAsList(String name, Function<NBT, R> function) {
-        ListNBT v = (ListNBT) get(name);
-        if (v == null) throw new NullPointerException("unknown tag " + name);
+    public UUID getAsUnknownUUID(String key) {
+        if (has(key, NbtType.LONG_ARR)) {
+            return getAsUUID(key);
+        } else if (has(key, NbtType.INT_ARR)) {
+            return getAsMojangUUID(key);
+        } else {
+            NBT nbt = get(key);
+            throw new IllegalStateException(
+                    String.format(
+                            "Expected UUID-Tag to be of type %s or %s, but found %s",
+                            NbtType.LONG_ARR,
+                            NbtType.INT_ARR,
+                            nbt == null ? "null" : nbt.getType()
+                    )
+            );
+        }
+    }
+
+    public UUID getAsMojangUUID(String key) {
+        return uuidFromIntArray(getAsIntArray(key));
+    }
+
+    private static UUID uuidFromIntArray(int[] arr) {
+        if (arr.length != 4) {
+            throw new IllegalArgumentException("Expected UUID-Array to be of length 4, but found " + arr.length + ".");
+        }
+        return new UUID((long) arr[0] << 32 | (long) arr[1] & 0xFFFFFFFFL, (long) arr[2] << 32 | (long) arr[3] & 0xFFFFFFFFL);
+    }
+
+    public <R> List<R> getAsList(String key, Function<NBT, R> function) {
+        ListNBT v = (ListNBT) get(key);
+        if (v == null) throw new NullPointerException("unknown tag " + key);
         List<R> list = new ArrayList<>();
         for (NBT nbt : v) {
             list.add(function.apply(nbt));
@@ -296,8 +349,8 @@ public class CompoundTag extends NBT {
         return list;
     }
 
-    public <R> List<R> getAsList(String name, Function<NBT, R> function, List<R> def) {
-        ListNBT v = (ListNBT) get(name);
+    public <R> List<R> getAsList(String key, Function<NBT, R> function, List<R> def) {
+        ListNBT v = (ListNBT) get(key);
         if (v == null) return def;
         List<R> list = new ArrayList<>();
         for (NBT nbt : v) {
@@ -306,17 +359,70 @@ public class CompoundTag extends NBT {
         return list;
     }
 
-    public <T extends NBT> T computeIfAbsent(String name, Supplier<T> mappingFunction) {
-        return computeIfAbsent(name, k -> mappingFunction.get());
+    public <T extends NBT> T computeIfAbsent(String key, Supplier<T> mappingFunction) {
+        return computeIfAbsent(key, k -> mappingFunction.get());
     }
 
-    public <T extends NBT> T computeIfAbsent(String name, Function<String, T> mappingFunction) {
-        var v = tags.get(name);
+    public <T extends NBT> T computeIfAbsent(String key, Function<String, T> mappingFunction) {
+        var v = tags.get(key);
         if (v == null) {
-            v = mappingFunction.apply(name);
-            tags.put(name, v);
+            v = mappingFunction.apply(key);
+            tags.put(key, v);
         }
         return (T) v;
+    }
+
+    public ListNBT getAsListNBT(String key) {
+        var v = get(key);
+        if (v == null) throw new NullPointerException("unknown tag " + key);
+        return (ListNBT) v;
+    }
+
+    public ListNBT getAsListNBT(String key, ListNBT def) {
+        var v = get(key);
+        if (v == null) return def;
+        return (ListNBT) v;
+    }
+
+    @SuppressWarnings("unchecked")
+    public <T extends NBT> List<T> getAsList(String key, Class<T> tClass) {
+        ListNBT current = getAsListNBT(key, new ListNBT());
+        List<T> result = new ArrayList<>();
+        for (NBT nbt : current) {
+            if (nbt.getClass() == tClass) {
+                result.add((T) nbt);
+            }
+        }
+        return result;
+    }
+
+    public ListNBT getListNBT(String key, NbtType type) {
+        ListNBT current = getAsListNBT(key, new ListNBT());
+        ListNBT newList = new ListNBT();
+        for (NBT nbt : current) {
+            if (nbt.getType() == type) {
+                newList.add(nbt);
+            }
+        }
+        return newList;
+    }
+
+    public int[] getAsIntArray(String key, int[] def) {
+        if (!tags.containsKey(key)) return def;
+        return getAsIntArray(key);
+    }
+
+    public int[] getAsIntArray(String key) {
+        return Objects.requireNonNull(((IntArrNBT) tags.get(key)), "unknown tag " + key).getValue();
+    }
+
+    public long[] getAsLongArray(String key, long[] def) {
+        if (!tags.containsKey(key)) return def;
+        return getAsLongArray(key);
+    }
+
+    public long[] getAsLongArray(String key) {
+        return Objects.requireNonNull(((LongArrNBT) tags.get(key)), "unknown tag " + key).getValue();
     }
 
     public boolean isEmpty() {
@@ -327,6 +433,7 @@ public class CompoundTag extends NBT {
     public Object getAsObject() {
         return tags;
     }
+
 
     @Override
     public NbtType getType() {
@@ -340,6 +447,15 @@ public class CompoundTag extends NBT {
 
     public Set<Map.Entry<String, NBT>> entrySet() {
         return tags.entrySet();
+    }
+
+    @Override
+    public CompoundTag copy() {
+        Map<String, NBT> tags2 = new HashMap<>(tags.size());
+        for (String s : tags.keySet()) {
+            tags2.put(s, tags.get(s).copy());
+        }
+        return new CompoundTag(tags2);
     }
 
     @Override

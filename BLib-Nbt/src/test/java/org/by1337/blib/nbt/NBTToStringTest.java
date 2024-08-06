@@ -1,7 +1,6 @@
 package org.by1337.blib.nbt;
 
 import junit.framework.TestCase;
-import net.minecraft.nbt.SnbtPrinterTagVisitor;
 import org.by1337.blib.nbt.impl.ByteArrNBT;
 import org.by1337.blib.nbt.impl.CompoundTag;
 import org.junit.Assert;

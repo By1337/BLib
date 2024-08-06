@@ -33,6 +33,12 @@ public class DoubleNBT extends NBT {
     public Object getAsObject() {
         return value;
     }
+
+    @Override
+    public DoubleNBT copy() {
+        return this;
+    }
+
     @Override
     public int hashCode() {
         return Objects.hash(value);

@@ -26,6 +26,11 @@ public class ShortNBT extends NBT {
         return value;
     }
 
+    @Override
+    public ShortNBT copy() {
+        return this;
+    }
+
     static class Cache {
         private static final int HIGH = 1024;
         private static final int LOW = -128;

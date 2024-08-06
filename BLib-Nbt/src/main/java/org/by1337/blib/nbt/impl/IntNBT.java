@@ -24,6 +24,11 @@ public class IntNBT extends NBT {
     public Object getAsObject() {
         return value;
     }
+
+    @Override
+    public IntNBT copy() {
+        return this;
+    }
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

@@ -27,6 +27,11 @@ public class StringNBT extends NBT {
     }
 
     @Override
+    public StringNBT copy() {
+        return this;
+    }
+
+    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
@@ -38,4 +43,5 @@ public class StringNBT extends NBT {
     public int hashCode() {
         return Objects.hash(value);
     }
+
 }

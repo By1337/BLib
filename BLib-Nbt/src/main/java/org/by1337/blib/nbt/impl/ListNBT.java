@@ -17,6 +17,12 @@ public class ListNBT extends NBT implements Collection<NBT> {
         this(new ArrayList<>());
     }
 
+    private ListNBT(List<NBT> list, NbtType innerType, boolean allowMultipleType) {
+        this.list = list;
+        this.innerType = innerType;
+        this.allowMultipleType = allowMultipleType;
+    }
+
     public ListNBT(List<NBT> list, boolean allowMultipleType) {
         this.allowMultipleType = true;
         this.list = new ArrayList<>(list.size());
@@ -98,6 +104,15 @@ public class ListNBT extends NBT implements Collection<NBT> {
         return list;
     }
 
+    @Override
+    public ListNBT copy() {
+        final List<NBT> list1 = new ArrayList<>(list.size());
+        for (NBT nbt : list) {
+            list1.add(nbt.copy());
+        }
+        return new ListNBT(list1, innerType, allowMultipleType);
+    }
+
     public List<NBT> getList() {
         return list;
     }
@@ -136,6 +151,10 @@ public class ListNBT extends NBT implements Collection<NBT> {
     @Override
     public <T> T[] toArray(@NotNull T[] a) {
         return list.toArray(a);
+    }
+
+    public boolean isAllowMultipleType() {
+        return allowMultipleType;
     }
 
     public static class NBTCastException extends ClassCastException {
