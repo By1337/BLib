@@ -24,7 +24,7 @@ import java.util.Objects;
 
 public class BlockReplacerV1_18_2 implements BlockReplacer {
     @Override
-    public Block replace(Vec3i pos0, BlockData data, ReplaceTask task, World world) {
+    public Block replace(Vec3i pos0, BlockData data, ReplaceTask task, World world, int flag) {
 
         ServerLevel nmsWorld = ((CraftWorld) world).getHandle();
         BlockPos blockposition = toNMS(pos0);
@@ -48,12 +48,12 @@ public class BlockReplacerV1_18_2 implements BlockReplacer {
         net.minecraft.world.level.block.Block block = iblockdata.getBlock();
         boolean captured = false;
         if (nmsWorld.captureBlockStates && !nmsWorld.capturedBlockStates.containsKey(blockposition)) {
-            CapturedBlockState blockstate = CapturedBlockState.getBlockState(nmsWorld, blockposition, task.getFlag());
+            CapturedBlockState blockstate = CapturedBlockState.getBlockState(nmsWorld, blockposition, flag);
             nmsWorld.capturedBlockStates.put(blockposition.immutable(), blockstate);
             captured = true;
         }
 
-        BlockState iblockdata1 = chunk.setBlockState(blockposition, iblockdata, (task.getFlag() & BlockReplaceFlags.UPDATE_MOVE_BY_PISTON) != 0, (task.getFlag() & BlockReplaceFlags.DONT_PLACE) == 0);
+        BlockState iblockdata1 = chunk.setBlockState(blockposition, iblockdata, (flag & BlockReplaceFlags.UPDATE_MOVE_BY_PISTON) != 0, (flag & BlockReplaceFlags.DONT_PLACE) == 0);
         if (iblockdata1 == null) {
             if (nmsWorld.captureBlockStates && captured) {
                 nmsWorld.capturedBlockStates.remove(blockposition);
@@ -62,7 +62,7 @@ public class BlockReplacerV1_18_2 implements BlockReplacer {
             return null;
         } else {
             BlockState iblockdata2 = nmsWorld.getBlockState(blockposition);
-            if ((task.getFlag() & BlockReplaceFlags.UPDATE_SUPPRESS_LIGHT) == 0 && iblockdata2 != iblockdata1 && (iblockdata2.getLightBlock(nmsWorld, blockposition) != iblockdata1.getLightBlock(nmsWorld, blockposition) || iblockdata2.getLightEmission() != iblockdata1.getLightEmission() || iblockdata2.useShapeForLightOcclusion() || iblockdata1.useShapeForLightOcclusion())) {
+            if ((flag & BlockReplaceFlags.UPDATE_SUPPRESS_LIGHT) == 0 && iblockdata2 != iblockdata1 && (iblockdata2.getLightBlock(nmsWorld, blockposition) != iblockdata1.getLightBlock(nmsWorld, blockposition) || iblockdata2.getLightEmission() != iblockdata1.getLightEmission() || iblockdata2.useShapeForLightOcclusion() || iblockdata1.useShapeForLightOcclusion())) {
                 nmsWorld.getProfiler().push("queueCheckLight");
                 nmsWorld.getChunkSource().getLightEngine().checkBlock(blockposition);
                 nmsWorld.getProfiler().pop();
@@ -70,7 +70,7 @@ public class BlockReplacerV1_18_2 implements BlockReplacer {
 
             if (!nmsWorld.captureBlockStates) {
                 try {
-                    this.notifyAndUpdatePhysics(blockposition, chunk, iblockdata1, iblockdata, iblockdata2, task.getFlag(), task.getUpdateLimit(), nmsWorld);
+                    this.notifyAndUpdatePhysics(blockposition, chunk, iblockdata1, iblockdata, iblockdata2, flag, task.getUpdateLimit(), nmsWorld);
                 } catch (StackOverflowError var11) {
                     Level.lastPhysicsProblem = new BlockPos(blockposition);
                 }

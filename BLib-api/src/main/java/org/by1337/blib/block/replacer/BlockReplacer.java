@@ -16,6 +16,7 @@ import org.by1337.blib.geom.Vec3i;
 public interface BlockReplacer {
     default Block replace(Vec3i pos, ReplaceBlock replaceBlock, ReplaceTask task, World world) {
         BlockData data;
+        int flag = replaceBlock.getFlag() == -1 ? task.getFlag() : replaceBlock.getFlag();
         if (replaceBlock instanceof BlockDataBlock dataBlock) {
             data = dataBlock.blockData;
         } else if (replaceBlock instanceof MaterialBlock materialBlock) {
@@ -23,7 +24,7 @@ public interface BlockReplacer {
         } else if (replaceBlock instanceof WeBlockStateBlock weBlockStateBlock) {
             data = BukkitAdapter.adapt(weBlockStateBlock.blockState);
         } else if (replaceBlock instanceof CustomBlockReplace customBlockReplace) {
-            Block block = replace(pos, customBlockReplace.customBlock.createBlockData(), task, world);
+            Block block = replace(pos, customBlockReplace.customBlock.createBlockData(), task, world, flag);
             if (block != null) {
                 CustomBlockData customBlockData = customBlockReplace.customBlock.doPlace(world, pos.x, pos.y, pos.z);
                 WorldRegistry.CUSTOM_BLOCK_REGISTRY.add(world.getName(), pos.x, pos.y, pos.z, customBlockData);
@@ -32,8 +33,8 @@ public interface BlockReplacer {
         } else {
             throw new UnsupportedOperationException("Unsupported type " + replaceBlock.getClass());
         }
-        return replace(pos, data, task, world);
+        return replace(pos, data, task, world, flag);
     }
 
-    Block replace(Vec3i pos, BlockData replaceBlock, ReplaceTask task, World world);
+    Block replace(Vec3i pos, BlockData replaceBlock, ReplaceTask task, World world, int replaceFlag);
 }

@@ -4,4 +4,6 @@ import org.bukkit.Material;
 
 public interface ReplaceBlock {
     Material getType();
+    ReplaceBlock withPlaceFlag(int flag);
+     int getFlag();
 }

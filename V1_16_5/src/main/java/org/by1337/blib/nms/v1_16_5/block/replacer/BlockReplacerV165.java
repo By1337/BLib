@@ -29,7 +29,7 @@ import java.util.Objects;
 
 public class BlockReplacerV165 implements BlockReplacer {
     @Override
-    public Block replace(Vec3i pos, BlockData data, ReplaceTask task, World world) {
+    public Block replace(Vec3i pos, BlockData data, ReplaceTask task, World world, int flag) {
         ServerLevel nmsWorld = ((CraftWorld) world).getHandle();
         BlockPos blockPos = toNMS(pos);
         if (Level.isOutsideWorld(blockPos)) return null;
@@ -50,11 +50,11 @@ public class BlockReplacerV165 implements BlockReplacer {
         boolean captured = false;
         if (nmsWorld.captureBlockStates && !nmsWorld.capturedBlockStates.containsKey(blockPos)) {
             CraftBlockState blockstate = (CraftBlockState) nmsWorld.getWorld().getBlockAt(blockPos.getX(), blockPos.getY(), blockPos.getZ()).getState();
-            blockstate.setFlag(task.getFlag());
+            blockstate.setFlag(flag);
             nmsWorld.capturedBlockStates.put(blockPos.immutableCopy(), blockstate);
             captured = true;
         }
-        int flag = task.getFlag();
+
         BlockState newBlock = chunk.setType(blockPos, blockData, (flag & BlockReplaceFlags.UPDATE_MOVE_BY_PISTON) != 0, (flag & BlockReplaceFlags.DONT_PLACE) == 0);
         nmsWorld.chunkPacketBlockController.onBlockChange(nmsWorld, blockPos, blockData, newBlock, flag);
 

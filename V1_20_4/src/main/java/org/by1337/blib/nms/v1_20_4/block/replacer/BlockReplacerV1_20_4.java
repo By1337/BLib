@@ -27,7 +27,7 @@ import java.util.Objects;
 
 public class BlockReplacerV1_20_4 implements BlockReplacer {
     @Override
-    public Block replace(Vec3i pos0, BlockData data, ReplaceTask task, World world) {
+    public Block replace(Vec3i pos0, BlockData data, ReplaceTask task, World world, int flag) {
 
         ServerLevel nmsWorld = ((CraftWorld) world).getHandle();
         BlockPos pos = toNMS(pos0);
@@ -50,13 +50,13 @@ public class BlockReplacerV1_20_4 implements BlockReplacer {
         boolean captured = false;
         if (nmsWorld.captureBlockStates && !nmsWorld.capturedBlockStates.containsKey(pos)) {
             CraftBlockState blockstate = (CraftBlockState)nmsWorld.getWorld().getBlockAt(pos.getX(), pos.getY(), pos.getZ()).getState();
-            blockstate.setFlag(task.getFlag());
+            blockstate.setFlag(flag);
             nmsWorld.capturedBlockStates.put(pos.immutable(), blockstate);
             captured = true;
         }
 
-        BlockState iblockdata1 = chunk.setBlockState(pos, state, (task.getFlag() & BlockReplaceFlags.UPDATE_MOVE_BY_PISTON) != 0, (task.getFlag() & BlockReplaceFlags.DONT_PLACE) == 0);
-        nmsWorld.chunkPacketBlockController.onBlockChange(nmsWorld, pos, state, iblockdata1, task.getFlag(), task.getUpdateLimit());
+        BlockState iblockdata1 = chunk.setBlockState(pos, state, (flag & BlockReplaceFlags.UPDATE_MOVE_BY_PISTON) != 0, (flag & BlockReplaceFlags.DONT_PLACE) == 0);
+        nmsWorld.chunkPacketBlockController.onBlockChange(nmsWorld, pos, state, iblockdata1, flag, task.getUpdateLimit());
         if (iblockdata1 == null) {
             if (nmsWorld.captureBlockStates && captured) {
                 nmsWorld.capturedBlockStates.remove(pos);
@@ -67,7 +67,7 @@ public class BlockReplacerV1_20_4 implements BlockReplacer {
             BlockState iblockdata2 = nmsWorld.getBlockState(pos);
             if (!nmsWorld.captureBlockStates) {
                 try {
-                    notifyAndUpdatePhysics(pos, chunk, iblockdata1, state, iblockdata2, task.getFlag(), task.getUpdateLimit(), nmsWorld);
+                    notifyAndUpdatePhysics(pos, chunk, iblockdata1, state, iblockdata2, flag, task.getUpdateLimit(), nmsWorld);
                 } catch (StackOverflowError var11) {
                     Level.lastPhysicsProblem = new BlockPos(pos);
                 }
