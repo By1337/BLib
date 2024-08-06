@@ -5,7 +5,7 @@ package org.by1337.blib.block.replacer;
  */
 public class BlockReplaceFlags {
     /**
-     * Updates comparators
+     * Special flag for updating the physics of certain redstone components.
      */
     public static final int UPDATE_NEIGHBORS = 1 << 0; // 1
 
