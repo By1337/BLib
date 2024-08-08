@@ -6,7 +6,9 @@ import net.minecraft.world.level.storage.PlayerDataStorage;
 import org.bukkit.Bukkit;
 import org.bukkit.craftbukkit.v1_20_R3.CraftServer;
 import org.bukkit.craftbukkit.v1_20_R3.inventory.CraftItemStack;
+import org.bukkit.craftbukkit.v1_20_R3.persistence.CraftPersistentDataContainer;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.persistence.PersistentDataContainer;
 import org.by1337.blib.nbt.NBT;
 import org.by1337.blib.nbt.ParseCompoundTag;
 import org.by1337.blib.nbt.impl.*;
@@ -37,6 +39,13 @@ public class ParseCompoundTagV204 implements ParseCompoundTag {
         return CraftItemStack.asBukkitCopy(
                 net.minecraft.world.item.ItemStack.of(nms)
         );
+    }
+    @Override
+    public @NotNull org.by1337.blib.nbt.impl.CompoundTag pdcToCompoundTag(@NotNull PersistentDataContainer persistentDataContainer) {
+        if (persistentDataContainer instanceof CraftPersistentDataContainer pdc){
+            return (org.by1337.blib.nbt.impl.CompoundTag) convertFromNms(pdc.toTagCompound());
+        }
+        return new org.by1337.blib.nbt.impl.CompoundTag();
     }
 
     private void copyAsNms(org.by1337.blib.nbt.impl.CompoundTag compoundTag, CompoundTag nms) {
