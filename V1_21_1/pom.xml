@@ -11,17 +11,10 @@
     </parent>
 
     <groupId>org.by1337.blib.nms</groupId>
-    <artifactId>V1_19_4</artifactId>
+    <artifactId>V1_21_1</artifactId>
     <packaging>jar</packaging>
 
-    <name>V1_19_4</name>
-
-    <properties>
-        <revision>1.2</revision>
-        <java.version>16</java.version>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <server.version>1.19.4-R0.1-SNAPSHOT</server.version>
-    </properties>
+    <name>V1_21_1</name>
 
     <pluginRepositories>
         <pluginRepository>
@@ -30,16 +23,23 @@
         </pluginRepository>
     </pluginRepositories>
 
+    <properties>
+        <revision>1.2</revision>
+        <java.version>16</java.version>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <server.version>1.21-R0.1-SNAPSHOT</server.version>
+    </properties>
+
     <build>
         <defaultGoal>clean install</defaultGoal>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.8.1</version>
+                <version>3.13.0</version>
                 <configuration>
-                    <source>${java.version}</source>
-                    <target>${java.version}</target>
+                    <source>16</source>
+                    <target>16</target>
                 </configuration>
             </plugin>
             <plugin>
@@ -100,7 +100,7 @@
         <dependency>
             <groupId>ca.bkaw</groupId>
             <artifactId>paper-nms</artifactId>
-            <version>1.19.4-SNAPSHOT</version>
+            <version>1.21.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
