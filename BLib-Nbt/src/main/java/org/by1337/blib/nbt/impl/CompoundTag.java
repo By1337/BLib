@@ -102,22 +102,37 @@ public class CompoundTag extends NBT {
         return tags.remove(key);
     }
 
-    public int getSize() {
+    public int getSizeInBytes() {
         int size = 0;
         for (Map.Entry<String, NBT> entry : tags.entrySet()) {
             size += entry.getKey().getBytes(StandardCharsets.UTF_8).length;
-            size += getSize(entry.getValue());
+            size += getSizeInBytes(entry.getValue());
         }
         return size;
     }
 
-    public static int getSize(NBT nbt) {
+    /**
+     * Returns the approximate size of the CompoundTag in bytes.
+     * To get the number of NBT tags in this CompoundTag, use {@link CompoundTag#getTagCount()}
+     * @deprecated The method name is not obvious. Use {@link CompoundTag#getSizeInBytes()} instead.
+     * @return the approximate size of the CompoundTag in bytes.
+     */
+    @Deprecated
+    public int getSize() {
+        return getSizeInBytes();
+    }
+
+    public int getTagCount() {
+        return tags.size();
+    }
+
+    public static int getSizeInBytes(NBT nbt) {
         if (nbt instanceof ByteArrNBT arr) {
             return arr.getValue().length;
         } else if (nbt instanceof ByteNBT) {
             return 1;
         } else if (nbt instanceof CompoundTag compoundTag) {
-            return compoundTag.getSize();
+            return compoundTag.getSizeInBytes();
         } else if (nbt instanceof DoubleNBT) {
             return 8;
         } else if (nbt instanceof FloatNBT) {
@@ -137,7 +152,7 @@ public class CompoundTag extends NBT {
         } else if (nbt instanceof ListNBT list) {
             int size = 0;
             for (NBT nbt1 : list) {
-                size += getSize(nbt1);
+                size += getSizeInBytes(nbt1);
             }
             return size;
         }
