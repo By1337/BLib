@@ -16,13 +16,13 @@ import org.by1337.blib.world.entity.PacketEntity;
 import org.jetbrains.annotations.Nullable;
 
 public abstract class PacketEntityImpl165 implements PacketEntity {
-    protected static final EntityDataAccessor<Byte> DATA_SHARED_FLAGS_ID = new EntityDataAccessor(0, EntityDataSerializers.BYTE_);
-    private static final EntityDataAccessor<Integer> DATA_AIR_SUPPLY_ID = new EntityDataAccessor(1, EntityDataSerializers.INT_);
-    private static final EntityDataAccessor<Boolean> DATA_CUSTOM_NAME_VISIBLE = new EntityDataAccessor(3, EntityDataSerializers.BOOLEAN_);
-    private static final EntityDataAccessor<Boolean> DATA_SILENT = new EntityDataAccessor(4, EntityDataSerializers.BOOLEAN_);
-    private static final EntityDataAccessor<Boolean> DATA_NO_GRAVITY = new EntityDataAccessor(5, EntityDataSerializers.BOOLEAN_);
-    protected static final EntityDataAccessor<Pose> DATA_POSE = new EntityDataAccessor(6, EntityDataSerializers.POSE_);
-    private static final EntityDataAccessor<Optional<Component>> DATA_CUSTOM_NAME = new EntityDataAccessor(2, EntityDataSerializers.OPTIONAL_COMPONENT_);
+    protected static final EntityDataAccessor<Byte> DATA_SHARED_FLAGS_ID = new EntityDataAccessor(0, EntityDataSerializers.BYTE);
+    private static final EntityDataAccessor<Integer> DATA_AIR_SUPPLY_ID = new EntityDataAccessor(1, EntityDataSerializers.INT);
+    private static final EntityDataAccessor<Boolean> DATA_CUSTOM_NAME_VISIBLE = new EntityDataAccessor(3, EntityDataSerializers.BOOLEAN);
+    private static final EntityDataAccessor<Boolean> DATA_SILENT = new EntityDataAccessor(4, EntityDataSerializers.BOOLEAN);
+    private static final EntityDataAccessor<Boolean> DATA_NO_GRAVITY = new EntityDataAccessor(5, EntityDataSerializers.BOOLEAN);
+    protected static final EntityDataAccessor<Pose> DATA_POSE = new EntityDataAccessor(6, EntityDataSerializers.POSE);
+    private static final EntityDataAccessor<Optional<Component>> DATA_CUSTOM_NAME = new EntityDataAccessor(2, EntityDataSerializers.OPTIONAL_COMPONENT);
     protected final SynchedEntityData entityData;
     protected static final Random random = new Random();
     private final EntityType<?> type;

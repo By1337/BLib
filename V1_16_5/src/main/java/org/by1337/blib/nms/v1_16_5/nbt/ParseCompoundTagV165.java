@@ -68,7 +68,7 @@ public class ParseCompoundTagV165 implements ParseCompoundTag {
     public @NotNull ItemStack create(@NotNull CompoundTag compoundTag) {
         net.minecraft.nbt.CompoundTag nms = new net.minecraft.nbt.CompoundTag();
         this.copyAsNms(compoundTag, nms);
-        return CraftItemStack.asBukkitCopy(net.minecraft.world.item.ItemStack.of_(nms));
+        return CraftItemStack.asBukkitCopy(net.minecraft.world.item.ItemStack.of(nms));
     }
 
     public CompletableFuture<CompoundTag> readOfflinePlayerData(@NotNull UUID player) {
@@ -98,19 +98,19 @@ public class ParseCompoundTagV165 implements ParseCompoundTag {
         } else if (nbt instanceof LongArrNBT) {
             return new LongArrayTag(((LongArrNBT) nbt).getValue());
         } else if (nbt instanceof ByteNBT) {
-            return ByteTag.valueOf_(((ByteNBT) nbt).getValue());
+            return ByteTag.valueOf(((ByteNBT) nbt).getValue());
         } else if (nbt instanceof DoubleNBT) {
-            return DoubleTag.valueOf_(((DoubleNBT) nbt).getValue());
+            return DoubleTag.valueOf(((DoubleNBT) nbt).getValue());
         } else if (nbt instanceof FloatNBT) {
-            return FloatTag.valueOf_(((FloatNBT) nbt).getValue());
+            return FloatTag.valueOf(((FloatNBT) nbt).getValue());
         } else if (nbt instanceof IntNBT) {
-            return IntTag.valueOf_(((IntNBT) nbt).getValue());
+            return IntTag.valueOf(((IntNBT) nbt).getValue());
         } else if (nbt instanceof LongNBT) {
-            return LongTag.valueOf_(((LongNBT) nbt).getValue());
+            return LongTag.valueOf(((LongNBT) nbt).getValue());
         } else if (nbt instanceof ShortNBT) {
-            return ShortTag.valueOf_(((ShortNBT) nbt).getValue());
+            return ShortTag.valueOf(((ShortNBT) nbt).getValue());
         } else if (nbt instanceof StringNBT) {
-            return StringTag.valueOf_(((StringNBT) nbt).getValue());
+            return StringTag.valueOf(((StringNBT) nbt).getValue());
         } else if (nbt instanceof CompoundTag) {
             net.minecraft.nbt.CompoundTag subNms = new net.minecraft.nbt.CompoundTag();
             this.copyAsNms((CompoundTag) nbt, subNms);

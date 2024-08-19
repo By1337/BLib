@@ -28,17 +28,17 @@ public class PacketSetEntityDataImpl165 extends PacketImpl165 implements PacketS
     private void init(PacketEntityImpl165 entity, boolean all) {
         this.id = entity.getId();
         if (all) {
-            this.packedItems = entity.getEntityData().getAll_();
-            entity.getEntityData().clearDirty_();
+            this.packedItems = entity.getEntityData().getAll();
+            entity.getEntityData().clearDirty();
         } else {
-            this.packedItems = entity.getEntityData().packDirty_();
+            this.packedItems = entity.getEntityData().packDirty();
         }
     }
 
     private FriendlyByteBuf write(FriendlyByteBuf buffer) {
         try {
-            buffer.writeVarInt_(this.id);
-            SynchedEntityData.pack_(this.packedItems, buffer);
+            buffer.writeVarInt(this.id);
+            SynchedEntityData.pack(this.packedItems, buffer);
             return buffer;
         } catch (IOException var3) {
             throw new RuntimeException(var3);
@@ -49,7 +49,7 @@ public class PacketSetEntityDataImpl165 extends PacketImpl165 implements PacketS
     protected Packet<?> create() {
         try {
             ClientboundSetEntityDataPacket packet = new ClientboundSetEntityDataPacket();
-            packet.read_(this.write(new FriendlyByteBuf(Unpooled.buffer())));
+            packet.read(this.write(new FriendlyByteBuf(Unpooled.buffer())));
             return packet;
         } catch (IOException var2) {
             throw new RuntimeException(var2);

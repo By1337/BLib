@@ -33,7 +33,7 @@ public class PacketAddEntityImpl165 extends PacketImpl165 implements PacketAddEn
     protected Packet<?> create() {
         try {
             ClientboundAddEntityPacket packet = new ClientboundAddEntityPacket();
-            packet.read_(this.write(new FriendlyByteBuf(Unpooled.buffer())));
+            packet.read(this.write(new FriendlyByteBuf(Unpooled.buffer())));
             return packet;
         } catch (IOException var2) {
             throw new RuntimeException(var2);
@@ -50,13 +50,13 @@ public class PacketAddEntityImpl165 extends PacketImpl165 implements PacketAddEn
         this.x = x;
         this.y = y;
         this.z = z;
-        this.pitch = Mth.floor_(pitch * 256.0F / 360.0F);
-        this.yaw = Mth.floor_(yaw * 256.0F / 360.0F);
+        this.pitch = Mth.floor(pitch * 256.0F / 360.0F);
+        this.yaw = Mth.floor(yaw * 256.0F / 360.0F);
         this.type = types;
         this.data = data;
-        this.xa = (int)(Mth.clamp_(var12.x, -3.9, 3.9) * 8000.0);
-        this.ya = (int)(Mth.clamp_(var12.y, -3.9, 3.9) * 8000.0);
-        this.za = (int)(Mth.clamp_(var12.z, -3.9, 3.9) * 8000.0);
+        this.xa = (int)(Mth.clamp(var12.x, -3.9, 3.9) * 8000.0);
+        this.ya = (int)(Mth.clamp(var12.y, -3.9, 3.9) * 8000.0);
+        this.za = (int)(Mth.clamp(var12.z, -3.9, 3.9) * 8000.0);
     }
 
     private void init(PacketEntityImpl165 entity, int data) {
@@ -75,9 +75,9 @@ public class PacketAddEntityImpl165 extends PacketImpl165 implements PacketAddEn
     }
 
     private FriendlyByteBuf write(FriendlyByteBuf byteBuf) {
-        byteBuf.writeVarInt_(this.id);
-        byteBuf.writeUUID_(this.uuid);
-        byteBuf.writeVarInt_(Registry.ENTITY_TYPE.getId_(this.type));
+        byteBuf.writeVarInt(this.id);
+        byteBuf.writeUUID(this.uuid);
+        byteBuf.writeVarInt(Registry.ENTITY_TYPE.getId(this.type));
         byteBuf.writeDouble(this.x);
         byteBuf.writeDouble(this.y);
         byteBuf.writeDouble(this.z);
@@ -163,7 +163,7 @@ public class PacketAddEntityImpl165 extends PacketImpl165 implements PacketAddEn
     }
 
     public void setPitch(float pitch) {
-        this.pitch = Mth.floor_(pitch * 256.0F / 360.0F);
+        this.pitch = Mth.floor(pitch * 256.0F / 360.0F);
     }
 
     public int getYaw() {
@@ -175,7 +175,7 @@ public class PacketAddEntityImpl165 extends PacketImpl165 implements PacketAddEn
     }
 
     public void setYaw(float yaw) {
-        this.yaw = Mth.floor_(yaw * 256.0F / 360.0F);
+        this.yaw = Mth.floor(yaw * 256.0F / 360.0F);
     }
 
     public EntityType<?> getType() {

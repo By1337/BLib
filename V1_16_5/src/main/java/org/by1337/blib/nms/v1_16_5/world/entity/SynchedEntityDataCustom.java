@@ -17,9 +17,9 @@ public class SynchedEntityDataCustom extends SynchedEntityData {
             Method method = SynchedEntityData.class.getDeclaredMethod("b", EntityDataAccessor.class);
             method.setAccessible(true);
             DataItem<T> datawatcher_item = (DataItem)method.invoke(this, datawatcherobject);
-            if (!Objects.equals(t0, datawatcher_item.getValue_())) {
-                datawatcher_item.setValue_(t0);
-                datawatcher_item.setDirty_(true);
+            if (!Objects.equals(t0, datawatcher_item.getValue())) {
+                datawatcher_item.setValue(t0);
+                datawatcher_item.setDirty(true);
             }
         } catch (NoSuchMethodException | InvocationTargetException | IllegalAccessException var5) {
             throw new RuntimeException(var5);

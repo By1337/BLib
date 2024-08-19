@@ -30,7 +30,7 @@ public class SummonCommandV1_16_5 implements SummonCommand {
             entityData.setString("id", entityKey.toString());
             Location location1 = location.getLocation();
             ServerLevel world = ((CraftWorld)location1.getWorld()).getHandle();
-            Entity entity = EntityType.loadEntityRecursive_(entityData, world, entity1 -> {
+            Entity entity = EntityType.loadEntityRecursive(entityData, world, entity1 -> {
                 entity1.setPositionRotation(location1.getX(), location1.getY(), location1.getZ(), location1.getYaw(), location1.getPitch());
                 return entity1;
             });

@@ -67,13 +67,13 @@ public class BlockReplacerV165 implements BlockReplacer {
             BlockState iblockdata2 = nmsWorld.getType(blockPos);
             if ((flag & BlockReplaceFlags.UPDATE_SUPPRESS_LIGHT) == 0 &&
                 iblockdata2 != newBlock &&
-                (iblockdata2.getLightBlock_(nmsWorld, blockPos) != newBlock.getLightBlock_(nmsWorld, blockPos) ||
-                 iblockdata2.getLightEmission_() != newBlock.getLightEmission_() ||
-                 iblockdata2.useShapeForLightOcclusion_() ||
-                 newBlock.useShapeForLightOcclusion_())
+                (iblockdata2.getLightBlock(nmsWorld, blockPos) != newBlock.getLightBlock(nmsWorld, blockPos) ||
+                 iblockdata2.getLightEmission() != newBlock.getLightEmission() ||
+                 iblockdata2.useShapeForLightOcclusion() ||
+                 newBlock.useShapeForLightOcclusion())
             ) {
                 nmsWorld.getMethodProfiler().enter("queueCheckLight");
-                nmsWorld.getChunkProvider().getLightEngine().checkBlock_(blockPos);
+                nmsWorld.getChunkProvider().getLightEngine().checkBlock(blockPos);
                 nmsWorld.getMethodProfiler().exit();
             }
 
@@ -92,7 +92,7 @@ public class BlockReplacerV165 implements BlockReplacer {
     public void notifyAndUpdatePhysics(BlockPos blockposition, LevelChunk chunk, BlockState oldBlock, BlockState newBlock, BlockState actualBlock, int flags, int limit, Level level) {
         if (actualBlock == newBlock) {
             if (oldBlock != actualBlock) {
-                level.setBlocksDirty_(blockposition, oldBlock, actualBlock);
+                level.setBlocksDirty(blockposition, oldBlock, actualBlock);
             }
 
             if ((flags & BlockReplaceFlags.UPDATE_CLIENTS) != 0 &&
@@ -118,7 +118,7 @@ public class BlockReplacerV165 implements BlockReplacer {
 
             if ((flags & BlockReplaceFlags.UPDATE_KNOWN_SHAPE) == 0 && limit > 0) {
                 int k = flags & -BlockReplaceFlags.UPDATE_CLIENTS; // BlockReplaceFlags.UPDATE_SUPPRESS_DROPS // disable unset UPDATE_SUPPRESS_DROPS
-                oldBlock.updateIndirectNeighbourShapes_(level, blockposition, k, limit - 1);
+                oldBlock.updateIndirectNeighbourShapes(level, blockposition, k, limit - 1);
                 CraftWorld world = (level).getWorld();
                 if (world != null && ((ServerLevel) level).hasPhysicsEvent) {
                     BlockPhysicsEvent event = new BlockPhysicsEvent(world.getBlockAt(blockposition.getX(), blockposition.getY(), blockposition.getZ()), CraftBlockData.fromData(newBlock));
@@ -128,10 +128,10 @@ public class BlockReplacerV165 implements BlockReplacer {
                     }
                 }
 
-                newBlock.updateNeighbourShapes_(level, blockposition, k, limit - 1);
-                newBlock.updateIndirectNeighbourShapes_(level, blockposition, k, limit - 1);
+                newBlock.updateNeighbourShapes(level, blockposition, k, limit - 1);
+                newBlock.updateIndirectNeighbourShapes(level, blockposition, k, limit - 1);
             }
-            level.onBlockStateChange_(blockposition, oldBlock, actualBlock);
+            level.onBlockStateChange(blockposition, oldBlock, actualBlock);
         }
     }
 

@@ -32,7 +32,7 @@ public class ItemStackSerializeV1_16_5 implements ItemStackSerialize {
     public ItemStack deserialize(@NotNull String data) throws IllegalArgumentException {
         try {
             return CraftItemStack.asBukkitCopy(
-                    net.minecraft.world.item.ItemStack.of_(
+                    net.minecraft.world.item.ItemStack.of(
                             TagParser.parse(new String(Base64.getDecoder().decode(data.getBytes(StandardCharsets.UTF_8)), StandardCharsets.UTF_8))
                     )
             );
@@ -56,7 +56,7 @@ public class ItemStackSerializeV1_16_5 implements ItemStackSerialize {
     @NotNull
     public ItemStack decompressAndDeserialize(@NotNull String data) throws IllegalArgumentException {
         try {
-            return CraftItemStack.asBukkitCopy(net.minecraft.world.item.ItemStack.of_(TagParser.parse(this.decompress(data))));
+            return CraftItemStack.asBukkitCopy(net.minecraft.world.item.ItemStack.of(TagParser.parse(this.decompress(data))));
         } catch (Exception var3) {
             throw new IllegalArgumentException("Failed to deserialize ItemStack", var3);
         }

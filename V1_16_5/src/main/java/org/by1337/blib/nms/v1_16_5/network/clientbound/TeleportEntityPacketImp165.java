@@ -42,7 +42,7 @@ public class TeleportEntityPacketImp165 extends PacketImpl165 implements Telepor
     protected Packet<?> create() {
         try {
             ClientboundTeleportEntityPacket packet = new ClientboundTeleportEntityPacket();
-            packet.read_(this.write(new FriendlyByteBuf(Unpooled.buffer())));
+            packet.read(this.write(new FriendlyByteBuf(Unpooled.buffer())));
             return packet;
         } catch (IOException var2) {
             throw new RuntimeException(var2);
@@ -50,7 +50,7 @@ public class TeleportEntityPacketImp165 extends PacketImpl165 implements Telepor
     }
 
     public FriendlyByteBuf write(FriendlyByteBuf byteBuf) {
-        byteBuf.writeVarInt_(this.id);
+        byteBuf.writeVarInt(this.id);
         byteBuf.writeDouble(this.x);
         byteBuf.writeDouble(this.y);
         byteBuf.writeDouble(this.z);

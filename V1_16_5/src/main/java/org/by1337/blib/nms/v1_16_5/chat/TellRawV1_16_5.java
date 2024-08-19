@@ -9,7 +9,7 @@ import org.by1337.blib.chat.TellRaw;
 
 public class TellRawV1_16_5 implements TellRaw {
     public void tell(String raw, Player player) throws JsonParseException {
-        Component iChatBaseComponent = Serializer.fromJson_(raw);
+        Component iChatBaseComponent = Serializer.fromJson(raw);
         ((CraftPlayer)player).getHandle().sendMessage(iChatBaseComponent, player.getUniqueId());
     }
 }
