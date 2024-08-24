@@ -1,11 +1,11 @@
 package org.by1337.blib.nms.v1_16_5.world.entity;
 
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.SynchedEntityData;
+
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Objects;
-import net.minecraft.network.syncher.EntityDataAccessor;
-import net.minecraft.network.syncher.SynchedEntityData;
-import net.minecraft.network.syncher.SynchedEntityData.DataItem;
 
 public class SynchedEntityDataCustom extends SynchedEntityData {
     public SynchedEntityDataCustom() {
@@ -26,7 +26,7 @@ public class SynchedEntityDataCustom extends SynchedEntityData {
         }
     }
 
-    public boolean isDirty_() {
+    public boolean isDirty() {
         return true;
     }
 }

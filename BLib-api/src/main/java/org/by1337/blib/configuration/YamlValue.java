@@ -4,6 +4,7 @@ import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.block.Biome;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.MemorySection;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
@@ -110,6 +111,10 @@ public class YamlValue {
             map.put(keyMapper.apply(new YamlValue(entry.getKey())), valueMapper.apply(new YamlValue(entry.getValue())));
         }
         return map;
+    }
+
+    public boolean isPrimitive() {
+        return !(value instanceof Map<?, ?>) && !(value instanceof ConfigurationSection);
     }
 
     public Double getAsDouble(Double def) {

@@ -169,7 +169,7 @@ public class AdapterRegistry {
      * @throws IllegalStateException If no suitable adapter is found for the specified class.
      */
     @Contract("null, _ -> null")
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({"unchecked", "rawtypes"})
     public static <T> T getAs(@Nullable Object src, @NotNull Class<T> clazz) {
         if (src == null) return null;
         if (clazz.isAssignableFrom(src.getClass())) {
@@ -180,7 +180,7 @@ public class AdapterRegistry {
                 if (clazz.isEnum()) { // runtime adapter register
                     AdapterEnum adapterEnum = new AdapterEnum(clazz);
                     registerPrimitiveAdapter(clazz, adapterEnum);
-                    return (T) adapterEnum.deserialize(clazz);
+                    return (T) adapterEnum.deserialize(src);
                 }
                 throw new IllegalStateException("class " + src.getClass() + " has no adapter");
             } else {
@@ -200,10 +200,15 @@ public class AdapterRegistry {
      * @param <T> The type of the object to serialize.
      * @return The serialized object.
      */
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({"unchecked", "rawtypes"})
     public static <T> Object serialize(@NotNull T src) {
         if (!hasPrimitiveAdapter(src.getClass())) {
             if (!hasAdapter(src.getClass())) {
+                if (src.getClass().isEnum()){
+                    AdapterEnum adapterEnum = new AdapterEnum(src.getClass());
+                    registerPrimitiveAdapter(src.getClass(), adapterEnum);
+                    return adapterEnum.serialize((Enum) src);
+                }
                 return src;
             } else {
                 ClassAdapter<T> classAdapter = (ClassAdapter<T>) adapters.get(src.getClass());
