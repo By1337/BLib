@@ -43,7 +43,7 @@ public class LegacyFormattingConvertor {
             }
             default -> {
                 return "<" + lexeme.type.miniMessagesSyntax + ">"
-                        + parseText(buffer) + "</" + lexeme.type.miniMessagesSyntax + ">";
+                       + parseText(buffer) + "</" + lexeme.type.miniMessagesSyntax + ">";
             }
         }
     }
@@ -202,9 +202,9 @@ public class LegacyFormattingConvertor {
         @Override
         public String toString() {
             return "Lexeme{" +
-                    "type=" + type +
-                    ", value='" + value + '\'' +
-                    '}';
+                   "type=" + type +
+                   ", value='" + value + '\'' +
+                   '}';
         }
     }
 
@@ -214,7 +214,14 @@ public class LegacyFormattingConvertor {
 
         void add(Lexeme lexeme) {
             if (lexeme.type == LexemeType.TEXT) {
-             //   if (isEmpty(lexeme.value)) return; // skip
+                if (lexeme.value.isBlank()) {
+                    if (!buffer.isEmpty()) {
+                        if (buffer.get(buffer.size() - 1).type.isColor) {
+                            buffer.clear();
+                            buffer.add(new Lexeme(LexemeType.RESET, ""));
+                        }
+                    }
+                }
                 lexemes.addAll(buffer);
                 lexemes.add(lexeme);
                 buffer.clear();
@@ -226,17 +233,6 @@ public class LegacyFormattingConvertor {
             } else {
                 lexemes.add(lexeme);
             }
-        }
-
-        boolean isEmpty(String s) {
-            if (s.isEmpty()) {
-                return true;
-            }
-            char[] arr = s.toCharArray();
-            for (char c : arr) {
-                if (c != ' ') return false;
-            }
-            return true;
         }
     }
 
@@ -279,9 +275,9 @@ public class LegacyFormattingConvertor {
         @Override
         public String toString() {
             return "LexemeBuffer{" +
-                    "pos=" + pos +
-                    ", lexemes=" + lexemes +
-                    '}';
+                   "pos=" + pos +
+                   ", lexemes=" + lexemes +
+                   '}';
         }
     }
 
@@ -294,8 +290,8 @@ public class LegacyFormattingConvertor {
         String startText = text.substring(start, pos);
 
         return startText +
-                text.substring(pos, end) +
-                "\n" + " ".repeat(startText.length()) + "^";
+               text.substring(pos, end) +
+               "\n" + " ".repeat(startText.length()) + "^";
     }
 
     public static class LegacyTextParseException extends IllegalArgumentException {
