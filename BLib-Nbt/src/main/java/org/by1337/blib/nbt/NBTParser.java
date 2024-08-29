@@ -100,7 +100,7 @@ public class NBTParser {
         return parseNBT(new LexemeBuffer(parseExp(raw)), context);
     }
 
-    private static NBT parseNBT(LexemeBuffer buffer, NBTParserContext context) {
+    static NBT parseNBT(LexemeBuffer buffer, NBTParserContext context) {
         Lexeme lexeme = buffer.next();
         LexemeType type = lexeme.type;
         if (type == LexemeType.LIST_OPEN) {
@@ -248,7 +248,7 @@ public class NBTParser {
         return new ListNBT(list);
     }
 
-    private static List<Lexeme> parseExp(String expText) throws ParseException {
+    static List<Lexeme> parseExp(String expText) throws ParseException {
         ArrayList<Lexeme> lexemes = new ArrayList<>();
         int pos = 0;
         boolean textExpected = false;
@@ -531,7 +531,7 @@ public class NBTParser {
                 default -> {
                     if (!text.isEmpty() && (!Character.isDigit(c) || !text.toString().equals("-"))) {
                         text.append(c);
-                    } else if (Character.isDigit(c) || (c == '.' && lastIsDigit)) {
+                    } else if (Character.isDigit(c) || (c == '.' && lastIsDigit) || (c == 'E' && lastIsDigit)) {
                         if (!text.isEmpty()) {
                             if (!text.toString().equals("-")) {
                                 throw new ParseException(text + " pos= " + pos + "\n" + ParserExceptionReport.report(expText, pos));
@@ -561,7 +561,7 @@ public class NBTParser {
     }
 
 
-    private enum LexemeType {
+    enum LexemeType {
         STRUCT_OPEN, // {
         STRUCT_CLOSE, // }
         ELEMENT_SEPARATOR, // ,
@@ -581,7 +581,7 @@ public class NBTParser {
     }
 
 
-    private static class LexemeBuffer {
+    static class LexemeBuffer {
         private int pos;
 
         public List<Lexeme> lexemes;
@@ -611,13 +611,13 @@ public class NBTParser {
         @Override
         public String toString() {
             return "LexemeBuffer{" +
-                    "pos=" + pos +
-                    ", lexemes=" + lexemes +
-                    '}';
+                   "pos=" + pos +
+                   ", lexemes=" + lexemes +
+                   '}';
         }
     }
 
-    private static class Lexeme {
+    static class Lexeme {
         LexemeType type;
         String value;
 
@@ -634,9 +634,9 @@ public class NBTParser {
         @Override
         public String toString() {
             return "Lexeme{" +
-                    "type=" + type +
-                    ", value='" + value + '\'' +
-                    '}';
+                   "type=" + type +
+                   ", value='" + value + '\'' +
+                   '}';
         }
     }
 

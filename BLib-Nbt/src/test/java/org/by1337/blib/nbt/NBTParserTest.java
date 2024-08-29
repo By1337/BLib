@@ -70,6 +70,16 @@ public class NBTParserTest {
         Assert.assertTrue(nbt1 instanceof DoubleNBT);
         Assert.assertEquals(nbt1.getAsObject(), Math.PI);
     }
+
+    @Test
+    public void parseLargeDecimalNumber() {
+        Assert.assertTrue(NBTParser.parseNBT("1.7976931348623157E308") instanceof DoubleNBT);
+        Assert.assertTrue(NBTParser.parseNBT("1.7976931348623157E308d") instanceof DoubleNBT);
+        Assert.assertEquals(Double.MIN_VALUE, NBTParser.parseNBT("4.9E-324").getAsObject());
+        Assert.assertEquals(Double.MIN_VALUE, NBTParser.parseNBT("4.9E-324d").getAsObject());
+        Assert.assertTrue(NBTParser.parseNBT(Double.toString(Double.MIN_VALUE)) instanceof DoubleNBT);
+    }
+
     @Test
     public void parseLong() {
         String number = Long.toString(0x7fffffffffffffffL);
