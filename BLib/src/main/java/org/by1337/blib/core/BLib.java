@@ -14,6 +14,7 @@ import org.by1337.blib.block.custom.registry.WorldRegistry;
 import org.by1337.blib.command.Command;
 import org.by1337.blib.command.CommandException;
 import org.by1337.blib.command.argument.ArgumentBoolean;
+import org.by1337.blib.command.argument.ArgumentPlayer;
 import org.by1337.blib.command.argument.ArgumentSetList;
 import org.by1337.blib.command.requires.RequiresPermission;
 import org.by1337.blib.core.block.CustomBlockManager;
@@ -137,14 +138,19 @@ public class BLib extends JavaPlugin {
                         )
                         .addSubCommand(new Command<CommandSender>("give")
                                 .requires(new RequiresPermission<>("blib.cb.give"))
-                                .requires(sender -> sender instanceof Player)
                                 .argument(new ArgumentSetList<>("id", () -> BlockRegistry.get().getAll().stream().map(c -> c.getId().toString()).toList()))
+                                .argument(new ArgumentPlayer<>("player"))
                                 .executor(((sender, args) -> {
                                     String id = (String) args.getOrThrow("id", "/blib cb give <id>");
+                                    Player player = (Player) args.getOrDefault("player", sender instanceof Player pl ? pl : null);
+                                    if (player == null){
+                                        api.getMessage().sendTranslatable(sender, "no-selected-player");
+                                        return;
+                                    }
                                     SpacedNameKey spacedNameKey = new SpacedNameKey(id);
                                     CustomBlock customBlock = BlockRegistry.get().getCustomBlock(spacedNameKey);
-                                    ((Player) sender).getInventory().addItem(customBlock.getItem()).forEach((slot, i) -> {
-                                        ((Player) sender).getWorld().dropItemNaturally(((Player) sender).getLocation(), i);
+                                    player.getInventory().addItem(customBlock.getItem()).forEach((slot, i) -> {
+                                        player.getWorld().dropItemNaturally(player.getLocation(), i);
                                     });
                                 }))
                         )

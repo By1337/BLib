@@ -89,6 +89,10 @@
     "hello-message": {
       "ru_RU": "<white>Этот сервер использует BLib версии %s </white><aqua><i><hover:show_text:'https://github.com/By1337/BLib'><click:open_url:'https://github.com/By1337/BLib'>Github</click> </i></aqua><white>Автор </white><aqua><hover:show_text:'https://github.com/By1337'><click:open_url:'https://github.com/By1337'>By1337</click></aqua>",
       "en_UK": "<white>This server uses the BLib version %s </white><aqua><i><hover:show_text:'https://github.com/By1337/BLib'><click:open_url:'https://github.com/By1337/BLib'>Github</click> </i></aqua><white>Author </white><aqua><hover:show_text:'https://github.com/By1337'><click:open_url:'https://github.com/By1337'>By1337</click></aqua>"
+    },
+    "no-selected-player": {
+      "ru_RU": "&cВы должны указать игрока!",
+      "en_UK": "&cYou must specify the player!"
     }
   }
 }
