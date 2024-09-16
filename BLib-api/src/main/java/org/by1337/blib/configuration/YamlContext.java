@@ -7,8 +7,9 @@ import org.bukkit.configuration.MemorySection;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.inventory.ItemStack;
 import org.by1337.blib.configuration.adapter.AdapterRegistry;
-import org.by1337.blib.world.BLocation;
 import org.by1337.blib.util.NameKey;
+import org.by1337.blib.world.BLocation;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -207,11 +208,7 @@ public class YamlContext {
      * @param obj  The object to be stored in the MemorySection.
      */
     public void set(@NotNull String path, @Nullable Object obj) {
-        if (obj == null) {
-            section.set(path, null);
-        } else {
-            section.set(path, serialize(obj));
-        }
+        section.set(path, serialize(obj));
     }
 
     /**
@@ -220,8 +217,12 @@ public class YamlContext {
      * @param obj The object to be serialized.
      * @return The serialized object, suitable for storage in a MemorySection.
      */
-    public static Object serialize(@NotNull Object obj) {
-        if (obj instanceof Object[] array) {
+    @Contract("_ -> null")
+    public static Object serialize(@Nullable Object obj) {
+        if (obj == null) return null;
+        if (obj instanceof YamlValue yamlValue) {
+            return serialize(yamlValue.getValue());
+        } else if (obj instanceof Object[] array) {
             List<Object> out = new ArrayList<>();
             for (Object o : array) {
                 out.add(serialize(o));

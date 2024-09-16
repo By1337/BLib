@@ -44,6 +44,10 @@ public class YamlValue {
         return getAs(type);
     }
 
+    public @Nullable Object getValue() {
+        return value;
+    }
+
     public <T> T deserializeFromYaml(Class<T> type) {
         return GsonYamlConvertor.deserializeFromYaml(type, new YamlContext(YamlContext.getMemorySection(value)));
     }
