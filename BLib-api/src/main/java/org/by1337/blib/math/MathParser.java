@@ -85,7 +85,7 @@ public class MathParser {
         EOF; // end exp
     }
 
-    private static int analyze(LexemeBuffer lexemes) throws ParseException {
+    private static long analyze(LexemeBuffer lexemes) throws ParseException {
         Lexeme lexeme = lexemes.next();
         if (lexeme.type == LexemeType.EOF) {
             return 0;
@@ -95,8 +95,8 @@ public class MathParser {
         }
     }
 
-    private static int multdiv(LexemeBuffer buffer) throws ParseException {
-        int value = factor(buffer);
+    private static long multdiv(LexemeBuffer buffer) throws ParseException {
+        long value = factor(buffer);
         while (true) {
             Lexeme lexeme = buffer.next();
             switch (lexeme.type) {
@@ -116,17 +116,17 @@ public class MathParser {
 
     }
 
-    private static int plusMinus(LexemeBuffer buffer) throws ParseException {
-        int value = multdiv(buffer);
+    private static long plusMinus(LexemeBuffer buffer) throws ParseException {
+        long value = multdiv(buffer);
         while (true) {
             Lexeme lexeme = buffer.next();
             switch (lexeme.type) {
                 case OP_PLUS -> {
-                    int val1 = multdiv(buffer);
+                    long val1 = multdiv(buffer);
                     value += val1;
                 }
                 case OP_MINUS -> {
-                    int val1 = multdiv(buffer);
+                    long val1 = multdiv(buffer);
                     value -= val1;
                 }
                 case CLOSE_BRACKET, EOF, LOGICAL_AND, LOGICAL_OR, GREATER_THAN,
@@ -141,49 +141,41 @@ public class MathParser {
         }
     }
 
-    private static int logical(LexemeBuffer buffer) throws ParseException {
-        int value = plusMinus(buffer);
+    private static long logical(LexemeBuffer buffer) throws ParseException {
+        long value = plusMinus(buffer);
         while (true) {
             Lexeme lexeme = buffer.next();
             switch (lexeme.type) {
                 case EQUAL_TO -> {
-                    //  buffer.back();
-                    int val1 = plusMinus(buffer);
+                    long val1 = plusMinus(buffer);
                     value = value == val1 ? TRUE : FALSE;
                 }
                 case LOGICAL_AND -> {
-                    // buffer.back();
-                    int val1 = logical(buffer);
+                    long val1 = logical(buffer);
                     value = value == TRUE && val1 == TRUE ? TRUE : FALSE;
                 }
                 case LOGICAL_OR -> {
-                    // buffer.back();
-                    int val1 = logical(buffer);
+                    long val1 = logical(buffer);
                     value = value == TRUE || val1 == TRUE ? TRUE : FALSE;
                 }
                 case NOT_EQUAL_TO -> {
-                    //  buffer.back();
-                    int val1 = plusMinus(buffer);
+                    long val1 = plusMinus(buffer);
                     value = value != val1 ? TRUE : FALSE;
                 }
                 case LESS_THAN -> {
-                    //  buffer.back();
-                    int val1 = plusMinus(buffer);
+                    long val1 = plusMinus(buffer);
                     value = value < val1 ? TRUE : FALSE;
                 }
                 case GREATER_THAN -> {
-                    //  buffer.back();
-                    int val1 = plusMinus(buffer);
+                    long val1 = plusMinus(buffer);
                     value = value > val1 ? TRUE : FALSE;
                 }
                 case GREATER_THAN_OR_EQUAL_TO -> {
-                    //  buffer.back();
-                    int val1 = plusMinus(buffer);
+                    long val1 = plusMinus(buffer);
                     value = value >= val1 ? TRUE : FALSE;
                 }
                 case LESS_THAN_OR_EQUAL_TO -> {
-                    //   buffer.back();
-                    int val1 = plusMinus(buffer);
+                    long val1 = plusMinus(buffer);
                     value = value <= val1 ? TRUE : FALSE;
                 }
                 case EOF, CLOSE_BRACKET, OP_PLUS, OP_MINUS, OP_MUL, OP_DIV, MODULUS -> {
@@ -196,11 +188,11 @@ public class MathParser {
         }
     }
 
-    private static int factor(LexemeBuffer buffer) throws ParseException {
+    private static long factor(LexemeBuffer buffer) throws ParseException {
         Lexeme lexeme = buffer.next();
         switch (lexeme.type) {
             case NUMBER -> {
-                return Integer.parseInt(lexeme.value);
+                return Long.parseLong(lexeme.value);
             }
             case LOGICAL_NOT -> {
                 return factor(buffer) == FALSE ? TRUE : FALSE;
@@ -210,7 +202,7 @@ public class MathParser {
                 return -factor(buffer);
             }
             case OPEN_BRACKET -> {
-                int value = logical(buffer);
+                long value = logical(buffer);
                 lexeme = buffer.next();
                 if (lexeme.type != LexemeType.CLOSE_BRACKET) {
 
