@@ -33,7 +33,6 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.Collection;
 import java.util.List;
-import java.util.logging.Level;
 
 public class BLib extends JavaPlugin {
     @Getter
@@ -75,7 +74,7 @@ public class BLib extends JavaPlugin {
 
     private void init() {
         Lang.loadTranslations(api.getMessage().getTranslation());
-        getLogger().log(Level.INFO, String.format(Lang.getMessage("detect-version"), Version.VERSION.getVer()));
+        api.getMessage().log(Lang.getMessage("detect-version"), Version.VERSION.getVer());
     }
 
     private static Command<CommandSender> command;
@@ -143,7 +142,7 @@ public class BLib extends JavaPlugin {
                                 .executor(((sender, args) -> {
                                     String id = (String) args.getOrThrow("id", "/blib cb give <id>");
                                     Player player = (Player) args.getOrDefault("player", sender instanceof Player pl ? pl : null);
-                                    if (player == null){
+                                    if (player == null) {
                                         api.getMessage().sendTranslatable(sender, "no-selected-player");
                                         return;
                                     }

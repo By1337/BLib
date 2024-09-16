@@ -8,6 +8,7 @@ import org.by1337.blib.command.argument.ArgumentMap;
 import org.by1337.blib.command.argument.ArgumentStrings;
 import org.by1337.blib.command.requires.Requires;
 import org.by1337.blib.lang.Lang;
+import org.by1337.blib.text.MessageFormatter;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
@@ -142,7 +143,7 @@ public class Command<T> {
                     commandSender.sendMessage(usage);
                     return;
                 } else {
-                    throw new CommandSyntaxError(String.format(Lang.getMessage("too-many-arguments"), raw));
+                    throw new CommandSyntaxError(MessageFormatter.apply(Lang.getMessage("too-many-arguments"), raw));
                 }
             }
         }

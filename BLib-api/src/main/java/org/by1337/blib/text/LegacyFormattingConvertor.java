@@ -301,7 +301,7 @@ public class LegacyFormattingConvertor {
         }
 
         public LegacyTextParseException(String s, Object... objects) {
-            super(String.format(s, objects));
+            super(MessageFormatter.apply(s, objects));
         }
 
         public LegacyTextParseException(String s) {

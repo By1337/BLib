@@ -6,6 +6,7 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TranslatableComponent;
 import org.bukkit.OfflinePlayer;
 import org.by1337.blib.chat.util.Message;
+import org.by1337.blib.text.MessageFormatter;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -112,7 +113,7 @@ public class Translation {
             if (translation != null) {
                 Object[] args = translatable.args().stream().map(message::getContent).toArray();
                 if (args.length != 0) {
-                    component0 = message.componentBuilderNoTranslate(String.format(translation, args), player);
+                    component0 = message.componentBuilderNoTranslate(MessageFormatter.apply(translation, args), player);
                 } else {
                     component0 = message.componentBuilderNoTranslate(translation, player);
                 }

@@ -3,6 +3,7 @@ package org.by1337.blib.math;
 
 import org.by1337.blib.BLib;
 import org.by1337.blib.lang.Lang;
+import org.by1337.blib.text.MessageFormatter;
 
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -110,7 +111,7 @@ public class MathParser {
                     return value;
                 }
                 default ->
-                        throw new ParseException(String.format(Lang.getMessage("unexpected-token"), lexeme.type), buffer.pos);
+                        throw new ParseException(MessageFormatter.apply(Lang.getMessage("unexpected-token"), lexeme.type), buffer.pos);
             }
         }
 
@@ -136,7 +137,7 @@ public class MathParser {
                     return value;
                 }
                 default ->
-                        throw new ParseException(String.format(Lang.getMessage("unexpected-token"), lexeme.type), buffer.pos);
+                        throw new ParseException(MessageFormatter.apply(Lang.getMessage("unexpected-token"), lexeme.type), buffer.pos);
             }
         }
     }
@@ -183,7 +184,7 @@ public class MathParser {
                     return value;
                 }
                 default ->
-                        throw new ParseException(String.format(Lang.getMessage("unexpected-token"), lexeme.type), buffer.pos);
+                        throw new ParseException(MessageFormatter.apply(Lang.getMessage("unexpected-token"), lexeme.type), buffer.pos);
             }
         }
     }
@@ -206,12 +207,12 @@ public class MathParser {
                 lexeme = buffer.next();
                 if (lexeme.type != LexemeType.CLOSE_BRACKET) {
 
-                    throw new ParseException(String.format(Lang.getMessage("unexpected-token"), lexeme.type), buffer.pos);
+                    throw new ParseException(MessageFormatter.apply(Lang.getMessage("unexpected-token"), lexeme.type), buffer.pos);
                 }
                 return value;
             }
             default ->
-                    throw new ParseException(String.format(Lang.getMessage("unexpected-token"), lexeme.type), buffer.pos);
+                    throw new ParseException(MessageFormatter.apply(Lang.getMessage("unexpected-token"), lexeme.type), buffer.pos);
         }
     }
 
@@ -268,7 +269,7 @@ public class MathParser {
                             continue;
                         }
                     }
-                    throw new ParseException(String.format(Lang.getMessage("expected"), '='), pos);
+                    throw new ParseException(MessageFormatter.apply(Lang.getMessage("expected"), '='), pos);
                 }
                 case '!' -> {
                     if (pos + 1 < expText.length()) {
@@ -297,7 +298,7 @@ public class MathParser {
                             continue;
                         }
                     }
-                    throw new ParseException(String.format(Lang.getMessage("expected"), '&'), pos);
+                    throw new ParseException(MessageFormatter.apply(Lang.getMessage("expected"), '&'), pos);
                 }
                 case '|' -> {
                     if (pos + 1 < expText.length()) {
@@ -307,7 +308,7 @@ public class MathParser {
                             continue;
                         }
                     }
-                    throw new ParseException(String.format(Lang.getMessage("expected"), '|'), pos);
+                    throw new ParseException(MessageFormatter.apply(Lang.getMessage("expected"), '|'), pos);
                 }
                 case '-' -> {
                     lexemes.add(new Lexeme(LexemeType.OP_MINUS, c));
@@ -327,7 +328,7 @@ public class MathParser {
                         lexemes.add(new Lexeme(LexemeType.NUMBER, sb.toString()));
                     } else {
                         if (c != ' ') {
-                            throw new ParseException(String.format(Lang.getMessage("unexpected-character"), c), pos);
+                            throw new ParseException(MessageFormatter.apply(Lang.getMessage("unexpected-character"), c), pos);
                         }
                         pos++;
                     }

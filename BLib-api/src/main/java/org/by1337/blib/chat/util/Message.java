@@ -15,6 +15,7 @@ import org.by1337.blib.BLib;
 import org.by1337.blib.text.ComponentToANSI;
 import org.by1337.blib.text.LegacyConvertor;
 import org.by1337.blib.text.LegacyFormattingConvertor;
+import org.by1337.blib.text.MessageFormatter;
 import org.by1337.blib.translation.Translation;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -109,7 +110,7 @@ public class Message {
      */
     public void sendMsg(@NotNull CommandSender sender, @NotNull String msg, @NotNull Object... format) {
         OfflinePlayer player = sender instanceof OfflinePlayer o ? o : null;
-        sender.sendMessage(componentBuilder(String.format(msg, format), player));
+        sender.sendMessage(componentBuilder(MessageFormatter.apply(msg, format), player));
     }
 
 
@@ -172,7 +173,7 @@ public class Message {
     @Deprecated(since = "1.0.7.1")
     public void debug(@Nullable String msg, @NotNull LogLevel level, Object... objects) {
         if (level.getLvl() < logLevel.getLvl()) {
-            logger.info(String.format("[DEBUG] " + msg, objects));
+            logger.info(MessageFormatter.apply("[DEBUG] " + msg, objects));
         }
     }
 
@@ -183,7 +184,7 @@ public class Message {
 
     @Deprecated(since = "1.0.7.1")
     public void logger(@NotNull String msg, @NotNull Object... objects) {
-        logger.log(Level.INFO, String.format(msg, objects));
+        logger.log(Level.INFO, MessageFormatter.apply(msg, objects));
     }
 
 
@@ -201,11 +202,11 @@ public class Message {
     }
 
     public void error(@NotNull String msg, Object... objects) {
-        logger.log(Level.SEVERE, String.format(msg, objects));
+        logger.log(Level.SEVERE, MessageFormatter.apply(msg, objects));
     }
 
     public void error(@NotNull String msg, @Nullable Throwable t, Object... objects) {
-        logger.log(Level.SEVERE, String.format(msg, objects), t);
+        logger.log(Level.SEVERE, MessageFormatter.apply(msg, objects), t);
     }
 
     public void error(@NotNull Component msg) {
@@ -250,7 +251,7 @@ public class Message {
     }
 
     public void log(@NotNull String msg, Object... objects) {
-        logger.log(Level.INFO, String.format(msg, objects));
+        logger.log(Level.INFO, MessageFormatter.apply(msg, objects));
     }
 
     public void log(@NotNull String msg, @Nullable Throwable t) {
@@ -258,7 +259,7 @@ public class Message {
     }
 
     public void log(@NotNull String msg, @Nullable Throwable t, Object... objects) {
-        logger.log(Level.INFO, String.format(msg, objects), t);
+        logger.log(Level.INFO, MessageFormatter.apply(msg, objects), t);
     }
 
     public void log(@NotNull Component msg) {
@@ -288,7 +289,7 @@ public class Message {
     }
 
     public void warning(@NotNull String msg, Object... objects) {
-        logger.log(Level.WARNING, String.format(msg, objects));
+        logger.log(Level.WARNING, MessageFormatter.apply(msg, objects));
     }
 
     public void warning(@NotNull String msg, @Nullable Throwable t) {
@@ -296,7 +297,7 @@ public class Message {
     }
 
     public void warning(@NotNull String msg, @Nullable Throwable t, Object... objects) {
-        logger.log(Level.WARNING, String.format(msg, objects), t);
+        logger.log(Level.WARNING, MessageFormatter.apply(msg, objects), t);
     }
 
     public void warning(@NotNull Component msg) {

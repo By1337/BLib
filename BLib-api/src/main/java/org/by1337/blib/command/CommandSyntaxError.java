@@ -1,5 +1,7 @@
 package org.by1337.blib.command;
 
+import org.by1337.blib.text.MessageFormatter;
+
 /**
  * Represents an exception thrown for command syntax errors.
  */
@@ -21,7 +23,7 @@ public class CommandSyntaxError extends CommandException {
      * @param objects  The arguments to be formatted into the message.
      */
     public CommandSyntaxError(String message, Object... objects) {
-        super(String.format(message, objects));
+        super(MessageFormatter.apply(message, objects));
     }
 
     /**

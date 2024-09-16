@@ -1,5 +1,7 @@
 package org.by1337.blib.util;
 
+import org.by1337.blib.text.MessageFormatter;
+
 import java.util.Map;
 
 public class Pair<L, R> implements Map.Entry<L, R> {
@@ -43,6 +45,6 @@ public class Pair<L, R> implements Map.Entry<L, R> {
     }
 
     public String toString(final String format) {
-        return String.format(format, getLeft(), getRight());
+        return MessageFormatter.apply(format, getLeft(), getRight());
     }
 }

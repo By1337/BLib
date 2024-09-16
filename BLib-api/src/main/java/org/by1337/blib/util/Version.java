@@ -5,6 +5,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.stream.JsonReader;
 import org.bukkit.Bukkit;
 import org.by1337.blib.lang.Lang;
+import org.by1337.blib.text.MessageFormatter;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -207,7 +208,7 @@ public enum Version {
         }
 
         public UnsupportedVersionException(String message, Object... objects) {
-            super(String.format(message, objects));
+            super(MessageFormatter.apply(message, objects));
         }
     }
 }

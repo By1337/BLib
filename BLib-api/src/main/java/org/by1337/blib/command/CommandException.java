@@ -1,5 +1,7 @@
 package org.by1337.blib.command;
 
+import org.by1337.blib.text.MessageFormatter;
+
 public class CommandException extends Exception{
 
     /**
@@ -18,7 +20,7 @@ public class CommandException extends Exception{
      * @param objects  The arguments to be formatted into the message.
      */
     public CommandException(String message, Object... objects) {
-        super(String.format(message, objects));
+        super(MessageFormatter.apply(message, objects));
     }
 
     /**
