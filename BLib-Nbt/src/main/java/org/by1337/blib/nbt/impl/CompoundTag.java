@@ -114,8 +114,9 @@ public class CompoundTag extends NBT {
     /**
      * Returns the approximate size of the CompoundTag in bytes.
      * To get the number of NBT tags in this CompoundTag, use {@link CompoundTag#getTagCount()}
-     * @deprecated The method name is not obvious. Use {@link CompoundTag#getSizeInBytes()} instead.
+     *
      * @return the approximate size of the CompoundTag in bytes.
+     * @deprecated The method name is not obvious. Use {@link CompoundTag#getSizeInBytes()} instead.
      */
     @Deprecated
     public int getSize() {
@@ -360,6 +361,18 @@ public class CompoundTag extends NBT {
         List<R> list = new ArrayList<>();
         for (NBT nbt : v) {
             list.add(function.apply(nbt));
+        }
+        return list;
+    }
+    @SuppressWarnings("unchecked")
+    public <T extends NBT, R> List<R> getAsList(String key, Class<T> type, Function<T, R> function) {
+        ListNBT v = (ListNBT) get(key);
+        if (v == null) throw new NullPointerException("unknown tag " + key);
+        List<R> list = new ArrayList<>();
+        for (NBT nbt : v) {
+            if (nbt.getClass() == type) {
+                list.add(function.apply((T) nbt));
+            }
         }
         return list;
     }
