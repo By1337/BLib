@@ -64,7 +64,7 @@ public class MessageFormatterTest {
         String result = MessageFormatter.apply("Nested braces {{0}}", "first");
         assertEquals("Nested braces {first}", result);
     }
-    
+
     @Test
     public void testLegacy() {
         String result = MessageFormatter.apply("Numbers: %s %s %s", 10, 20, 30);

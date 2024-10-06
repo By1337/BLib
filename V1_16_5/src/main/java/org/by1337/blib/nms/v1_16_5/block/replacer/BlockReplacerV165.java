@@ -72,9 +72,9 @@ public class BlockReplacerV165 implements BlockReplacer {
                  iblockdata2.useShapeForLightOcclusion() ||
                  newBlock.useShapeForLightOcclusion())
             ) {
-                nmsWorld.getMethodProfiler().enter("queueCheckLight");
+              //  nmsWorld.getMethodProfiler().enter("queueCheckLight");
                 nmsWorld.getChunkProvider().getLightEngine().checkBlock(blockPos);
-                nmsWorld.getMethodProfiler().exit();
+             //   nmsWorld.getMethodProfiler().exit();
             }
 
             if (!nmsWorld.captureBlockStates) {

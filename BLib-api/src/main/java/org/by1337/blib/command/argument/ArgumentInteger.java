@@ -62,8 +62,9 @@ public class ArgumentInteger<T> extends Argument<T> {
 
     @Override
     public List<String> tabCompleter(T sender, String str) throws CommandSyntaxError {
-        if (str.isEmpty()) return super.getExx();
-        return super.tabCompleter(sender, str);
+        if (str.isEmpty()) return getExx();
+        process(sender, str);
+        return getExx();
     }
 
     /**

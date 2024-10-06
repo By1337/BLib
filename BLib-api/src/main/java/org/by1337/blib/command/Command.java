@@ -1,5 +1,10 @@
 package org.by1337.blib.command;
 
+import com.google.common.base.Joiner;
+import com.mojang.brigadier.context.StringRange;
+import com.mojang.brigadier.suggestion.Suggestion;
+import com.mojang.brigadier.suggestion.Suggestions;
+import com.mojang.brigadier.suggestion.SuggestionsBuilder;
 import net.kyori.adventure.text.Component;
 import org.bukkit.command.CommandSender;
 import org.by1337.blib.BLib;
@@ -9,6 +14,7 @@ import org.by1337.blib.command.argument.ArgumentStrings;
 import org.by1337.blib.command.requires.Requires;
 import org.by1337.blib.lang.Lang;
 import org.by1337.blib.text.MessageFormatter;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
@@ -100,58 +106,50 @@ public class Command<T> {
      * @throws CommandSyntaxError If there's a syntax error in the command.
      */
     public void process(T sender, String[] args) throws CommandException {
+        process(sender, new StringReader(Joiner.on(" ").join(args)));
+    }
+
+    public void process(T sender, StringReader reader) throws CommandException {
         for (Requires<T> requirement : requires) {
             if (!requirement.check(sender)) {
                 return;
             }
         }
-        if (args.length >= 1) {
-            Command<T> subCommand = findSubCommand(args[0]);
+
+        if (reader.hasNext()) {
+            int point = reader.getCursor();
+            Command<T> subCommand = findSubCommand(reader.readToSpace());
             if (subCommand != null) {
-                subCommand.process(sender, Arrays.copyOfRange(args, 1, args.length));
+                reader.pop();
+                subCommand.process(sender, reader);
                 return;
             }
+            reader.setCursor(point);
         }
+
+
         Iterator<Argument<T>> argumentIterator = arguments.iterator();
         ArgumentMap<String, Object> argumentMap = new ArgumentMap<>();
 
-        var argsIterator = Arrays.stream(args).iterator();
-
-        Argument<T> last = null;
-        StringBuilder sb = new StringBuilder();
-
-        while (argsIterator.hasNext()) {
-            String raw = argsIterator.next();
-
-            if (last instanceof ArgumentStrings<T>) {
-                sb.append(raw).append(" ");
-                continue;
+        Argument<T> argument;
+        while (argumentIterator.hasNext()) {
+            argument = argumentIterator.next();
+            if (!argument.checkRequires(sender)) {
+                break;
             }
-
-            if (argumentIterator.hasNext()) {
-                last = argumentIterator.next();
-                if (!last.checkRequires(sender)) {
-                    break;
-                }
-                if (last instanceof ArgumentStrings<T>) {
-                    sb.append(raw).append(" ");
-                    continue;
-                }
-                argumentMap.put(last.getName(), last.process(sender, raw));
-            } else {
-                if (usage != null && sender instanceof CommandSender commandSender) {
-                    commandSender.sendMessage(usage);
-                    return;
-                } else {
-                    throw new CommandSyntaxError(MessageFormatter.apply(Lang.getMessage("too-many-arguments"), raw));
-                }
+            argument.process(sender, reader, argumentMap);
+            if (!reader.hasNext()) break;
+            if (reader.peek() == ' '){
+                reader.pop();
             }
         }
-        if (last instanceof ArgumentStrings<T> && last.checkRequires(sender)) {
-            if (!sb.isEmpty()) {
-                sb.setLength(sb.length() - 1);
+        if (reader.hasNext()) {
+            if (usage != null && sender instanceof CommandSender commandSender) {
+                commandSender.sendMessage(usage);
+                return;
+            } else {
+                throw new CommandSyntaxError(MessageFormatter.apply(Lang.getMessage("too-many-arguments"), reader.getExtra()));
             }
-            argumentMap.put(last.getName(), last.process(sender, sb.toString()));
         }
 
         executor.execute(sender, argumentMap);
@@ -176,96 +174,91 @@ public class Command<T> {
      * @param sender The command sender.
      * @param args   The command arguments.
      * @return A list of tab completions.
+     * @deprecated use {@link Command#tabComplete}
      */
+    @Deprecated
     public List<String> getTabCompleter(T sender, String[] args) {
+        return tabComplete(sender, args);
+    }
+
+    public List<String> tabComplete(T sender, String[] args) {
+        Suggestions suggestions = tabComplete(sender, new StringReader(Joiner.on(" ").join(args)));
+        return suggestions.getList().stream().map(Suggestion::getText).toList();
+    }
+
+    public @NotNull Suggestions tabComplete(T sender, StringReader reader) {
         try {
-            if (args.length == 0) return Collections.emptyList();
-            List<String> list = getTabCompleter0(sender, args);
-            return list;
-          /*  String lastParam = args[args.length - 1];
-            return list.stream()
-                    .filter(s -> !s.isEmpty() && s.startsWith(lastParam))
-                    .toList();*/
+           // if (!reader.hasNext()) new Suggestions(new StringRange(0, 0), Collections.emptyList());
+            Suggestions suggestions = getTabCompleter0(sender, reader);
+            return suggestions == null ? new Suggestions(new StringRange(0, 0), Collections.emptyList()) : suggestions;
         } catch (CommandSyntaxError e) {
-            return Collections.singletonList(e.getMessage());
+            SuggestionsBuilder builder = new SuggestionsBuilder(reader.getString(), reader.getCursor());
+            builder.suggest(e.getMessage());
+            return builder.build();
         }
     }
 
-    private List<String> getTabCompleter0(T sender, String[] args) throws CommandSyntaxError {
+    private @Nullable Suggestions getTabCompleter0(T sender, StringReader reader) throws CommandSyntaxError {
         for (Requires<T> requirement : requires) {
             if (!requirement.check(sender)) {
-                return Collections.emptyList();
+                return null;
             }
         }
-        if (args.length >= 1) {
-            Command<T> subCommand = findSubCommand(args[0]);
-            if (subCommand != null) {
-                return subCommand.getTabCompleter0(sender, Arrays.copyOfRange(args, 1, args.length));
+        if (reader.hasNext()) {
+            int point = reader.getCursor();
+            Command<T> subCommand = findSubCommand(reader.readToSpace());
+            if (subCommand != null && reader.hasNext()) {
+                reader.pop();
+                return subCommand.getTabCompleter0(sender, reader);
             }
+            reader.setCursor(point);
         }
 
         Iterator<Argument<T>> argumentIterator = arguments.iterator();
+        ArgumentMap<String, Object> argumentMap = new ArgumentMap<>();
 
-        var argsIterator = Arrays.stream(args).iterator();
-
-        Argument<T> last = null;
-        StringBuilder sb = new StringBuilder();
         List<String> completions = new ArrayList<>();
-
-        while (argsIterator.hasNext() && !arguments.isEmpty()) {
-            String raw = argsIterator.next();
-            if (last instanceof ArgumentStrings<T>) {
-                sb.append(raw).append(" ");
-                continue;
+        Argument<T> argument;
+        int start = reader.getCursor();
+        while (argumentIterator.hasNext()) {
+            start = reader.getCursor();
+            argument = argumentIterator.next();
+            if (!argument.checkRequires(sender)) {
+                break;
+                //throw new CommandSyntaxError(Lang.getMessage("end-of-command"));
             }
-
-            if (argumentIterator.hasNext()) {
-                last = argumentIterator.next();
-                if (!last.checkRequires(sender)) {
-                    throw new CommandSyntaxError(Lang.getMessage("end-of-command"));
-                    // break;
-                }
-                if (last instanceof ArgumentStrings<T>) {
-                    sb.append(raw).append(" ");
-                    continue;
-                }
-                completions.clear();
-                if (!last.isHide()){
-                    completions.addAll(last.tabCompleter(sender, raw));
-                    if (completions.isEmpty()) {
-                        completions.addAll(last.getExx());
-                        if (completions.isEmpty()) {
-                            completions.add("[" + last.getName() + "]");
-                        }
-                    }
-                }
-            } else {
-                throw new CommandSyntaxError(Lang.getMessage("end-of-command"));
-            }
-        }
-        if (last instanceof ArgumentStrings<T> && last.checkRequires(sender)) {
-            if (!sb.isEmpty()) {
-                sb.setLength(sb.length() - 1);
-            }
-            if (!last.isHide()){
-                completions.addAll(last.tabCompleter(sender, sb.toString()));
+            completions.clear();
+            if (!argument.isHide()) {
+                completions.addAll(argument.tabCompleter(sender, reader, argumentMap));
                 if (completions.isEmpty()) {
-                    completions.addAll(last.getExx());
+                    completions.addAll(argument.getExx());
                     if (completions.isEmpty()) {
-                        completions.add("[" + last.getName() + "]");
+                        completions.add("[" + argument.getName() + "]");
                     }
                 }
             }
+            if (!reader.hasNext()) break;
+            if (reader.peek() == ' '){
+                reader.pop();
+            }
         }
+
+
         var list = subcommands.values().stream().filter(c -> c.checkReq(sender)).map(Command::getCommand).collect(Collectors.toList());
-        if (args.length != 0){
-            var lastWord = args[0];
-            if (!lastWord.isEmpty()){
+        if (reader.hasNext()) {
+            var lastWord = reader.readToSpace();
+            if (!lastWord.isEmpty()) {
                 list.removeIf(s -> !s.startsWith(lastWord));
             }
         }
         completions.addAll(list);
-        return completions;
+
+        String s = reader.getString();
+        SuggestionsBuilder builder = new SuggestionsBuilder(s, Math.min(start, s.length()));
+        for (String completion : completions) {
+            builder.suggest(completion);
+        }
+        return builder.build();
     }
 
     public boolean checkReq(T sender) {

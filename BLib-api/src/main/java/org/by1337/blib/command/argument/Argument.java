@@ -1,6 +1,7 @@
 package org.by1337.blib.command.argument;
 
 import org.by1337.blib.command.CommandSyntaxError;
+import org.by1337.blib.command.StringReader;
 import org.by1337.blib.command.requires.Requires;
 
 import java.util.ArrayList;
@@ -33,18 +34,20 @@ public abstract class Argument<T> {
         this.exx = exx;
     }
 
-    /**
-     * Processes the input string and returns an object representing the argument value.
-     *
-     * @param sender The sender of the command.
-     * @param str    The input string to process.
-     * @return An object representing the processed argument value.
-     * @throws CommandSyntaxError If there's a syntax error in the argument processing.
-     */
+    @Deprecated
     public abstract Object process(T sender, String str) throws CommandSyntaxError;
 
+    public void process(T sender, StringReader reader, ArgumentMap<String, Object> argumentMap) throws CommandSyntaxError {
+        argumentMap.put(name, process(sender, reader.readToSpace()));
+    }
+
+    @Deprecated
     public List<String> tabCompleter(T sender, String str) throws CommandSyntaxError {
         return getExx();
+    }
+
+    public List<String> tabCompleter(T sender, StringReader reader, ArgumentMap<String, Object> argumentMap) throws CommandSyntaxError {
+        return tabCompleter(sender, reader.readToSpace());
     }
 
     public Argument<T> requires(Requires<T> requires) {

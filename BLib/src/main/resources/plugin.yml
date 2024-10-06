@@ -7,9 +7,9 @@ depend:
   - WorldEdit
 softdepend:
   - 'PlaceholderAPI'
-commands:
-  blib:
-    aliases: lib
+#commands:
+#  blib:
+#    aliases: lib
 permissions:
   blib.*:
     default: op

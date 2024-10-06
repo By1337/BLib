@@ -13,6 +13,7 @@ import org.by1337.blib.block.custom.registry.BlockRegistry;
 import org.by1337.blib.block.custom.registry.WorldRegistry;
 import org.by1337.blib.command.Command;
 import org.by1337.blib.command.CommandException;
+import org.by1337.blib.command.CommandWrapper;
 import org.by1337.blib.command.argument.ArgumentBoolean;
 import org.by1337.blib.command.argument.ArgumentPlayer;
 import org.by1337.blib.command.argument.ArgumentSetList;
@@ -33,6 +34,7 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 
 public class BLib extends JavaPlugin {
     @Getter
@@ -40,21 +42,33 @@ public class BLib extends JavaPlugin {
     private BApi api;
     public static boolean DEBUG = false;
     private CustomBlockManager customBlockManager;
+    private CommandWrapper commandWrapper;
+    private CommandWrapper commandWrapper2;
 
     @Override
     public void onLoad() {
         instance = this;
         api = new BApi();
         org.by1337.blib.BLib.setApi(api);
-        setCommand();
         customBlockManager = new CustomBlockManager();
     }
 
     @Override
     public void onEnable() {
         init();
-        getCommand("blib").setExecutor(this);
-        getCommand("blib").setTabCompleter(this);
+        setCommand();
+
+        commandWrapper = new CommandWrapper(command, this);
+        commandWrapper.setPermission("blib.use");
+        commandWrapper.register();
+
+        commandWrapper2 = new CommandWrapper(command, this);
+        commandWrapper2.setPermission("blib.use");
+        commandWrapper2.setName("blib2");
+        commandWrapper2.allPossibleNames = Set.of("blib2");
+        commandWrapper2.disabled = true;
+        commandWrapper2.register();
+
         command.addSubCommand(FastUtilCommands.SET);
         command.addSubCommand(FastUtilCommands.SHEM_PASTE);
 
@@ -70,6 +84,8 @@ public class BLib extends JavaPlugin {
     public void onDisable() {
         api.getPooledBlockReplacer().close();
         customBlockManager.save();
+        commandWrapper.close();
+        commandWrapper2.close();
     }
 
     private void init() {
@@ -79,7 +95,7 @@ public class BLib extends JavaPlugin {
 
     private static Command<CommandSender> command;
 
-    @Override
+/*    @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull org.bukkit.command.Command cmd, @NotNull String label, @NotNull String[] args) {
         try {
             command.process(sender, args);
@@ -94,7 +110,7 @@ public class BLib extends JavaPlugin {
     @Override
     public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull org.bukkit.command.Command cmd, @NotNull String alias, @NotNull String[] args) {
         return command.getTabCompleter(sender, args);
-    }
+    }*/
 
     private void setCommand() {
         command = new Command<CommandSender>("blib")
@@ -170,6 +186,8 @@ public class BLib extends JavaPlugin {
                 .addSubCommand(CommandTests.itemClone())
 
         );
+
+
 
     }
 }

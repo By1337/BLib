@@ -9,6 +9,7 @@ import java.util.concurrent.*;
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 import java.util.function.Function;
+import java.util.function.Supplier;
 
 /**
  * A synchronized hash map with automatic removal of unused values.
@@ -29,12 +30,19 @@ public class ExpiringSynchronizedMap<K, V> implements Map<K, V> {
      * Constructs an instance of ExpiringSynchronizedMap with the specified expiry duration.
      *
      * @param expiryDuration the duration after which an entry should be removed if not accessed
-     * @param timeUnit the time unit of the expiry duration
+     * @param timeUnit       the time unit of the expiry duration
      */
     public ExpiringSynchronizedMap(long expiryDuration, TimeUnit timeUnit) {
+        this(expiryDuration, timeUnit, HashMap::new);
+    }
+
+    @SuppressWarnings("unchecked")
+    public ExpiringSynchronizedMap(long expiryDuration, TimeUnit timeUnit, Supplier<Map<K, ?>> mapSupplier) {
         this.expiryDuration = timeUnit.toMillis(expiryDuration);
         scheduler = Executors.newScheduledThreadPool(1);
-        source = new HashMap<>();
+        var map = mapSupplier.get();
+        if (!map.isEmpty()) throw new IllegalArgumentException("map must not be empty");
+        source = (Map<K, TimedValue>) map;
     }
 
     /**
