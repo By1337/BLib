@@ -19,7 +19,7 @@ public class StringReader {
     }
     private void boundCheck(){
         if (cursor < 0) cursor = 0;
-        if (cursor > string.length()) cursor = string.length() -1;
+        if (cursor > string.length()) cursor = string.length();
     }
     public void pop() {
         skip();
