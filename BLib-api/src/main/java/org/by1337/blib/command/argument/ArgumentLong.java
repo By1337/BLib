@@ -89,4 +89,7 @@ public class ArgumentLong<T> extends Argument<T> {
             throw new CommandSyntaxError(Lang.getMessage("nan"), str);
         }
     }
+    public boolean allowAsync(){
+        return true;
+    }
 }

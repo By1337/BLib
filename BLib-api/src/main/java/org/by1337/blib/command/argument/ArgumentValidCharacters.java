@@ -49,4 +49,7 @@ public class ArgumentValidCharacters<T> extends Argument<T> {
             throw new CommandSyntaxError(Lang.getMessage("invalid-characters"), invalidChars);
         return str;
     }
+    public boolean allowAsync(){
+        return true;
+    }
 }

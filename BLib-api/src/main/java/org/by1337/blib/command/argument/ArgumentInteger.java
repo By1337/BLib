@@ -93,4 +93,7 @@ public class ArgumentInteger<T> extends Argument<T> {
             throw new CommandSyntaxError(Lang.getMessage("nan"), str);
         }
     }
+    public boolean allowAsync(){
+        return true;
+    }
 }

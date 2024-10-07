@@ -43,4 +43,7 @@ public class ArgumentWorld<T> extends ArgumentSetList<T> {
         if (str.isEmpty()) return null;
         return Bukkit.getWorld(str);
     }
+    public boolean allowAsync(){
+        return true;
+    }
 }

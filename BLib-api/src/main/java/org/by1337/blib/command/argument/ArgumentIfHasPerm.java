@@ -36,4 +36,7 @@ public class ArgumentIfHasPerm<T extends CommandSender> extends Argument<T>{
             return argument.tabCompleter(sender, str);
         return Collections.emptyList();
     }
+    public boolean allowAsync(){
+        return true;
+    }
 }

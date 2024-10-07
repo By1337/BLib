@@ -1,24 +1,36 @@
 package org.by1337.blib.core.test;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.by1337.blib.BLib;
-import org.by1337.blib.command.CommandExecutor;
-import org.by1337.blib.command.argument.ArgumentMap;
+import org.by1337.blib.command.Command;
+import org.by1337.blib.command.CommandException;
+import org.by1337.blib.command.argument.ArgumentInteger;
+import org.by1337.blib.command.argument.ArgumentString;
 import org.by1337.blib.command.argument.ArgumentStrings;
 import org.by1337.blib.nbt.impl.CompoundTag;
 import org.by1337.blib.network.clientbound.entity.PacketAddEntity;
 import org.by1337.blib.network.clientbound.entity.PacketSetEntityData;
+import org.by1337.blib.util.Version;
 import org.by1337.blib.world.BLocation;
 import org.by1337.blib.world.entity.PacketArmorStand;
-import org.by1337.blib.util.Version;
-import org.by1337.blib.command.Command;
-import org.by1337.blib.command.CommandException;
-import org.by1337.blib.command.argument.ArgumentInteger;
+
+import java.util.List;
 
 public class CommandTests {
+
+    public static Command<CommandSender> args() {
+        return new Command<CommandSender>("ArgumentString")
+                .argument(new ArgumentString<>("msg", List.of("test", "test test")))
+                .argument(new ArgumentString<>("msg2", List.of("test", "test test")))
+                .executor(((sender, args) -> {
+                    BLib.getApi().getMessage().sendMsg(sender, (String) args.getOrDefault("msg", "123"));
+                    BLib.getApi().getMessage().sendMsg(sender, (String) args.getOrDefault("msg2", "123"));
+                }));
+    }
 
     public static Command<CommandSender> msgTest() {
         return new Command<CommandSender>("msg")
@@ -38,6 +50,7 @@ public class CommandTests {
                 }));
     }
 
+    @SuppressWarnings("removal")
     public static Command<CommandSender> packetArmorStandTest() {
         return new Command<CommandSender>("armor_stand_spawn_test")
                 .argument(new ArgumentStrings<>("name"))
@@ -69,8 +82,8 @@ public class CommandTests {
                 .executor(((sender, args) -> {
                     sender.sendMessage(
                             "§fVersion info: Bukkit.getVersion()='§7" + Bukkit.getVersion() +
-                                    "§f', Bukkit.getBukkitVersion()='§7" + Bukkit.getBukkitVersion() +
-                                    "§f', Bukkit.getServer().getClass().getPackage().getName()='§7" + Bukkit.getServer().getClass().getPackage().getName() + "§f'"
+                            "§f', Bukkit.getBukkitVersion()='§7" + Bukkit.getBukkitVersion() +
+                            "§f', Bukkit.getServer().getClass().getPackage().getName()='§7" + Bukkit.getServer().getClass().getPackage().getName() + "§f'"
                     );
                     sender.sendMessage("§fDetected version='§f" + Version.VERSION + "§f'");
 

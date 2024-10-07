@@ -43,7 +43,6 @@ public class BLib extends JavaPlugin {
     public static boolean DEBUG = false;
     private CustomBlockManager customBlockManager;
     private CommandWrapper commandWrapper;
-    private CommandWrapper commandWrapper2;
 
     @Override
     public void onLoad() {
@@ -62,13 +61,6 @@ public class BLib extends JavaPlugin {
         commandWrapper.setPermission("blib.use");
         commandWrapper.register();
 
-        commandWrapper2 = new CommandWrapper(command, this);
-        commandWrapper2.setPermission("blib.use");
-        commandWrapper2.setName("blib2");
-        commandWrapper2.allPossibleNames = Set.of("blib2");
-        commandWrapper2.disabled = true;
-        commandWrapper2.register();
-
         command.addSubCommand(FastUtilCommands.SET);
         command.addSubCommand(FastUtilCommands.SHEM_PASTE);
 
@@ -85,7 +77,6 @@ public class BLib extends JavaPlugin {
         api.getPooledBlockReplacer().close();
         customBlockManager.save();
         commandWrapper.close();
-        commandWrapper2.close();
     }
 
     private void init() {
@@ -184,10 +175,8 @@ public class BLib extends JavaPlugin {
                 .addSubCommand(CommandTests.logTest())
                 .addSubCommand(CommandTests.sleep())
                 .addSubCommand(CommandTests.itemClone())
-
+                .addSubCommand(CommandTests.args())
         );
-
-
 
     }
 }

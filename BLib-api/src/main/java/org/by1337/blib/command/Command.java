@@ -270,6 +270,16 @@ public class Command<T> {
         return true;
     }
 
+    public boolean allowAsync(){
+        for (Argument<T> argument : arguments) {
+            if (!argument.allowAsync()) return false;
+        }
+        for (Command<T> value : subcommands.values()) {
+            if (!value.allowAsync()) return false;
+        }
+        return true;
+    }
+
     public String getCommand() {
         return this.command;
     }

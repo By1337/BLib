@@ -90,4 +90,7 @@ public class ArgumentPlayer<T extends CommandSender> extends Argument<T> {
             return list;
         return list.stream().filter(s -> s.startsWith(str)).toList();
     }
+    public boolean allowAsync(){
+        return true;
+    }
 }

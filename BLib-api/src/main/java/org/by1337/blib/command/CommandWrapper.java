@@ -15,9 +15,9 @@ import java.util.Set;
 
 public class CommandWrapper extends BukkitCommand implements Listener {
     private final Command<CommandSender> command;
-    public Set<String> allPossibleNames;
+    private final Set<String> allPossibleNames;
     private final Plugin plugin;
-        public  boolean disabled;
+    private final boolean async;
 
     public CommandWrapper(Command<CommandSender> command, Plugin plugin) {
         super(command.getCommand());
@@ -27,6 +27,7 @@ public class CommandWrapper extends BukkitCommand implements Listener {
         allPossibleNames = new HashSet<>();
         allPossibleNames.addAll(command.getAliases());
         allPossibleNames.add(command.getCommand());
+        async = command.allowAsync();
 
     }
 
@@ -54,8 +55,7 @@ public class CommandWrapper extends BukkitCommand implements Listener {
     @EventHandler
     @SuppressWarnings("all")
     public void on(AsyncPlayerSendSuggestionsEvent event) {
-        if (disabled) return;
-        if (event.isAsynchronous()) return;
+        if (event.isAsynchronous() && !async) return;
         String input = event.getBuffer();
         StringReader reader = new StringReader(input);
         if (reader.hasNext() && reader.next() == '/') {

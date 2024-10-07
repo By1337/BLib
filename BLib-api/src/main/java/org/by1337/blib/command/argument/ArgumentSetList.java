@@ -70,4 +70,7 @@ public class ArgumentSetList<T> extends Argument<T> {
             return items.get();
         return items.get().stream().filter(s -> s.startsWith(str)).toList();
     }
+    public boolean allowAsync(){
+        return true;
+    }
 }

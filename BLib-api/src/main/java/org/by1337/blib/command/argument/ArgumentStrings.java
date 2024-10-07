@@ -33,4 +33,7 @@ public class ArgumentStrings<T> extends Argument<T> {
     public Object process(T sender, String str) throws CommandSyntaxError {
         return str;
     }
+    public boolean allowAsync(){
+        return true;
+    }
 }

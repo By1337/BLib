@@ -35,7 +35,9 @@ public abstract class Argument<T> {
     }
 
     @Deprecated
-    public abstract Object process(T sender, String str) throws CommandSyntaxError;
+    public Object process(T sender, String str) throws CommandSyntaxError{
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
 
     public void process(T sender, StringReader reader, ArgumentMap<String, Object> argumentMap) throws CommandSyntaxError {
         argumentMap.put(name, process(sender, reader.readToSpace()));
@@ -97,5 +99,8 @@ public abstract class Argument<T> {
 
     public void setExx(Supplier<List<String>> exx) {
         this.exx = exx;
+    }
+    public boolean allowAsync(){
+        return false;
     }
 }

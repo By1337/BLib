@@ -1,8 +1,10 @@
 package org.by1337.blib.command.argument;
 
 import org.by1337.blib.command.CommandSyntaxError;
+import org.by1337.blib.command.StringReader;
 import org.by1337.blib.lang.Lang;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Supplier;
 
@@ -60,8 +62,9 @@ public class ArgumentDouble<T> extends Argument<T> {
 
 
     @Override
-    public Object process(T sender, String str) throws CommandSyntaxError {
-        if (str.isEmpty()) return 0;
+    public void process(T sender, StringReader reader, ArgumentMap<String, Object> argumentMap) throws CommandSyntaxError {
+        if (!reader.hasNext()) return;
+        String str = ArgumentUtils.readString(reader);
         try {
             double val = Double.parseDouble(str);
 
@@ -71,10 +74,19 @@ public class ArgumentDouble<T> extends Argument<T> {
             if (val > max)
                 throw new CommandSyntaxError(Lang.getMessage("number-too-small"), val, max);
 
-            return val;
-
+            argumentMap.put(name, val);
         } catch (NumberFormatException e) {
             throw new CommandSyntaxError(Lang.getMessage("nan"), str);
         }
+    }
+
+    @Override
+    public List<String> tabCompleter(T sender, StringReader reader, ArgumentMap<String, Object> argumentMap) throws CommandSyntaxError {
+        if (!reader.hasNext()) return getExx();
+        process(sender, reader, argumentMap);
+        return getExx();
+    }
+    public boolean allowAsync(){
+        return true;
     }
 }

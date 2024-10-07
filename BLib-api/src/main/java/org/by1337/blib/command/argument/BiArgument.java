@@ -60,4 +60,7 @@ public class BiArgument<T> extends Argument<T> {
         }
         return list;
     }
+    public boolean allowAsync(){
+        return first.allowAsync() && second.allowAsync();
+    }
 }

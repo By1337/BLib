@@ -75,4 +75,7 @@ public class ArgumentPosition<T extends CommandSender> extends Argument<T> {
         Y,
         Z
     }
+    public boolean allowAsync(){
+        return true;
+    }
 }

@@ -93,6 +93,10 @@
     "no-selected-player": {
       "ru_RU": "&cВы должны указать игрока!",
       "en_UK": "&cYou must specify the player!"
+    },
+    "expected-2": {
+      "ru_RU": "Ожидалось '{}' или '{}'",
+      "en_UK": "Expected '{}' or '{}'"
     }
   }
 }

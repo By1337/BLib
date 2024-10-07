@@ -78,4 +78,7 @@ public class ArgumentIntegerAllowedMath<T> extends ArgumentInteger<T> {
             throw new CommandSyntaxError(Lang.getMessage("nan"), str);
         }
     }
+    public boolean allowAsync(){
+        return true;
+    }
 }
