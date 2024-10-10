@@ -43,6 +43,10 @@ public class YamlContext {
         return new YamlValue(section.get(path, def));
     }
 
+    public boolean has(String path) {
+        return section.contains(path);
+    }
+
     /**
      * Constructs a YamlContext using the provided MemorySection.
      *

@@ -4,7 +4,7 @@
     <groupId>org.by1337.blib</groupId>
     <artifactId>Blib-parent</artifactId>
     <packaging>pom</packaging>
-    <version>1.2</version>
+    <version>1.3-beta</version>
     <name>Blib-parent</name>
     <modules>
         <module>BLib</module>

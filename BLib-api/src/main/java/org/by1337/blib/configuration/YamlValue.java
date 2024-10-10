@@ -345,4 +345,10 @@ public class YamlValue {
         return getAs(Vec3i.class);
     }
 
+    @Override
+    public String toString() {
+        return "YamlValue{" +
+               "value=" + value +
+               '}';
+    }
 }

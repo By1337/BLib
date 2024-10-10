@@ -21,7 +21,6 @@ public class ArgumentString<T> extends Argument<T> {
         super(name, exx);
     }
 
-
     @Override
     public List<String> tabCompleter(T sender, StringReader reader, ArgumentMap<String, Object> argumentMap) throws CommandSyntaxError {
         if (!reader.hasNext()) {
