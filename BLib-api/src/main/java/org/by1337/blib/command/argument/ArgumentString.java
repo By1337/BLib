@@ -37,7 +37,9 @@ public class ArgumentString<T> extends Argument<T> {
     @Override
     public void process(T sender, StringReader reader, ArgumentMap<String, Object> argumentMap) throws CommandSyntaxError {
         if (!reader.hasNext()) return;
-        argumentMap.put(name, ArgumentUtils.readString(reader));
+        var str = ArgumentUtils.readString(reader);
+        if (str.isEmpty()) return;
+        argumentMap.put(name, str);
     }
 
     public boolean allowAsync() {
