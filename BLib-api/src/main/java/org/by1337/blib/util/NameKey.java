@@ -17,7 +17,8 @@ public class NameKey {
      *
      * @param name The name to be used as the key.
      */
-    public NameKey(String name) {
+    public NameKey(@NotNull String name) {
+        Objects.requireNonNull(name, "name is null");
         InvalidCharacters.validate(name);
         this.name = name;
     }
@@ -29,7 +30,7 @@ public class NameKey {
      * @param isRoot nothing
      */
     @Deprecated
-    public NameKey(String name, boolean isRoot) {
+    public NameKey(@NotNull String name, boolean isRoot) {
         this(name);
     }
 

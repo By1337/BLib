@@ -1,22 +1,29 @@
 package org.by1337.blib.util;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.Objects;
 
-public class SpacedNameKey {
+public class SpacedNameKey implements SpacedNamed{
     private final NameKey space;
     private final NameKey name;
 
-    public SpacedNameKey(NameKey space, NameKey name) {
+    public SpacedNameKey(@NotNull NameKey space, @NotNull NameKey name) {
+        Objects.requireNonNull(space, "space is null");
+        Objects.requireNonNull(name, "name is null");
         this.space = space;
         this.name = name;
     }
 
-    public SpacedNameKey(String space, String name) {
+    public SpacedNameKey(@NotNull String space, @NotNull String name) {
+        Objects.requireNonNull(space, "space is null");
+        Objects.requireNonNull(name, "name is null");
         this.space = new NameKey(space);
         this.name = new NameKey(name);
     }
 
-    public SpacedNameKey(String spacedNameKey) {
+    public SpacedNameKey(@NotNull String spacedNameKey) {
+        Objects.requireNonNull(spacedNameKey, "spacedNameKey is null");
         if (!spacedNameKey.contains(":")) throw new IllegalArgumentException("Expected <space>:<name>");
         String[] arr = spacedNameKey.split(":");
         if (arr.length != 2) throw new IllegalArgumentException("Expected <space>:<name>");
@@ -24,16 +31,23 @@ public class SpacedNameKey {
         this.name = new NameKey(arr[1]);
     }
 
-    public NameKey getSpace() {
+    public static SpacedNameKey fromString(@NotNull String spacedName, @NotNull String defaultSpace) {
+        Objects.requireNonNull(spacedName, "spacedName is null");
+        Objects.requireNonNull(defaultSpace, "defaultSpace is null");
+        if (spacedName.contains(":")) return new SpacedNameKey(spacedName);
+        return new SpacedNameKey(defaultSpace, spacedName);
+    }
+
+    public @NotNull NameKey getSpace() {
         return space;
     }
 
-    public NameKey getName() {
+    public @NotNull NameKey getName() {
         return name;
     }
 
     @Override
-    public String toString() {
+    public @NotNull String toString() {
         return space.getName() + ":" + name.getName();
     }
 
@@ -48,5 +62,10 @@ public class SpacedNameKey {
     @Override
     public int hashCode() {
         return Objects.hash(space, name);
+    }
+
+    @Override
+    public @NotNull SpacedNameKey getSpacedName() {
+        return this;
     }
 }
