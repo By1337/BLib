@@ -85,7 +85,7 @@ public class BlockReplacerV1_17_1 implements BlockReplacer {
 
             if ((i & 2) != 0 && (!level.isClientSide || (i & 4) == 0) && (level.isClientSide || chunk == null || chunk.getFullStatus() != null && chunk.getFullStatus().isOrAfter(ChunkHolder.FullChunkStatus.TICKING))) {
                 //level.sendBlockUpdated(blockposition, oldBlock, newBlock, i); disable update navigatingMobs
-                ((ServerLevel) level).getChunkProvider().blockChanged(blockposition);
+                ((ServerLevel) level).getChunkSource().blockChanged(blockposition);
             }
 
             if ((i & 1) != 0) {

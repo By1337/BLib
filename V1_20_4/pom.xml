@@ -16,8 +16,6 @@
 
     <name>V1_20_4</name>
 
-
-
     <properties>
         <revision>1.3-beta</revision>
         <java.version>16</java.version>

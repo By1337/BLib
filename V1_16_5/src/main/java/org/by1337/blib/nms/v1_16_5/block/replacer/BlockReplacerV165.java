@@ -1,6 +1,5 @@
 package org.by1337.blib.nms.v1_16_5.block.replacer;
 
-import com.sk89q.worldedit.bukkit.BukkitAdapter;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.MCUtil;
 import net.minecraft.server.level.ChunkHolder;
@@ -19,10 +18,6 @@ import org.bukkit.event.block.BlockPhysicsEvent;
 import org.by1337.blib.block.replacer.BlockReplaceFlags;
 import org.by1337.blib.block.replacer.BlockReplacer;
 import org.by1337.blib.block.replacer.ReplaceTask;
-import org.by1337.blib.block.replacer.type.ReplaceBlock;
-import org.by1337.blib.block.replacer.type.impl.BlockDataBlock;
-import org.by1337.blib.block.replacer.type.impl.MaterialBlock;
-import org.by1337.blib.block.replacer.type.impl.WeBlockStateBlock;
 import org.by1337.blib.geom.Vec3i;
 
 import java.util.Objects;
@@ -72,9 +67,9 @@ public class BlockReplacerV165 implements BlockReplacer {
                  iblockdata2.useShapeForLightOcclusion() ||
                  newBlock.useShapeForLightOcclusion())
             ) {
-              //  nmsWorld.getMethodProfiler().enter("queueCheckLight");
+                //  nmsWorld.getMethodProfiler().enter("queueCheckLight");
                 nmsWorld.getChunkProvider().getLightEngine().checkBlock(blockPos);
-             //   nmsWorld.getMethodProfiler().exit();
+                //   nmsWorld.getMethodProfiler().exit();
             }
 
             if (!nmsWorld.captureBlockStates) {
