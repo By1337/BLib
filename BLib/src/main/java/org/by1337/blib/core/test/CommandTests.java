@@ -9,8 +9,10 @@ import org.by1337.blib.BLib;
 import org.by1337.blib.command.Command;
 import org.by1337.blib.command.CommandException;
 import org.by1337.blib.command.argument.ArgumentInteger;
+import org.by1337.blib.command.argument.ArgumentLookingAtBlock;
 import org.by1337.blib.command.argument.ArgumentString;
 import org.by1337.blib.command.argument.ArgumentStrings;
+import org.by1337.blib.geom.Vec3i;
 import org.by1337.blib.nbt.impl.CompoundTag;
 import org.by1337.blib.network.clientbound.entity.PacketAddEntity;
 import org.by1337.blib.network.clientbound.entity.PacketSetEntityData;
@@ -23,13 +25,24 @@ import java.util.List;
 public class CommandTests {
 
     public static Command<CommandSender> args() {
-        return new Command<CommandSender>("ArgumentString")
-                .argument(new ArgumentString<>("msg", List.of("test", "test test")))
-                .argument(new ArgumentString<>("msg2", List.of("test", "test test")))
-                .executor(((sender, args) -> {
-                    BLib.getApi().getMessage().sendMsg(sender, (String) args.getOrDefault("msg", "123"));
-                    BLib.getApi().getMessage().sendMsg(sender, (String) args.getOrDefault("msg2", "123"));
-                }));
+        return new Command<CommandSender>("args")
+                .addSubCommand(new Command<CommandSender>("ArgumentString")
+                        .argument(new ArgumentString<>("msg", List.of("test", "test test")))
+                        .argument(new ArgumentString<>("msg2", List.of("test", "test test")))
+                        .executor(((sender, args) -> {
+                            BLib.getApi().getMessage().sendMsg(sender, (String) args.getOrDefault("msg", "123"));
+                            BLib.getApi().getMessage().sendMsg(sender, (String) args.getOrDefault("msg2", "123"));
+                        }))
+                )
+                .addSubCommand(new Command<CommandSender>("ArgumentLookingAtBlock")
+                        .argument(new ArgumentLookingAtBlock<>("pos"))
+                        .argument(new ArgumentLookingAtBlock<>("pos1"))
+                        .executor(((sender, args) -> {
+                            BLib.getApi().getMessage().sendMsg(sender, args.getOrDefault("pos", "123").toString());
+                            BLib.getApi().getMessage().sendMsg(sender, args.getOrDefault("pos1", "123").toString());
+                        }))
+                )
+                ;
     }
 
     public static Command<CommandSender> msgTest() {

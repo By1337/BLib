@@ -97,6 +97,10 @@
     "expected-2": {
       "ru_RU": "Ожидалось '{}' или '{}'",
       "en_UK": "Expected '{}' or '{}'"
+    },
+    "arg-looking-at-block-expected-3-pos": {
+      "ru_RU": "Ожидалось x y z, получено {}",
+      "en_UK": "Expected x y z, got {}"
     }
   }
 }

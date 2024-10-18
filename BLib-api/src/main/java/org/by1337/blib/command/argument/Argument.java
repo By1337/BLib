@@ -1,5 +1,6 @@
 package org.by1337.blib.command.argument;
 
+import com.mojang.brigadier.suggestion.SuggestionsBuilder;
 import org.by1337.blib.command.CommandSyntaxError;
 import org.by1337.blib.command.StringReader;
 import org.by1337.blib.command.requires.Requires;
@@ -35,7 +36,7 @@ public abstract class Argument<T> {
     }
 
     @Deprecated
-    public Object process(T sender, String str) throws CommandSyntaxError{
+    public Object process(T sender, String str) throws CommandSyntaxError {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
@@ -48,8 +49,22 @@ public abstract class Argument<T> {
         return getExx();
     }
 
-    public List<String> tabCompleter(T sender, StringReader reader, ArgumentMap<String, Object> argumentMap) throws CommandSyntaxError {
-        return tabCompleter(sender, reader.readToSpace());
+    public void tabCompleter(T sender, StringReader reader, ArgumentMap<String, Object> argumentMap, SuggestionsBuilder builder) throws CommandSyntaxError {
+        int start = reader.getCursor();
+        SuggestionsBuilder builder0 = new SuggestionsBuilder(reader.getString(), Math.min(start, reader.getString().length()));
+        for (String completion : tabCompleter(sender, reader.readToSpace())) {
+            builder.suggest(completion);
+        }
+        builder.add(builder0);
+    }
+
+    protected void applyExx(SuggestionsBuilder builder) {
+        addSuggestions(builder, getExx());
+    }
+    protected void addSuggestions(SuggestionsBuilder builder, List<String> list) {
+        for (String s : list) {
+            builder.suggest(s);
+        }
     }
 
     public Argument<T> requires(Requires<T> requires) {
@@ -100,7 +115,8 @@ public abstract class Argument<T> {
     public void setExx(Supplier<List<String>> exx) {
         this.exx = exx;
     }
-    public boolean allowAsync(){
+
+    public boolean allowAsync() {
         return false;
     }
 }

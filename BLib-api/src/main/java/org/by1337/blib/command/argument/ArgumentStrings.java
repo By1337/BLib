@@ -1,5 +1,6 @@
 package org.by1337.blib.command.argument;
 
+import com.mojang.brigadier.suggestion.SuggestionsBuilder;
 import org.by1337.blib.command.CommandSyntaxError;
 import org.by1337.blib.command.StringReader;
 
@@ -27,8 +28,8 @@ public class ArgumentStrings<T> extends Argument<T> {
     }
 
     @Override
-    public List<String> tabCompleter(T sender, StringReader reader, ArgumentMap<String, Object> argumentMap) throws CommandSyntaxError {
-        return tabCompleter(sender, reader.readAll());
+    public void tabCompleter(T sender, StringReader reader, ArgumentMap<String, Object> argumentMap, SuggestionsBuilder builder) throws CommandSyntaxError {
+        addSuggestions(builder, tabCompleter(sender, reader.readAll()));
     }
 
     @Override

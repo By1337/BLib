@@ -21,6 +21,12 @@ public class StringReader {
         if (cursor < 0) cursor = 0;
         if (cursor > string.length()) cursor = string.length();
     }
+    public void skipSpace() {
+        if (!hasNext()) throw new IndexOutOfBoundsException("index " + cursor + 1 + " is out of bounds");
+        if (next() != ' '){
+            throw new IndexOutOfBoundsException("index " + cursor + 1 + " is not space '" + peek() + "'");
+        }
+    }
     public void pop() {
         skip();
     }

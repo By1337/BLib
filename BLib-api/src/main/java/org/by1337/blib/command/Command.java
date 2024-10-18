@@ -217,25 +217,29 @@ public class Command<T> {
         Iterator<Argument<T>> argumentIterator = arguments.iterator();
         ArgumentMap<String, Object> argumentMap = new ArgumentMap<>();
 
-        List<String> completions = new ArrayList<>();
+        //List<String> completions = new ArrayList<>();
         Argument<T> argument;
-        int start = reader.getCursor();
+        String input = reader.getString();
+        SuggestionsBuilder builder = new SuggestionsBuilder(input, Math.min(reader.getCursor(), input.length()));
+       // int start = reader.getCursor();
         while (argumentIterator.hasNext()) {
-            start = reader.getCursor();
+            int start = reader.getCursor();
             argument = argumentIterator.next();
             if (!argument.checkRequires(sender)) {
                 break;
                 //throw new CommandSyntaxError(Lang.getMessage("end-of-command"));
             }
-            completions.clear();
+            builder = builder.createOffset(start);
+           // completions.clear();
             if (!argument.isHide()) {
-                completions.addAll(argument.tabCompleter(sender, reader, argumentMap));
-                if (completions.isEmpty()) {
+                argument.tabCompleter(sender, reader, argumentMap, builder);
+                //completions.addAll(argument.tabCompleter(sender, reader, argumentMap, builder));
+/*                if (completions.isEmpty()) {
                     completions.addAll(argument.getExx());
                     if (completions.isEmpty()) {
                         completions.add("[" + argument.getName() + "]");
                     }
-                }
+                }*/
             }
             if (!reader.hasNext()) break;
             if (reader.peek() == ' '){
@@ -251,13 +255,16 @@ public class Command<T> {
                 list.removeIf(s -> !s.startsWith(lastWord));
             }
         }
-        completions.addAll(list);
-
-        String s = reader.getString();
-        SuggestionsBuilder builder = new SuggestionsBuilder(s, Math.min(start, s.length()));
-        for (String completion : completions) {
-            builder.suggest(completion);
+        for (String s : list) {
+            builder.suggest(s);
         }
+//        completions.addAll(list);
+//
+//        String s = reader.getString();
+//        SuggestionsBuilder builder = new SuggestionsBuilder(s, Math.min(start, s.length()));
+//        for (String completion : completions) {
+//            builder.suggest(completion);
+//        }
         return builder.build();
     }
 

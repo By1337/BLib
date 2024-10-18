@@ -1,10 +1,16 @@
 package org.by1337.blib.geom;
 
 import com.google.errorprone.annotations.Immutable;
+import org.bukkit.Location;
+import org.bukkit.World;
+import org.bukkit.block.Block;
 import org.bukkit.util.Vector;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 @Immutable
 public final class Vec3i {
-
+    public static final Vec3i ZERO = new Vec3i(0, 0, 0);
     public final int x;
 
     public final int y;
@@ -18,12 +24,38 @@ public final class Vec3i {
         this.z = z;
     }
 
+    public Vec3i(Block block) {
+        this(block.getLocation());
+    }
+
+    public Vec3i(Location location) {
+        x = location.getBlockX();
+        y = location.getBlockY();
+        z = location.getBlockZ();
+    }
+
+    public Location toLocation(@Nullable World world) {
+        return new Location(world, x, y, z);
+    }
+
+    public Vector toVector() {
+        return new Vector(x, y, z);
+    }
+
+    public Block toBlock(@NotNull World world) {
+        return world.getBlockAt(x, y, z);
+    }
+
     public Vec3i(Vector v) {
         this((int) v.getX(), (int) v.getY(), (int) v.getZ());
     }
 
     public Vec3d toVec3d() {
         return new Vec3d(x, y, z);
+    }
+
+    public Vec3d blockCenter(int scale) {
+        return new Vec3d(this).add(0.5, 0.5, 0.5);
     }
 
     public Vec3i mul(int scale) {

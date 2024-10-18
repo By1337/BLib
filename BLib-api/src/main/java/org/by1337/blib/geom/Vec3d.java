@@ -2,11 +2,16 @@ package org.by1337.blib.geom;
 
 import com.google.common.primitives.Doubles;
 import com.google.errorprone.annotations.Immutable;
+import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.util.NumberConversions;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 @Immutable
 public final class Vec3d {
+    public static final Vec3d ZERO = new Vec3d(0, 0, 0);
 
     public final double x;
 
@@ -15,10 +20,26 @@ public final class Vec3d {
     public final double z;
 
 
+    public Vec3d(Location location) {
+        x = location.getX();
+        y = location.getY();
+        z = location.getZ();
+    }
+
+    public Vec3d(Vec3i vec3i) {
+        x = vec3i.getX();
+        y = vec3i.getY();
+        z = vec3i.getZ();
+    }
+
     public Vec3d(double x, double y, double z) {
         this.x = x;
         this.y = y;
         this.z = z;
+    }
+
+    public Location toLocation(@Nullable World world) {
+        return new Location(world, x, y, z);
     }
 
     public Vec3d(Vec3d v) {
@@ -37,7 +58,7 @@ public final class Vec3d {
         );
     }
 
-    public Vec3d sub(Vec3d t1, Vec3d t2) {
+    public static Vec3d sub(Vec3d t1, Vec3d t2) {
         return new Vec3d(
                 t1.x - t2.x,
                 t1.y - t2.y,
@@ -52,8 +73,22 @@ public final class Vec3d {
                 z - t1.z
         );
     }
+    public Vec3d sub(Vec3i t1) {
+        return new Vec3d(
+                x - t1.x,
+                y - t1.y,
+                z - t1.z
+        );
+    }
+    public Vec3d sub(Vector t1) {
+        return new Vec3d(
+                x - t1.getX(),
+                y - t1.getY(),
+                z - t1.getZ()
+        );
+    }
 
-    public Vec3d add(Vec3d t1, Vec3d t2) {
+    public static Vec3d add(Vec3d t1, Vec3d t2) {
         return new Vec3d(
                 t1.x + t2.x,
                 t1.y + t2.y,
@@ -62,6 +97,20 @@ public final class Vec3d {
     }
 
     public Vec3d add(Vec3d t1) {
+        return new Vec3d(
+                x + t1.x,
+                y + t1.y,
+                z + t1.z
+        );
+    }
+    public Vec3d add(Vector t1) {
+        return new Vec3d(
+                x + t1.getX(),
+                y + t1.getY(),
+                z + t1.getZ()
+        );
+    }
+    public Vec3d add(Vec3i t1) {
         return new Vec3d(
                 x + t1.x,
                 y + t1.y,
@@ -100,6 +149,14 @@ public final class Vec3d {
                 this.z / vec3d.z
         );
     }
+    public Vec3d divide(Vec3i vec3d) {
+        return new Vec3d(
+                this.x / vec3d.x,
+                this.y / vec3d.y,
+                this.z / vec3d.z
+        );
+    }
+
 
     public double length() {
         return Math.sqrt(this.x * this.x + this.y * this.y + this.z * this.z);
@@ -118,7 +175,7 @@ public final class Vec3d {
         );
     }
 
-    public Vec3d cross(Vec3d v1, Vec3d v2) {
+    public static Vec3d cross(Vec3d v1, Vec3d v2) {
         return new Vec3d(
                 v1.y * v2.z - v1.z * v2.y,
                 v2.x * v1.z - v2.z * v1.x,
@@ -174,12 +231,21 @@ public final class Vec3d {
     public double dot(Vec3d v1) {
         return this.x * v1.x + this.y * v1.y + this.z * v1.z;
     }
+    public double dot(Vec3i v1) {
+        return this.x * v1.x + this.y * v1.y + this.z * v1.z;
+    }
 
     public double distance(Vec3d o) {
         return Math.sqrt(square(x - o.x) + square(y - o.y) + square(z - o.z));
     }
+    public double distance(Vec3i o) {
+        return Math.sqrt(square(x - o.x) + square(y - o.y) + square(z - o.z));
+    }
 
     public double distanceSquared(Vec3d o) {
+        return square(x - o.x) + square(y - o.y) + square(z - o.z);
+    }
+    public double distanceSquared(Vec3i o) {
         return square(x - o.x) + square(y - o.y) + square(z - o.z);
     }
 

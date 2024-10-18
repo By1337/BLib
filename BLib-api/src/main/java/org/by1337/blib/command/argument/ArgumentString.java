@@ -1,8 +1,8 @@
 package org.by1337.blib.command.argument;
 
+import com.mojang.brigadier.suggestion.SuggestionsBuilder;
 import org.by1337.blib.command.CommandSyntaxError;
 import org.by1337.blib.command.StringReader;
-import org.by1337.blib.nbt.NBTToString;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,16 +22,17 @@ public class ArgumentString<T> extends Argument<T> {
     }
 
     @Override
-    public List<String> tabCompleter(T sender, StringReader reader, ArgumentMap<String, Object> argumentMap) throws CommandSyntaxError {
+    public void tabCompleter(T sender, StringReader reader, ArgumentMap<String, Object> argumentMap, SuggestionsBuilder builder) throws CommandSyntaxError {
         if (!reader.hasNext()) {
-            return ArgumentUtils.quoteAndEscapeIfNeeded(getExx());
+            addSuggestions(builder, ArgumentUtils.quoteAndEscapeIfNeeded(getExx()));
+            return;
         }
         String str = ArgumentUtils.readString(reader);
         var list = new ArrayList<>(getExx());
         list.removeIf(s -> !s.startsWith(str));
         list.add(str);
         argumentMap.put(name, str);
-        return ArgumentUtils.quoteAndEscapeIfNeeded(list);
+        addSuggestions(builder, ArgumentUtils.quoteAndEscapeIfNeeded(list));
     }
 
     @Override
