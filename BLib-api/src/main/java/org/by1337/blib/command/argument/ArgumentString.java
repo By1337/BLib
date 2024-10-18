@@ -38,7 +38,7 @@ public class ArgumentString<T> extends Argument<T> {
     public void process(T sender, StringReader reader, ArgumentMap<String, Object> argumentMap) throws CommandSyntaxError {
         if (!reader.hasNext()) return;
         var str = ArgumentUtils.readString(reader);
-        if (str.isEmpty()) return;
+        if (str.isBlank()) return;
         argumentMap.put(name, str);
     }
 

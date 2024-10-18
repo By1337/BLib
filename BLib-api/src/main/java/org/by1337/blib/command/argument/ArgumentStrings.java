@@ -21,7 +21,9 @@ public class ArgumentStrings<T> extends Argument<T> {
 
     @Override
     public void process(T sender, StringReader reader, ArgumentMap<String, Object> argumentMap) throws CommandSyntaxError {
-        argumentMap.put(name, process(sender, reader.readAll()));
+        String str = reader.readAll();
+        if (str.isBlank()) return;
+        argumentMap.put(name, process(sender, str));
     }
 
     @Override
