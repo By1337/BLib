@@ -207,7 +207,7 @@ public class NBTParser {
         }
 
         if (list.isEmpty() && type == null)
-            return new ListNBT(list);
+            return new ListNBT(list, context.isAllowMultipleTypeInList());
 
         if (!list.isEmpty() && !context.isAllowMultipleTypeInList()) {
             final Class<?> clazz = list.get(0).getClass();
@@ -245,7 +245,7 @@ public class NBTParser {
             }
             return new IntArrNBT(arr);
         }
-        return new ListNBT(list);
+        return new ListNBT(list, context.isAllowMultipleTypeInList());
     }
 
     static List<Lexeme> parseExp(String expText) throws ParseException {
