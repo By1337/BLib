@@ -1,16 +1,11 @@
 package org.by1337.blib.world;
 
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+
 /**
  * Represents a custom location in the game world.
  */
-@Getter
-@Setter
-@ToString
 public class BLocation {
     private double x;
     private double y;
@@ -78,4 +73,55 @@ public class BLocation {
         );
     }
 
+    public double getX() {
+        return this.x;
+    }
+
+    public double getY() {
+        return this.y;
+    }
+
+    public double getZ() {
+        return this.z;
+    }
+
+    public float getYaw() {
+        return this.yaw;
+    }
+
+    public float getPitch() {
+        return this.pitch;
+    }
+
+    public String getWorldName() {
+        return this.worldName;
+    }
+
+    public void setX(double x) {
+        this.x = x;
+    }
+
+    public void setY(double y) {
+        this.y = y;
+    }
+
+    public void setZ(double z) {
+        this.z = z;
+    }
+
+    public void setYaw(float yaw) {
+        this.yaw = yaw;
+    }
+
+    public void setPitch(float pitch) {
+        this.pitch = pitch;
+    }
+
+    public void setWorldName(String worldName) {
+        this.worldName = worldName;
+    }
+
+    public String toString() {
+        return "BLocation(x=" + this.getX() + ", y=" + this.getY() + ", z=" + this.getZ() + ", yaw=" + this.getYaw() + ", pitch=" + this.getPitch() + ", worldName=" + this.getWorldName() + ")";
+    }
 }

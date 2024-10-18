@@ -1,12 +1,10 @@
 package org.by1337.blib.command.requires;
 
-import lombok.ToString;
 import org.bukkit.command.CommandSender;
 
 /**
  * A command requirement that checks if a sender has a specific permission.
  */
-@ToString
 public class RequiresPermission<T extends CommandSender> implements Requires<T> {
     private String permission;
 
@@ -28,5 +26,9 @@ public class RequiresPermission<T extends CommandSender> implements Requires<T> 
     @Override
     public boolean check(T sender) {
         return sender.hasPermission(permission);
+    }
+
+    public String toString() {
+        return "RequiresPermission(permission=" + this.permission + ")";
     }
 }

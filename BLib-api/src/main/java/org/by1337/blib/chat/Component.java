@@ -2,13 +2,12 @@ package org.by1337.blib.chat;
 
 
 import com.google.gson.internal.LinkedTreeMap;
-import lombok.AllArgsConstructor;
 import org.by1337.blib.chat.hover.HoverEvent;
 import org.by1337.blib.chat.hover.HoverEventContentsString;
 
 import java.awt.*;
+
 @Deprecated(since = "1.0.7", forRemoval = true)
-@AllArgsConstructor
 public class Component {
     private boolean bold = false;
     private boolean italic = false;
@@ -25,6 +24,18 @@ public class Component {
 
     public Component(String text) {
         this.text = text;
+    }
+
+    public Component(boolean bold, boolean italic, boolean strikethrough, boolean underlined, boolean obfuscated, ChatColor color, String text, HoverEvent hoverEvent, ClickEvent clickEvent) {
+        this.bold = bold;
+        this.italic = italic;
+        this.strikethrough = strikethrough;
+        this.underlined = underlined;
+        this.obfuscated = obfuscated;
+        this.color = color;
+        this.text = text;
+        this.hoverEvent = hoverEvent;
+        this.clickEvent = clickEvent;
     }
 
     /**

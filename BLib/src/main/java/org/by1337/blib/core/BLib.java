@@ -1,6 +1,5 @@
 package org.by1337.blib.core;
 
-import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -12,7 +11,6 @@ import org.by1337.blib.block.custom.listener.CustomBlockListener;
 import org.by1337.blib.block.custom.registry.BlockRegistry;
 import org.by1337.blib.block.custom.registry.WorldRegistry;
 import org.by1337.blib.command.Command;
-import org.by1337.blib.command.CommandException;
 import org.by1337.blib.command.CommandWrapper;
 import org.by1337.blib.command.argument.ArgumentBoolean;
 import org.by1337.blib.command.argument.ArgumentPlayer;
@@ -25,24 +23,23 @@ import org.by1337.blib.lang.Lang;
 import org.by1337.blib.translation.Translation;
 import org.by1337.blib.util.SpacedNameKey;
 import org.by1337.blib.util.Version;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.Collection;
-import java.util.List;
-import java.util.Set;
 
 public class BLib extends JavaPlugin {
-    @Getter
     private static Plugin instance;
     private BApi api;
     public static boolean DEBUG = false;
     private CustomBlockManager customBlockManager;
     private CommandWrapper commandWrapper;
+
+    public static Plugin getInstance() {
+        return BLib.instance;
+    }
 
     @Override
     public void onLoad() {
