@@ -17,11 +17,19 @@ public class MathParser {
     public static final int FALSE = 0;
 
 
+    /**
+     * @deprecated {@link MathParser#mathSafe(String)}
+     */
+    @Deprecated
     public static String mathSave(String input) {
+        return mathSafe(input, true);
+    }
+
+    public static String mathSafe(String input) {
         return mathSave(input, true);
     }
 
-    public static String mathSave(String input, boolean replaceStrings) {
+    public static String mathSafe(String input, boolean replaceStrings) {
         try {
             return math(input, replaceStrings);
         } catch (ParseException e) {
@@ -29,6 +37,13 @@ public class MathParser {
         }
 
         return input;
+    }
+
+    /**
+     * @deprecated {@link MathParser#mathSafe(String, boolean)}
+     */
+    public static String mathSave(String input, boolean replaceStrings) {
+        return mathSave(input, replaceStrings);
     }
 
     public static String math(String input) throws ParseException {
@@ -105,8 +120,8 @@ public class MathParser {
                 case OP_DIV -> value /= factor(buffer);
                 case MODULUS -> value %= factor(buffer);
                 case OP_PLUS, OP_MINUS, CLOSE_BRACKET, EOF, LOGICAL_AND, LOGICAL_OR, GREATER_THAN,
-                        EQUAL_TO, NOT_EQUAL_TO, LESS_THAN,
-                        GREATER_THAN_OR_EQUAL_TO, LESS_THAN_OR_EQUAL_TO -> {
+                     EQUAL_TO, NOT_EQUAL_TO, LESS_THAN,
+                     GREATER_THAN_OR_EQUAL_TO, LESS_THAN_OR_EQUAL_TO -> {
                     buffer.back();
                     return value;
                 }
@@ -131,8 +146,8 @@ public class MathParser {
                     value -= val1;
                 }
                 case CLOSE_BRACKET, EOF, LOGICAL_AND, LOGICAL_OR, GREATER_THAN,
-                        EQUAL_TO, NOT_EQUAL_TO, LESS_THAN,
-                        GREATER_THAN_OR_EQUAL_TO, LESS_THAN_OR_EQUAL_TO -> {
+                     EQUAL_TO, NOT_EQUAL_TO, LESS_THAN,
+                     GREATER_THAN_OR_EQUAL_TO, LESS_THAN_OR_EQUAL_TO -> {
                     buffer.back();
                     return value;
                 }
@@ -358,9 +373,9 @@ public class MathParser {
         @Override
         public String toString() {
             return "Lexeme{" +
-                   "type=" + type +
-                   ", value='" + value + '\'' +
-                   '}';
+                    "type=" + type +
+                    ", value='" + value + '\'' +
+                    '}';
         }
     }
 
