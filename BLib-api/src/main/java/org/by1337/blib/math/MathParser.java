@@ -8,14 +8,19 @@ import org.by1337.blib.text.MessageFormatter;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+import java.util.function.Function;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class MathParser {
+public class MathParser extends AbstractMathParser<Long>{
+    private static final MathParser INSTANCE = new MathParser();
+    public static final long TRUE = 1;
+    public static final long FALSE = 0;
 
-    public static final int TRUE = 1;
-    public static final int FALSE = 0;
-
+    public MathParser() {
+        super(TRUE, FALSE, Long::parseLong);
+    }
 
     /**
      * @deprecated {@link MathParser#mathSafe(String)}
@@ -26,7 +31,7 @@ public class MathParser {
     }
 
     public static String mathSafe(String input) {
-        return mathSave(input, true);
+        return mathSafe(input, true);
     }
 
     public static String mathSafe(String input, boolean replaceStrings) {
@@ -43,7 +48,7 @@ public class MathParser {
      * @deprecated {@link MathParser#mathSafe(String, boolean)}
      */
     public static String mathSave(String input, boolean replaceStrings) {
-        return mathSave(input, replaceStrings);
+        return mathSafe(input, replaceStrings);
     }
 
     public static String math(String input) throws ParseException {
@@ -58,9 +63,9 @@ public class MathParser {
         while (matcher.find()) {
             String s = replaceStrings ? replaceStrings(matcher.group(1)) : matcher.group(1);
             s = s.replace(" ", "");
-            List<Lexeme> list = parseExp(s);
+            List<Lexeme> list = INSTANCE.parseExp(s);
             LexemeBuffer buffer = new LexemeBuffer(list);
-            input = input.replace(matcher.group(0), String.valueOf(analyze(buffer)));
+            input = input.replace(matcher.group(0), String.valueOf(INSTANCE.analyze(buffer)));
         }
         return input;
     }
@@ -79,331 +84,85 @@ public class MathParser {
         return resultBuffer.toString();
     }
 
-
-    enum LexemeType {
-        OPEN_BRACKET, // (
-        CLOSE_BRACKET, // )
-        NUMBER, // 0-9
-        LOGICAL_AND, // &&
-        LOGICAL_OR, // ||
-        LOGICAL_NOT, // !
-        EQUAL_TO, // ==
-        NOT_EQUAL_TO, // !=
-        OP_MINUS, // -
-        LESS_THAN, // <
-        GREATER_THAN, // >
-        GREATER_THAN_OR_EQUAL_TO, // >=
-        LESS_THAN_OR_EQUAL_TO, // <=
-        OP_PLUS, // +
-        OP_MUL, // *
-        OP_DIV, // /
-        MODULUS, // %
-        EOF; // end exp
-    }
-
-    private static long analyze(LexemeBuffer lexemes) throws ParseException {
-        Lexeme lexeme = lexemes.next();
-        if (lexeme.type == LexemeType.EOF) {
-            return 0;
+    @Override
+    protected int defaultTextParser(char c, int pos, String expText, List<Lexeme> lexemes) throws ParseException {
+        if (c <= '9' && c >= '0') {
+            StringBuilder sb = new StringBuilder();
+            do {
+                sb.append(c);
+                pos++;
+                if (pos >= expText.length()) {
+                    break;
+                }
+                c = expText.charAt(pos);
+            } while (c <= '9' && c >= '0');
+            lexemes.add(new Lexeme(LexemeType.NUMBER, sb.toString()));
         } else {
-            lexemes.back();
-            return logical(lexemes);
-        }
-    }
-
-    private static long multdiv(LexemeBuffer buffer) throws ParseException {
-        long value = factor(buffer);
-        while (true) {
-            Lexeme lexeme = buffer.next();
-            switch (lexeme.type) {
-                case OP_MUL -> value *= factor(buffer);
-                case OP_DIV -> value /= factor(buffer);
-                case MODULUS -> value %= factor(buffer);
-                case OP_PLUS, OP_MINUS, CLOSE_BRACKET, EOF, LOGICAL_AND, LOGICAL_OR, GREATER_THAN,
-                     EQUAL_TO, NOT_EQUAL_TO, LESS_THAN,
-                     GREATER_THAN_OR_EQUAL_TO, LESS_THAN_OR_EQUAL_TO -> {
-                    buffer.back();
-                    return value;
-                }
-                default ->
-                        throw new ParseException(MessageFormatter.apply(Lang.getMessage("unexpected-token"), lexeme.type), buffer.pos);
+            if (c != ' ') {
+                throw new ParseException(MessageFormatter.apply(Lang.getMessage("unexpected-character"), c), pos);
             }
-        }
-
-    }
-
-    private static long plusMinus(LexemeBuffer buffer) throws ParseException {
-        long value = multdiv(buffer);
-        while (true) {
-            Lexeme lexeme = buffer.next();
-            switch (lexeme.type) {
-                case OP_PLUS -> {
-                    long val1 = multdiv(buffer);
-                    value += val1;
-                }
-                case OP_MINUS -> {
-                    long val1 = multdiv(buffer);
-                    value -= val1;
-                }
-                case CLOSE_BRACKET, EOF, LOGICAL_AND, LOGICAL_OR, GREATER_THAN,
-                     EQUAL_TO, NOT_EQUAL_TO, LESS_THAN,
-                     GREATER_THAN_OR_EQUAL_TO, LESS_THAN_OR_EQUAL_TO -> {
-                    buffer.back();
-                    return value;
-                }
-                default ->
-                        throw new ParseException(MessageFormatter.apply(Lang.getMessage("unexpected-token"), lexeme.type), buffer.pos);
-            }
-        }
-    }
-
-    private static long logical(LexemeBuffer buffer) throws ParseException {
-        long value = plusMinus(buffer);
-        while (true) {
-            Lexeme lexeme = buffer.next();
-            switch (lexeme.type) {
-                case EQUAL_TO -> {
-                    long val1 = plusMinus(buffer);
-                    value = value == val1 ? TRUE : FALSE;
-                }
-                case LOGICAL_AND -> {
-                    long val1 = logical(buffer);
-                    value = value == TRUE && val1 == TRUE ? TRUE : FALSE;
-                }
-                case LOGICAL_OR -> {
-                    long val1 = logical(buffer);
-                    value = value == TRUE || val1 == TRUE ? TRUE : FALSE;
-                }
-                case NOT_EQUAL_TO -> {
-                    long val1 = plusMinus(buffer);
-                    value = value != val1 ? TRUE : FALSE;
-                }
-                case LESS_THAN -> {
-                    long val1 = plusMinus(buffer);
-                    value = value < val1 ? TRUE : FALSE;
-                }
-                case GREATER_THAN -> {
-                    long val1 = plusMinus(buffer);
-                    value = value > val1 ? TRUE : FALSE;
-                }
-                case GREATER_THAN_OR_EQUAL_TO -> {
-                    long val1 = plusMinus(buffer);
-                    value = value >= val1 ? TRUE : FALSE;
-                }
-                case LESS_THAN_OR_EQUAL_TO -> {
-                    long val1 = plusMinus(buffer);
-                    value = value <= val1 ? TRUE : FALSE;
-                }
-                case EOF, CLOSE_BRACKET, OP_PLUS, OP_MINUS, OP_MUL, OP_DIV, MODULUS -> {
-                    buffer.back();
-                    return value;
-                }
-                default ->
-                        throw new ParseException(MessageFormatter.apply(Lang.getMessage("unexpected-token"), lexeme.type), buffer.pos);
-            }
-        }
-    }
-
-    private static long factor(LexemeBuffer buffer) throws ParseException {
-        Lexeme lexeme = buffer.next();
-        switch (lexeme.type) {
-            case NUMBER -> {
-                return Long.parseLong(lexeme.value);
-            }
-            case LOGICAL_NOT -> {
-                return factor(buffer) == FALSE ? TRUE : FALSE;
-            }
-
-            case OP_MINUS -> {
-                return -factor(buffer);
-            }
-            case OPEN_BRACKET -> {
-                long value = logical(buffer);
-                lexeme = buffer.next();
-                if (lexeme.type != LexemeType.CLOSE_BRACKET) {
-
-                    throw new ParseException(MessageFormatter.apply(Lang.getMessage("unexpected-token"), lexeme.type), buffer.pos);
-                }
-                return value;
-            }
-            default ->
-                    throw new ParseException(MessageFormatter.apply(Lang.getMessage("unexpected-token"), lexeme.type), buffer.pos);
-        }
-    }
-
-    private static List<Lexeme> parseExp(String expText) throws ParseException {
-        ArrayList<Lexeme> lexemes = new ArrayList<>();
-        int pos = 0;
-        while (pos < expText.length()) {
-            char c = expText.charAt(pos);
-            switch (c) {
-                case '%' -> {
-                    lexemes.add(new Lexeme(LexemeType.MODULUS, c));
-                    pos++;
-                }
-                case '/' -> {
-                    lexemes.add(new Lexeme(LexemeType.OP_DIV, c));
-                    pos++;
-                }
-                case '*' -> {
-                    lexemes.add(new Lexeme(LexemeType.OP_MUL, c));
-                    pos++;
-                }
-                case '+' -> {
-                    lexemes.add(new Lexeme(LexemeType.OP_PLUS, c));
-                    pos++;
-                }
-                case '>' -> {
-                    if (pos + 1 < expText.length()) {
-                        if (expText.charAt(pos + 1) == '=') {
-                            lexemes.add(new Lexeme(LexemeType.GREATER_THAN_OR_EQUAL_TO, ">="));
-                            pos += 2;
-                            continue;
-                        }
-                    }
-                    lexemes.add(new Lexeme(LexemeType.GREATER_THAN, '>'));
-                    pos++;
-                }
-                case '<' -> {
-                    if (pos + 1 < expText.length()) {
-                        if (expText.charAt(pos + 1) == '=') {
-                            lexemes.add(new Lexeme(LexemeType.LESS_THAN_OR_EQUAL_TO, "<="));
-                            pos += 2;
-                            continue;
-                        }
-                    }
-                    lexemes.add(new Lexeme(LexemeType.LESS_THAN, '<'));
-                    pos++;
-
-                }
-                case '=' -> {
-                    if (pos + 1 < expText.length()) {
-                        if (expText.charAt(pos + 1) == '=') {
-                            lexemes.add(new Lexeme(LexemeType.EQUAL_TO, "=="));
-                            pos += 2;
-                            continue;
-                        }
-                    }
-                    throw new ParseException(MessageFormatter.apply(Lang.getMessage("expected"), '='), pos);
-                }
-                case '!' -> {
-                    if (pos + 1 < expText.length()) {
-                        if (expText.charAt(pos + 1) == '=') {
-                            lexemes.add(new Lexeme(LexemeType.NOT_EQUAL_TO, "!="));
-                            pos += 2;
-                            continue;
-                        }
-                    }
-                    lexemes.add(new Lexeme(LexemeType.LOGICAL_NOT, '!'));
-                    pos++;
-                }
-                case '(' -> {
-                    lexemes.add(new Lexeme(LexemeType.OPEN_BRACKET, c));
-                    pos++;
-                }
-                case ')' -> {
-                    lexemes.add(new Lexeme(LexemeType.CLOSE_BRACKET, c));
-                    pos++;
-                }
-                case '&' -> {
-                    if (pos + 1 < expText.length()) {
-                        if (expText.charAt(pos + 1) == '&') {
-                            lexemes.add(new Lexeme(LexemeType.LOGICAL_AND, "&&"));
-                            pos += 2;
-                            continue;
-                        }
-                    }
-                    throw new ParseException(MessageFormatter.apply(Lang.getMessage("expected"), '&'), pos);
-                }
-                case '|' -> {
-                    if (pos + 1 < expText.length()) {
-                        if (expText.charAt(pos + 1) == '|') {
-                            lexemes.add(new Lexeme(LexemeType.LOGICAL_OR, "||"));
-                            pos += 2;
-                            continue;
-                        }
-                    }
-                    throw new ParseException(MessageFormatter.apply(Lang.getMessage("expected"), '|'), pos);
-                }
-                case '-' -> {
-                    lexemes.add(new Lexeme(LexemeType.OP_MINUS, c));
-                    pos++;
-                }
-                default -> {
-                    if (c <= '9' && c >= '0') {
-                        StringBuilder sb = new StringBuilder();
-                        do {
-                            sb.append(c);
-                            pos++;
-                            if (pos >= expText.length()) {
-                                break;
-                            }
-                            c = expText.charAt(pos);
-                        } while (c <= '9' && c >= '0');
-                        lexemes.add(new Lexeme(LexemeType.NUMBER, sb.toString()));
-                    } else {
-                        if (c != ' ') {
-                            throw new ParseException(MessageFormatter.apply(Lang.getMessage("unexpected-character"), c), pos);
-                        }
-                        pos++;
-                    }
-                }
-
-            }
-        }
-        lexemes.add(new Lexeme(LexemeType.EOF, ""));
-        return lexemes;
-    }
-
-
-    private static class Lexeme {
-        LexemeType type;
-        String value;
-
-        public Lexeme(LexemeType type, String value) {
-            this.type = type;
-            this.value = value;
-        }
-
-        public Lexeme(LexemeType type, Character value) {
-            this.type = type;
-            this.value = String.valueOf(value);
-        }
-
-        @Override
-        public String toString() {
-            return "Lexeme{" +
-                    "type=" + type +
-                    ", value='" + value + '\'' +
-                    '}';
-        }
-    }
-
-    private static class LexemeBuffer {
-        private int pos;
-
-        public List<Lexeme> lexemes;
-
-        public LexemeBuffer(List<Lexeme> lexemes) {
-            this.lexemes = lexemes;
-        }
-
-        public Lexeme next() {
-            return lexemes.get(pos++);
-        }
-
-        public LexemeBuffer back() {
-            pos--;
-            return this;
-        }
-
-        public LexemeBuffer add() {
             pos++;
-            return this;
         }
+        return pos;
+    }
 
-        private int getPos() {
-            return pos;
-        }
+    @Override
+    protected Long mul(Long v, Long v1) {
+        return v * v1;
+    }
+
+    @Override
+    protected Long div(Long v, Long v1) {
+        return v / v1;
+    }
+
+    @Override
+    protected Long modulus(Long v, Long v1) {
+        return v % v1;
+    }
+
+    @Override
+    protected Long add(Long v, Long v1) {
+        return v + v1;
+    }
+
+    @Override
+    protected Long sub(Long v, Long v1) {
+        return v - v1;
+    }
+
+    @Override
+    protected boolean equalTo(Long v, Long v1) {
+        return Objects.equals(v, v1);
+    }
+
+    @Override
+    protected boolean notEqualTo(Long v, Long v1) {
+        return !equalTo(v, v1);
+    }
+
+    @Override
+    protected boolean lessThan(Long v, Long v1) {
+        return v < v1;
+    }
+
+    @Override
+    protected boolean greaterThan(Long v, Long v1) {
+        return v > v1;
+    }
+
+    @Override
+    protected boolean greaterThanOrEqualTo(Long v, Long v1) {
+        return v >= v1;
+    }
+
+    @Override
+    protected boolean lessThanOrEqualTo(Long v, Long v1) {
+        return v <= v1;
+    }
+
+    @Override
+    protected Long opMinus(Long val) {
+        return -val;
     }
 }
