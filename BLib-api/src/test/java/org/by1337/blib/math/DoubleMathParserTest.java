@@ -20,5 +20,8 @@ public class DoubleMathParserTest {
         assertTrue(Double.parseDouble(mathSafe("5 > 3 && 2 < 4 ? 1 : 0")) - 1 < 0.01);
         assertEquals(1, Double.parseDouble(mathSafe("!(true && false)")));
         assertEquals(1_250_000D, Double.parseDouble(mathSafe("1.25*1000*1000")));
+        assertEquals(1, Double.parseDouble(mathSafe("1.025E7 == 1.025E7")));
+        assertEquals(0, Double.parseDouble(mathSafe("1.025E7 - 1.025E7")));
+        assertEquals(1.025E7, Double.parseDouble(mathSafe("1.02E7 + 50000")));
     }
 }

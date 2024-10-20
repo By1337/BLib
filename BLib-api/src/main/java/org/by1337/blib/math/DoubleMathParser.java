@@ -67,7 +67,7 @@ public class DoubleMathParser extends AbstractMathParser<Double> {
     public static String replaceStrings(String s) {
         String step1 = s.replaceAll("\\btrue\\b", "1");
         String step2 = step1.replaceAll("\\bfalse\\b", "0");
-        Pattern pattern = Pattern.compile("([^\\s=><!^%()&|+\\-*/.\\d]+)");
+        Pattern pattern = Pattern.compile("([^\\s=><!^%()&|+\\-*/.E\\d]+)");
         Matcher matcher = pattern.matcher(step2);
         StringBuilder resultBuffer = new StringBuilder();
         while (matcher.find()) {
