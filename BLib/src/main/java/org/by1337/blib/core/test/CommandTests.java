@@ -8,10 +8,7 @@ import org.bukkit.inventory.ItemStack;
 import org.by1337.blib.BLib;
 import org.by1337.blib.command.Command;
 import org.by1337.blib.command.CommandException;
-import org.by1337.blib.command.argument.ArgumentInteger;
-import org.by1337.blib.command.argument.ArgumentLookingAtBlock;
-import org.by1337.blib.command.argument.ArgumentString;
-import org.by1337.blib.command.argument.ArgumentStrings;
+import org.by1337.blib.command.argument.*;
 import org.by1337.blib.geom.Vec3i;
 import org.by1337.blib.nbt.impl.CompoundTag;
 import org.by1337.blib.network.clientbound.entity.PacketAddEntity;
@@ -30,16 +27,24 @@ public class CommandTests {
                         .argument(new ArgumentString<>("msg", List.of("test", "test test")))
                         .argument(new ArgumentString<>("msg2", List.of("test", "test test")))
                         .executor(((sender, args) -> {
-                            BLib.getApi().getMessage().sendMsg(sender, (String) args.getOrDefault("msg", "123"));
-                            BLib.getApi().getMessage().sendMsg(sender, (String) args.getOrDefault("msg2", "123"));
+                            BLib.getApi().getMessage().sendMsg(sender, (String) args.getOrDefault("msg", "null"));
+                            BLib.getApi().getMessage().sendMsg(sender, (String) args.getOrDefault("msg2", "null"));
                         }))
                 )
                 .addSubCommand(new Command<CommandSender>("ArgumentLookingAtBlock")
                         .argument(new ArgumentLookingAtBlock<>("pos"))
                         .argument(new ArgumentLookingAtBlock<>("pos1"))
                         .executor(((sender, args) -> {
-                            BLib.getApi().getMessage().sendMsg(sender, args.getOrDefault("pos", "123").toString());
-                            BLib.getApi().getMessage().sendMsg(sender, args.getOrDefault("pos1", "123").toString());
+                            BLib.getApi().getMessage().sendMsg(sender, args.getOrDefault("pos", "null").toString());
+                            BLib.getApi().getMessage().sendMsg(sender, args.getOrDefault("pos1", "null").toString());
+                        }))
+                )
+                .addSubCommand(new Command<CommandSender>("ArgumentFormattedDouble")
+                        .argument(new ArgumentFormattedDouble<>("d", List.of("10.5K")))
+                        .argument(new ArgumentFormattedDouble<>("d1",List.of("10.5K")))
+                        .executor(((sender, args) -> {
+                            BLib.getApi().getMessage().sendMsg(sender, args.getOrDefault("d", "null").toString());
+                            BLib.getApi().getMessage().sendMsg(sender, args.getOrDefault("d1", "null").toString());
                         }))
                 )
                 ;

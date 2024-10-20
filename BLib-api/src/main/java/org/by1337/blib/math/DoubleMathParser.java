@@ -56,6 +56,9 @@ public class DoubleMathParser extends AbstractMathParser<Double> {
         return input;
     }
 
+    public static String math(String input) throws ParseException {
+        return math(input, false);
+    }
     public static String math(String input, boolean replaceStrings) throws ParseException {
         String s = replaceStrings ? replaceStrings(input) : input;
         s = s.replace(" ", "");

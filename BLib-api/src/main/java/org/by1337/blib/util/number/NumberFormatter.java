@@ -18,6 +18,9 @@ public class NumberFormatter {
         return df.format(d) + "K".repeat(x);
     }
 
+    public static String formatNumberWithThousandsSeparator(Double raw, String integerSeparator, String thousandSeparator){
+        return formatNumberWithThousandsSeparator(df.format(raw), integerSeparator, thousandSeparator);
+    }
     public static String formatNumberWithThousandsSeparator(String raw, String integerSeparator, String thousandSeparator){
         StringBuilder formatted = new StringBuilder();
         String[] parts = raw.split("\\D");
