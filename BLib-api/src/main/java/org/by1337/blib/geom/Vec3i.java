@@ -1,5 +1,7 @@
 package org.by1337.blib.geom;
 
+import blib.com.mojang.serialization.Codec;
+import blib.com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.google.errorprone.annotations.Immutable;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -10,6 +12,12 @@ import org.jetbrains.annotations.Nullable;
 
 @Immutable
 public final class Vec3i {
+    public static final Codec<Vec3i> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+            Codec.INT.fieldOf("x").forGetter(Vec3i::getX),
+            Codec.INT.fieldOf("y").forGetter(Vec3i::getY),
+            Codec.INT.fieldOf("z").forGetter(Vec3i::getZ)
+    ).apply(instance, Vec3i::new));
+
     public static final Vec3i ZERO = new Vec3i(0, 0, 0);
     public final int x;
 

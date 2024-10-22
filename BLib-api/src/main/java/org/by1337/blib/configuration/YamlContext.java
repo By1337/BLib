@@ -382,6 +382,19 @@ public class YamlContext {
                 k -> AdapterRegistry.getAs(k, keyType));
     }
 
+    public static MemorySection getMemorySection(Object o, ConfigurationSection root) {
+        if (o instanceof YamlValue v){
+            o = v.unpack();
+        }
+        if (o instanceof Map<?, ?> map) {
+            return (MemorySection) convertMapsToSections(YamlValue.unpackMap(map), root);
+        }
+        if (o instanceof YamlContext context) {
+            return context.section;
+        }
+        return (MemorySection) o;
+    }
+
     /**
      * Get a MemorySection from an object, converting maps to sections if necessary.
      *
@@ -389,13 +402,7 @@ public class YamlContext {
      * @return A MemorySection containing the data from the object.
      */
     public static MemorySection getMemorySection(Object o) {
-        if (o instanceof Map<?, ?> map) {
-            return (MemorySection) convertMapsToSections(map, new YamlConfiguration());
-        }
-        if (o instanceof YamlContext context) {
-            return context.section;
-        }
-        return (MemorySection) o;
+        return getMemorySection(o, new YamlConfiguration());
     }
 
     /**

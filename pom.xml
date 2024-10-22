@@ -21,6 +21,7 @@
         <module>V1_21_1</module>
         <module>MinimessageSupport</module>
         <module>BLib-Nbt</module>
+        <module>ShadedDFU</module>
     </modules>
     <build>
         <defaultGoal>clean install</defaultGoal>

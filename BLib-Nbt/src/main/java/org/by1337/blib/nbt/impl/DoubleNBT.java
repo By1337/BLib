@@ -1,14 +1,16 @@
 package org.by1337.blib.nbt.impl;
-import org.by1337.blib.nbt.NBT;
+
 import org.by1337.blib.nbt.NbtType;
+import org.by1337.blib.nbt.NumericNBT;
 
 import java.util.Objects;
 
-public class DoubleNBT extends NBT {
+public class DoubleNBT extends NumericNBT {
 
     private final double value;
 
     public DoubleNBT(double value) {
+        super(value);
         this.value = value;
     }
 

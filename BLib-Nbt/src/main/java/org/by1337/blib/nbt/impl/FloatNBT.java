@@ -1,14 +1,16 @@
 package org.by1337.blib.nbt.impl;
-import org.by1337.blib.nbt.NBT;
+
 import org.by1337.blib.nbt.NbtType;
+import org.by1337.blib.nbt.NumericNBT;
 
 import java.util.Objects;
 
-public class FloatNBT extends NBT {
+public class FloatNBT extends NumericNBT {
 
     private final float value;
 
     public FloatNBT(float value) {
+        super(value);
         this.value = value;
     }
 

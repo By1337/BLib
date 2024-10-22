@@ -10,6 +10,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
+import org.by1337.blib.configuration.YamlValue;
 import org.by1337.blib.configuration.adapter.impl.*;
 import org.by1337.blib.configuration.adapter.impl.primitive.*;
 import org.by1337.blib.geom.*;
@@ -172,6 +173,9 @@ public class AdapterRegistry {
     @SuppressWarnings({"unchecked", "rawtypes"})
     public static <T> T getAs(@Nullable Object src, @NotNull Class<T> clazz) {
         if (src == null) return null;
+        if (src instanceof YamlValue v){
+            src = v.unpack();
+        }
         if (clazz.isAssignableFrom(src.getClass())) {
             return clazz.cast(src);
         }
@@ -202,6 +206,9 @@ public class AdapterRegistry {
      */
     @SuppressWarnings({"unchecked", "rawtypes"})
     public static <T> Object serialize(@NotNull T src) {
+        if (src instanceof YamlValue v){
+            src = (T) v.unpack();
+        }
         if (!hasPrimitiveAdapter(src.getClass())) {
             if (!hasAdapter(src.getClass())) {
                 if (src.getClass().isEnum()){

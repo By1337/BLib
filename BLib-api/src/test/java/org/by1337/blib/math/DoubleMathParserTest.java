@@ -24,4 +24,5 @@ public class DoubleMathParserTest {
         assertEquals(0, Double.parseDouble(mathSafe("1.025E7 - 1.025E7")));
         assertEquals(1.025E7, Double.parseDouble(mathSafe("1.02E7 + 50000")));
     }
+
 }

@@ -1,9 +1,16 @@
 package org.by1337.blib.geom;
 
+import blib.com.mojang.serialization.Codec;
+import blib.com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.google.errorprone.annotations.Immutable;
 
 @Immutable
 public final class Sphere {
+    public static final Codec<Sphere> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+            Vec3d.CODEC.fieldOf("center").forGetter(Sphere::getCenter),
+            Codec.DOUBLE.fieldOf("radius").forGetter(Sphere::getRadius)
+    ).apply(instance, Sphere::new));
+
     public final double radius;
     public final Vec3d center;
 

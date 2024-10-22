@@ -1,8 +1,13 @@
 package org.by1337.blib.nbt.impl;
+
 import org.by1337.blib.nbt.NBT;
 import org.by1337.blib.nbt.NbtType;
 
 import java.util.Arrays;
+import java.util.Spliterator;
+import java.util.function.Consumer;
+import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 
 public class LongArrNBT extends NBT {
     private final long[] value;
@@ -41,5 +46,47 @@ public class LongArrNBT extends NBT {
     @Override
     public LongArrNBT copy() {
         return new LongArrNBT(value.clone());
+    }
+
+    public Spliterator<Long> spliterator() {
+        return new SpliteratorImp();
+    }
+    public Stream<Long> stream(){
+        return StreamSupport.stream(spliterator(), false);
+    }
+
+    private class SpliteratorImp implements Spliterator<Long> {
+        private int index = 0;
+
+        @Override
+        public boolean tryAdvance(Consumer<? super Long> action) {
+            if (index < value.length) {
+                action.accept(value[index++]);
+                return true;
+            }
+            return false;
+        }
+
+        @Override
+        public Spliterator<Long> trySplit() {
+            int currentSize = value.length - index;
+            if (currentSize < 2) {
+                return null;
+            }
+            int splitSize = currentSize / 2;
+            long[] splitArray = Arrays.copyOfRange(value, index, index + splitSize);
+            index += splitSize;
+            return new LongArrNBT(splitArray).spliterator();
+        }
+
+        @Override
+        public long estimateSize() {
+            return value.length - index;
+        }
+
+        @Override
+        public int characteristics() {
+            return Spliterator.ORDERED | Spliterator.SIZED | Spliterator.SUBSIZED;
+        }
     }
 }

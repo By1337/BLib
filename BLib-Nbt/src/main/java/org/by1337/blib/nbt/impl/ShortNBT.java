@@ -1,14 +1,17 @@
 package org.by1337.blib.nbt.impl;
-import org.by1337.blib.nbt.NBT;
-import org.by1337.blib.nbt.NbtType;
 
-public class ShortNBT extends NBT {
+import org.by1337.blib.nbt.NbtType;
+import org.by1337.blib.nbt.NumericNBT;
+
+public class ShortNBT extends NumericNBT {
 
     private final short value;
 
     private ShortNBT(short value) {
+        super(value);
         this.value = value;
     }
+
     @Override
     public NbtType getType() {
         return NbtType.SHORT;
@@ -21,6 +24,7 @@ public class ShortNBT extends NBT {
     public short getValue() {
         return value;
     }
+
     @Override
     public Object getAsObject() {
         return value;
@@ -40,8 +44,8 @@ public class ShortNBT extends NBT {
         }
 
         static {
-            for(int i = 0; i < cache.length; ++i) {
-                cache[i] = new ShortNBT((short)(LOW + i));
+            for (int i = 0; i < cache.length; ++i) {
+                cache[i] = new ShortNBT((short) (LOW + i));
             }
 
         }

@@ -1,0 +1,1 @@
+This module is needed to shade [DFU](https://github.com/Mojang/DataFixerUpper) and relocate it to `blib.com.mojang`.

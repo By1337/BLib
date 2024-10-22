@@ -1,13 +1,16 @@
 package org.by1337.blib.nbt.impl;
-import org.by1337.blib.nbt.NBT;
+
 import org.by1337.blib.nbt.NbtType;
+import org.by1337.blib.nbt.NumericNBT;
+
 import java.util.Objects;
 
-public class IntNBT extends NBT {
+public class IntNBT extends NumericNBT {
 
     private final int value;
 
     private IntNBT(int value) {
+        super(value);
         this.value = value;
     }
 
@@ -29,6 +32,7 @@ public class IntNBT extends NBT {
     public IntNBT copy() {
         return this;
     }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -56,7 +60,7 @@ public class IntNBT extends NBT {
         }
 
         static {
-            for(int i = 0; i < cache.length; ++i) {
+            for (int i = 0; i < cache.length; ++i) {
                 cache[i] = new IntNBT(LOW + i);
             }
 

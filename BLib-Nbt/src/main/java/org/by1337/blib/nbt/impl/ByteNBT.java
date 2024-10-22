@@ -1,11 +1,15 @@
 package org.by1337.blib.nbt.impl;
-import org.by1337.blib.nbt.NBT;
+
 import org.by1337.blib.nbt.NbtType;
+import org.by1337.blib.nbt.NumericNBT;
+
 import java.util.Objects;
 
-public class ByteNBT extends NBT{
+public class ByteNBT extends NumericNBT {
     private final byte value;
+
     private ByteNBT(byte value) {
+        super(value);
         this.value = value;
     }
 
@@ -52,8 +56,8 @@ public class ByteNBT extends NBT{
         }
 
         static {
-            for(int i = 0; i < cache.length; ++i) {
-                cache[i] = new ByteNBT((byte)(i - 128));
+            for (int i = 0; i < cache.length; ++i) {
+                cache[i] = new ByteNBT((byte) (i - 128));
             }
 
         }

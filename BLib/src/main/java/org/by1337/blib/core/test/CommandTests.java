@@ -1,7 +1,6 @@
 package org.by1337.blib.core.test;
 
 import org.bukkit.Bukkit;
-import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -9,7 +8,7 @@ import org.by1337.blib.BLib;
 import org.by1337.blib.command.Command;
 import org.by1337.blib.command.CommandException;
 import org.by1337.blib.command.argument.*;
-import org.by1337.blib.geom.Vec3i;
+import org.by1337.blib.core.Test;
 import org.by1337.blib.nbt.impl.CompoundTag;
 import org.by1337.blib.network.clientbound.entity.PacketAddEntity;
 import org.by1337.blib.network.clientbound.entity.PacketSetEntityData;
@@ -65,6 +64,13 @@ public class CommandTests {
                     BLib.getApi().getMessage().log(
                             BLib.getApi().getMessage().componentBuilder((String) args.getOrDefault("msg", "123"))
                     );
+                }));
+    }
+
+    public static Command<CommandSender> test() {
+        return new Command<CommandSender>("yamlOPS")
+                .executor(((sender, args) -> {
+                    Test.main(new String[]{});
                 }));
     }
 

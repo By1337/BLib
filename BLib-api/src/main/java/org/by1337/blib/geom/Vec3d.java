@@ -1,5 +1,7 @@
 package org.by1337.blib.geom;
 
+import blib.com.mojang.serialization.Codec;
+import blib.com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.google.common.primitives.Doubles;
 import com.google.errorprone.annotations.Immutable;
 import org.bukkit.Location;
@@ -11,6 +13,12 @@ import org.jetbrains.annotations.Nullable;
 
 @Immutable
 public final class Vec3d {
+    public static final Codec<Vec3d> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+            Codec.DOUBLE.fieldOf("x").forGetter(Vec3d::getX),
+            Codec.DOUBLE.fieldOf("y").forGetter(Vec3d::getY),
+            Codec.DOUBLE.fieldOf("z").forGetter(Vec3d::getZ)
+    ).apply(instance, Vec3d::new));
+
     public static final Vec3d ZERO = new Vec3d(0, 0, 0);
 
     public final double x;

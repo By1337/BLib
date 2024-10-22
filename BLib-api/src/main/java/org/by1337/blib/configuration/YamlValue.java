@@ -19,16 +19,13 @@ import org.by1337.blib.world.BlockPosition;
 import org.by1337.blib.world.Vector2D;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 import java.util.function.Function;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class YamlValue {
+    public static final YamlValue EMPTY = new YamlValue(null);
     private final @Nullable Object value;
 
     public YamlValue(@Nullable Object value) {
@@ -69,7 +66,11 @@ public class YamlValue {
     }
 
     public Stream<YamlValue> stream() {
-        return ((List<?>) value).stream().map(YamlValue::new);
+        return ((List<?>) value).stream().map(v -> v instanceof YamlValue ? (YamlValue) v : new YamlValue(v));
+    }
+
+    public Set<Map.Entry<YamlValue, YamlValue>> entrySet() {
+        return getAsMap(Function.identity(), Function.identity()).entrySet();
     }
 
     public Stream<Pair<YamlValue, YamlValue>> mapStream() {
@@ -117,8 +118,53 @@ public class YamlValue {
         return map;
     }
 
+    public boolean isMap() {
+        return value instanceof Map<?, ?> || value instanceof ConfigurationSection || value instanceof YamlContext;
+    }
+
+    public boolean isList() {
+        return value instanceof List<?>;
+    }
+
+    public boolean isEmpty() {
+        return value == null;
+    }
+
     public boolean isPrimitive() {
-        return !(value instanceof Map<?, ?>) && !(value instanceof ConfigurationSection);
+        return !isMap() && !isList();
+    }
+
+    public Object unpack() {
+        return unpack(value);
+    }
+
+    public static Object unpack(@Nullable Object val) {
+        Object o = val;
+        while (o instanceof YamlValue) {
+            o = ((YamlValue) o).unpack();
+        }
+        if (o instanceof Map<?,?> m){
+            return unpackMap(m);
+        }
+        if (o instanceof List<?> list){
+            return unpackList(list);
+        }
+        return o;
+    }
+
+    public static Map<?, ?> unpackMap(Map<?, ?> map) {
+        Map<Object, Object> result = new HashMap<>();
+        for (Object o : map.keySet()) {
+            result.put(unpack(o), unpack(map.get(o)));
+        }
+        return result;
+    }
+    public static Collection<?> unpackList(Collection<?> list) {
+        List<Object> result = new ArrayList<>();
+        for (Object o : list) {
+            result.add(unpack(o));
+        }
+        return result;
     }
 
     public Double getAsDouble(Double def) {
@@ -348,7 +394,20 @@ public class YamlValue {
     @Override
     public String toString() {
         return "YamlValue{" +
-               "value=" + value +
-               '}';
+                "value=" + value +
+                '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        YamlValue yamlValue = (YamlValue) o;
+        return Objects.equals(value, yamlValue.value);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(value);
     }
 }

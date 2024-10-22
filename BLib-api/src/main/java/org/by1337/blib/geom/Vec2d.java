@@ -1,11 +1,17 @@
 package org.by1337.blib.geom;
 
+import blib.com.mojang.serialization.Codec;
+import blib.com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.google.errorprone.annotations.Immutable;
 
 @Immutable
 public final class Vec2d {
-    public final double x;
+    public static final Codec<Vec2d> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+            Codec.DOUBLE.fieldOf("x").forGetter(Vec2d::getX),
+            Codec.DOUBLE.fieldOf("y").forGetter(Vec2d::getY)
+    ).apply(instance, Vec2d::new));
 
+    public final double x;
     public final double y;
 
 

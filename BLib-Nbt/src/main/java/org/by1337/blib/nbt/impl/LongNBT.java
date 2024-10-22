@@ -1,14 +1,16 @@
 package org.by1337.blib.nbt.impl;
-import org.by1337.blib.nbt.NBT;
+
 import org.by1337.blib.nbt.NbtType;
+import org.by1337.blib.nbt.NumericNBT;
 
 import java.util.Objects;
 
-public class LongNBT extends NBT {
+public class LongNBT extends NumericNBT {
 
     private final long value;
 
     private LongNBT(long value) {
+        super(value);
         this.value = value;
     }
 
@@ -24,6 +26,7 @@ public class LongNBT extends NBT {
     public long getValue() {
         return value;
     }
+
     @Override
     public Object getAsObject() {
         return value;
@@ -56,7 +59,7 @@ public class LongNBT extends NBT {
         }
 
         static {
-            for(int i = 0; i < cache.length; ++i) {
+            for (int i = 0; i < cache.length; ++i) {
                 cache[i] = new LongNBT(LOW + i);
             }
 

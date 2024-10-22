@@ -1,11 +1,23 @@
 package org.by1337.blib.geom;
 
+import blib.com.mojang.serialization.Codec;
+import blib.com.mojang.serialization.codecs.RecordCodecBuilder;
 import org.bukkit.util.BoundingBox;
 import org.bukkit.util.Vector;
 import org.by1337.blib.util.Direction;
 import org.jetbrains.annotations.NotNull;
 
 public class AABB {
+    public static final Codec<AABB> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+            Codec.DOUBLE.fieldOf("minX").forGetter(AABB::getMinX),
+            Codec.DOUBLE.fieldOf("minY").forGetter(AABB::getMinY),
+            Codec.DOUBLE.fieldOf("minZ").forGetter(AABB::getMinZ),
+
+            Codec.DOUBLE.fieldOf("maxX").forGetter(AABB::getMaxX),
+            Codec.DOUBLE.fieldOf("maxY").forGetter(AABB::getMaxY),
+            Codec.DOUBLE.fieldOf("maxZ").forGetter(AABB::getMaxZ)
+    ).apply(instance, AABB::new));
+
     private double minX;
     private double minY;
     private double minZ;
