@@ -4,12 +4,12 @@
     <parent>
         <groupId>org.by1337.blib</groupId>
         <artifactId>Blib-parent</artifactId>
-        <version>1.3.1-beta</version>
+        <version>1.3.2-beta</version>
     </parent>
     <groupId>org.by1337.blib.nbt</groupId>
     <artifactId>BLib-Nbt</artifactId>
     <properties>
-        <revision>1.3.1-beta</revision>
+        <revision>1.3.2-beta</revision>
         <java.version>16</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <server.version>1.17.1-R0.1-SNAPSHOT</server.version>
