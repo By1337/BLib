@@ -37,7 +37,9 @@ public abstract class Argument<T> {
 
     @Deprecated
     public Object process(T sender, String str) throws CommandSyntaxError {
-        throw new UnsupportedOperationException("Not supported yet.");
+        ArgumentMap<String, Object> map = new ArgumentMap<>();
+        process(sender, new StringReader(str), map);
+        return map.get(name);
     }
 
     public void process(T sender, StringReader reader, ArgumentMap<String, Object> argumentMap) throws CommandSyntaxError {
