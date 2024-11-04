@@ -1,9 +1,11 @@
 package org.by1337.blib.util;
 
+import blib.com.mojang.serialization.Codec;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.stream.JsonReader;
 import org.bukkit.Bukkit;
+import org.by1337.blib.configuration.serialization.DefaultCodecs;
 import org.by1337.blib.lang.Lang;
 import org.by1337.blib.text.MessageFormatter;
 import org.jetbrains.annotations.NotNull;
@@ -57,6 +59,7 @@ public enum Version {
     V1_20_6("1.20.6", 766, 3839),
     V1_21("1.21", 767, 3953),
     V1_21_1("1.21.1", 767, 3955);
+    public static final Codec<Version> CODEC = DefaultCodecs.createEnumCodec(Version.class);
 
     @NotNull
     private final String ver;

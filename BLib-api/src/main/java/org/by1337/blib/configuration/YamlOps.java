@@ -83,7 +83,7 @@ public class YamlOps implements DynamicOps<YamlValue> {
 
     @Override
     public YamlValue createNumeric(Number i) {
-        return new YamlValue(i);
+        return YamlValue.wrap(i);
     }
 
     @Override
@@ -96,7 +96,7 @@ public class YamlOps implements DynamicOps<YamlValue> {
 
     @Override
     public YamlValue createString(String value) {
-        return new YamlValue(value);
+        return YamlValue.wrap(value);
     }
 
     @Override
@@ -110,7 +110,7 @@ public class YamlOps implements DynamicOps<YamlValue> {
             result.addAll(list.getAsList(Function.identity()));
         }
         result.add(value);
-        return DataResult.success(new YamlValue(result));
+        return DataResult.success(YamlValue.wrap(value));
     }
 
     @Override
@@ -123,7 +123,7 @@ public class YamlOps implements DynamicOps<YamlValue> {
             result.addAll(list.getAsList(Function.identity()));
         }
         result.addAll(values);
-        return DataResult.success(new YamlValue(result));
+        return DataResult.success(YamlValue.wrap(result));
     }
 
     @Override
@@ -139,7 +139,7 @@ public class YamlOps implements DynamicOps<YamlValue> {
             result.putAll(map.getAsMap(Function.identity(), Function.identity()));
         }
         result.put(key, value);
-        return DataResult.success(new YamlValue(result));
+        return DataResult.success(YamlValue.wrap(result));
     }
 
     @Override
@@ -161,9 +161,9 @@ public class YamlOps implements DynamicOps<YamlValue> {
             result.put(key, entry.getSecond());
         });
         if (!missed.isEmpty()) {
-            return DataResult.error(() -> "some keys are not primitives: " + missed, new YamlValue(result));
+            return DataResult.error(() -> "some keys are not primitives: " + missed, YamlValue.wrap(result));
         }
-        return DataResult.success(new YamlValue(result));
+        return DataResult.success(YamlValue.wrap(result));
     }
 
     @Override
@@ -201,7 +201,7 @@ public class YamlOps implements DynamicOps<YamlValue> {
 
             @Override
             public @Nullable YamlValue get(String key) {
-                return get(new YamlValue(key));
+                return get(YamlValue.wrap(key));
             }
 
             @Override
@@ -215,7 +215,7 @@ public class YamlOps implements DynamicOps<YamlValue> {
     public YamlValue createMap(Stream<Pair<YamlValue, YamlValue>> map) {
         Map<YamlValue, YamlValue> result = new HashMap<>();
         map.forEach(e -> result.put(e.getFirst(), e.getSecond()));
-        return new YamlValue(result);
+        return YamlValue.wrap(result);
     }
 
     @Override
@@ -230,15 +230,15 @@ public class YamlOps implements DynamicOps<YamlValue> {
     public YamlValue createList(Stream<YamlValue> input) {
         List<YamlValue> result = new ArrayList<>();
         input.forEach(result::add);
-        return new YamlValue(result);
+        return YamlValue.wrap(result);
     }
 
     @Override
     public YamlValue remove(YamlValue input, String key) {
         if (input.isMap()) {
             Map<YamlValue, YamlValue> map = input.getAsMap(Function.identity(), Function.identity());
-            map.remove(new YamlValue(key));
-            return new YamlValue(map);
+            map.remove(YamlValue.wrap(key));
+            return YamlValue.wrap(map);
         }
         return input;
     }

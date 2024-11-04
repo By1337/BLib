@@ -1,5 +1,7 @@
 package org.by1337.blib.util;
 
+import blib.com.mojang.serialization.Codec;
+import blib.com.mojang.serialization.DataResult;
 import org.by1337.blib.chat.util.InvalidCharacters;
 import org.jetbrains.annotations.NotNull;
 
@@ -10,6 +12,7 @@ import java.util.Objects;
  * It is used to identify objects and entities with names in the application.
  */
 public class NameKey {
+    public static Codec<NameKey> CODEC = Codec.STRING.comapFlatMap(NameKey::validate, NameKey::getKey);
     private final String name;
 
     /**
@@ -21,6 +24,13 @@ public class NameKey {
         Objects.requireNonNull(name, "name is null");
         InvalidCharacters.validate(name);
         this.name = name;
+    }
+    public static DataResult<NameKey> validate(String id){
+        try {
+            return DataResult.success(new NameKey(id));
+        } catch (IllegalArgumentException e) {
+            return DataResult.error(() -> "Not a valid name: " + id + " " + e.getMessage());
+        }
     }
 
     /**
@@ -42,6 +52,10 @@ public class NameKey {
      */
     @NotNull
     public String getName() {
+        return name;
+    }
+    @NotNull
+    public String getKey() {
         return name;
     }
 

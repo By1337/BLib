@@ -7,6 +7,7 @@ import blib.com.mojang.serialization.codecs.PrimitiveCodec;
 import blib.com.mojang.serialization.codecs.RecordCodecBuilder;
 import org.bukkit.*;
 import org.bukkit.block.Biome;
+import org.bukkit.block.data.BlockData;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.EntityType;
 import org.bukkit.event.inventory.InventoryType;
@@ -15,12 +16,17 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionType;
 import org.bukkit.util.Vector;
 import org.by1337.blib.BLib;
+import org.by1337.blib.text.MessageFormatter;
 import org.jetbrains.annotations.ApiStatus;
 
 import java.util.Optional;
+import java.util.function.Function;
 
 @ApiStatus.Experimental
 public class BukkitCodecs {
+    public static final Codec<BlockData> BLOCK_DATA = Codec.STRING
+            .comapFlatMap(s -> tryMap(s, Bukkit::createBlockData, "Not a valid block data: {} {}"), BlockData::getAsString);
+
     public static final PrimitiveCodec<NamespacedKey> NAMESPACED_KEY = new PrimitiveCodec<>() {
         @Override
         public <T> DataResult<NamespacedKey> read(DynamicOps<T> ops, T t) {
@@ -96,26 +102,15 @@ public class BukkitCodecs {
     public static final PrimitiveCodec<InventoryType> INVENTORY_TYPE = createEnumCodec(InventoryType.class);
 
     public static <T extends Enum<T>> PrimitiveCodec<T> createEnumCodec(final Class<T> type) {
-        return new PrimitiveCodec<>() {
-            @Override
-            public <T1> DataResult<T> read(DynamicOps<T1> ops, T1 t1) {
-                return ops.getStringValue(t1).flatMap(s -> {
-                    try {
-                        return DataResult.success(Enum.valueOf(type, s));
-                    } catch (IllegalArgumentException e) {
-                        try {
-                            return DataResult.success(Enum.valueOf(type, s.toUpperCase()));
-                        } catch (IllegalArgumentException e1) {
-                            return DataResult.error(() -> "Unknown enum value: " + s);
-                        }
-                    }
-                });
-            }
-
-            @Override
-            public <T1> T1 write(DynamicOps<T1> ops, T t) {
-                return ops.createString(t.name());
-            }
-        };
+        return DefaultCodecs.createEnumCodec(type);
     }
+
+    private static <T, E> DataResult<E> tryMap(T val, Function<? super T, ? extends E> mapper, String errorMsg) {
+        try {
+            return DataResult.success(mapper.apply(val));
+        } catch (Throwable t) {
+            return DataResult.error(() -> MessageFormatter.apply(errorMsg, val, t.getMessage()));
+        }
+    }
+
 }

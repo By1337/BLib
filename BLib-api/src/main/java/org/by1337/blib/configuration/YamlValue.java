@@ -28,8 +28,13 @@ public class YamlValue {
     public static final YamlValue EMPTY = new YamlValue(null);
     private final @Nullable Object value;
 
+    @Deprecated
     public YamlValue(@Nullable Object value) {
         this.value = value;
+    }
+
+    public static YamlValue wrap(@Nullable final Object value) {
+        return value instanceof YamlValue ? (YamlValue) value : new YamlValue(value);
     }
 
     public <T> T getAs(Class<T> type) {
@@ -49,7 +54,6 @@ public class YamlValue {
         return GsonYamlConvertor.deserializeFromYaml(type, new YamlContext(YamlContext.getMemorySection(value)));
     }
 
-
     public <T> List<T> getAsList(Function<YamlValue, T> function, List<T> def) {
         if (value == null) return def;
         return getAsList(function);
@@ -66,7 +70,7 @@ public class YamlValue {
     }
 
     public Stream<YamlValue> stream() {
-        return ((List<?>) value).stream().map(v -> v instanceof YamlValue ? (YamlValue) v : new YamlValue(v));
+        return ((List<?>) value).stream().map(YamlValue::wrap);
     }
 
     public Set<Map.Entry<YamlValue, YamlValue>> entrySet() {
@@ -75,7 +79,7 @@ public class YamlValue {
 
     public Stream<Pair<YamlValue, YamlValue>> mapStream() {
         Map<String, ?> map0 = YamlContext.getMemorySection(value).getValues(false);
-        return map0.entrySet().stream().map(e -> Pair.of(new YamlValue(e.getKey()), new YamlValue(e.getValue())));
+        return map0.entrySet().stream().map(e -> Pair.of(YamlValue.wrap(e.getKey()), YamlValue.wrap(e.getValue())));
     }
 
     public <V> Map<String, V> getAsMap(Class<V> valueType) {
@@ -113,7 +117,7 @@ public class YamlValue {
         Map<String, ?> map0 = YamlContext.getMemorySection(value).getValues(false);
         Map<K, V> map = new HashMap<>();
         for (Map.Entry<String, ?> entry : map0.entrySet()) {
-            map.put(keyMapper.apply(new YamlValue(entry.getKey())), valueMapper.apply(new YamlValue(entry.getValue())));
+            map.put(keyMapper.apply(YamlValue.wrap(entry.getKey())), valueMapper.apply(YamlValue.wrap(entry.getValue())));
         }
         return map;
     }

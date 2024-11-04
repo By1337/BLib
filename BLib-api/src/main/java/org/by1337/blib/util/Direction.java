@@ -1,5 +1,7 @@
 package org.by1337.blib.util;
 
+import blib.com.mojang.serialization.Codec;
+import org.by1337.blib.configuration.serialization.DefaultCodecs;
 import org.by1337.blib.geom.Vec3i;
 
 public enum Direction {
@@ -9,6 +11,7 @@ public enum Direction {
     SOUTH(0, 0, 1, Axis.POSITIVE_Z),
     WEST(-1, 0, 0, Axis.NEGATIVE_X),
     EAST(1, 0, 0, Axis.POSITIVE_X);
+    public static final Codec<Direction> CODEC = DefaultCodecs.createEnumCodec(Direction.class);
     private final Vec3i direction;
     private final Axis axis;
 
@@ -36,6 +39,7 @@ public enum Direction {
         POSITIVE_X(EAST),
         NEGATIVE_Z(NORTH),
         POSITIVE_Z(SOUTH);
+        public static final Codec<Axis> CODEC = DefaultCodecs.createEnumCodec(Axis.class);
         private final Direction direction;
 
         Axis(Direction direction) {

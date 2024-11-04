@@ -652,12 +652,9 @@ public class NBTParser {
             sb.append("Parsing Error Report:\n");
             String s = input.substring(start, end);
             String replaced = s.replace("\n", "\\n");
-            System.out.println(replaced.length() - s.length());
             sb.append(replaced);
             sb.append("\n");
             sb.append(" ".repeat(Math.max(0, position - start + (replaced.length() - s.length()) - 2))).append("^^^");
-
-            System.out.println(input.charAt(position));
 
             return sb.toString();
         }

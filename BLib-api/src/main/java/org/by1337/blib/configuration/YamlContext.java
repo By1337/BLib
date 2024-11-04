@@ -24,23 +24,23 @@ public class YamlContext {
     private MemorySection section;
 
     public YamlValue getAsYamlValue() {
-        return new YamlValue(section);
+        return YamlValue.wrap(section);
     }
 
     public YamlValue get() {
-        return new YamlValue(section);
+        return YamlValue.wrap(section);
     }
 
     public YamlValue get(String path) {
-        return new YamlValue(section.get(path));
+        return YamlValue.wrap(section.get(path));
     }
 
     public YamlValue getAsYamlValue(String path) {
-        return new YamlValue(section.get(path));
+        return YamlValue.wrap(section.get(path));
     }
 
     public YamlValue getAsYamlValue(String path, Object def) {
-        return new YamlValue(section.get(path, def));
+        return YamlValue.wrap(section.get(path, def));
     }
 
     public boolean has(String path) {

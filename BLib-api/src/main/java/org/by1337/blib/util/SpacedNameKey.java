@@ -1,10 +1,32 @@
 package org.by1337.blib.util;
 
+import blib.com.mojang.serialization.Codec;
+import blib.com.mojang.serialization.DataResult;
+import blib.com.mojang.serialization.DynamicOps;
+import blib.com.mojang.serialization.codecs.PrimitiveCodec;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
 
-public class SpacedNameKey implements SpacedNamed{
+public class SpacedNameKey implements SpacedNamed {
+    public static Codec<SpacedNameKey> CODEC = new PrimitiveCodec<>() {
+        @Override
+        public <T> DataResult<SpacedNameKey> read(DynamicOps<T> ops, T t) {
+            return ops.getStringValue(t).flatMap(s -> {
+                try {
+                    return DataResult.success(new SpacedNameKey(s));
+                } catch (IllegalArgumentException e) {
+                    return DataResult.error(() -> "Not a valid spaced name: " + s + " " + e.getMessage());
+                }
+            });
+        }
+
+        @Override
+        public <T> T write(DynamicOps<T> ops, SpacedNameKey spacedNameKey) {
+            return ops.createString(spacedNameKey.toString());
+        }
+    };
+
     private final NameKey space;
     private final NameKey name;
 
