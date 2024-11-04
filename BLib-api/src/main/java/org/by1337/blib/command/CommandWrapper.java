@@ -42,7 +42,7 @@ public class CommandWrapper extends BukkitCommand implements Listener {
             command.process(sender, args);
             return true;
         } catch (CommandException e) {
-            sender.sendMessage(e.getLocalizedMessage());
+            BLib.getApi().getMessage().sendMsg(sender, e.getLocalizedMessage());
         }
         return false;
     }
