@@ -1,6 +1,8 @@
 package org.by1337.blib.chat.placeholder;
 
 import org.by1337.blib.chat.Placeholderable;
+import org.by1337.blib.chat.placeholder.auto.PlaceholderFinder;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -12,7 +14,11 @@ public class Placeholder implements Placeholderable {
     public static final Placeholder EMPTY = new Placeholder();
     protected final Map<String, Supplier<Object>> placeholders = new HashMap<>();
 
-    public void registerPlaceholder(String placeholder, Supplier<Object> supplier) {
+    public Placeholder() {
+        registerPlaceholders(PlaceholderFinder.findPlaceholders(this, getClass()).entrySet());
+    }
+
+    public void registerPlaceholder(@NotNull String placeholder, Supplier<Object> supplier) {
         placeholders.put(placeholder, supplier);
     }
 
