@@ -41,7 +41,6 @@ public class PlaceholderFinder {
             if (Modifier.isStatic(field.getModifiers())) continue;
             if (!includeAll && !field.isAnnotationPresent(IncludeInPlaceholders.class)) continue;
             if (field.isAnnotationPresent(ExcludeFromPlaceholders.class)) continue;
-            field.setAccessible(true);
             processField(field, placeholders, nameFactory);
         }
         CACHE.put(in.getCanonicalName(), Pair.of(in.getClassLoader(), placeholders));
