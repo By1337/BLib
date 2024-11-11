@@ -17,6 +17,7 @@ public class PlaceholderFinderTest {
         assertEquals("camelCase", test.replace("{camel_case}"));
         assertEquals("{ignore}", test.replace("{ignore}"));
         assertEquals("customName", test.replace("{name_custom}"));
+        assertEquals("101", test.replace("{data}"));
     }
 
 
@@ -29,5 +30,6 @@ public class PlaceholderFinderTest {
         private String ignore = "ignore";
         @PlaceholderName(name = "name_custom")
         private String customName = "customName";
+        private int data = 101;
     }
 }

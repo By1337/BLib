@@ -58,7 +58,9 @@ public enum Version {
     V1_20_5("1.20.5", 766, 3837),
     V1_20_6("1.20.6", 766, 3839),
     V1_21("1.21", 767, 3953),
-    V1_21_1("1.21.1", 767, 3955);
+    V1_21_1("1.21.1", 767, 3955),
+    V1_21_2("1.21.2",768,4080),
+    V1_21_3("1.21.3",768,4082);
     public static final Codec<Version> CODEC = DefaultCodecs.createEnumCodec(Version.class);
 
     @NotNull

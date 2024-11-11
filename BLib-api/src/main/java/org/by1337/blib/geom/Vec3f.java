@@ -5,6 +5,8 @@ import blib.com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.google.errorprone.annotations.Immutable;
 import org.bukkit.util.Vector;
 
+import java.util.Objects;
+
 @Immutable
 public class Vec3f {
     public static final Codec<Vec3f> CODEC = RecordCodecBuilder.create(instance -> instance.group(
@@ -256,5 +258,18 @@ public class Vec3f {
 
     public float getZ() {
         return z;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Vec3f vec3f = (Vec3f) o;
+        return Float.compare(x, vec3f.x) == 0 && Float.compare(y, vec3f.y) == 0 && Float.compare(z, vec3f.z) == 0;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(x, y, z);
     }
 }
