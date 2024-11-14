@@ -31,6 +31,23 @@ public final class Vec3i {
         this.y = y;
         this.z = z;
     }
+    public Vec3i(Vec3d vec3i) {
+        x = (int) vec3i.x;
+        y = (int) vec3i.y;
+        z = (int) vec3i.z;
+    }
+
+    public Vec3i(Vec3f vec3i) {
+        x = (int) vec3i.x;
+        y = (int) vec3i.y;
+        z = (int) vec3i.z;
+    }
+
+    public Vec3i(double x, double y, double z) {
+        this.x = (int) x;
+        this.y = (int) y;
+        this.z = (int) z;
+    }
 
     public Vec3i(Block block) {
         this(block.getLocation());
@@ -44,10 +61,6 @@ public final class Vec3i {
 
     public Location toLocation(@Nullable World world) {
         return new Location(world, x, y, z);
-    }
-
-    public Vector toVector() {
-        return new Vector(x, y, z);
     }
 
     public Block toBlock(@NotNull World world) {
@@ -66,6 +79,7 @@ public final class Vec3i {
         return new Vec3d(this).add(0.5, 0.5, 0.5);
     }
 
+    // auto generated start
     public Vec3i mul(int scale) {
         return new Vec3i(
                 x * scale,
@@ -73,15 +87,177 @@ public final class Vec3i {
                 z * scale
         );
     }
-
-    public Vec3i sub(Vec3i t1, Vec3i t2) {
+    public Vec3i mul(int x1, int y1, int z1) {
         return new Vec3i(
-                t1.x - t2.x,
-                t1.y - t2.y,
-                t1.z - t2.z
+                x * x1,
+                y * y1,
+                z * z1
         );
     }
+    public Vec3i sub(int val) {
+        return new Vec3i(
+                x - val,
+                y - val,
+                z - val
+        );
+    }
+    public Vec3i sub(int x1, int y1, int z1) {
+        return new Vec3i(
+                x - x1,
+                y - y1,
+                z - z1
+        );
+    }
+    public Vec3i add(int val) {
+        return new Vec3i(
+                x + val,
+                y + val,
+                z + val
+        );
+    }
+    public Vec3i add(int x1, int y1, int z1) {
+        return new Vec3i(
+                x + x1,
+                y + y1,
+                z + z1
+        );
+    }
+    public Vec3i divide(int scale) {
+        return new Vec3i(
+                x / scale,
+                y / scale,
+                z / scale
+        );
+    }
+    public Vec3i divide(int x1, int y1, int z1) {
+        return new Vec3i(
+                x / x1,
+                y / y1,
+                z / z1
+        );
+    }
+    public int dot(int x1, int y1, int z1) {
+        return x * x1 + y * y1 + z * z1;
+    }
+    public double distance(double x1, double y1, double z1) {
+        return Math.sqrt(square(x - x1) + square(y - y1) + square(z - z1));
+    }
+    public double distanceSquared(double x1, double y1, double z1) {
+        return square(x - x1) + square(y - y1) + square(z - z1);
+    }
+    public Vector toVector() {
+        return new Vector(x, y, z);
+    }
+    public int getX() {
+        return x;
+    }
+    public int getY() {
+        return y;
+    }
+    public int getZ() {
+        return z;
+    }
+    public Vec3i setX(int x1) {
+        return new Vec3i(x1, y, z);
+    }
+    public Vec3i setY(int y1) {
+        return new Vec3i(x, y1, z);
+    }
+    public Vec3i setZ(int z1) {
+        return new Vec3i(x, y, z1);
+    }
+    public double length() {
+        return Math.sqrt(this.x * this.x + this.y * this.y + this.z * this.z);
+    }
 
+    public Vec3i sub(Vec3d t1) {
+        return new Vec3i(
+                x - t1.x,
+                y - t1.y,
+                z - t1.z
+        );
+    }
+    public Vec3i mul(Vec3d t1) {
+        return new Vec3i(
+                x * t1.x,
+                y * t1.y,
+                z * t1.z
+        );
+    }
+    public Vec3i divide(Vec3d t1) {
+        return new Vec3i(
+                x / t1.x,
+                y / t1.y,
+                z / t1.z
+        );
+    }
+    public Vec3i add(Vec3d t1) {
+        return new Vec3i(
+                x + t1.x,
+                y + t1.y,
+                z + t1.z
+        );
+    }
+    public int dot(Vec3d t1) {
+        return (int) (x * t1.x + y * t1.y + z * t1.z);
+    }
+    public double distance(Vec3d t1) {
+        return Math.sqrt(square(x - t1.x) + square(y - t1.y) + square(z - t1.z));
+    }
+    public double distanceSquared(Vec3d t1) {
+        return square(x - t1.x) + square(y - t1.y) + square(z - t1.z);
+    }
+    public Vec3i cross(Vec3d t1) {
+        return new Vec3i(
+                y * t1.z - z * t1.y,
+                t1.x * z - t1.z * x,
+                x * t1.y - y * t1.x
+        );
+    }
+    public Vec3i sub(Vec3f t1) {
+        return new Vec3i(
+                x - t1.x,
+                y - t1.y,
+                z - t1.z
+        );
+    }
+    public Vec3i mul(Vec3f t1) {
+        return new Vec3i(
+                x * t1.x,
+                y * t1.y,
+                z * t1.z
+        );
+    }
+    public Vec3i divide(Vec3f t1) {
+        return new Vec3i(
+                x / t1.x,
+                y / t1.y,
+                z / t1.z
+        );
+    }
+    public Vec3i add(Vec3f t1) {
+        return new Vec3i(
+                x + t1.x,
+                y + t1.y,
+                z + t1.z
+        );
+    }
+    public int dot(Vec3f t1) {
+        return (int) (x * t1.x + y * t1.y + z * t1.z);
+    }
+    public double distance(Vec3f t1) {
+        return Math.sqrt(square(x - t1.x) + square(y - t1.y) + square(z - t1.z));
+    }
+    public double distanceSquared(Vec3f t1) {
+        return square(x - t1.x) + square(y - t1.y) + square(z - t1.z);
+    }
+    public Vec3i cross(Vec3f t1) {
+        return new Vec3i(
+                y * t1.z - z * t1.y,
+                t1.x * z - t1.z * x,
+                x * t1.y - y * t1.x
+        );
+    }
     public Vec3i sub(Vec3i t1) {
         return new Vec3i(
                 x - t1.x,
@@ -89,31 +265,20 @@ public final class Vec3i {
                 z - t1.z
         );
     }
-
-    public Vec3i sub(int x, int y, int z) {
+    public Vec3i mul(Vec3i t1) {
         return new Vec3i(
-                this.x - x,
-                this.y - y,
-                this.z - z
+                x * t1.x,
+                y * t1.y,
+                z * t1.z
         );
     }
-
-    public Vec3i add(Vec3i t1, Vec3i t2) {
+    public Vec3i divide(Vec3i t1) {
         return new Vec3i(
-                t1.x + t2.x,
-                t1.y + t2.y,
-                t1.z + t2.z
+                x / t1.x,
+                y / t1.y,
+                z / t1.z
         );
     }
-
-    public Vec3i add(int x, int y, int z) {
-        return new Vec3i(
-                this.x + x,
-                this.y + y,
-                this.z + z
-        );
-    }
-
     public Vec3i add(Vec3i t1) {
         return new Vec3i(
                 x + t1.x,
@@ -121,26 +286,201 @@ public final class Vec3i {
                 z + t1.z
         );
     }
-
-    public double length() {
-        return Math.sqrt(this.x * this.x + this.y * this.y + this.z * this.z);
+    public int dot(Vec3i t1) {
+        return x * t1.x + y * t1.y + z * t1.z;
     }
-
-
-    public double dot(Vec3i v1) {
-        return this.x * v1.x + this.y * v1.y + this.z * v1.z;
+    public double distance(Vec3i t1) {
+        return Math.sqrt(square(x - t1.x) + square(y - t1.y) + square(z - t1.z));
     }
-
-    public int getX() {
-        return x;
+    public double distanceSquared(Vec3i t1) {
+        return square(x - t1.x) + square(y - t1.y) + square(z - t1.z);
     }
-
-    public int getY() {
-        return y;
+    public Vec3i cross(Vec3i t1) {
+        return new Vec3i(
+                y * t1.z - z * t1.y,
+                t1.x * z - t1.z * x,
+                x * t1.y - y * t1.x
+        );
     }
-
-    public int getZ() {
-        return z;
+    public Vec3i sub(Vec3l t1) {
+        return new Vec3i(
+                x - t1.x,
+                y - t1.y,
+                z - t1.z
+        );
+    }
+    public Vec3i mul(Vec3l t1) {
+        return new Vec3i(
+                x * t1.x,
+                y * t1.y,
+                z * t1.z
+        );
+    }
+    public Vec3i divide(Vec3l t1) {
+        return new Vec3i(
+                (double) x / t1.x,
+                (double) y / t1.y,
+                (double) z / t1.z
+        );
+    }
+    public Vec3i add(Vec3l t1) {
+        return new Vec3i(
+                x + t1.x,
+                y + t1.y,
+                z + t1.z
+        );
+    }
+    public int dot(Vec3l t1) {
+        return (int) (x * t1.x + y * t1.y + z * t1.z);
+    }
+    public double distance(Vec3l t1) {
+        return Math.sqrt(square(x - t1.x) + square(y - t1.y) + square(z - t1.z));
+    }
+    public double distanceSquared(Vec3l t1) {
+        return square(x - t1.x) + square(y - t1.y) + square(z - t1.z);
+    }
+    public Vec3i cross(Vec3l t1) {
+        return new Vec3i(
+                y * t1.z - z * t1.y,
+                t1.x * z - t1.z * x,
+                x * t1.y - y * t1.x
+        );
+    }
+    public Vec3i sub(Vec3s t1) {
+        return new Vec3i(
+                x - t1.x,
+                y - t1.y,
+                z - t1.z
+        );
+    }
+    public Vec3i mul(Vec3s t1) {
+        return new Vec3i(
+                x * t1.x,
+                y * t1.y,
+                z * t1.z
+        );
+    }
+    public Vec3i divide(Vec3s t1) {
+        return new Vec3i(
+                x / t1.x,
+                y / t1.y,
+                z / t1.z
+        );
+    }
+    public Vec3i add(Vec3s t1) {
+        return new Vec3i(
+                x + t1.x,
+                y + t1.y,
+                z + t1.z
+        );
+    }
+    public int dot(Vec3s t1) {
+        return x * t1.x + y * t1.y + z * t1.z;
+    }
+    public double distance(Vec3s t1) {
+        return Math.sqrt(square(x - t1.x) + square(y - t1.y) + square(z - t1.z));
+    }
+    public double distanceSquared(Vec3s t1) {
+        return square(x - t1.x) + square(y - t1.y) + square(z - t1.z);
+    }
+    public Vec3i cross(Vec3s t1) {
+        return new Vec3i(
+                y * t1.z - z * t1.y,
+                t1.x * z - t1.z * x,
+                x * t1.y - y * t1.x
+        );
+    }
+    public Vec3i sub(Vector t1) {
+        return new Vec3i(
+                x - t1.getX(),
+                y - t1.getY(),
+                z - t1.getZ()
+        );
+    }
+    public Vec3i mul(Vector t1) {
+        return new Vec3i(
+                x * t1.getX(),
+                y * t1.getY(),
+                z * t1.getZ()
+        );
+    }
+    public Vec3i divide(Vector t1) {
+        return new Vec3i(
+                x / t1.getX(),
+                y / t1.getY(),
+                z / t1.getZ()
+        );
+    }
+    public Vec3i add(Vector t1) {
+        return new Vec3i(
+                x + t1.getX(),
+                y + t1.getY(),
+                z + t1.getZ()
+        );
+    }
+    public int dot(Vector t1) {
+        return (int) (x * t1.getX() + y * t1.getY() + z * t1.getZ());
+    }
+    public double distance(Vector t1) {
+        return Math.sqrt(square(x - t1.getX()) + square(y - t1.getY()) + square(z - t1.getZ()));
+    }
+    public double distanceSquared(Vector t1) {
+        return square(x - t1.getX()) + square(y - t1.getY()) + square(z - t1.getZ());
+    }
+    public Vec3i cross(Vector t1) {
+        return new Vec3i(
+                y * t1.getZ() - z * t1.getY(),
+                t1.getX() * z - t1.getZ() * x,
+                x * t1.getY() - y * t1.getX()
+        );
+    }
+    public Vec3i sub(Location t1) {
+        return new Vec3i(
+                x - t1.getX(),
+                y - t1.getY(),
+                z - t1.getZ()
+        );
+    }
+    public Vec3i mul(Location t1) {
+        return new Vec3i(
+                x * t1.getX(),
+                y * t1.getY(),
+                z * t1.getZ()
+        );
+    }
+    public Vec3i divide(Location t1) {
+        return new Vec3i(
+                x / t1.getX(),
+                y / t1.getY(),
+                z / t1.getZ()
+        );
+    }
+    public Vec3i add(Location t1) {
+        return new Vec3i(
+                x + t1.getX(),
+                y + t1.getY(),
+                z + t1.getZ()
+        );
+    }
+    public int dot(Location t1) {
+        return (int) (x * t1.getX() + y * t1.getY() + z * t1.getZ());
+    }
+    public double distance(Location t1) {
+        return Math.sqrt(square(x - t1.getX()) + square(y - t1.getY()) + square(z - t1.getZ()));
+    }
+    public double distanceSquared(Location t1) {
+        return square(x - t1.getX()) + square(y - t1.getY()) + square(z - t1.getZ());
+    }
+    public Vec3i cross(Location t1) {
+        return new Vec3i(
+                y * t1.getZ() - z * t1.getY(),
+                t1.getX() * z - t1.getZ() * x,
+                x * t1.getY() - y * t1.getX()
+        );
+    }
+    // auto generated end
+    private double square(double d) {
+        return d * d;
     }
 
     @Override
