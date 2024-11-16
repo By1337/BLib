@@ -90,6 +90,14 @@ public final class Vec3i {
     }
 
     // auto generated start
+    public Vec3i abs() {
+        return new Vec3i(
+                Math.abs(x),
+                Math.abs(y),
+                Math.abs(z)
+        );
+    }
+
     public Vec3i mul(int scale) {
         return new Vec3i(
                 x * scale,

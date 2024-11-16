@@ -162,6 +162,14 @@ public final class Vec3d {
 
 
     // auto generated start
+    public Vec3d abs() {
+        return new Vec3d(
+                Math.abs(x),
+                Math.abs(y),
+                Math.abs(z)
+        );
+    }
+
     public Vec3d mul(double scale) {
         return new Vec3d(
                 x * scale,

@@ -66,6 +66,14 @@ public class Vec3l {
     }
 
     // auto generated start
+    public Vec3l abs() {
+        return new Vec3l(
+                Math.abs(x),
+                Math.abs(y),
+                Math.abs(z)
+        );
+    }
+
     public Vec3l mul(long scale) {
         return new Vec3l(
                 x * scale,

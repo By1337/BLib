@@ -104,6 +104,14 @@ public class Vec3f {
     }
 
     // auto generated start
+    public Vec3f abs() {
+        return new Vec3f(
+                Math.abs(x),
+                Math.abs(y),
+                Math.abs(z)
+        );
+    }
+
     public Vec3f mul(float scale) {
         return new Vec3f(
                 x * scale,

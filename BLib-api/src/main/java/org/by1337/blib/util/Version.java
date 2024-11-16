@@ -89,7 +89,15 @@ public enum Version {
         String version = System.getProperty("blib.server.version");
         if (version != null) {
             LOGGER.warn("Server version {} is set via property blib.server.version", version);
-            VERSION = valueOf(version);
+            if (version.contains(".")){
+                try {
+                    VERSION = getVersion(version);
+                } catch (UnsupportedVersionException e) {
+                    throw new RuntimeException(e);
+                }
+            }else {
+                VERSION = valueOf(version);
+            }
         } else {
             Version detectedVer;
             try (InputStream stream = Bukkit.getServer().getClass().getResourceAsStream("/version.json")) {
@@ -118,8 +126,11 @@ public enum Version {
     }
 
     private static Version getVersion(GameVersion gameVersion) throws UnsupportedVersionException {
+        return getVersion(gameVersion.getName());
+    }
+    private static Version getVersion(String gameVersion) throws UnsupportedVersionException {
         for (Version version : Version.values()) {
-            if (version.getVer().equals(gameVersion.getName())) {
+            if (version.getVer().equals(gameVersion)) {
                 return version;
             }
         }
@@ -211,6 +222,19 @@ public enum Version {
 
     public int getWorldVersion() {
         return worldVersion;
+    }
+
+    public boolean newerThan(Version version){
+        return ordinal() > version.ordinal();
+    }
+    public boolean newerThanOrEqual(Version version){
+        return ordinal() >= version.ordinal();
+    }
+    public boolean olderThan(Version version){
+        return ordinal() < version.ordinal();
+    }
+    public boolean olderThanOrEqual(Version version){
+        return ordinal() <= version.ordinal();
     }
 
     /**
