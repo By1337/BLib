@@ -10,6 +10,8 @@ import org.by1337.blib.lang.Lang;
 import org.by1337.blib.text.MessageFormatter;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -59,9 +61,10 @@ public enum Version {
     V1_20_6("1.20.6", 766, 3839),
     V1_21("1.21", 767, 3953),
     V1_21_1("1.21.1", 767, 3955),
-    V1_21_2("1.21.2",768,4080),
-    V1_21_3("1.21.3",768,4082);
+    V1_21_2("1.21.2", 768, 4080),
+    V1_21_3("1.21.3", 768, 4082);
     public static final Codec<Version> CODEC = DefaultCodecs.createEnumCodec(Version.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger("BLib#Version");
 
     @NotNull
     private final String ver;
@@ -83,29 +86,35 @@ public enum Version {
     }
 
     static {
-        Version detectedVer;
-        try (InputStream stream = Bukkit.getServer().getClass().getResourceAsStream("/version.json")) {
-            if (stream == null) {
-                Bukkit.getLogger().log(Level.WARNING, "[BLib] Missing version information!");
-                throw new FileNotFoundException();
-            } else {
-                try (InputStreamReader reader = new InputStreamReader(stream, StandardCharsets.UTF_8)) {
-                    Gson gson = new Gson();
-                    JsonReader jsonReader = new JsonReader(reader);
-                    gameVersion = new BGameVersion(gson.getAdapter(JsonObject.class).read(jsonReader));
+        String version = System.getProperty("blib.server.version");
+        if (version != null) {
+            LOGGER.warn("Server version {} is set via property blib.server.version", version);
+            VERSION = valueOf(version);
+        } else {
+            Version detectedVer;
+            try (InputStream stream = Bukkit.getServer().getClass().getResourceAsStream("/version.json")) {
+                if (stream == null) {
+                    Bukkit.getLogger().log(Level.WARNING, "[BLib] Missing version information!");
+                    throw new FileNotFoundException();
+                } else {
+                    try (InputStreamReader reader = new InputStreamReader(stream, StandardCharsets.UTF_8)) {
+                        Gson gson = new Gson();
+                        JsonReader jsonReader = new JsonReader(reader);
+                        gameVersion = new BGameVersion(gson.getAdapter(JsonObject.class).read(jsonReader));
+                    }
+                    detectedVer = getVersion(gameVersion);
                 }
-                detectedVer = getVersion(gameVersion);
+            } catch (IOException | UnsupportedVersionException e) {
+                try {
+                    detectedVer = getVersion(Bukkit.getVersion(), Bukkit.getBukkitVersion(), Bukkit.getServer().getClass().getPackage().getName());
+                } catch (UnsupportedVersionException ex) {
+                    throw new RuntimeException(new UnsupportedVersionException("Cannot be detected server version! " + "Version info: Bukkit.getVersion()='" + Bukkit.getVersion() +
+                            "', Bukkit.getBukkitVersion()='" + Bukkit.getBukkitVersion() +
+                            "', Bukkit.getServer().getClass().getPackage().getName()='" + Bukkit.getServer().getClass().getPackage().getName() + "'" + ", gameVersion='" + gameVersion + "'"));
+                }
             }
-        } catch (IOException | UnsupportedVersionException e) {
-            try {
-                detectedVer = getVersion(Bukkit.getVersion(), Bukkit.getBukkitVersion(), Bukkit.getServer().getClass().getPackage().getName());
-            } catch (UnsupportedVersionException ex) {
-                throw new RuntimeException(new UnsupportedVersionException("Cannot be detected server version! " + "Version info: Bukkit.getVersion()='" + Bukkit.getVersion() +
-                                                                           "', Bukkit.getBukkitVersion()='" + Bukkit.getBukkitVersion() +
-                                                                           "', Bukkit.getServer().getClass().getPackage().getName()='" + Bukkit.getServer().getClass().getPackage().getName() + "'" + ", gameVersion='" + gameVersion + "'"));
-            }
+            VERSION = detectedVer;
         }
-        VERSION = detectedVer;
     }
 
     private static Version getVersion(GameVersion gameVersion) throws UnsupportedVersionException {
