@@ -47,6 +47,12 @@ public class Vec3l {
         z = (long) vec3i.z;
     }
 
+    public Vec3l(Vec3s vec3s) {
+        x = vec3s.x;
+        y = vec3s.y;
+        z = vec3s.z;
+    }
+
     public Vec3l(int x, int y, int z) {
         this.x = x;
         this.y = y;

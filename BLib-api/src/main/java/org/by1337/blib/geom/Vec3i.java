@@ -42,6 +42,16 @@ public final class Vec3i {
         y = (int) vec3i.y;
         z = (int) vec3i.z;
     }
+    public Vec3i(Vec3l vec3l) {
+        x = (int) vec3l.x;
+        y = (int) vec3l.y;
+        z = (int) vec3l.z;
+    }
+    public Vec3i(Vec3s vec3s) {
+        x = vec3s.x;
+        y = vec3s.y;
+        z = vec3s.z;
+    }
 
     public Vec3i(double x, double y, double z) {
         this.x = (int) x;

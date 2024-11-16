@@ -43,6 +43,18 @@ public final class Vec3d {
         z = vec3i.z;
     }
 
+    public Vec3d(Vec3l vec3l) {
+        x = vec3l.x;
+        y = vec3l.y;
+        z = vec3l.z;
+    }
+
+    public Vec3d(Vec3s vec3s) {
+        x = vec3s.x;
+        y = vec3s.y;
+        z = vec3s.z;
+    }
+
     public Vec3d(double x, double y, double z) {
         this.x = x;
         this.y = y;

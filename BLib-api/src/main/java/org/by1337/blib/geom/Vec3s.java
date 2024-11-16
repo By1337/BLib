@@ -57,6 +57,12 @@ public class Vec3s {
         z = (short) vec3i.z;
     }
 
+    public Vec3s(Vec3d vec3d) {
+        x = (short) vec3d.x;
+        y = (short) vec3d.y;
+        z = (short) vec3d.z;
+    }
+
     // auto generated start
     public Vec3s mul(short scale) {
         return new Vec3s(
