@@ -22,7 +22,6 @@ import org.jetbrains.annotations.ApiStatus;
 import java.util.Optional;
 import java.util.function.Function;
 
-@ApiStatus.Experimental
 public class BukkitCodecs {
     public static final Codec<BlockData> BLOCK_DATA = Codec.STRING
             .comapFlatMap(s -> tryMap(s, Bukkit::createBlockData, "Not a valid block data: {} {}"), BlockData::getAsString);

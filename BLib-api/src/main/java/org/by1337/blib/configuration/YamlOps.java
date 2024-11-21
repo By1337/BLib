@@ -18,7 +18,6 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
-@ApiStatus.Experimental
 public class YamlOps implements DynamicOps<YamlValue> {
     public static final YamlOps INSTANCE = new YamlOps();
 
