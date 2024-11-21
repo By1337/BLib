@@ -13,6 +13,7 @@ import org.by1337.blib.inventory.ItemStackSerialize;
 import org.by1337.blib.nbt.ParseCompoundTag;
 import org.by1337.blib.text.ComponentToANSI;
 import org.by1337.blib.text.LegacyConvertor;
+import org.by1337.blib.unsafe.BLibUnsafe;
 import org.by1337.blib.util.AsyncCatcher;
 import org.jetbrains.annotations.NotNull;
 
@@ -32,4 +33,5 @@ public interface Api {
     @NotNull LegacyConvertor getLegacyConvertor();
     @NotNull ComponentToANSI getComponentToANSI();
     @NotNull PooledBlockReplacer getPooledBlockReplacer();
+    @NotNull BLibUnsafe getUnsafe();
 }

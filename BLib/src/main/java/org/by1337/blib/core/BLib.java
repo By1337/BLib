@@ -43,6 +43,13 @@ public class BLib extends JavaPlugin {
 
     @Override
     public void onLoad() {
+        File libraries = new File(getDataFolder(), "libraries");
+        if (!libraries.exists()) {
+            getSLF4JLogger().info("Downloading libraries...");
+            libraries.mkdirs();
+        }
+        LibLoader.load(libraries.toPath(), this);
+
         instance = this;
         api = new BApi();
         org.by1337.blib.BLib.setApi(api);
@@ -82,23 +89,6 @@ public class BLib extends JavaPlugin {
     }
 
     private static Command<CommandSender> command;
-
-/*    @Override
-    public boolean onCommand(@NotNull CommandSender sender, @NotNull org.bukkit.command.Command cmd, @NotNull String label, @NotNull String[] args) {
-        try {
-            command.process(sender, args);
-            return true;
-        } catch (CommandException e) {
-            sender.sendMessage(e.getLocalizedMessage());
-        }
-        return false;
-    }
-
-    @Nullable
-    @Override
-    public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull org.bukkit.command.Command cmd, @NotNull String alias, @NotNull String[] args) {
-        return command.getTabCompleter(sender, args);
-    }*/
 
     private void setCommand() {
         command = new Command<CommandSender>("blib")
