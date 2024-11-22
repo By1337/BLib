@@ -41,7 +41,7 @@ public class ExpiringSynchronizedMap<K, V> implements Map<K, V> {
         this.expiryDuration = timeUnit.toMillis(expiryDuration);
         scheduler = Executors.newScheduledThreadPool(1);
         var map = mapSupplier.get();
-        if (!map.isEmpty()) throw new IllegalArgumentException("map must not be empty");
+        if (!map.isEmpty()) throw new IllegalArgumentException("map must be empty");
         source = (Map<K, TimedValue>) map;
     }
 
