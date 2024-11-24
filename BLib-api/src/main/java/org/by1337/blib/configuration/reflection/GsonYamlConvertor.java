@@ -4,6 +4,7 @@ import com.google.gson.*;
 import org.bukkit.configuration.MemorySection;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.by1337.blib.configuration.YamlContext;
+import org.by1337.blib.configuration.YamlValue;
 import org.by1337.blib.configuration.adapter.AdapterRegistry;
 import org.by1337.blib.nbt.NBT;
 import org.by1337.blib.nbt.impl.*;
@@ -38,10 +39,20 @@ public class GsonYamlConvertor {
     }
 
     public static JsonElement convertYamlToJson(Object o) {
+        if (o instanceof YamlValue yamlValue){
+            return convertYamlToJson(yamlValue.unpack());
+        }
         if (o instanceof MemorySection memorySection) {
             JsonObject jsonObject = new JsonObject();
             for (String key : memorySection.getKeys(false)) {
                 jsonObject.add(key, convertYamlToJson(memorySection.get(key)));
+            }
+            return jsonObject;
+        }
+        if (o instanceof Map<?,?> map){
+            JsonObject jsonObject = new JsonObject();
+            for (Object key : map.keySet()) {
+                jsonObject.add(String.valueOf(key), convertYamlToJson(map.get(key)));
             }
             return jsonObject;
         }
@@ -60,7 +71,7 @@ public class GsonYamlConvertor {
         if (o instanceof Boolean b) {
             return new JsonPrimitive(b);
         }
-        if (o instanceof List<?> list) {
+        if (o instanceof Collection<?> list) {
             JsonArray array = new JsonArray();
             for (Object object : list) {
                 array.add(convertYamlToJson(object));
@@ -70,7 +81,7 @@ public class GsonYamlConvertor {
         if (AdapterRegistry.hasAdapter(o.getClass()) || AdapterRegistry.hasPrimitiveAdapter(o.getClass())) {
             return convertYamlToJson(AdapterRegistry.serialize(o));
         }
-        throw new IllegalStateException("Unknown type " + o);
+        throw new IllegalStateException("Unknown type " + o.getClass().getCanonicalName() + " " + o);
     }
 
     public static YamlContext serializeToYaml(Object source) {
@@ -129,6 +140,9 @@ public class GsonYamlConvertor {
         }
         if (o instanceof YamlContext context) {
             return convertYamlToNBT(context.getHandle());
+        }
+        if (o instanceof YamlValue yamlValue) {
+            return convertYamlToNBT(yamlValue.unpack());
         }
         if (o instanceof Number n) {
             return convertNumberToNbt(n);

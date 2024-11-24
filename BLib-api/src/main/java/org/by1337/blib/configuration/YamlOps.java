@@ -195,7 +195,7 @@ public class YamlOps implements DynamicOps<YamlValue> {
             @Override
             public @Nullable YamlValue get(YamlValue key) {
                 var v = map.get(key);
-                return v.isEmpty() ? null : v;
+                return v == null || v.isEmpty() ? null : v;
             }
 
             @Override
@@ -206,6 +206,11 @@ public class YamlOps implements DynamicOps<YamlValue> {
             @Override
             public Stream<Pair<YamlValue, YamlValue>> entries() {
                 return map.entrySet().stream().map(e -> Pair.of(e.getKey(), e.getValue()));
+            }
+
+            @Override
+            public String toString() {
+                return "MapLike" + map;
             }
         });
     }
