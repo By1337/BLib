@@ -17,4 +17,6 @@ public interface ParseCompoundTag {
     CompletableFuture<@Nullable CompoundTag> readOfflinePlayerData(@NotNull UUID player);
 
     @NotNull CompoundTag pdcToCompoundTag(@NotNull PersistentDataContainer persistentDataContainer);
+    Object toNMS(@NotNull NBT nbt);
+    NBT fromNMS(@NotNull Object nmsObj);
 }

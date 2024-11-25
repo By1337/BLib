@@ -1,5 +1,7 @@
 package org.by1337.blib.configuration;
 
+import blib.com.mojang.serialization.Codec;
+import blib.com.mojang.serialization.DataResult;
 import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.Particle;
@@ -35,6 +37,10 @@ public class YamlValue {
 
     public static YamlValue wrap(@Nullable final Object value) {
         return value instanceof YamlValue ? (YamlValue) value : new YamlValue(value);
+    }
+
+    public <T> DataResult<blib.com.mojang.datafixers.util.Pair<T, YamlValue>> decode(Codec<T> codec){
+        return codec.decode(YamlOps.INSTANCE, this);
     }
 
     public <T> T getAs(Class<T> type) {

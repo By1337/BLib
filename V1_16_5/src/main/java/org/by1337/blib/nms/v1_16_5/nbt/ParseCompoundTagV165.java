@@ -82,6 +82,14 @@ public class ParseCompoundTagV165 implements ParseCompoundTag {
         return (raw == null ? null : function.apply(raw));
     }
 
+    @Override
+    public Object toNMS(@NotNull NBT nbt) {
+        return convert(nbt);
+    }
+    @Override
+    public NBT fromNMS(@NotNull Object nmsObj) {
+        return convertFromNms((Tag) nmsObj);
+    }
     private void copyAsNms(CompoundTag compoundTag, net.minecraft.nbt.CompoundTag nms) {
         for (Entry<String, NBT> entry : compoundTag.entrySet()) {
             NBT nbt = (NBT) entry.getValue();

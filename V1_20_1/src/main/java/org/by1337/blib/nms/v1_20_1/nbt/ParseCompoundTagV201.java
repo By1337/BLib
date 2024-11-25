@@ -42,6 +42,14 @@ public class ParseCompoundTagV201 implements ParseCompoundTag {
     }
 
     @Override
+    public Object toNMS(@NotNull NBT nbt) {
+        return convert(nbt);
+    }
+    @Override
+    public NBT fromNMS(@NotNull Object nmsObj) {
+        return convertFromNms((Tag) nmsObj);
+    }
+    @Override
     public @NotNull org.by1337.blib.nbt.impl.CompoundTag pdcToCompoundTag(@NotNull PersistentDataContainer persistentDataContainer) {
         if (persistentDataContainer instanceof CraftPersistentDataContainer pdc){
             return (org.by1337.blib.nbt.impl.CompoundTag) convertFromNms(pdc.toTagCompound());
