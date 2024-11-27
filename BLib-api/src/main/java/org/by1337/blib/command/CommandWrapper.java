@@ -36,6 +36,10 @@ public class CommandWrapper extends BukkitCommand implements Listener {
         BLib.getApi().getBukkitCommandRegister().register(this);
     }
 
+    public void unregister() {
+        close();
+    }
+
     @Override
     public boolean execute(@NotNull CommandSender sender, @NotNull String commandLabel, @NotNull String[] args) {
         try {
