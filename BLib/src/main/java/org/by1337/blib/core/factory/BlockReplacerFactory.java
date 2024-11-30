@@ -5,6 +5,7 @@ import org.by1337.blib.block.replacer.impl.BukkitBlockReplacer;
 import org.by1337.blib.nms.V1_20_6.block.replacer.BlockReplacerV1_20_6;
 import org.by1337.blib.nms.V1_21.block.replacer.BlockReplacerV1_21;
 import org.by1337.blib.nms.V1_21.block.replacer.BlockReplacerV1_21_1;
+import org.by1337.blib.nms.V1_21_3.block.replacer.BlockReplacerV1_21_3;
 import org.by1337.blib.nms.v1_16_5.block.replacer.BlockReplacerV165;
 import org.by1337.blib.nms.v1_17_1.block.replacer.BlockReplacerV1_17_1;
 import org.by1337.blib.nms.v1_18_2.block.replacer.BlockReplacerV1_18_2;
@@ -27,6 +28,7 @@ public class BlockReplacerFactory {
             case V1_20_6 -> new BlockReplacerV1_20_6();
             case V1_21 -> new BlockReplacerV1_21();
             case V1_21_1 -> new BlockReplacerV1_21_1();
+            case V1_21_3 -> new BlockReplacerV1_21_3();
             default -> new BukkitBlockReplacer();
         };
     }

@@ -4,13 +4,13 @@
     <parent>
         <groupId>org.by1337.blib</groupId>
         <artifactId>Blib-parent</artifactId>
-        <version>1.4</version>
+        <version>1.4.1</version>
     </parent>
     <groupId>org.by1337.blib.asm</groupId>
     <artifactId>blib-maven-plugin</artifactId>
     <name>blib-maven-plugin</name>
     <packaging>maven-plugin</packaging>
-    <version>1.4</version>
+    <version>1.4.1</version>
 
     <properties>
         <java.version>16</java.version>

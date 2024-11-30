@@ -6,7 +6,7 @@
     <parent>
         <groupId>org.by1337.blib</groupId>
         <artifactId>Blib-parent</artifactId>
-        <version>1.4</version>
+        <version>1.4.1</version>
     </parent>
 
     <groupId>org.by1337.blib.dfu</groupId>
@@ -68,7 +68,7 @@
             <plugin>
                 <groupId>org.by1337.blib.asm</groupId>
                 <artifactId>blib-maven-plugin</artifactId>
-                <version>1.4</version>
+                <version>1.4.1</version>
                 <executions>
                     <execution>
                         <phase>package</phase>

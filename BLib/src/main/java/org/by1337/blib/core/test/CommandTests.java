@@ -8,7 +8,6 @@ import org.by1337.blib.BLib;
 import org.by1337.blib.command.Command;
 import org.by1337.blib.command.CommandException;
 import org.by1337.blib.command.argument.*;
-import org.by1337.blib.core.Test;
 import org.by1337.blib.nbt.impl.CompoundTag;
 import org.by1337.blib.network.clientbound.entity.PacketAddEntity;
 import org.by1337.blib.network.clientbound.entity.PacketSetEntityData;
@@ -40,7 +39,7 @@ public class CommandTests {
                 )
                 .addSubCommand(new Command<CommandSender>("ArgumentFormattedDouble")
                         .argument(new ArgumentFormattedDouble<>("d", List.of("10.5K")))
-                        .argument(new ArgumentFormattedDouble<>("d1",List.of("10.5K")))
+                        .argument(new ArgumentFormattedDouble<>("d1", List.of("10.5K")))
                         .executor(((sender, args) -> {
                             BLib.getApi().getMessage().sendMsg(sender, args.getOrDefault("d", "null").toString());
                             BLib.getApi().getMessage().sendMsg(sender, args.getOrDefault("d1", "null").toString());
@@ -64,13 +63,6 @@ public class CommandTests {
                     BLib.getApi().getMessage().log(
                             BLib.getApi().getMessage().componentBuilder((String) args.getOrDefault("msg", "123"))
                     );
-                }));
-    }
-
-    public static Command<CommandSender> test() {
-        return new Command<CommandSender>("yamlOPS")
-                .executor(((sender, args) -> {
-                    Test.main(new String[]{});
                 }));
     }
 
@@ -106,8 +98,8 @@ public class CommandTests {
                 .executor(((sender, args) -> {
                     sender.sendMessage(
                             "§fVersion info: Bukkit.getVersion()='§7" + Bukkit.getVersion() +
-                            "§f', Bukkit.getBukkitVersion()='§7" + Bukkit.getBukkitVersion() +
-                            "§f', Bukkit.getServer().getClass().getPackage().getName()='§7" + Bukkit.getServer().getClass().getPackage().getName() + "§f'"
+                                    "§f', Bukkit.getBukkitVersion()='§7" + Bukkit.getBukkitVersion() +
+                                    "§f', Bukkit.getServer().getClass().getPackage().getName()='§7" + Bukkit.getServer().getClass().getPackage().getName() + "§f'"
                     );
                     sender.sendMessage("§fDetected version='§f" + Version.VERSION + "§f'");
 

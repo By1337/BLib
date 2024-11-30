@@ -2,6 +2,7 @@ package org.by1337.blib.core;
 
 import org.by1337.blib.nms.V1_20_6.command.SummonCommandV1_20_6;
 import org.by1337.blib.nms.V1_21.command.SummonCommandV1_21_1;
+import org.by1337.blib.nms.V1_21_3.command.SummonCommandV1_21_3;
 import org.by1337.blib.util.Version;
 import org.by1337.blib.world.BLocation;
 import org.by1337.blib.nms.v1_16_5.command.SummonCommandV1_16_5;
@@ -26,6 +27,7 @@ public class SummonCommand {
             case V1_20_4 -> new SummonCommandV1_20_4().spawn(entityType, location, nbt);
             case V1_20_5, V1_20_6 -> new SummonCommandV1_20_6().spawn(entityType, location, nbt);
             case V1_21_1 -> new SummonCommandV1_21_1().spawn(entityType, location, nbt);
+            case V1_21_3 -> new SummonCommandV1_21_3().spawn(entityType, location, nbt);
             default -> throw new IllegalStateException("Unsupported version! use 1.16.5, 1.17.1, 1.18.2, 1.19.4, 1.20.x, 1.21.x. Version: '" + Version.VERSION.getVer() + "', GameVersion: '" + Version.getGameVersion() + "'");
         }
     }
