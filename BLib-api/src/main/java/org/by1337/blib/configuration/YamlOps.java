@@ -5,7 +5,6 @@ import blib.com.mojang.serialization.DataResult;
 import blib.com.mojang.serialization.DynamicOps;
 import blib.com.mojang.serialization.MapLike;
 import com.google.common.collect.Lists;
-import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 
 import java.math.BigDecimal;
@@ -79,6 +78,17 @@ public class YamlOps implements DynamicOps<YamlValue> {
             return DataResult.error(() -> "Not a number: " + e + " " + input);
         }
     }
+
+    @Override
+    public DataResult<Boolean> getBooleanValue(YamlValue input) {
+        return input.getValue() instanceof Number n ? DataResult.success(n.byteValue() != 0) : DataResult.success(input.getAsBoolean());
+    }
+
+    @Override
+    public YamlValue createBoolean(boolean value) {
+        return YamlValue.wrap(value);
+    }
+
 
     @Override
     public YamlValue createNumeric(Number i) {
