@@ -27,7 +27,8 @@ public class BlockReplaceStream implements ReplaceTask {
     private int maxReplacesInTick = -1;
     private int updateLimit = BlockReplaceFlags.UPDATE_LIMIT;
     private Predicate<Block> filter;
-    private Consumer<Block> blockBreakCallBack;
+    private Consumer<Block> blockPreReplaceCallBack;
+    private Consumer<Block> blockPostReplaceCallBack;
 
     public void start(World world) {
         start(world, flag);
@@ -66,8 +67,8 @@ public class BlockReplaceStream implements ReplaceTask {
     }
 
     @Override
-    public @Nullable Consumer<Block> getBlockBreakCallBack() {
-        return blockBreakCallBack;
+    public @Nullable Consumer<Block> getBlockPreReplaceCallBack() {
+        return blockPreReplaceCallBack;
     }
 
     @Override
@@ -115,7 +116,19 @@ public class BlockReplaceStream implements ReplaceTask {
     }
 
     public void setBlockBreakCallBack(Consumer<Block> blockBreakCallBack) {
-        this.blockBreakCallBack = blockBreakCallBack;
+        setBlockPreReplaceCallBack(blockBreakCallBack);
+    }
+    @Override
+    public @Nullable Consumer<Block> getBlockPostReplaceCallBack() {
+        return blockPostReplaceCallBack;
+    }
+
+    @Override
+    public void setBlockPostReplaceCallBack(Consumer<Block> blockPreReplaceCallBack) {
+        this.blockPostReplaceCallBack = blockPreReplaceCallBack;
+    }
+    public void setBlockPreReplaceCallBack(Consumer<Block> blockPreReplaceCallBack) {
+        this.blockPreReplaceCallBack = blockPreReplaceCallBack;
     }
 
     public BlockReplaceStream addToRemove(IntAABB aabb) {

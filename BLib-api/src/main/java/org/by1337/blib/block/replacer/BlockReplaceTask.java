@@ -28,7 +28,8 @@ public class BlockReplaceTask implements ReplaceTask {
     private Iterator<Pair<Vec3i, ReplaceBlock>> iterator;
     private CompletableFuture<BlockReplaceTask> future;
     private Predicate<Block> filter;
-    private Consumer<Block> blockBreakCallBack;
+    private Consumer<Block> blockPreReplaceCallBack;
+    private Consumer<Block> blockPostReplaceCallBack;
     private int flag = BlockReplaceFlags.UPDATE_ALL;
     private int maxReplacesInTick = -1;
     private int updateLimit = BlockReplaceFlags.UPDATE_LIMIT;
@@ -88,8 +89,8 @@ public class BlockReplaceTask implements ReplaceTask {
     }
 
     @Override
-    public @Nullable Consumer<Block> getBlockBreakCallBack() {
-        return blockBreakCallBack;
+    public @Nullable Consumer<Block> getBlockPreReplaceCallBack() {
+        return blockPreReplaceCallBack;
     }
 
     @Override
@@ -102,7 +103,21 @@ public class BlockReplaceTask implements ReplaceTask {
     }
 
     public void setBlockBreakCallBack(Consumer<Block> blockBreakCallBack) {
-        this.blockBreakCallBack = blockBreakCallBack;
+        setBlockPreReplaceCallBack(blockBreakCallBack);
+    }
+
+    public void setBlockPreReplaceCallBack(Consumer<Block> blockPreReplaceCallBack) {
+        this.blockPreReplaceCallBack = blockPreReplaceCallBack;
+    }
+
+    @Override
+    public @Nullable Consumer<Block> getBlockPostReplaceCallBack() {
+        return blockPostReplaceCallBack;
+    }
+
+    @Override
+    public void setBlockPostReplaceCallBack(Consumer<Block> blockPreReplaceCallBack) {
+        this.blockPostReplaceCallBack = blockPreReplaceCallBack;
     }
 
     public void setFlag(int flag) {

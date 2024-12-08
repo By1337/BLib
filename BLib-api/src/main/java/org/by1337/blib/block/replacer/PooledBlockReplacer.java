@@ -5,16 +5,18 @@ import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitTask;
-import org.by1337.blib.chat.util.Message;
 import org.by1337.blib.block.replacer.type.ReplaceBlock;
+import org.by1337.blib.chat.util.Message;
 import org.by1337.blib.geom.Vec3i;
 import org.by1337.blib.util.Pair;
 import org.by1337.blib.util.collection.CyclicIterator;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Consumer;
 
 public class PooledBlockReplacer {
     private final Plugin plugin;
@@ -79,13 +81,16 @@ public class PooledBlockReplacer {
                     if (filter != null) {
                         if (filter.test(bukkitBlock)) continue;
                     }
-                    var callBack = info.task.getBlockBreakCallBack();
-                    if (callBack != null) {
-                        callBack.accept(bukkitBlock);
-                    }
-                    blockReplacer.replace(pair.getLeft(), pair.getRight(), info.task, world);
+                    acceptIfNotNull(info.task.getBlockPreReplaceCallBack(), bukkitBlock);
+                    var res = blockReplacer.replace(pair.getLeft(), pair.getRight(), info.task, world);
+                    acceptIfNotNull(info.task.getBlockPostReplaceCallBack(), res);
                 }
             }
+        }
+
+        private <T> void acceptIfNotNull(@Nullable Consumer<T> consumer, @Nullable T val) {
+            if (consumer == null || val == null) return;
+            consumer.accept(val);
         }
 
         private void tick() {
@@ -122,17 +127,15 @@ public class PooledBlockReplacer {
                             if (filter != null) {
                                 if (filter.test(bukkitBlock)) continue;
                             }
-                            var callBack = info.task.getBlockBreakCallBack();
-                            if (callBack != null) {
-                                callBack.accept(bukkitBlock);
-                            }
+                            acceptIfNotNull(info.task.getBlockPreReplaceCallBack(), bukkitBlock);
                             BlockReplacer replacer;
                             if (info.task.getCustomBlockReplacer() != null) {
                                 replacer = info.task.getCustomBlockReplacer();
                             } else {
                                 replacer = blockReplacer;
                             }
-                            replacer.replace(pair.getLeft(), pair.getRight(), info.task, world);
+                            var res = replacer.replace(pair.getLeft(), pair.getRight(), info.task, world);
+                            acceptIfNotNull(info.task.getBlockPostReplaceCallBack(), res);
                             currentLimit--;
 
                             long time1 = System.currentTimeMillis() - time;
@@ -148,7 +151,7 @@ public class PooledBlockReplacer {
                         if (currentLimit <= 0 && info.task.getMaxReplacesInTick() != -1) {
                             info.doSkip = true;
                         }
-                        if (info.task instanceof BlockReplaceStream){
+                        if (info.task instanceof BlockReplaceStream) {
                             info.doSkip = true;
                         }
                     }

@@ -22,7 +22,17 @@ public interface ReplaceTask {
     Predicate<Block> getFilter();
 
     @Nullable
-    Consumer<Block> getBlockBreakCallBack();
+    Consumer<Block> getBlockPreReplaceCallBack();
+
+    default @Nullable Consumer<Block> getBlockBreakCallBack(){
+        return getBlockPreReplaceCallBack();
+    }
+
+    void setBlockPreReplaceCallBack(Consumer<Block> blockPreReplaceCallBack);
+
+    @Nullable
+    Consumer<Block> getBlockPostReplaceCallBack();
+    void setBlockPostReplaceCallBack(Consumer<Block> blockPreReplaceCallBack);
 
     int getMaxReplacesInTick();
 
