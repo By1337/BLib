@@ -9,6 +9,7 @@ import org.by1337.blib.lang.Lang;
 import java.util.*;
 import java.util.function.Supplier;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 /**
  * Represents a player argument for a command.
@@ -27,9 +28,6 @@ public class ArgumentPlayer<T extends CommandSender> extends Argument<T> {
     public ArgumentPlayer(String name) {
         super(name);
         exx = new ArrayList<>();
-        exx.add("@p");
-        exx.add("@r");
-        exx.add("@s");
     }
 
     /**
@@ -84,11 +82,14 @@ public class ArgumentPlayer<T extends CommandSender> extends Argument<T> {
     @Override
     public List<String> tabCompleter(T sender, String str) {
         Player player = sender instanceof Player ? (Player) sender : null;
-        var list = new ArrayList<>(Arrays.stream(Bukkit.getOnlinePlayers().stream().filter(pl -> player == null || player.canSee(pl)).map(Player::getName).toArray(String[]::new)).toList());
+        var list = Bukkit.getOnlinePlayers().stream().filter(pl -> player == null || player.canSee(pl)).map(Player::getName).collect(Collectors.toList());
         list.addAll(exx);
         if (str.isEmpty())
             return list;
-        return list.stream().filter(s -> s.startsWith(str)).toList();
+        String input = str.toLowerCase(Locale.ENGLISH);
+        return list.stream().filter(
+                s -> s.toLowerCase(Locale.ENGLISH).startsWith(input)
+        ).toList();
     }
     public boolean allowAsync(){
         return true;
