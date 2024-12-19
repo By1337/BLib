@@ -11,18 +11,11 @@
     </parent>
 
     <groupId>org.by1337.blib.nms</groupId>
-    <artifactId>V1_17_1</artifactId>
+    <artifactId>V1_21_4</artifactId>
     <packaging>jar</packaging>
 
-    <name>V1_17_1</name>
+    <name>V1_21_4</name>
 
-    <properties>
-        <revision>1.5</revision>
-        <target.version>16</target.version>
-        <source.version>16</source.version>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <server.version>1.17.1-R0.1-SNAPSHOT</server.version>
-    </properties>
     <pluginRepositories>
         <pluginRepository>
             <id>bytecode.space</id>
@@ -30,13 +23,20 @@
         </pluginRepository>
     </pluginRepositories>
 
+    <properties>
+        <revision>1.5</revision>
+        <target.version>21</target.version>
+        <source.version>21</source.version>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+
     <build>
         <defaultGoal>clean install</defaultGoal>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.8.1</version>
+                <version>3.13.0</version>
                 <configuration>
                     <source>${source.version}</source>
                     <target>${target.version}</target>
@@ -58,19 +58,6 @@
                     </execution>
                 </executions>
             </plugin>
-            <plugin>
-                <groupId>ca.bkaw</groupId>
-                <artifactId>paper-nms-maven-plugin</artifactId>
-                <version>1.4.4</version>
-                <executions>
-                    <execution>
-                        <phase>process-classes</phase>
-                        <goals>
-                            <goal>remap</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
         </plugins>
         <resources>
             <resource>
@@ -89,6 +76,10 @@
             <id>sonatype</id>
             <url>https://oss.sonatype.org/content/groups/public/</url>
         </repository>
+        <repository>
+            <id>sk89q-repo</id>
+            <url>https://maven.enginehub.org/repo/</url>
+        </repository>
     </repositories>
 
     <dependencies>
@@ -96,19 +87,18 @@
         <dependency>
             <groupId>ca.bkaw</groupId>
             <artifactId>paper-nms</artifactId>
-            <version>1.17.1-SNAPSHOT</version>
+            <version>1.21.4-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>net.kyori</groupId>
-            <artifactId>adventure-text-serializer-gson</artifactId>
-            <version>4.7.0</version>
-            <scope>provided</scope>
+            <groupId>io.papermc.paper</groupId>
+            <artifactId>paper-api</artifactId>
+            <version>1.21.4-R0.1-SNAPSHOT</version>
         </dependency>
         <dependency>
-            <groupId>net.kyori</groupId>
-            <artifactId>adventure-api</artifactId>
-            <version>4.7.0</version>
+            <groupId>com.sk89q.worldedit</groupId>
+            <artifactId>worldedit-bukkit</artifactId>
+            <version>7.2.15</version>
             <scope>provided</scope>
         </dependency>
         <!-- api -->

@@ -1,4 +1,4 @@
-package org.by1337.blib.nms.V1_21_3.block.replacer;
+package org.by1337.blib.nms.V1_21_4.block.replacer;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.FullChunkStatus;
@@ -20,7 +20,7 @@ import org.by1337.blib.geom.Vec3i;
 
 import java.util.Objects;
 
-public class BlockReplacerV1_21_3 implements BlockReplacer {
+public class BlockReplacerV1_21_4 implements BlockReplacer {
     @Override
     public Block replace(Vec3i pos0, BlockData data, ReplaceTask task, World world, int flag) {
         ServerLevel nmsWorld = ((CraftWorld) world).getHandle();
@@ -33,7 +33,6 @@ public class BlockReplacerV1_21_3 implements BlockReplacer {
         BlockState oldBlock = nmsWorld.getBlockState(pos);
         BlockState state = ((CraftBlockData) data).getState();
         if (Objects.equals(oldBlock, state)) return bukkitBlock;
-
 //        if (oldBlock.hasBlockEntity() && state.getBlock() != oldBlock.getBlock()) {
 //            nmsWorld.removeBlockEntity(pos);
 //        }
@@ -43,7 +42,7 @@ public class BlockReplacerV1_21_3 implements BlockReplacer {
 
         boolean captured = false;
         if (nmsWorld.captureBlockStates && !nmsWorld.capturedBlockStates.containsKey(pos)) {
-            CraftBlockState blockstate = (CraftBlockState)nmsWorld.getWorld().getBlockAt(pos.getX(), pos.getY(), pos.getZ()).getState();
+            CraftBlockState blockstate = (CraftBlockState) nmsWorld.getWorld().getBlockAt(pos.getX(), pos.getY(), pos.getZ()).getState();
             blockstate.setFlag(flag);
             nmsWorld.capturedBlockStates.put(pos.immutable(), blockstate);
             captured = true;
@@ -80,7 +79,7 @@ public class BlockReplacerV1_21_3 implements BlockReplacer {
 
             if ((flags & BlockReplaceFlags.UPDATE_CLIENTS) != 0 && (!level.isClientSide || (flags & BlockReplaceFlags.UPDATE_INVISIBLE) == 0) && (level.isClientSide || chunk == null || chunk.getFullStatus().isOrAfter(FullChunkStatus.FULL))) {
                 //level.sendBlockUpdated(blockposition, oldBlock, newBlock, flags); // disable mob path update
-                ((ServerLevel)level).getChunkSource().blockChanged(blockposition);
+                ((ServerLevel) level).getChunkSource().blockChanged(blockposition);
             }
 
             if ((flags & BlockReplaceFlags.UPDATE_NEIGHBORS) != 0) {
@@ -95,7 +94,7 @@ public class BlockReplacerV1_21_3 implements BlockReplacer {
                 oldBlock.updateIndirectNeighbourShapes(level, blockposition, k, updateLimit - 1);
                 CraftWorld world = level.getWorld();
                 boolean cancelledUpdates = false;
-                if (((ServerLevel)level).hasPhysicsEvent) {
+                if (((ServerLevel) level).hasPhysicsEvent) {
                     BlockPhysicsEvent event = new BlockPhysicsEvent(world.getBlockAt(blockposition.getX(), blockposition.getY(), blockposition.getZ()), CraftBlockData.fromData(newBlock));
                     level.getCraftServer().getPluginManager().callEvent(event);
                     cancelledUpdates = event.isCancelled();

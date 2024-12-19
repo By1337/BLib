@@ -5,6 +5,7 @@ import org.by1337.blib.nms.V1_20_6.chat.TellRawV1_20_6;
 import org.by1337.blib.nms.V1_21.chat.TellRawV1_21;
 import org.by1337.blib.nms.V1_21.chat.TellRawV1_21_1;
 import org.by1337.blib.nms.V1_21_3.chat.TellRawV1_21_3;
+import org.by1337.blib.nms.V1_21_4.chat.TellRawV1_21_4;
 import org.by1337.blib.util.Version;
 import org.by1337.blib.nms.v1_16_5.chat.TellRawV1_16_5;
 import org.by1337.blib.nms.v1_17_1.chat.TellRawV1_17_1;
@@ -29,6 +30,7 @@ public class TellRaw {
             case V1_21 -> new TellRawV1_21().tell(s, player);
             case V1_21_1 -> new TellRawV1_21_1().tell(s, player);
             case V1_21_3 -> new TellRawV1_21_3().tell(s, player);
+            case V1_21_4 -> new TellRawV1_21_4().tell(s, player);
             default -> throw new IllegalStateException("Unsupported version! use 1.16.5, 1.17.1, 1.18.2, 1.19.4, 1.20.x, 1.21.x. Version: '" + Version.VERSION.getVer() + "', GameVersion: '" + Version.getGameVersion() + "'");
         }
     }

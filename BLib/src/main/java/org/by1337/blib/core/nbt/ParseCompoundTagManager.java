@@ -5,6 +5,7 @@ import org.by1337.blib.nms.V1_20_6.nbt.ParseCompoundTagV206;
 import org.by1337.blib.nms.V1_21.nbt.ParseCompoundTagV211;
 import org.by1337.blib.nms.V1_21.nbt.ParseCompoundTagV21;
 import org.by1337.blib.nms.V1_21_3.nbt.ParseCompoundTagV213;
+import org.by1337.blib.nms.V1_21_4.nbt.ParseCompoundTagV214;
 import org.by1337.blib.nms.v1_16_5.nbt.ParseCompoundTagV165;
 import org.by1337.blib.nms.v1_17_1.nbt.ParseCompoundTagV171;
 import org.by1337.blib.nms.v1_18_2.nbt.ParseCompoundTagV182;
@@ -27,6 +28,7 @@ public class ParseCompoundTagManager {
         case V1_21 -> new ParseCompoundTagV21();
         case V1_21_1 -> new ParseCompoundTagV211();
         case V1_21_3 -> new ParseCompoundTagV213();
+        case V1_21_4 -> new ParseCompoundTagV214();
         default -> throw new IllegalStateException("Unsupported version! use 1.16.5, 1.17.1, 1.18.2, 1.19.4, 1.20.x, 1.21.x. Version: '" + Version.VERSION.getVer() + "', GameVersion: '" + Version.getGameVersion() + "'");
     };
 

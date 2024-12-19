@@ -39,9 +39,9 @@ public class BlockReplacerV1_21 implements BlockReplacer {
         BlockState state = ((CraftBlockData) data).getState();
         if (Objects.equals(oldBlock, state)) return bukkitBlock;
 
-        if (oldBlock.hasBlockEntity() && state.getBlock() != oldBlock.getBlock()) {
-            nmsWorld.removeBlockEntity(pos);
-        }
+//        if (oldBlock.hasBlockEntity() && state.getBlock() != oldBlock.getBlock()) {
+//            nmsWorld.removeBlockEntity(pos);
+//        }
 
         LevelChunk chunk = nmsWorld.getChunkAt(pos);
 
