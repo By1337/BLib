@@ -10,7 +10,6 @@ import org.by1337.blib.core.factory.AbstractPacketFactory;
 import org.by1337.blib.core.factory.BBukkitCommandRegisterFactory;
 import org.by1337.blib.core.factory.BPacketEntityFactory;
 import org.by1337.blib.core.factory.BlockReplacerFactory;
-import org.by1337.blib.core.inventory.FakeTitleFactoryImpl;
 import org.by1337.blib.core.inventory.ItemStackSerializeFactory;
 import org.by1337.blib.core.nbt.ParseCompoundTagManager;
 import org.by1337.blib.core.text.ComponentToANSIImpl;
@@ -19,14 +18,27 @@ import org.by1337.blib.core.unsafe.BLibUnsafeImpl;
 import org.by1337.blib.factory.PacketEntityFactory;
 import org.by1337.blib.factory.PacketFactory;
 import org.by1337.blib.inventory.FakeTitleFactory;
+import org.by1337.blib.inventory.InventoryUtil;
 import org.by1337.blib.inventory.ItemStackSerialize;
 import org.by1337.blib.nbt.ParseCompoundTag;
+import org.by1337.blib.nms.V1_20_6.inventory.InventoryUtilV1_20_6;
+import org.by1337.blib.nms.V1_21.inventory.InventoryUtilV1_21;
+import org.by1337.blib.nms.V1_21.inventory.InventoryUtilV1_21_1;
+import org.by1337.blib.nms.V1_21_3.inventory.InventoryUtilV1_21_3;
 import org.by1337.blib.nms.v1_16_5.AsyncCatcherImpl;
+import org.by1337.blib.nms.v1_16_5.inventory.InventoryUtilV1_16_5;
+import org.by1337.blib.nms.v1_17_1.inventory.InventoryUtilV1_17_1;
+import org.by1337.blib.nms.v1_18_2.inventory.InventoryUtilV1_18_2;
+import org.by1337.blib.nms.v1_19_4.inventory.InventoryUtilV1_19_4;
+import org.by1337.blib.nms.v1_20_1.inventory.InventoryUtilV1_20_1;
+import org.by1337.blib.nms.v1_20_2.inventory.InventoryUtilV1_20_2;
+import org.by1337.blib.nms.v1_20_4.inventory.InventoryUtilV1_20_4;
 import org.by1337.blib.text.ComponentToANSI;
 import org.by1337.blib.text.LegacyConvertor;
 import org.by1337.blib.translation.Translation;
 import org.by1337.blib.unsafe.BLibUnsafe;
 import org.by1337.blib.util.AsyncCatcher;
+import org.by1337.blib.util.Version;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
@@ -43,7 +55,23 @@ public class BApi implements Api {
     private final Message message;
     private final AsyncCatcher asyncCatcher;
     private final ItemStackSerialize itemStackSerialize = ItemStackSerializeFactory.create();
-    private final FakeTitleFactory fakeTitleFactory = new FakeTitleFactoryImpl();
+    private final InventoryUtil inventoryUtil = switch (Version.VERSION) {
+        case V1_16_5 -> new InventoryUtilV1_16_5();
+        case V1_17_1 -> new InventoryUtilV1_17_1();
+        case V1_18_2 -> new InventoryUtilV1_18_2();
+        case V1_19_4 -> new InventoryUtilV1_19_4();
+        case V1_20_1 -> new InventoryUtilV1_20_1();
+        case V1_20_2 -> new InventoryUtilV1_20_2();
+        case V1_20_4, V1_20_3 -> new InventoryUtilV1_20_4();
+        case V1_20_5, V1_20_6 -> new InventoryUtilV1_20_6();
+        case V1_21 -> new InventoryUtilV1_21();
+        case V1_21_1 -> new InventoryUtilV1_21_1();
+        case V1_21_3 -> new InventoryUtilV1_21_3();
+        default -> throw new IllegalStateException("Unsupported version: " + Version.VERSION);
+    };
+    @Deprecated
+    private final FakeTitleFactory fakeTitleFactory = () -> inventoryUtil::sendFakeTitle;
+
     private final BukkitCommandRegister register = new BBukkitCommandRegisterFactory().create();
     private final LegacyConvertor legacyConvertor = new LegacyConvertorImpl();
     private final ComponentToANSIImpl componentToANSI = new ComponentToANSIImpl();
@@ -85,6 +113,7 @@ public class BApi implements Api {
     }
 
     @Override
+    @Deprecated
     public @NotNull PacketFactory getPacketFactory() {
         return packetFactory;
     }
@@ -142,5 +171,10 @@ public class BApi implements Api {
     @Override
     public @NotNull BLibUnsafe getUnsafe() {
         return BLibUnsafeImpl.INSTANCE;
+    }
+
+    @Override
+    public @NotNull InventoryUtil getInventoryUtil() {
+        return inventoryUtil;
     }
 }

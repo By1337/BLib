@@ -6,12 +6,14 @@ import net.minecraft.server.level.ChunkHolder;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BaseEntityBlock;
+import net.minecraft.world.level.block.ChestBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.LevelChunk;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.craftbukkit.CraftWorld;
+import org.bukkit.craftbukkit.block.CraftBlock;
 import org.bukkit.craftbukkit.block.CraftBlockState;
 import org.bukkit.craftbukkit.block.data.CraftBlockData;
 import org.bukkit.event.block.BlockPhysicsEvent;
@@ -35,7 +37,7 @@ public class BlockReplacerV165 implements BlockReplacer {
         BlockState blockData = ((CraftBlockData) data).getState();
         if (Objects.equals(oldBlock, blockData)) return bukkitBlock;
 
-        if (!blockData.isAir() && blockData.getBlock() instanceof BaseEntityBlock && blockData.getBlock() != oldBlock.getBlock()) {
+        if (oldBlock.getBlock() instanceof BaseEntityBlock && blockData.getBlock() != oldBlock.getBlock()) {
             nmsWorld.removeTileEntity(blockPos);
         }
         // nmsWorld.setTypeAndData()

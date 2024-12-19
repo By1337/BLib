@@ -2,15 +2,22 @@ package org.by1337.blib.nms.v1_20_4.block.replacer;
 
 import com.sk89q.worldedit.bukkit.BukkitAdapter;
 import net.minecraft.core.BlockPos;
+import net.minecraft.network.Connection;
+import net.minecraft.network.protocol.game.ServerboundInteractPacket;
 import net.minecraft.server.level.FullChunkStatus;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.network.ServerGamePacketListenerImpl;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelWriter;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.ChestBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.LevelChunk;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.craftbukkit.v1_20_R3.CraftWorld;
+import org.bukkit.craftbukkit.v1_20_R3.block.CraftBlock;
 import org.bukkit.craftbukkit.v1_20_R3.block.CraftBlockState;
 import org.bukkit.craftbukkit.v1_20_R3.block.data.CraftBlockData;
 import org.bukkit.event.block.BlockPhysicsEvent;
@@ -40,12 +47,12 @@ public class BlockReplacerV1_20_4 implements BlockReplacer {
         BlockState state = ((CraftBlockData) data).getState();
         if (Objects.equals(oldBlock, state)) return bukkitBlock;
 
-        if (oldBlock.hasBlockEntity() && state.getBlock() != oldBlock.getBlock()) {
+/*        if (oldBlock.hasBlockEntity() && state.getBlock() != oldBlock.getBlock()) {
+            var v = nmsWorld.getBlockEntity(pos);
             nmsWorld.removeBlockEntity(pos);
-        }
 
+        }*/
         LevelChunk chunk = nmsWorld.getChunkAt(pos);
-
 
         boolean captured = false;
         if (nmsWorld.captureBlockStates && !nmsWorld.capturedBlockStates.containsKey(pos)) {

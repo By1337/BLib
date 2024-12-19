@@ -61,6 +61,10 @@ public class SpacedNameRegistry<T> {
         return old;
     }
 
+    public boolean has(SpacedNameKey key) {
+        return lookupBySpacedName.containsKey(key);
+    }
+
     /**
      * Removes the value associated with the specified {@link SpacedNameKey}.
      *
@@ -205,5 +209,13 @@ public class SpacedNameRegistry<T> {
     @NotNull
     public Collection<T> values() {
         return Collections.unmodifiableCollection(lookupBySpacedName.values());
+    }
+
+    @NotNull
+    public Collection<SpacedNameKey> keySet(){
+        return Collections.unmodifiableCollection(lookupBySpacedName.keySet());
+    }
+    public int size(){
+        return lookupBySpacedName.size();
     }
 }

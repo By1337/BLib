@@ -24,12 +24,41 @@ public enum Direction {
         this.axis = axis;
     }
 
+    public boolean isHorizontal() {
+        return this != DOWN && this != UP;
+    }
+
+    public boolean isVertical() {
+        return this == DOWN || this == UP;
+    }
+
     public Vec3i getDirection() {
         return direction;
     }
 
     public Axis getAxis() {
         return axis;
+    }
+
+    public Direction getOpposite() {
+        return switch (this) {
+            case DOWN -> UP;
+            case UP -> DOWN;
+            case NORTH -> SOUTH;
+            case SOUTH -> NORTH;
+            case WEST -> EAST;
+            case EAST -> WEST;
+        };
+    }
+
+    public Direction getClockWise() {
+        return switch (this) {
+            case NORTH -> EAST;
+            case EAST -> SOUTH;
+            case SOUTH -> WEST;
+            case WEST -> NORTH;
+            default -> throw new IllegalStateException("Unable to get CW facing of " + this);
+        };
     }
 
     public enum Axis {

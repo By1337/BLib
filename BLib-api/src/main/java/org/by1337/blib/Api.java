@@ -8,6 +8,7 @@ import org.by1337.blib.factory.BukkitCommandRegisterFactory;
 import org.by1337.blib.factory.PacketEntityFactory;
 import org.by1337.blib.factory.PacketFactory;
 import org.by1337.blib.inventory.FakeTitleFactory;
+import org.by1337.blib.inventory.InventoryUtil;
 import org.by1337.blib.inventory.ItemStackSerialize;
 
 import org.by1337.blib.nbt.ParseCompoundTag;
@@ -27,6 +28,7 @@ public interface Api {
     @NotNull AsyncCatcher getAsyncCatcher();
     @NotNull Message getMessage();
     @NotNull ItemStackSerialize getItemStackSerialize();
+    @Deprecated
     @NotNull FakeTitleFactory getFakeTitleFactory();
     @NotNull BukkitCommandRegister getBukkitCommandRegister();
     @NotNull ParseCompoundTag getParseCompoundTag();
@@ -34,4 +36,5 @@ public interface Api {
     @NotNull ComponentToANSI getComponentToANSI();
     @NotNull PooledBlockReplacer getPooledBlockReplacer();
     @NotNull BLibUnsafe getUnsafe();
+    @NotNull InventoryUtil getInventoryUtil();
 }
