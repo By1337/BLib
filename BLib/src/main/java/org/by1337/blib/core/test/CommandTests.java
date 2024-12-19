@@ -45,6 +45,14 @@ public class CommandTests {
                             BLib.getApi().getMessage().sendMsg(sender, args.getOrDefault("d1", "null").toString());
                         }))
                 )
+                .addSubCommand(new Command<CommandSender>("ArgumentSound")
+                        .argument(new ArgumentSound<>("s"))
+                        .argument(new ArgumentSound<>("s1"))
+                        .executor(((sender, args) -> {
+                            BLib.getApi().getMessage().sendMsg(sender, args.getOrDefault("s", "null").toString());
+                            BLib.getApi().getMessage().sendMsg(sender, args.getOrDefault("s1", "null").toString());
+                        }))
+                )
                 ;
     }
 
