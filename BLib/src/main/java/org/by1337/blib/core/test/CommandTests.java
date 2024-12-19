@@ -9,6 +9,9 @@ import org.by1337.blib.BLib;
 import org.by1337.blib.command.Command;
 import org.by1337.blib.command.CommandException;
 import org.by1337.blib.command.argument.*;
+import org.by1337.blib.configuration.YamlOps;
+import org.by1337.blib.configuration.YamlValue;
+import org.by1337.blib.configuration.serialization.BukkitCodecs;
 import org.by1337.blib.nbt.impl.CompoundTag;
 import org.by1337.blib.network.clientbound.entity.PacketAddEntity;
 import org.by1337.blib.network.clientbound.entity.PacketSetEntityData;
@@ -60,6 +63,11 @@ public class CommandTests {
                         .executor(((sender, args) -> {
                             BLib.getApi().getMessage().sendMsg(sender, args.getOrDefault("s", "null").toString());
                             BLib.getApi().getMessage().sendMsg(sender, args.getOrDefault("s1", "null").toString());
+                        }))
+                )
+                .addSubCommand(new Command<CommandSender>("codec")
+                        .executor(((sender, args) -> {
+                            System.out.println(BukkitCodecs.BIOME.read(YamlOps.INSTANCE, YamlValue.wrap("NETHER_WASTES")));
                         }))
                 )
                 ;

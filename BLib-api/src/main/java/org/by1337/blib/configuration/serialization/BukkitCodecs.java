@@ -17,7 +17,6 @@ import org.bukkit.potion.PotionType;
 import org.bukkit.util.Vector;
 import org.by1337.blib.BLib;
 import org.by1337.blib.text.MessageFormatter;
-import org.jetbrains.annotations.ApiStatus;
 
 import java.util.Optional;
 import java.util.function.Function;
@@ -91,14 +90,14 @@ public class BukkitCodecs {
         }
     };
 
-    public static final PrimitiveCodec<Material> MATERIAL = createEnumCodec(Material.class);
-    public static final PrimitiveCodec<Biome> BIOME = createEnumCodec(Biome.class);
-    public static final PrimitiveCodec<DyeColor> DYE_COLOR = createEnumCodec(DyeColor.class);
-    public static final PrimitiveCodec<EntityType> ENTITY_TYPE = createEnumCodec(EntityType.class);
-    public static final PrimitiveCodec<EntityEffect> ENTITY_EFFECT = createEnumCodec(EntityEffect.class);
-    public static final PrimitiveCodec<PotionType> POTION_TYPE = createEnumCodec(PotionType.class);
-    public static final PrimitiveCodec<ItemFlag> ITEM_FLAG = createEnumCodec(ItemFlag.class);
-    public static final PrimitiveCodec<InventoryType> INVENTORY_TYPE = createEnumCodec(InventoryType.class);
+    public static final PrimitiveCodec<Material> MATERIAL = DefaultCodecs.createAnyEnumCodec(Material.class);
+    public static final PrimitiveCodec<Biome> BIOME = DefaultCodecs.createAnyEnumCodec(Biome.class);
+    public static final PrimitiveCodec<DyeColor> DYE_COLOR = DefaultCodecs.createAnyEnumCodec(DyeColor.class);
+    public static final PrimitiveCodec<EntityType> ENTITY_TYPE = DefaultCodecs.createAnyEnumCodec(EntityType.class);
+    public static final PrimitiveCodec<EntityEffect> ENTITY_EFFECT = DefaultCodecs.createAnyEnumCodec(EntityEffect.class);
+    public static final PrimitiveCodec<PotionType> POTION_TYPE = DefaultCodecs.createAnyEnumCodec(PotionType.class);
+    public static final PrimitiveCodec<ItemFlag> ITEM_FLAG = DefaultCodecs.createAnyEnumCodec(ItemFlag.class);
+    public static final PrimitiveCodec<InventoryType> INVENTORY_TYPE = DefaultCodecs.createAnyEnumCodec(InventoryType.class);
 
     public static <T extends Enum<T>> PrimitiveCodec<T> createEnumCodec(final Class<T> type) {
         return DefaultCodecs.createEnumCodec(type);
