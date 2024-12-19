@@ -2,24 +2,22 @@ package org.by1337.blib.configuration.adapter;
 
 import com.google.errorprone.annotations.CanIgnoreReturnValue;
 import org.bukkit.Color;
-import org.bukkit.Material;
-import org.bukkit.Particle;
-import org.bukkit.block.Biome;
 import org.bukkit.configuration.MemorySection;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
+import org.by1337.blib.configuration.YamlContext;
 import org.by1337.blib.configuration.YamlValue;
 import org.by1337.blib.configuration.adapter.impl.*;
 import org.by1337.blib.configuration.adapter.impl.primitive.*;
 import org.by1337.blib.geom.*;
+import org.by1337.blib.util.NameKey;
+import org.by1337.blib.util.OldEnumFixer;
 import org.by1337.blib.util.SpacedNameKey;
 import org.by1337.blib.world.BLocation;
 import org.by1337.blib.world.BlockPosition;
 import org.by1337.blib.world.Vector2D;
-import org.by1337.blib.configuration.YamlContext;
-import org.by1337.blib.util.NameKey;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -30,6 +28,7 @@ import java.util.UUID;
 /**
  * A registry for managing various adapters used for serialization and deserialization.
  */
+@ApiStatus.Internal
 public class AdapterRegistry {
     private static final HashMap<Class<?>, ClassAdapter<?>> adapters;
     private static final HashMap<Class<?>, PrimitiveAdapter<?>> primitiveAdapters;
@@ -173,7 +172,7 @@ public class AdapterRegistry {
     @SuppressWarnings({"unchecked", "rawtypes"})
     public static <T> T getAs(@Nullable Object src, @NotNull Class<T> clazz) {
         if (src == null) return null;
-        if (src instanceof YamlValue v){
+        if (src instanceof YamlValue v) {
             src = v.unpack();
         }
         if (clazz.isAssignableFrom(src.getClass())) {
@@ -185,6 +184,10 @@ public class AdapterRegistry {
                     AdapterEnum adapterEnum = new AdapterEnum(clazz);
                     registerPrimitiveAdapter(clazz, adapterEnum);
                     return (T) adapterEnum.deserialize(src);
+                } else if (OldEnumFixer.isOldEnum(clazz)) {
+                    AdapterOldEnum oldEnum = new AdapterOldEnum(clazz);
+                    registerPrimitiveAdapter(clazz, oldEnum);
+                    return (T) oldEnum.deserialize(src);
                 }
                 throw new IllegalStateException("class " + src.getClass() + " has no adapter");
             } else {
@@ -206,15 +209,19 @@ public class AdapterRegistry {
      */
     @SuppressWarnings({"unchecked", "rawtypes"})
     public static <T> Object serialize(@NotNull T src) {
-        if (src instanceof YamlValue v){
+        if (src instanceof YamlValue v) {
             src = (T) v.unpack();
         }
         if (!hasPrimitiveAdapter(src.getClass())) {
             if (!hasAdapter(src.getClass())) {
-                if (src.getClass().isEnum()){
+                if (src.getClass().isEnum()) {
                     AdapterEnum adapterEnum = new AdapterEnum(src.getClass());
                     registerPrimitiveAdapter(src.getClass(), adapterEnum);
                     return adapterEnum.serialize((Enum) src);
+                } else if (OldEnumFixer.isOldEnum(src.getClass())) {
+                    AdapterOldEnum oldEnum = new AdapterOldEnum(src.getClass());
+                    registerPrimitiveAdapter(src.getClass(), oldEnum);
+                    return oldEnum.serialize(src);
                 }
                 return src;
             } else {
@@ -275,10 +282,6 @@ public class AdapterRegistry {
         registerPrimitiveAdapter(Object.class, obj -> obj);
         registerPrimitiveAdapter(Class.class, new AdapterClass());
         registerPrimitiveAdapter(UUID.class, new AdapterUUID());
-        registerPrimitiveAdapter(Biome.class, new AdapterEnum<>(Biome.class));
-        registerPrimitiveAdapter(Material.class, new AdapterEnum<>(Material.class));
-        registerPrimitiveAdapter(Particle.class, new AdapterEnum<>(Particle.class));
-        registerPrimitiveAdapter(ItemFlag.class, new AdapterEnum<>(ItemFlag.class));
 
         registerAdapter(ItemStack.class, new AdapterItemStack());
 

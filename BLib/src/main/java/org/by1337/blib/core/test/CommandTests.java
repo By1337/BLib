@@ -1,6 +1,7 @@
 package org.by1337.blib.core.test;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Sound;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -48,6 +49,14 @@ public class CommandTests {
                 .addSubCommand(new Command<CommandSender>("ArgumentSound")
                         .argument(new ArgumentSound<>("s"))
                         .argument(new ArgumentSound<>("s1"))
+                        .executor(((sender, args) -> {
+                            BLib.getApi().getMessage().sendMsg(sender, args.getOrDefault("s", "null").toString());
+                            BLib.getApi().getMessage().sendMsg(sender, args.getOrDefault("s1", "null").toString());
+                        }))
+                )
+                .addSubCommand(new Command<CommandSender>("OldEnum")
+                        .argument(new ArgumentEnumValue<>("s", Sound.class))
+                        .argument(new ArgumentEnumValue<>("s1", Sound.class))
                         .executor(((sender, args) -> {
                             BLib.getApi().getMessage().sendMsg(sender, args.getOrDefault("s", "null").toString());
                             BLib.getApi().getMessage().sendMsg(sender, args.getOrDefault("s1", "null").toString());

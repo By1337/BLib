@@ -61,7 +61,7 @@ public class ArgumentSound<T> extends Argument<T> {
                 LOOKUP_BY_NAME.put(value.getKey().getKey(), value);
             }
         } else {
-            try {
+            try { // in versions >=1.21.3 Sound is no longer enum
                 for (Field field : Sound.class.getFields()) {
                     field.setAccessible(true);
                     if (!Modifier.isStatic(field.getModifiers())) continue;

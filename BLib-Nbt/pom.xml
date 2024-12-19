@@ -10,7 +10,8 @@
     <artifactId>BLib-Nbt</artifactId>
     <properties>
         <revision>1.4.1</revision>
-        <java.version>16</java.version>
+        <target.version>16</target.version>
+        <source.version>16</source.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <server.version>1.17.1-R0.1-SNAPSHOT</server.version>
     </properties>
@@ -30,8 +31,8 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.8.1</version>
                 <configuration>
-                    <source>${java.version}</source>
-                    <target>${java.version}</target>
+                    <source>${source.version}</source>
+                    <target>${target.version}</target>
                 </configuration>
             </plugin>
             <plugin>
