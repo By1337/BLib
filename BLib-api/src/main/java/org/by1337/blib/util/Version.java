@@ -28,42 +28,42 @@ import java.util.regex.Pattern;
  */
 public enum Version {
     UNKNOWN("unknown", 0, 0),
-    V1_14("1.14",477,1952),
-    V1_14_1("1.14.1",480,1957),
-    V1_14_2("1.14.2",485,1963),
-    V1_14_3("1.14.3",490,1968),
-    V1_14_4("1.14.4",498,1976),
-    V1_15("1.15",573,2225),
-    V1_15_1("1.15.1",575,2227),
-    V1_15_2("1.15.2",578,2230),
-    V1_16("1.16",735,2566),
-    V1_16_1("1.16.1",736,2567),
-    V1_16_2("1.16.2",751,2578),
-    V1_16_3("1.16.3",753,2580),
-    V1_16_4("1.16.4",754,2584),
-    V1_16_5("1.16.5",754,2586),
-    V1_17("1.17",755,2724),
-    V1_17_1("1.17.1",756,2730),
-    V1_18("1.18",757,2860),
-    V1_18_1("1.18.1",757,2865),
-    V1_18_2("1.18.2",758,2975),
-    V1_19("1.19",759,3105),
-    V1_19_1("1.19.1",760,3117),
-    V1_19_2("1.19.2",760,3120),
-    V1_19_3("1.19.3",761,3218),
-    V1_19_4("1.19.4",762,3337),
-    V1_20("1.20",763,3463),
-    V1_20_1("1.20.1",763,3465),
-    V1_20_2("1.20.2",764,3578),
-    V1_20_3("1.20.3",765,3698),
-    V1_20_4("1.20.4",765,3700),
-    V1_20_5("1.20.5",766,3837),
-    V1_20_6("1.20.6",766,3839),
-    V1_21("1.21",767,3953),
-    V1_21_1("1.21.1",767,3955),
-    V1_21_2("1.21.2",768,4080),
-    V1_21_3("1.21.3",768,4082),
-    V1_21_4("1.21.4",769,4189);
+    V1_14("1.14", 477, 1952),
+    V1_14_1("1.14.1", 480, 1957),
+    V1_14_2("1.14.2", 485, 1963),
+    V1_14_3("1.14.3", 490, 1968),
+    V1_14_4("1.14.4", 498, 1976),
+    V1_15("1.15", 573, 2225),
+    V1_15_1("1.15.1", 575, 2227),
+    V1_15_2("1.15.2", 578, 2230),
+    V1_16("1.16", 735, 2566),
+    V1_16_1("1.16.1", 736, 2567),
+    V1_16_2("1.16.2", 751, 2578),
+    V1_16_3("1.16.3", 753, 2580),
+    V1_16_4("1.16.4", 754, 2584),
+    V1_16_5("1.16.5", 754, 2586),
+    V1_17("1.17", 755, 2724),
+    V1_17_1("1.17.1", 756, 2730),
+    V1_18("1.18", 757, 2860),
+    V1_18_1("1.18.1", 757, 2865),
+    V1_18_2("1.18.2", 758, 2975),
+    V1_19("1.19", 759, 3105),
+    V1_19_1("1.19.1", 760, 3117),
+    V1_19_2("1.19.2", 760, 3120),
+    V1_19_3("1.19.3", 761, 3218),
+    V1_19_4("1.19.4", 762, 3337),
+    V1_20("1.20", 763, 3463),
+    V1_20_1("1.20.1", 763, 3465),
+    V1_20_2("1.20.2", 764, 3578),
+    V1_20_3("1.20.3", 765, 3698),
+    V1_20_4("1.20.4", 765, 3700),
+    V1_20_5("1.20.5", 766, 3837),
+    V1_20_6("1.20.6", 766, 3839),
+    V1_21("1.21", 767, 3953),
+    V1_21_1("1.21.1", 767, 3955),
+    V1_21_2("1.21.2", 768, 4080),
+    V1_21_3("1.21.3", 768, 4082),
+    V1_21_4("1.21.4", 769, 4189);
     public static final Codec<Version> CODEC = DefaultCodecs.createEnumCodec(Version.class);
     private static final Logger LOGGER = LoggerFactory.getLogger("BLib#Version");
 
@@ -90,13 +90,13 @@ public enum Version {
         String version = System.getProperty("blib.server.version");
         if (version != null) {
             LOGGER.warn("Server version {} is set via property blib.server.version", version);
-            if (version.contains(".")){
+            if (version.contains(".")) {
                 try {
                     VERSION = getVersion(version);
                 } catch (UnsupportedVersionException e) {
                     throw new RuntimeException(e);
                 }
-            }else {
+            } else {
                 VERSION = valueOf(version);
             }
         } else {
@@ -129,13 +129,14 @@ public enum Version {
     private static Version getVersion(GameVersion gameVersion) throws UnsupportedVersionException {
         return getVersion(gameVersion.getName());
     }
+
     private static Version getVersion(String gameVersion) throws UnsupportedVersionException {
         for (Version version : Version.values()) {
             if (version.getVer().equals(gameVersion)) {
                 return version;
             }
         }
-        throw new UnsupportedVersionException(Lang.getMessage("unsupported-version"), gameVersion.toString());
+        throw new UnsupportedVersionException(Lang.getMessage("unsupported-version"), gameVersion);
     }
 
     /**
@@ -225,17 +226,296 @@ public enum Version {
         return worldVersion;
     }
 
-    public boolean newerThan(Version version){
+    public boolean newerThan(Version version) {
         return ordinal() > version.ordinal();
     }
-    public boolean newerThanOrEqual(Version version){
+
+    public boolean newerThanOrEqual(Version version) {
         return ordinal() >= version.ordinal();
     }
-    public boolean olderThan(Version version){
+
+    public boolean olderThan(Version version) {
         return ordinal() < version.ordinal();
     }
-    public boolean olderThanOrEqual(Version version){
+
+    public boolean olderThanOrEqual(Version version) {
         return ordinal() <= version.ordinal();
+    }
+
+    public static boolean is1_16_5orNewer() {
+        return VERSION.newerThanOrEqual(V1_16_5);
+    }
+
+    public static boolean is1_16_5orOlder() {
+        return VERSION.olderThanOrEqual(V1_16_5);
+    }
+
+    public static boolean is1_16_5() {
+        return VERSION == V1_16_5;
+    }
+
+    public static boolean is1_17orNewer() {
+        return VERSION.newerThanOrEqual(V1_17);
+    }
+
+    public static boolean is1_17orOlder() {
+        return VERSION.olderThanOrEqual(V1_17);
+    }
+
+    public static boolean is1_17() {
+        return VERSION == V1_17;
+    }
+
+    public static boolean is1_17_1orNewer() {
+        return VERSION.newerThanOrEqual(V1_17_1);
+    }
+
+    public static boolean is1_17_1orOlder() {
+        return VERSION.olderThanOrEqual(V1_17_1);
+    }
+
+    public static boolean is1_17_1() {
+        return VERSION == V1_17_1;
+    }
+
+    public static boolean is1_18orNewer() {
+        return VERSION.newerThanOrEqual(V1_18);
+    }
+
+    public static boolean is1_18orOlder() {
+        return VERSION.olderThanOrEqual(V1_18);
+    }
+
+    public static boolean is1_18() {
+        return VERSION == V1_18;
+    }
+
+    public static boolean is1_18_1orNewer() {
+        return VERSION.newerThanOrEqual(V1_18_1);
+    }
+
+    public static boolean is1_18_1orOlder() {
+        return VERSION.olderThanOrEqual(V1_18_1);
+    }
+
+    public static boolean is1_18_1() {
+        return VERSION == V1_18_1;
+    }
+
+    public static boolean is1_18_2orNewer() {
+        return VERSION.newerThanOrEqual(V1_18_2);
+    }
+
+    public static boolean is1_18_2orOlder() {
+        return VERSION.olderThanOrEqual(V1_18_2);
+    }
+
+    public static boolean is1_18_2() {
+        return VERSION == V1_18_2;
+    }
+
+    public static boolean is1_19orNewer() {
+        return VERSION.newerThanOrEqual(V1_19);
+    }
+
+    public static boolean is1_19orOlder() {
+        return VERSION.olderThanOrEqual(V1_19);
+    }
+
+    public static boolean is1_19() {
+        return VERSION == V1_19;
+    }
+
+    public static boolean is1_19_1orNewer() {
+        return VERSION.newerThanOrEqual(V1_19_1);
+    }
+
+    public static boolean is1_19_1orOlder() {
+        return VERSION.olderThanOrEqual(V1_19_1);
+    }
+
+    public static boolean is1_19_1() {
+        return VERSION == V1_19_1;
+    }
+
+    public static boolean is1_19_2orNewer() {
+        return VERSION.newerThanOrEqual(V1_19_2);
+    }
+
+    public static boolean is1_19_2orOlder() {
+        return VERSION.olderThanOrEqual(V1_19_2);
+    }
+
+    public static boolean is1_19_2() {
+        return VERSION == V1_19_2;
+    }
+
+    public static boolean is1_19_3orNewer() {
+        return VERSION.newerThanOrEqual(V1_19_3);
+    }
+
+    public static boolean is1_19_3orOlder() {
+        return VERSION.olderThanOrEqual(V1_19_3);
+    }
+
+    public static boolean is1_19_3() {
+        return VERSION == V1_19_3;
+    }
+
+    public static boolean is1_19_4orNewer() {
+        return VERSION.newerThanOrEqual(V1_19_4);
+    }
+
+    public static boolean is1_19_4orOlder() {
+        return VERSION.olderThanOrEqual(V1_19_4);
+    }
+
+    public static boolean is1_19_4() {
+        return VERSION == V1_19_4;
+    }
+
+    public static boolean is1_20orNewer() {
+        return VERSION.newerThanOrEqual(V1_20);
+    }
+
+    public static boolean is1_20orOlder() {
+        return VERSION.olderThanOrEqual(V1_20);
+    }
+
+    public static boolean is1_20() {
+        return VERSION == V1_20;
+    }
+
+    public static boolean is1_20_1orNewer() {
+        return VERSION.newerThanOrEqual(V1_20_1);
+    }
+
+    public static boolean is1_20_1orOlder() {
+        return VERSION.olderThanOrEqual(V1_20_1);
+    }
+
+    public static boolean is1_20_1() {
+        return VERSION == V1_20_1;
+    }
+
+    public static boolean is1_20_2orNewer() {
+        return VERSION.newerThanOrEqual(V1_20_2);
+    }
+
+    public static boolean is1_20_2orOlder() {
+        return VERSION.olderThanOrEqual(V1_20_2);
+    }
+
+    public static boolean is1_20_2() {
+        return VERSION == V1_20_2;
+    }
+
+    public static boolean is1_20_3orNewer() {
+        return VERSION.newerThanOrEqual(V1_20_3);
+    }
+
+    public static boolean is1_20_3orOlder() {
+        return VERSION.olderThanOrEqual(V1_20_3);
+    }
+
+    public static boolean is1_20_3() {
+        return VERSION == V1_20_3;
+    }
+
+    public static boolean is1_20_4orNewer() {
+        return VERSION.newerThanOrEqual(V1_20_4);
+    }
+
+    public static boolean is1_20_4orOlder() {
+        return VERSION.olderThanOrEqual(V1_20_4);
+    }
+
+    public static boolean is1_20_4() {
+        return VERSION == V1_20_4;
+    }
+
+    public static boolean is1_20_5orNewer() {
+        return VERSION.newerThanOrEqual(V1_20_5);
+    }
+
+    public static boolean is1_20_5orOlder() {
+        return VERSION.olderThanOrEqual(V1_20_5);
+    }
+
+    public static boolean is1_20_5() {
+        return VERSION == V1_20_5;
+    }
+
+    public static boolean is1_20_6orNewer() {
+        return VERSION.newerThanOrEqual(V1_20_6);
+    }
+
+    public static boolean is1_20_6orOlder() {
+        return VERSION.olderThanOrEqual(V1_20_6);
+    }
+
+    public static boolean is1_20_6() {
+        return VERSION == V1_20_6;
+    }
+
+    public static boolean is1_21orNewer() {
+        return VERSION.newerThanOrEqual(V1_21);
+    }
+
+    public static boolean is1_21orOlder() {
+        return VERSION.olderThanOrEqual(V1_21);
+    }
+
+    public static boolean is1_21() {
+        return VERSION == V1_21;
+    }
+
+    public static boolean is1_21_1orNewer() {
+        return VERSION.newerThanOrEqual(V1_21_1);
+    }
+
+    public static boolean is1_21_1orOlder() {
+        return VERSION.olderThanOrEqual(V1_21_1);
+    }
+
+    public static boolean is1_21_1() {
+        return VERSION == V1_21_1;
+    }
+
+    public static boolean is1_21_2orNewer() {
+        return VERSION.newerThanOrEqual(V1_21_2);
+    }
+
+    public static boolean is1_21_2orOlder() {
+        return VERSION.olderThanOrEqual(V1_21_2);
+    }
+
+    public static boolean is1_21_2() {
+        return VERSION == V1_21_2;
+    }
+
+    public static boolean is1_21_3orNewer() {
+        return VERSION.newerThanOrEqual(V1_21_3);
+    }
+
+    public static boolean is1_21_3orOlder() {
+        return VERSION.olderThanOrEqual(V1_21_3);
+    }
+
+    public static boolean is1_21_3() {
+        return VERSION == V1_21_3;
+    }
+
+    public static boolean is1_21_4orNewer() {
+        return VERSION.newerThanOrEqual(V1_21_4);
+    }
+
+    public static boolean is1_21_4orOlder() {
+        return VERSION.olderThanOrEqual(V1_21_4);
+    }
+
+    public static boolean is1_21_4() {
+        return VERSION == V1_21_4;
     }
 
     /**
