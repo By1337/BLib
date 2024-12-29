@@ -5,6 +5,7 @@ import blib.com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.google.errorprone.annotations.Immutable;
 import org.bukkit.Location;
 import org.bukkit.util.Vector;
+import org.jetbrains.annotations.Contract;
 
 import java.util.Objects;
 
@@ -66,6 +67,7 @@ public class Vec3f {
         return new Vec3d(this);
     }
 
+    @Contract(value = "_ -> new", pure = true)
     public Vec3f mul(double scale) {
         return new Vec3f(
                 x * scale,
@@ -78,6 +80,7 @@ public class Vec3f {
         return square(x) + square(y) + square(z);
     }
 
+    @Contract(value = " -> new", pure = true)
     public Vec3f normalize() {
         double norm = 1.0 / length();
         return new Vec3f(
@@ -87,6 +90,7 @@ public class Vec3f {
         );
     }
 
+    @Contract(value = "_ -> new", pure = true)
     public Vec3f multiply(double m) {
         return new Vec3f(
                 x * m,
@@ -104,14 +108,7 @@ public class Vec3f {
     }
 
     // auto generated start
-    public Vec3f abs() {
-        return new Vec3f(
-                Math.abs(x),
-                Math.abs(y),
-                Math.abs(z)
-        );
-    }
-
+    @Contract(value = "_ -> new", pure = true)
     public Vec3f mul(float scale) {
         return new Vec3f(
                 x * scale,
@@ -120,6 +117,16 @@ public class Vec3f {
         );
     }
 
+    @Contract(value = " -> new", pure = true)
+    public Vec3f abs() {
+        return new Vec3f(
+                Math.abs(x),
+                Math.abs(y),
+                Math.abs(z)
+        );
+    }
+
+    @Contract(value = "_, _, _ -> new", pure = true)
     public Vec3f mul(float x1, float y1, float z1) {
         return new Vec3f(
                 x * x1,
@@ -128,6 +135,7 @@ public class Vec3f {
         );
     }
 
+    @Contract(value = "_ -> new", pure = true)
     public Vec3f sub(float val) {
         return new Vec3f(
                 x - val,
@@ -136,6 +144,7 @@ public class Vec3f {
         );
     }
 
+    @Contract(value = "_, _, _ -> new", pure = true)
     public Vec3f sub(float x1, float y1, float z1) {
         return new Vec3f(
                 x - x1,
@@ -144,6 +153,7 @@ public class Vec3f {
         );
     }
 
+    @Contract(value = "_ -> new", pure = true)
     public Vec3f add(float val) {
         return new Vec3f(
                 x + val,
@@ -152,6 +162,7 @@ public class Vec3f {
         );
     }
 
+    @Contract(value = "_, _, _ -> new", pure = true)
     public Vec3f add(float x1, float y1, float z1) {
         return new Vec3f(
                 x + x1,
@@ -160,6 +171,7 @@ public class Vec3f {
         );
     }
 
+    @Contract(value = "_ -> new", pure = true)
     public Vec3f divide(float scale) {
         return new Vec3f(
                 x / scale,
@@ -168,6 +180,7 @@ public class Vec3f {
         );
     }
 
+    @Contract(value = "_, _, _ -> new", pure = true)
     public Vec3f divide(float x1, float y1, float z1) {
         return new Vec3f(
                 x / x1,
@@ -176,18 +189,22 @@ public class Vec3f {
         );
     }
 
+    @Contract(pure = true)
     public float dot(float x1, float y1, float z1) {
         return x * x1 + y * y1 + z * z1;
     }
 
+    @Contract(pure = true)
     public double distance(double x1, double y1, double z1) {
         return Math.sqrt(square(x - x1) + square(y - y1) + square(z - z1));
     }
 
+    @Contract(pure = true)
     public double distanceSquared(double x1, double y1, double z1) {
         return square(x - x1) + square(y - y1) + square(z - z1);
     }
 
+    @Contract(pure = true)
     public Vector toVector() {
         return new Vector(x, y, z);
     }
@@ -204,14 +221,17 @@ public class Vec3f {
         return z;
     }
 
+    @Contract(value = "_ -> new", pure = true)
     public Vec3f setX(float x1) {
         return new Vec3f(x1, y, z);
     }
 
+    @Contract(value = "_ -> new", pure = true)
     public Vec3f setY(float y1) {
         return new Vec3f(x, y1, z);
     }
 
+    @Contract(value = "_ -> new", pure = true)
     public Vec3f setZ(float z1) {
         return new Vec3f(x, y, z1);
     }
@@ -220,6 +240,7 @@ public class Vec3f {
         return Math.sqrt(this.x * this.x + this.y * this.y + this.z * this.z);
     }
 
+    @Contract(value = "_ -> new", pure = true)
     public Vec3f sub(Vec3d t1) {
         return new Vec3f(
                 x - t1.x,
@@ -228,6 +249,7 @@ public class Vec3f {
         );
     }
 
+    @Contract(value = "_ -> new", pure = true)
     public Vec3f mul(Vec3d t1) {
         return new Vec3f(
                 x * t1.x,
@@ -236,6 +258,7 @@ public class Vec3f {
         );
     }
 
+    @Contract(value = "_ -> new", pure = true)
     public Vec3f divide(Vec3d t1) {
         return new Vec3f(
                 x / t1.x,
@@ -244,6 +267,7 @@ public class Vec3f {
         );
     }
 
+    @Contract(value = "_ -> new", pure = true)
     public Vec3f add(Vec3d t1) {
         return new Vec3f(
                 x + t1.x,
@@ -252,18 +276,22 @@ public class Vec3f {
         );
     }
 
-    public float dot(Vec3d t1) {
-        return (float) (x * t1.x + y * t1.y + z * t1.z);
+    @Contract(pure = true)
+    public double dot(Vec3d t1) {
+        return x * t1.x + y * t1.y + z * t1.z;
     }
 
+    @Contract(pure = true)
     public double distance(Vec3d t1) {
         return Math.sqrt(square(x - t1.x) + square(y - t1.y) + square(z - t1.z));
     }
 
+    @Contract(pure = true)
     public double distanceSquared(Vec3d t1) {
         return square(x - t1.x) + square(y - t1.y) + square(z - t1.z);
     }
 
+    @Contract(value = "_ -> new", pure = true)
     public Vec3f cross(Vec3d t1) {
         return new Vec3f(
                 y * t1.z - z * t1.y,
@@ -272,6 +300,7 @@ public class Vec3f {
         );
     }
 
+    @Contract(value = "_ -> new", pure = true)
     public Vec3f sub(Vec3f t1) {
         return new Vec3f(
                 x - t1.x,
@@ -280,6 +309,7 @@ public class Vec3f {
         );
     }
 
+    @Contract(value = "_ -> new", pure = true)
     public Vec3f mul(Vec3f t1) {
         return new Vec3f(
                 x * t1.x,
@@ -288,6 +318,7 @@ public class Vec3f {
         );
     }
 
+    @Contract(value = "_ -> new", pure = true)
     public Vec3f divide(Vec3f t1) {
         return new Vec3f(
                 x / t1.x,
@@ -296,6 +327,7 @@ public class Vec3f {
         );
     }
 
+    @Contract(value = "_ -> new", pure = true)
     public Vec3f add(Vec3f t1) {
         return new Vec3f(
                 x + t1.x,
@@ -304,18 +336,22 @@ public class Vec3f {
         );
     }
 
+    @Contract(pure = true)
     public float dot(Vec3f t1) {
         return x * t1.x + y * t1.y + z * t1.z;
     }
 
+    @Contract(pure = true)
     public double distance(Vec3f t1) {
         return Math.sqrt(square(x - t1.x) + square(y - t1.y) + square(z - t1.z));
     }
 
+    @Contract(pure = true)
     public double distanceSquared(Vec3f t1) {
         return square(x - t1.x) + square(y - t1.y) + square(z - t1.z);
     }
 
+    @Contract(value = "_ -> new", pure = true)
     public Vec3f cross(Vec3f t1) {
         return new Vec3f(
                 y * t1.z - z * t1.y,
@@ -324,6 +360,7 @@ public class Vec3f {
         );
     }
 
+    @Contract(value = "_ -> new", pure = true)
     public Vec3f sub(Vec3i t1) {
         return new Vec3f(
                 x - t1.x,
@@ -332,6 +369,7 @@ public class Vec3f {
         );
     }
 
+    @Contract(value = "_ -> new", pure = true)
     public Vec3f mul(Vec3i t1) {
         return new Vec3f(
                 x * t1.x,
@@ -340,6 +378,7 @@ public class Vec3f {
         );
     }
 
+    @Contract(value = "_ -> new", pure = true)
     public Vec3f divide(Vec3i t1) {
         return new Vec3f(
                 x / t1.x,
@@ -348,6 +387,7 @@ public class Vec3f {
         );
     }
 
+    @Contract(value = "_ -> new", pure = true)
     public Vec3f add(Vec3i t1) {
         return new Vec3f(
                 x + t1.x,
@@ -356,18 +396,22 @@ public class Vec3f {
         );
     }
 
+    @Contract(pure = true)
     public float dot(Vec3i t1) {
         return x * t1.x + y * t1.y + z * t1.z;
     }
 
+    @Contract(pure = true)
     public double distance(Vec3i t1) {
         return Math.sqrt(square(x - t1.x) + square(y - t1.y) + square(z - t1.z));
     }
 
+    @Contract(pure = true)
     public double distanceSquared(Vec3i t1) {
         return square(x - t1.x) + square(y - t1.y) + square(z - t1.z);
     }
 
+    @Contract(value = "_ -> new", pure = true)
     public Vec3f cross(Vec3i t1) {
         return new Vec3f(
                 y * t1.z - z * t1.y,
@@ -376,6 +420,7 @@ public class Vec3f {
         );
     }
 
+    @Contract(value = "_ -> new", pure = true)
     public Vec3f sub(Vec3l t1) {
         return new Vec3f(
                 x - t1.x,
@@ -384,6 +429,7 @@ public class Vec3f {
         );
     }
 
+    @Contract(value = "_ -> new", pure = true)
     public Vec3f mul(Vec3l t1) {
         return new Vec3f(
                 x * t1.x,
@@ -392,6 +438,7 @@ public class Vec3f {
         );
     }
 
+    @Contract(value = "_ -> new", pure = true)
     public Vec3f divide(Vec3l t1) {
         return new Vec3f(
                 x / t1.x,
@@ -400,6 +447,7 @@ public class Vec3f {
         );
     }
 
+    @Contract(value = "_ -> new", pure = true)
     public Vec3f add(Vec3l t1) {
         return new Vec3f(
                 x + t1.x,
@@ -408,18 +456,22 @@ public class Vec3f {
         );
     }
 
+    @Contract(pure = true)
     public float dot(Vec3l t1) {
         return x * t1.x + y * t1.y + z * t1.z;
     }
 
+    @Contract(pure = true)
     public double distance(Vec3l t1) {
         return Math.sqrt(square(x - t1.x) + square(y - t1.y) + square(z - t1.z));
     }
 
+    @Contract(pure = true)
     public double distanceSquared(Vec3l t1) {
         return square(x - t1.x) + square(y - t1.y) + square(z - t1.z);
     }
 
+    @Contract(value = "_ -> new", pure = true)
     public Vec3f cross(Vec3l t1) {
         return new Vec3f(
                 y * t1.z - z * t1.y,
@@ -428,6 +480,7 @@ public class Vec3f {
         );
     }
 
+    @Contract(value = "_ -> new", pure = true)
     public Vec3f sub(Vec3s t1) {
         return new Vec3f(
                 x - t1.x,
@@ -436,6 +489,7 @@ public class Vec3f {
         );
     }
 
+    @Contract(value = "_ -> new", pure = true)
     public Vec3f mul(Vec3s t1) {
         return new Vec3f(
                 x * t1.x,
@@ -444,6 +498,7 @@ public class Vec3f {
         );
     }
 
+    @Contract(value = "_ -> new", pure = true)
     public Vec3f divide(Vec3s t1) {
         return new Vec3f(
                 x / t1.x,
@@ -452,6 +507,7 @@ public class Vec3f {
         );
     }
 
+    @Contract(value = "_ -> new", pure = true)
     public Vec3f add(Vec3s t1) {
         return new Vec3f(
                 x + t1.x,
@@ -460,18 +516,22 @@ public class Vec3f {
         );
     }
 
+    @Contract(pure = true)
     public float dot(Vec3s t1) {
         return x * t1.x + y * t1.y + z * t1.z;
     }
 
+    @Contract(pure = true)
     public double distance(Vec3s t1) {
         return Math.sqrt(square(x - t1.x) + square(y - t1.y) + square(z - t1.z));
     }
 
+    @Contract(pure = true)
     public double distanceSquared(Vec3s t1) {
         return square(x - t1.x) + square(y - t1.y) + square(z - t1.z);
     }
 
+    @Contract(value = "_ -> new", pure = true)
     public Vec3f cross(Vec3s t1) {
         return new Vec3f(
                 y * t1.z - z * t1.y,
@@ -480,6 +540,7 @@ public class Vec3f {
         );
     }
 
+    @Contract(value = "_ -> new", pure = true)
     public Vec3f sub(Vector t1) {
         return new Vec3f(
                 x - t1.getX(),
@@ -488,6 +549,7 @@ public class Vec3f {
         );
     }
 
+    @Contract(value = "_ -> new", pure = true)
     public Vec3f mul(Vector t1) {
         return new Vec3f(
                 x * t1.getX(),
@@ -496,6 +558,7 @@ public class Vec3f {
         );
     }
 
+    @Contract(value = "_ -> new", pure = true)
     public Vec3f divide(Vector t1) {
         return new Vec3f(
                 x / t1.getX(),
@@ -504,6 +567,7 @@ public class Vec3f {
         );
     }
 
+    @Contract(value = "_ -> new", pure = true)
     public Vec3f add(Vector t1) {
         return new Vec3f(
                 x + t1.getX(),
@@ -512,18 +576,22 @@ public class Vec3f {
         );
     }
 
-    public float dot(Vector t1) {
-        return (float) (x * t1.getX() + y * t1.getY() + z * t1.getZ());
+    @Contract(pure = true)
+    public double dot(Vector t1) {
+        return x * t1.getX() + y * t1.getY() + z * t1.getZ();
     }
 
+    @Contract(pure = true)
     public double distance(Vector t1) {
         return Math.sqrt(square(x - t1.getX()) + square(y - t1.getY()) + square(z - t1.getZ()));
     }
 
+    @Contract(pure = true)
     public double distanceSquared(Vector t1) {
         return square(x - t1.getX()) + square(y - t1.getY()) + square(z - t1.getZ());
     }
 
+    @Contract(value = "_ -> new", pure = true)
     public Vec3f cross(Vector t1) {
         return new Vec3f(
                 y * t1.getZ() - z * t1.getY(),
@@ -532,6 +600,7 @@ public class Vec3f {
         );
     }
 
+    @Contract(value = "_ -> new", pure = true)
     public Vec3f sub(Location t1) {
         return new Vec3f(
                 x - t1.getX(),
@@ -540,6 +609,7 @@ public class Vec3f {
         );
     }
 
+    @Contract(value = "_ -> new", pure = true)
     public Vec3f mul(Location t1) {
         return new Vec3f(
                 x * t1.getX(),
@@ -548,6 +618,7 @@ public class Vec3f {
         );
     }
 
+    @Contract(value = "_ -> new", pure = true)
     public Vec3f divide(Location t1) {
         return new Vec3f(
                 x / t1.getX(),
@@ -556,6 +627,7 @@ public class Vec3f {
         );
     }
 
+    @Contract(value = "_ -> new", pure = true)
     public Vec3f add(Location t1) {
         return new Vec3f(
                 x + t1.getX(),
@@ -564,18 +636,22 @@ public class Vec3f {
         );
     }
 
-    public float dot(Location t1) {
-        return (float) (x * t1.getX() + y * t1.getY() + z * t1.getZ());
+    @Contract(pure = true)
+    public double dot(Location t1) {
+        return x * t1.getX() + y * t1.getY() + z * t1.getZ();
     }
 
+    @Contract(pure = true)
     public double distance(Location t1) {
         return Math.sqrt(square(x - t1.getX()) + square(y - t1.getY()) + square(z - t1.getZ()));
     }
 
+    @Contract(pure = true)
     public double distanceSquared(Location t1) {
         return square(x - t1.getX()) + square(y - t1.getY()) + square(z - t1.getZ());
     }
 
+    @Contract(value = "_ -> new", pure = true)
     public Vec3f cross(Location t1) {
         return new Vec3f(
                 y * t1.getZ() - z * t1.getY(),
