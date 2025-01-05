@@ -1,6 +1,5 @@
 package org.by1337.blib.block.custom.listener;
 
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Particle;
@@ -76,36 +75,42 @@ public class CustomBlockListener implements Listener {
         }
     }
 
-    @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
+    @EventHandler(priority = EventPriority.MONITOR)
+    // Ideally, I would use HIGHEST, but WorldGuard cancels this event, and other plugins might bypass it.
     public void onPistonMove(BlockPistonExtendEvent event) {
+        if (event.isCancelled()) return;
         List<CustomBlockData> customBlocks = new ArrayList<>();
         for (Block bukkitBlock : event.getBlocks()) {
             CustomBlockData data = worldRegistry.get(bukkitBlock.getLocation());
             if (data == null) continue;
             customBlocks.add(data);
-        }
-        for (CustomBlockData data : customBlocks) {
+
             CustomBlock customBlock = BlockRegistry.get().getCustomBlock(data.getId());
             if (customBlock.getPistonMoveReaction() == PistonMoveReaction.BLOCK || customBlock.getPistonMoveReaction() == PistonMoveReaction.IGNORE) {
                 event.setCancelled(true);
                 return;
             }
+        }
+        for (int i = customBlocks.size() - 1; i >= 0; i--) {
+            CustomBlockData data = customBlocks.get(i);
+
+            CustomBlock customBlock = BlockRegistry.get().getCustomBlock(data.getId());
             Block block = event.getBlock().getWorld().getBlockAt(data.getBlockX(), data.getBlockY(), data.getBlockZ());
 
             if (customBlock.getPistonMoveReaction() == PistonMoveReaction.BREAK || block.getPistonMoveReaction() == PistonMoveReaction.BREAK) {
-                customBlock.remove(data);
-                worldRegistry.remove(data.getWorld(), data.getBlockX(), data.getBlockY(), data.getBlockZ());
-                block.getWorld().spawnParticle(Particle.BLOCK_CRACK, block.getLocation().add(0.5, 0, 0.5), 30, block.getBlockData());
-                block.setType(Material.AIR);
-                for (ItemStack itemStack : customBlock.getDrop(data)) {
-                    if (itemStack == null || itemStack.getType().isAir()) continue;
-                    event.getBlock().getWorld().dropItemNaturally(event.getBlock().getLocation(), itemStack);
-                }
+                doRemove(data, block, customBlock);
                 return;
             } else {
-                Location location = new Location(Bukkit.getWorld(data.getWorld()), data.getBlockX(), data.getBlockY(), data.getBlockZ());
+                Location location = block.getLocation();
                 worldRegistry.remove(location);
+
                 location.add(event.getDirection().getDirection());
+                {
+                    CustomBlockData old = worldRegistry.remove(location);
+                    if (old != null) {
+                        doRemove(old, location.getBlock(), BlockRegistry.get().getCustomBlock(old.getId()));
+                    }
+                }
                 customBlock.onMove(event, location);
                 if (event.isCancelled()) {
                     BlockRegistry.getPlugin(customBlock.getClass()).getLogger().severe("At this moment it is forbidden to cancel the event!");
@@ -117,6 +122,17 @@ public class CustomBlockListener implements Listener {
                 compoundTag.putInt("z", location.getBlockZ());
                 worldRegistry.add(location, data);
             }
+        }
+    }
+
+    private void doRemove(CustomBlockData data, Block block, CustomBlock customBlock) {
+        customBlock.remove(data);
+        worldRegistry.remove(data.getWorld(), data.getBlockX(), data.getBlockY(), data.getBlockZ());
+        block.getWorld().spawnParticle(Particle.BLOCK_CRACK, block.getLocation().add(0.5, 0, 0.5), 30, block.getBlockData());
+        block.setType(Material.AIR);
+        for (ItemStack itemStack : customBlock.getDrop(data)) {
+            if (itemStack == null || itemStack.getType().isAir()) continue;
+            block.getWorld().dropItemNaturally(block.getLocation(), itemStack);
         }
     }
 

@@ -221,7 +221,7 @@ public class YamlContext {
      * @param obj The object to be serialized.
      * @return The serialized object, suitable for storage in a MemorySection.
      */
-    @Contract("_ -> null")
+    @Contract("null -> null")
     public static Object serialize(@Nullable Object obj) {
         if (obj == null) return null;
         if (obj instanceof YamlValue yamlValue) {

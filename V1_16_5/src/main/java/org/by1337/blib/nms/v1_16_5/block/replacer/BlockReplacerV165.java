@@ -37,7 +37,7 @@ public class BlockReplacerV165 implements BlockReplacer {
         BlockState blockData = ((CraftBlockData) data).getState();
         if (Objects.equals(oldBlock, blockData)) return bukkitBlock;
 
-        if (oldBlock.getBlock() instanceof BaseEntityBlock && blockData.getBlock() != oldBlock.getBlock()) {
+        if (!blockData.isAir() && blockData.getBlock() instanceof BaseEntityBlock && blockData.getBlock() != oldBlock.getBlock()) {
             nmsWorld.removeTileEntity(blockPos);
         }
         // nmsWorld.setTypeAndData()
