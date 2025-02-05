@@ -81,6 +81,13 @@ public class CommandTests {
                 }));
     }
 
+    public static Command<CommandSender> gc() {
+        return new Command<CommandSender>("gc")
+                .executor(((sender, args) -> {
+                    System.gc();
+                }));
+    }
+
     public static Command<CommandSender> logTest() {
         return new Command<CommandSender>("log")
                 .argument(new ArgumentStrings<>("msg"))

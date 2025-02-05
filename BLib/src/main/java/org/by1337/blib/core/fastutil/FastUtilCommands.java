@@ -5,6 +5,7 @@ import com.sk89q.worldedit.WorldEdit;
 import com.sk89q.worldedit.bukkit.BukkitAdapter;
 import com.sk89q.worldedit.bukkit.BukkitPlayer;
 import com.sk89q.worldedit.extent.clipboard.Clipboard;
+import com.sk89q.worldedit.extent.clipboard.io.BuiltInClipboardFormat;
 import com.sk89q.worldedit.extent.clipboard.io.ClipboardFormat;
 import com.sk89q.worldedit.extent.clipboard.io.ClipboardFormats;
 import com.sk89q.worldedit.extent.clipboard.io.ClipboardReader;
@@ -62,7 +63,7 @@ public class FastUtilCommands {
                 if (!file.exists()) {
                     throw new CommandException("file isn't exist!");
                 }
-                ClipboardFormat format = ClipboardFormats.findByFile(file);
+                ClipboardFormat format = Objects.requireNonNullElse(ClipboardFormats.findByFile(file), BuiltInClipboardFormat.SPONGE_SCHEMATIC);
                 BlockReplaceTask task = new BlockReplaceTask();
                 try (ClipboardReader reader = format.getReader(new FileInputStream(file))) {
                     Clipboard clipboard = reader.read();

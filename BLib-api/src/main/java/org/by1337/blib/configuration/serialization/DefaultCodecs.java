@@ -11,7 +11,7 @@ import java.util.Map;
 import java.util.UUID;
 
 public class DefaultCodecs {
-    private static final Codec<UUID> UUID = new PrimitiveCodec<>() {
+    public static final Codec<UUID> UUID = new PrimitiveCodec<>() {
         @Override
         public <T> DataResult<UUID> read(DynamicOps<T> ops, T t) {
             return ops.getStringValue(t).flatMap(s -> DataResult.success(java.util.UUID.fromString(s)));
