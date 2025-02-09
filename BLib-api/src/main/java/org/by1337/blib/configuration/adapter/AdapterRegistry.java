@@ -8,8 +8,10 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
 import org.by1337.blib.configuration.YamlContext;
 import org.by1337.blib.configuration.YamlValue;
+import org.by1337.blib.configuration.adapter.codec.YamlCodec;
 import org.by1337.blib.configuration.adapter.impl.*;
 import org.by1337.blib.configuration.adapter.impl.primitive.*;
+import org.by1337.blib.configuration.serialization.BukkitCodecs;
 import org.by1337.blib.geom.*;
 import org.by1337.blib.util.NameKey;
 import org.by1337.blib.util.OldEnumFixer;
@@ -32,6 +34,11 @@ import java.util.UUID;
 public class AdapterRegistry {
     private static final HashMap<Class<?>, ClassAdapter<?>> adapters;
     private static final HashMap<Class<?>, PrimitiveAdapter<?>> primitiveAdapters;
+    private static final HashMap<Class<?>, YamlCodec<?>> codecs;
+
+    private static <T> void registerCodec(Class<T> adapterClass, YamlCodec<T> codec) {
+        codecs.put(adapterClass, codec);
+    }
 
     /**
      * Registers a new adapter in the registry.
@@ -178,24 +185,29 @@ public class AdapterRegistry {
         if (clazz.isAssignableFrom(src.getClass())) {
             return clazz.cast(src);
         }
-        if (!hasPrimitiveAdapter(clazz)) {
-            if (!hasAdapter(clazz)) {
-                if (clazz.isEnum()) { // runtime adapter register
-                    AdapterEnum adapterEnum = new AdapterEnum(clazz);
-                    registerPrimitiveAdapter(clazz, adapterEnum);
-                    return (T) adapterEnum.deserialize(src);
-                } else if (OldEnumFixer.isOldEnum(clazz)) {
-                    AdapterOldEnum oldEnum = new AdapterOldEnum(clazz);
-                    registerPrimitiveAdapter(clazz, oldEnum);
-                    return (T) oldEnum.deserialize(src);
+        if (!codecs.containsKey(clazz)) {
+            if (!hasPrimitiveAdapter(clazz)) {
+                if (!hasAdapter(clazz)) {
+                    if (clazz.isEnum()) { // runtime adapter register
+                        AdapterEnum adapterEnum = new AdapterEnum(clazz);
+                        registerPrimitiveAdapter(clazz, adapterEnum);
+                        return (T) adapterEnum.deserialize(src);
+                    } else if (OldEnumFixer.isOldEnum(clazz)) {
+                        AdapterOldEnum oldEnum = new AdapterOldEnum(clazz);
+                        registerPrimitiveAdapter(clazz, oldEnum);
+                        return (T) oldEnum.deserialize(src);
+                    }
+                    throw new IllegalStateException("class " + src.getClass() + " has no adapter");
+                } else {
+                    MemorySection section = YamlContext.getMemorySection(src);
+                    return getAs(section, clazz);
                 }
-                throw new IllegalStateException("class " + src.getClass() + " has no adapter");
             } else {
-                MemorySection section = YamlContext.getMemorySection(src);
-                return getAs(section, clazz);
+                return getPrimitiveAs(src, clazz);
             }
         } else {
-            return getPrimitiveAs(src, clazz);
+            YamlCodec<T> codec = (YamlCodec<T>) codecs.get(clazz);
+            return codec.decode(YamlValue.wrap(src));
         }
     }
 
@@ -203,34 +215,43 @@ public class AdapterRegistry {
     /**
      * Serialize an object of a specific class using the appropriate adapter.
      *
-     * @param src The source object to serialize.
+     * @param src0 The source object to serialize.
      * @param <T> The type of the object to serialize.
      * @return The serialized object.
      */
     @SuppressWarnings({"unchecked", "rawtypes"})
-    public static <T> Object serialize(@NotNull T src) {
-        if (src instanceof YamlValue v) {
+    public static <T> Object serialize(final @NotNull T src0) {
+        final T src;
+        if (src0 instanceof YamlValue v) {
             src = (T) v.unpack();
+        } else {
+            src = src0;
         }
-        if (!hasPrimitiveAdapter(src.getClass())) {
-            if (!hasAdapter(src.getClass())) {
-                if (src.getClass().isEnum()) {
-                    AdapterEnum adapterEnum = new AdapterEnum(src.getClass());
-                    registerPrimitiveAdapter(src.getClass(), adapterEnum);
-                    return adapterEnum.serialize((Enum) src);
-                } else if (OldEnumFixer.isOldEnum(src.getClass())) {
-                    AdapterOldEnum oldEnum = new AdapterOldEnum(src.getClass());
-                    registerPrimitiveAdapter(src.getClass(), oldEnum);
-                    return oldEnum.serialize(src);
+        Class<?> srcClass = src.getClass();
+        if (!codecs.containsKey(srcClass)) {
+            if (!hasPrimitiveAdapter(srcClass)) {
+                if (!hasAdapter(srcClass)) {
+                    if (srcClass.isEnum()) {
+                        AdapterEnum adapterEnum = new AdapterEnum(srcClass);
+                        registerPrimitiveAdapter(srcClass, adapterEnum);
+                        return adapterEnum.serialize((Enum) src);
+                    } else if (OldEnumFixer.isOldEnum(srcClass)) {
+                        AdapterOldEnum oldEnum = new AdapterOldEnum(srcClass);
+                        registerPrimitiveAdapter(srcClass, oldEnum);
+                        return oldEnum.serialize(src);
+                    }
+                    return src;
+                } else {
+                    ClassAdapter<T> classAdapter = (ClassAdapter<T>) adapters.get(srcClass);
+                    return classAdapter.serialize(src, new YamlContext(new YamlConfiguration()));
                 }
-                return src;
             } else {
-                ClassAdapter<T> classAdapter = (ClassAdapter<T>) adapters.get(src.getClass());
-                return classAdapter.serialize(src, new YamlContext(new YamlConfiguration()));
+                PrimitiveAdapter<T> adapter = (PrimitiveAdapter<T>) primitiveAdapters.get(srcClass);
+                return adapter.serialize(src);
             }
         } else {
-            PrimitiveAdapter<T> adapter = (PrimitiveAdapter<T>) primitiveAdapters.get(src.getClass());
-            return adapter.serialize(src);
+            YamlCodec<T> codec = (YamlCodec<T>) codecs.get(srcClass);
+            return codec.encode(src);
         }
     }
 
@@ -266,6 +287,7 @@ public class AdapterRegistry {
     static {
         adapters = new HashMap<>();
         primitiveAdapters = new HashMap<>();
+        codecs = new HashMap<>();
 
         registerPrimitiveAdapter(Byte.class, new AdapterByte());
         registerPrimitiveAdapter(Double.class, new AdapterDouble());
@@ -275,7 +297,6 @@ public class AdapterRegistry {
         registerPrimitiveAdapter(Short.class, new AdapterShort());
         registerPrimitiveAdapter(NameKey.class, new AdapterNameKey());
         registerPrimitiveAdapter(Boolean.class, new AdapterBoolean());
-        registerPrimitiveAdapter(Color.class, new AdapterColor());
         registerPrimitiveAdapter(SpacedNameKey.class, new SpacedNameKeyAdapter());
 
         registerPrimitiveAdapter(String.class, String::valueOf);
@@ -285,12 +306,13 @@ public class AdapterRegistry {
 
         registerAdapter(ItemStack.class, new AdapterItemStack());
 
-        registerAdapter(AABB.class, new AdapterAABB());
-        registerAdapter(IntAABB.class, new AdapterIntAABB());
-        registerAdapter(Vec2d.class, new AdapterVec2d());
-        registerAdapter(Vec2i.class, new AdapterVec2i());
-        registerAdapter(Vec3d.class, new AdapterVec3d());
-        registerAdapter(Vec3i.class, new AdapterVec3i());
+        registerCodec(Vec3d.class, YamlCodec.codecOf(Vec3d.CODEC));
+        registerCodec(Vec3i.class, YamlCodec.codecOf(Vec3i.CODEC));
+        registerCodec(Vec2i.class, YamlCodec.codecOf(Vec2i.CODEC));
+        registerCodec(Vec2d.class, YamlCodec.codecOf(Vec2d.CODEC));
+        registerCodec(IntAABB.class, YamlCodec.codecOf(IntAABB.CODEC));
+        registerCodec(AABB.class, YamlCodec.codecOf(AABB.CODEC));
+        registerCodec(Color.class, YamlCodec.codecOf(BukkitCodecs.COLOR));
 
         registerAdapter(BLocation.class, new AdapterBLocation());
         registerAdapter(Vector.class, new AdapterVector());

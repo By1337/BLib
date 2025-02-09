@@ -16,12 +16,24 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionType;
 import org.bukkit.util.Vector;
 import org.by1337.blib.BLib;
+import org.by1337.blib.chat.ChatColor;
 import org.by1337.blib.text.MessageFormatter;
 
 import java.util.Optional;
 import java.util.function.Function;
 
 public class BukkitCodecs {
+    public static final Codec<Color> COLOR = new PrimitiveCodec<>() {
+        @Override
+        public <T> DataResult<Color> read(DynamicOps<T> ops, T t) {
+            return ops.getStringValue(t).map(s -> ChatColor.fromHex(s).toBukkitColor());
+        }
+
+        @Override
+        public <T> T write(DynamicOps<T> ops, Color color) {
+            return ops.createString(ChatColor.toHex(color));
+        }
+    };
     public static final Codec<BlockData> BLOCK_DATA = Codec.STRING
             .comapFlatMap(s -> tryMap(s, Bukkit::createBlockData, "Not a valid block data: {} {}"), BlockData::getAsString);
 
