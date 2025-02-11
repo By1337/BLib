@@ -7,6 +7,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.Plugin;
 import org.by1337.blib.BLib;
+import org.by1337.blib.hook.papi.PapiEscaper;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.HashSet;
@@ -60,7 +61,7 @@ public class CommandWrapper extends BukkitCommand implements Listener {
     @SuppressWarnings("all")
     public void on(AsyncPlayerSendSuggestionsEvent event) {
         if (event.isAsynchronous() && !async) return;
-        String input = event.getBuffer();
+        String input = PapiEscaper.escape(event.getBuffer());
         StringReader reader = new StringReader(input);
         if (reader.hasNext() && reader.next() == '/') {
             String cmd = reader.readToSpace();

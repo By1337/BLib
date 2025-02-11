@@ -12,6 +12,7 @@ import org.by1337.blib.command.argument.Argument;
 import org.by1337.blib.command.argument.ArgumentMap;
 import org.by1337.blib.command.argument.ArgumentStrings;
 import org.by1337.blib.command.requires.Requires;
+import org.by1337.blib.hook.papi.PapiEscaper;
 import org.by1337.blib.lang.Lang;
 import org.by1337.blib.text.MessageFormatter;
 import org.jetbrains.annotations.NotNull;
@@ -106,7 +107,9 @@ public class Command<T> {
      * @throws CommandSyntaxError If there's a syntax error in the command.
      */
     public void process(T sender, String[] args) throws CommandException {
-        process(sender, new StringReader(Joiner.on(" ").join(args)));
+        process(sender, new StringReader(
+                PapiEscaper.escape(Joiner.on(" ").join(args))
+        ));
     }
 
     public void process(T sender, StringReader reader) throws CommandException {
@@ -182,7 +185,7 @@ public class Command<T> {
     }
 
     public List<String> tabComplete(T sender, String[] args) {
-        Suggestions suggestions = tabComplete(sender, new StringReader(Joiner.on(" ").join(args)));
+        Suggestions suggestions = tabComplete(sender, new StringReader(PapiEscaper.escape(Joiner.on(" ").join(args))));
         return suggestions.getList().stream().map(Suggestion::getText).toList();
     }
 
