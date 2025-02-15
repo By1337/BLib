@@ -44,10 +44,24 @@ public class Translation {
             JsonObject lang = key.getValue().getAsJsonObject();
             for (Map.Entry<String, JsonElement> locale : lang.entrySet()) {
                 String[] arr = locale.getKey().split("_");
+                String text;
+                var textRaw = locale.getValue();
+                if (textRaw.isJsonPrimitive()) {
+                    text = textRaw.getAsString();
+                } else {
+                    StringBuilder sb = new StringBuilder();
+                    for (JsonElement jsonElement : textRaw.getAsJsonArray()) {
+                        sb.append(jsonElement.getAsString()).append("\n");
+                    }
+                    if (!sb.isEmpty()) {
+                        sb.setLength(sb.length() - 1);
+                    }
+                    text = sb.toString();
+                }
                 putTranslationIfNotExist(
                         new Locale(arr[0], arr[1]),
                         key.getKey(),
-                        locale.getValue().getAsString()
+                        text
                 );
             }
         }
@@ -142,11 +156,36 @@ public class Translation {
             String rawUseLocale = jsonObject.getAsJsonPrimitive("use-locale").getAsString();
             String rawDefaultLocale = jsonObject.getAsJsonPrimitive("default-locale").getAsString();
 
-            Type mapType = new TypeToken<Map<String, Map<String, String>>>() {
-            }.getType();
+            JsonObject messagesObject = jsonObject.getAsJsonObject("messages");
+            Map<String, Map<String, String>> rawMessages = new HashMap<>();
 
+            for (Map.Entry<String, JsonElement> entry : messagesObject.entrySet()) {
+                String key = entry.getKey();
+                JsonObject innerObject = entry.getValue().getAsJsonObject();
+                Map<String, String> innerMap = new HashMap<>();
 
-            Map<String, Map<String, String>> rawMessages = context.deserialize(jsonObject.getAsJsonObject("messages"), mapType);
+                for (Map.Entry<String, JsonElement> innerEntry : innerObject.entrySet()) {
+                    String text;
+                    var textRaw = innerEntry.getValue();
+                    if (textRaw.isJsonPrimitive()) {
+                        text = textRaw.getAsString();
+                    } else {
+                        StringBuilder sb = new StringBuilder();
+                        for (JsonElement element : textRaw.getAsJsonArray()) {
+                            sb.append(element.getAsString()).append("\n");
+                        }
+                        if (!sb.isEmpty()) {
+                            sb.setLength(sb.length() - 1);
+                        }
+                        text = sb.toString();
+                    }
+
+                    innerMap.put(innerEntry.getKey(), text);
+                }
+
+                rawMessages.put(key, innerMap);
+            }
+
 
 
             Locale useLocale;
