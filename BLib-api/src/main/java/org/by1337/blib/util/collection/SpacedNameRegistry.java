@@ -52,8 +52,8 @@ public class SpacedNameRegistry<T> {
      */
     @Nullable
     public T put(SpacedNameKey key, @Nullable T value) {
-        if (value == null){
-           return remove(key);
+        if (value == null) {
+            return remove(key);
         }
         var old = lookupBySpacedName.put(key, value);
         lookupSpacedNameByName.computeIfAbsent(key.getName(), k -> new HashSet<>()).add(key);
@@ -212,10 +212,17 @@ public class SpacedNameRegistry<T> {
     }
 
     @NotNull
-    public Collection<SpacedNameKey> keySet(){
+    public Collection<SpacedNameKey> keySet() {
         return Collections.unmodifiableCollection(lookupBySpacedName.keySet());
     }
-    public int size(){
+
+    public int size() {
         return lookupBySpacedName.size();
+    }
+
+    public void clear() {
+        lookupBySpacedName.clear();
+        lookupSpacedNameByName.clear();
+        lookupSpacedNameBySpace.clear();
     }
 }
