@@ -6,6 +6,11 @@ package org.by1337.blib.random;
  * @param <T> the type of the value
  */
 public interface WeightedItem<T> {
+
+    static <T> WeightedItem<T> of(double weight, T value) {
+        return WeightedItemImpl.of(weight, value);
+    }
+
     /**
      * Gets the value of the item.
      *
