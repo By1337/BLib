@@ -49,7 +49,7 @@ public class BlockReplacerV1_21_4 implements BlockReplacer {
         }
 
         BlockState iblockdata1 = chunk.setBlockState(pos, state, (flag & BlockReplaceFlags.UPDATE_MOVE_BY_PISTON) != 0, (flag & BlockReplaceFlags.DONT_PLACE) == 0);
-        nmsWorld.chunkPacketBlockController.onBlockChange(nmsWorld, pos, state, iblockdata1, flag, task.getUpdateLimit());
+        // nmsWorld.chunkPacketBlockController.onBlockChange(nmsWorld, pos, state, iblockdata1, flag, task.getUpdateLimit());
         if (iblockdata1 == null) {
             if (nmsWorld.captureBlockStates && captured) {
                 nmsWorld.capturedBlockStates.remove(pos);

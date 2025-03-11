@@ -81,6 +81,19 @@
                     </archive>
                 </configuration>
             </plugin>
+            <plugin>
+                <groupId>org.by1337.blib.asm</groupId>
+                <artifactId>blib-maven-plugin</artifactId>
+                <version>1.5.2</version>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>apply</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
         <resources>
             <resource>

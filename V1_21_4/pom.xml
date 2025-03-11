@@ -58,6 +58,11 @@
                     </execution>
                 </executions>
             </plugin>
+            <plugin>
+                <groupId>ca.bkaw</groupId>
+                <artifactId>paper-nms-maven-plugin</artifactId>
+                <version>1.4.5</version>
+            </plugin>
         </plugins>
         <resources>
             <resource>

@@ -9,8 +9,10 @@ import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.MavenProject;
 import org.by1337.blib.asm.ASMModifier;
+import org.by1337.blib.asm.ASMWriter;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassWriter;
+import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.tree.ClassNode;
 import org.objectweb.asm.tree.MethodNode;
 
@@ -47,12 +49,23 @@ public class MojoApply extends AbstractMojo {
                         classReader.accept(classNode, ClassReader.EXPAND_FRAMES);
 
                         ASMModifier.modify(classNode);
-                        boolean edited = true;
+                        boolean edited = false;
                         atomicBoolean.set(true);
-                        for (MethodNode method : classNode.methods) {
-                            ASMModifier.modify(method, classNode);
-                            edited = true;
+                        if (classNode.version != Opcodes.V16){
+                            for (MethodNode method : classNode.methods) {
+                                ASMModifier.modify(method, classNode);
+                                edited = true;
+                            }
                         }
+                        for (MethodNode method : classNode.methods) {
+                            if (method.invisibleAnnotations != null && method.invisibleAnnotations.stream().anyMatch(a -> a.desc.contains("ASM"))) {
+                                getLog().info("Modify method " + classNode.name + "#" + method.name);
+                                ASMWriter.apply(method);
+                                edited = true;
+                                atomicBoolean.set(true);
+                            }
+                        }
+
                         if (edited) {
                             ClassWriter writer = new ClassWriter(ClassWriter.COMPUTE_MAXS);
                             classNode.accept(writer);

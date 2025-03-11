@@ -6,14 +6,12 @@ import net.minecraft.server.level.ChunkHolder;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BaseEntityBlock;
-import net.minecraft.world.level.block.ChestBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.LevelChunk;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.craftbukkit.CraftWorld;
-import org.bukkit.craftbukkit.block.CraftBlock;
 import org.bukkit.craftbukkit.block.CraftBlockState;
 import org.bukkit.craftbukkit.block.data.CraftBlockData;
 import org.bukkit.event.block.BlockPhysicsEvent;
@@ -63,11 +61,11 @@ public class BlockReplacerV165 implements BlockReplacer {
         } else {
             BlockState iblockdata2 = nmsWorld.getType(blockPos);
             if ((flag & BlockReplaceFlags.UPDATE_SUPPRESS_LIGHT) == 0 &&
-                iblockdata2 != newBlock &&
-                (iblockdata2.getLightBlock(nmsWorld, blockPos) != newBlock.getLightBlock(nmsWorld, blockPos) ||
-                 iblockdata2.getLightEmission() != newBlock.getLightEmission() ||
-                 iblockdata2.useShapeForLightOcclusion() ||
-                 newBlock.useShapeForLightOcclusion())
+                    iblockdata2 != newBlock &&
+                    (iblockdata2.getLightBlock(nmsWorld, blockPos) != newBlock.getLightBlock(nmsWorld, blockPos) ||
+                            iblockdata2.getLightEmission() != newBlock.getLightEmission() ||
+                            iblockdata2.useShapeForLightOcclusion() ||
+                            newBlock.useShapeForLightOcclusion())
             ) {
                 //  nmsWorld.getMethodProfiler().enter("queueCheckLight");
                 nmsWorld.getChunkProvider().getLightEngine().checkBlock(blockPos);
@@ -93,15 +91,15 @@ public class BlockReplacerV165 implements BlockReplacer {
             }
 
             if ((flags & BlockReplaceFlags.UPDATE_CLIENTS) != 0 &&
-                (!level.isClientSide || (flags & BlockReplaceFlags.UPDATE_INVISIBLE) == 0) &&
-                (level.isClientSide || chunk == null || chunk.getState() != null && chunk.getState().isAtLeast(ChunkHolder.FullChunkStatus.TICKING))
+                    (!level.isClientSide || (flags & BlockReplaceFlags.UPDATE_INVISIBLE) == 0) &&
+                    (level.isClientSide || chunk == null || chunk.getState() != null && chunk.getState().isAtLeast(ChunkHolder.FullChunkStatus.TICKING))
             ) {
                 ((ServerLevel) level).getChunkProvider().flagDirty(blockposition);
                 //  level.notify(blockposition, oldBlock, newBlock, flags); // disable paper updatePathfindingOnBlockUpdate
             } else if ((flags & BlockReplaceFlags.UPDATE_CLIENTS) != 0 &&
-                       (!level.isClientSide || (flags & BlockReplaceFlags.UPDATE_INVISIBLE) == 0) &&
-                       (level.isClientSide || chunk == null ||
-                        ((ServerLevel) level).getChunkProvider().playerChunkMap.playerViewDistanceBroadcastMap.getObjectsInRange(MCUtil.getCoordinateKey(blockposition)) != null)
+                    (!level.isClientSide || (flags & BlockReplaceFlags.UPDATE_INVISIBLE) == 0) &&
+                    (level.isClientSide || chunk == null ||
+                            ((ServerLevel) level).getChunkProvider().playerChunkMap.playerViewDistanceBroadcastMap.getObjectsInRange(MCUtil.getCoordinateKey(blockposition)) != null)
             ) {
                 ((ServerLevel) level).getChunkProvider().flagDirty(blockposition);
             }

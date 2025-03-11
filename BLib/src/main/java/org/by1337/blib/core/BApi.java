@@ -13,7 +13,8 @@ import org.by1337.blib.core.factory.BlockReplacerFactory;
 import org.by1337.blib.core.inventory.ItemStackSerializeFactory;
 import org.by1337.blib.core.nbt.ParseCompoundTagManager;
 import org.by1337.blib.core.text.ComponentToANSIImpl;
-import org.by1337.blib.core.text.LegacyConvertorImpl;
+import org.by1337.blib.core.text.minimessage.LegacyConvertorImpl;
+import org.by1337.blib.core.text.minimessage.NativeLegacyConvertor;
 import org.by1337.blib.core.unsafe.BLibUnsafeImpl;
 import org.by1337.blib.factory.PacketEntityFactory;
 import org.by1337.blib.factory.PacketFactory;
@@ -79,11 +80,17 @@ public class BApi implements Api {
     private final FakeTitleFactory fakeTitleFactory = () -> inventoryUtil::sendFakeTitle;
 
     private final BukkitCommandRegister register = new BBukkitCommandRegisterFactory().create();
-    private final LegacyConvertor legacyConvertor = new LegacyConvertorImpl();
+    private final LegacyConvertor legacyConvertor;
     private final ComponentToANSIImpl componentToANSI = new ComponentToANSIImpl();
     private final PooledBlockReplacer pooledBlockReplacer;
 
     public BApi() {
+        if (NativeLegacyConvertor.isAvailable()) {
+            //BLib.getInstance().getSLF4JLogger().error("Using native mini message");
+            legacyConvertor = new NativeLegacyConvertor();
+        } else {
+            legacyConvertor = new LegacyConvertorImpl();
+        }
         File file = new File(BLib.getInstance().getDataFolder(), "translation.json");
         if (!file.exists()) {
             BLib.getInstance().saveResource("translation.json", false);

@@ -7,7 +7,6 @@ import java.net.http.HttpResponse;
 import java.nio.file.Path;
 
 public class RepositoryUtil {
-    private static final boolean hasCloseMethod;
 
     public static Path downloadIfNotExist(String repo, String groupId, String artifactId, String version, Path folder) {
         // url/{groupId}/{artifactId}/{version}/{artifactId}-{version}.jar
@@ -38,21 +37,6 @@ public class RepositoryUtil {
             return out;
         } catch (Exception t) {
             throw new RuntimeException(t);
-        } finally {
-            if (hasCloseMethod) {
-                client.close(); // since 21
-            }
         }
-    }
-
-    static {
-        boolean hasCloseMethod1;
-        try {
-            HttpClient.class.getMethod("close");
-            hasCloseMethod1 = true;
-        } catch (NoSuchMethodException e) {
-            hasCloseMethod1 = false;
-        }
-        hasCloseMethod = hasCloseMethod1;
     }
 }

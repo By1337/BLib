@@ -1,4 +1,4 @@
-package org.by1337.blib.core.text;
+package org.by1337.blib.core.text.minimessage;
 
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
