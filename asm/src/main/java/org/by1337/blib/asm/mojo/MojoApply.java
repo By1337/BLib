@@ -48,19 +48,17 @@ public class MojoApply extends AbstractMojo {
                         final ClassNode classNode = new ClassNode();
                         classReader.accept(classNode, ClassReader.EXPAND_FRAMES);
 
-                        ASMModifier.modify(classNode);
+
                         boolean edited = false;
                         atomicBoolean.set(true);
                         if (classNode.version != Opcodes.V16){
-                            for (MethodNode method : classNode.methods) {
-                                ASMModifier.modify(method, classNode);
-                                edited = true;
-                            }
+                            ASMModifier.modify(classNode);
+                            edited = true;
                         }
                         for (MethodNode method : classNode.methods) {
                             if (method.invisibleAnnotations != null && method.invisibleAnnotations.stream().anyMatch(a -> a.desc.contains("ASM"))) {
                                 getLog().info("Modify method " + classNode.name + "#" + method.name);
-                                ASMWriter.apply(method);
+                                ASMWriter.apply(method, classNode);
                                 edited = true;
                                 atomicBoolean.set(true);
                             }

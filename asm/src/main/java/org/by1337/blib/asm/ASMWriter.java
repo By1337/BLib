@@ -12,22 +12,22 @@ import java.util.stream.Stream;
 
 public class ASMWriter {
 
-    public static void apply(MethodNode methodNode) {
-        String asm = findASM(methodNode.instructions);
+    public static void apply(MethodNode methodNode, ClassNode n) {
+        String asm = findASM(methodNode.instructions, methodNode, n);
         Stream<String> lines = Arrays.stream(asm.split("\n"));
         Convertor convertor = new Convertor();
         lines.forEach(convertor::apply);
         methodNode.instructions = convertor.instructions;
     }
 
-    private static String findASM(InsnList list) {
+    private static String findASM(InsnList list, MethodNode m, ClassNode cn) {
         AbstractInsnNode node = list.getFirst();
         do {
             if (node instanceof LdcInsnNode ldc && ldc.cst instanceof String string) {
                 return string;
             }
         } while ((node = node.getNext()) != null);
-        throw new ASMApplyException("Не найдена строка содержащая asm код!");
+        throw new ASMApplyException("Не найдена строка содержащая asm код! " + cn.name + "#" + m.name);
     }
 
 
