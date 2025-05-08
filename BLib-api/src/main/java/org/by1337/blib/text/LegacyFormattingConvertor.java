@@ -42,6 +42,7 @@ public class LegacyFormattingConvertor {
                 return "";
             }
             default -> {
+                if (lexeme.type == LexemeType.RESET) return "<" + lexeme.type.miniMessagesSyntax + ">"  + parseText(buffer);
                 return "<" + lexeme.type.miniMessagesSyntax + ">"
                        + parseText(buffer) + "</" + lexeme.type.miniMessagesSyntax + ">";
             }

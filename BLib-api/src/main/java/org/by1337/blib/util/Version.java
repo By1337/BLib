@@ -63,7 +63,9 @@ public enum Version {
     V1_21_1("1.21.1", 767, 3955),
     V1_21_2("1.21.2", 768, 4080),
     V1_21_3("1.21.3", 768, 4082),
-    V1_21_4("1.21.4", 769, 4189);
+    V1_21_4("1.21.4", 769, 4189),
+    V1_21_5("1.21.5", 770, 4325);
+
     public static final Codec<Version> CODEC = DefaultCodecs.createEnumCodec(Version.class);
     private static final Logger LOGGER = LoggerFactory.getLogger("BLib#Version");
 
@@ -516,6 +518,18 @@ public enum Version {
 
     public static boolean is1_21_4() {
         return VERSION == V1_21_4;
+    }
+
+    public static boolean is1_21_5orNewer() {
+        return VERSION.newerThanOrEqual(V1_21_5);
+    }
+
+    public static boolean is1_21_5orOlder() {
+        return VERSION.olderThanOrEqual(V1_21_5);
+    }
+
+    public static boolean is1_21_5() {
+        return VERSION == V1_21_5;
     }
 
     /**

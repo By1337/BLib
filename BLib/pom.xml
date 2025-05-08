@@ -271,6 +271,12 @@
             <version>${revision}</version>
             <scope>compile</scope>
         </dependency>
+        <dependency>
+            <groupId>org.by1337.blib.nms</groupId>
+            <artifactId>V1_21_5</artifactId>
+            <version>${revision}</version>
+            <scope>compile</scope>
+        </dependency>
         <!-- tests -->
         <dependency>
             <groupId>junit</groupId>

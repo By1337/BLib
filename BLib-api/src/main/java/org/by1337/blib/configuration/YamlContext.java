@@ -383,7 +383,7 @@ public class YamlContext {
     }
 
     public static MemorySection getMemorySection(Object o, ConfigurationSection root) {
-        if (o instanceof YamlValue v){
+        if (o instanceof YamlValue v) {
             o = v.unpack();
         }
         if (o instanceof Map<?, ?> map) {

@@ -27,6 +27,7 @@ import org.by1337.blib.nms.V1_21.inventory.InventoryUtilV1_21;
 import org.by1337.blib.nms.V1_21.inventory.InventoryUtilV1_21_1;
 import org.by1337.blib.nms.V1_21_3.inventory.InventoryUtilV1_21_3;
 import org.by1337.blib.nms.V1_21_4.inventory.InventoryUtilV1_21_4;
+import org.by1337.blib.nms.V1_21_5.inventory.InventoryUtilV1_21_5;
 import org.by1337.blib.nms.v1_16_5.inventory.InventoryUtilV1_16_5;
 import org.by1337.blib.nms.v1_17_1.inventory.InventoryUtilV1_17_1;
 import org.by1337.blib.nms.v1_18_2.inventory.InventoryUtilV1_18_2;
@@ -74,6 +75,7 @@ public class BApi implements Api {
         case V1_21_1 -> new InventoryUtilV1_21_1();
         case V1_21_3 -> new InventoryUtilV1_21_3();
         case V1_21_4 -> new InventoryUtilV1_21_4();
+        case V1_21_5 -> new InventoryUtilV1_21_5();
         default -> throw new IllegalStateException("Unsupported version: " + Version.VERSION);
     };
     @Deprecated
@@ -86,7 +88,6 @@ public class BApi implements Api {
 
     public BApi() {
         if (NativeLegacyConvertor.isAvailable()) {
-            //BLib.getInstance().getSLF4JLogger().error("Using native mini message");
             legacyConvertor = new NativeLegacyConvertor();
         } else {
             legacyConvertor = new LegacyConvertorImpl();

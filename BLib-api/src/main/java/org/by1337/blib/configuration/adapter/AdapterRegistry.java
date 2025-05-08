@@ -251,7 +251,8 @@ public class AdapterRegistry {
             }
         } else {
             YamlCodec<T> codec = (YamlCodec<T>) codecs.get(srcClass);
-            return codec.encode(src);
+            var v = codec.encode(src);
+            return v.unpack();
         }
     }
 
