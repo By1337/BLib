@@ -7,7 +7,7 @@
     <parent>
         <groupId>org.by1337.blib</groupId>
         <artifactId>Blib-parent</artifactId>
-        <version>1.5.3</version>
+        <version>1.5.4</version>
     </parent>
 
     <groupId>org.by1337.blib.nms</groupId>
@@ -24,7 +24,7 @@
     </pluginRepositories>
 
     <properties>
-        <revision>1.5.3</revision>
+        <revision>1.5.4</revision>
         <target.version>21</target.version>
         <source.version>21</source.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

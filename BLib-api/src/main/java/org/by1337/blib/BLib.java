@@ -17,7 +17,6 @@ public final class BLib {
             throw new UnsupportedOperationException("Cannot redefine singleton Api");
         }
         BLib.api = api;
-        BLib.api.getLogger().info("set api");
     }
 
     @NotNull

@@ -78,9 +78,6 @@ public class BApi implements Api {
         case V1_21_5 -> new InventoryUtilV1_21_5();
         default -> throw new IllegalStateException("Unsupported version: " + Version.VERSION);
     };
-    @Deprecated
-    private final FakeTitleFactory fakeTitleFactory = () -> inventoryUtil::sendFakeTitle;
-
     private final BukkitCommandRegister register = new BBukkitCommandRegisterFactory().create();
     private final LegacyConvertor legacyConvertor;
     private final ComponentToANSIImpl componentToANSI = new ComponentToANSIImpl();
@@ -148,11 +145,6 @@ public class BApi implements Api {
     @Override
     public @NotNull ItemStackSerialize getItemStackSerialize() {
         return itemStackSerialize;
-    }
-
-    @Override
-    public @NotNull FakeTitleFactory getFakeTitleFactory() {
-        return fakeTitleFactory;
     }
 
     @Override
