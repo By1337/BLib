@@ -59,7 +59,7 @@ public class ParseCompoundTagV171 implements ParseCompoundTag {
         return convertFromNms((Tag) nmsObj);
     }
 
-    private void copyAsNms(org.by1337.blib.nbt.impl.CompoundTag compoundTag, CompoundTag nms) {
+    private static void copyAsNms(org.by1337.blib.nbt.impl.CompoundTag compoundTag, CompoundTag nms) {
         for (Map.Entry<String, NBT> entry : compoundTag.entrySet()) {
             NBT nbt = entry.getValue();
             String key = entry.getKey();
@@ -80,7 +80,7 @@ public class ParseCompoundTagV171 implements ParseCompoundTag {
         return function.apply(raw);
     }
 
-    private Tag convert(NBT nbt) {
+    public static Tag convert(NBT nbt) {
         if (nbt instanceof ByteArrNBT) {
             return new ByteArrayTag(((ByteArrNBT) nbt).getValue());
         } else if (nbt instanceof IntArrNBT) {

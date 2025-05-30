@@ -1,22 +1,6 @@
 package org.by1337.blib.nms.v1_16_5.nbt;
 
-import java.util.UUID;
-import java.util.Map.Entry;
-import java.util.concurrent.CompletableFuture;
-import java.util.function.Function;
-
-import net.minecraft.nbt.ByteArrayTag;
-import net.minecraft.nbt.ByteTag;
-import net.minecraft.nbt.DoubleTag;
-import net.minecraft.nbt.FloatTag;
-import net.minecraft.nbt.IntArrayTag;
-import net.minecraft.nbt.IntTag;
-import net.minecraft.nbt.ListTag;
-import net.minecraft.nbt.LongArrayTag;
-import net.minecraft.nbt.LongTag;
-import net.minecraft.nbt.ShortTag;
-import net.minecraft.nbt.StringTag;
-import net.minecraft.nbt.Tag;
+import net.minecraft.nbt.*;
 import net.minecraft.world.level.storage.PlayerDataStorage;
 import org.bukkit.Bukkit;
 import org.bukkit.craftbukkit.CraftServer;
@@ -26,20 +10,15 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.by1337.blib.nbt.NBT;
 import org.by1337.blib.nbt.ParseCompoundTag;
-import org.by1337.blib.nbt.impl.ByteArrNBT;
-import org.by1337.blib.nbt.impl.ByteNBT;
 import org.by1337.blib.nbt.impl.CompoundTag;
-import org.by1337.blib.nbt.impl.DoubleNBT;
-import org.by1337.blib.nbt.impl.FloatNBT;
-import org.by1337.blib.nbt.impl.IntArrNBT;
-import org.by1337.blib.nbt.impl.IntNBT;
-import org.by1337.blib.nbt.impl.ListNBT;
-import org.by1337.blib.nbt.impl.LongArrNBT;
-import org.by1337.blib.nbt.impl.LongNBT;
-import org.by1337.blib.nbt.impl.ShortNBT;
-import org.by1337.blib.nbt.impl.StringNBT;
+import org.by1337.blib.nbt.impl.*;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.Map.Entry;
+import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
+import java.util.function.Function;
 
 public class ParseCompoundTagV165 implements ParseCompoundTag {
     private final PlayerDataStorage worldNBTStorage;
@@ -59,7 +38,7 @@ public class ParseCompoundTagV165 implements ParseCompoundTag {
 
     @Override
     public @NotNull CompoundTag pdcToCompoundTag(@NotNull PersistentDataContainer persistentDataContainer) {
-        if (persistentDataContainer instanceof CraftPersistentDataContainer pdc){
+        if (persistentDataContainer instanceof CraftPersistentDataContainer pdc) {
             return (CompoundTag) convertFromNms(pdc.toTagCompound());
         }
         return new CompoundTag();
@@ -86,19 +65,21 @@ public class ParseCompoundTagV165 implements ParseCompoundTag {
     public Object toNMS(@NotNull NBT nbt) {
         return convert(nbt);
     }
+
     @Override
     public NBT fromNMS(@NotNull Object nmsObj) {
         return convertFromNms((Tag) nmsObj);
     }
-    private void copyAsNms(CompoundTag compoundTag, net.minecraft.nbt.CompoundTag nms) {
+
+    private static void copyAsNms(CompoundTag compoundTag, net.minecraft.nbt.CompoundTag nms) {
         for (Entry<String, NBT> entry : compoundTag.entrySet()) {
             NBT nbt = (NBT) entry.getValue();
             String key = (String) entry.getKey();
-            nms.set(key, this.convert(nbt));
+            nms.set(key, convert(nbt));
         }
     }
 
-    private Tag convert(NBT nbt) {
+    public static Tag convert(NBT nbt) {
         if (nbt instanceof ByteArrNBT) {
             return new ByteArrayTag(((ByteArrNBT) nbt).getValue());
         } else if (nbt instanceof IntArrNBT) {
@@ -121,7 +102,7 @@ public class ParseCompoundTagV165 implements ParseCompoundTag {
             return StringTag.valueOf(((StringNBT) nbt).getValue());
         } else if (nbt instanceof CompoundTag) {
             net.minecraft.nbt.CompoundTag subNms = new net.minecraft.nbt.CompoundTag();
-            this.copyAsNms((CompoundTag) nbt, subNms);
+            copyAsNms((CompoundTag) nbt, subNms);
             return subNms;
         } else if (!(nbt instanceof ListNBT)) {
             throw new UnsupportedOperationException("Unsupported tag type: " + nbt.getClass().getSimpleName());
@@ -130,21 +111,21 @@ public class ParseCompoundTagV165 implements ParseCompoundTag {
             ListTag listTag = new ListTag();
 
             for (NBT element : listNBT.getList()) {
-                listTag.add(this.convert(element));
+                listTag.add(convert(element));
             }
 
             return listTag;
         }
     }
 
-    private void copyAsApiType(net.minecraft.nbt.CompoundTag nms, CompoundTag compoundTag) {
+    private static void copyAsApiType(net.minecraft.nbt.CompoundTag nms, CompoundTag compoundTag) {
         for (String key : nms.getKeys()) {
             Tag tag = nms.get(key);
-            compoundTag.putTag(key, this.convertFromNms(tag));
+            compoundTag.putTag(key, convertFromNms(tag));
         }
     }
 
-    private NBT convertFromNms(Tag tag) {
+    private static NBT convertFromNms(Tag tag) {
         if (tag instanceof ByteArrayTag byteTags) {
             return new ByteArrNBT(byteTags.getBytes());
         } else if (tag instanceof IntArrayTag intTags) {
@@ -155,7 +136,7 @@ public class ParseCompoundTagV165 implements ParseCompoundTag {
             return ByteNBT.valueOf(byteTag.asByte());
         } else if (tag instanceof net.minecraft.nbt.CompoundTag nmsTags) {
             CompoundTag compoundTag1 = new CompoundTag();
-            this.copyAsApiType(nmsTags, compoundTag1);
+            copyAsApiType(nmsTags, compoundTag1);
             return compoundTag1;
         } else if (tag instanceof DoubleTag doubleTag) {
             return new DoubleNBT(doubleTag.asDouble());
@@ -176,7 +157,7 @@ public class ParseCompoundTagV165 implements ParseCompoundTag {
             ListNBT listNBT = new ListNBT();
 
             for (Tag value : listTag) {
-                listNBT.add(this.convertFromNms(value));
+                listNBT.add(convertFromNms(value));
             }
 
             return listNBT;
