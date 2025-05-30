@@ -18,7 +18,6 @@ import org.by1337.blib.core.text.minimessage.NativeLegacyConvertor;
 import org.by1337.blib.core.unsafe.BLibUnsafeImpl;
 import org.by1337.blib.factory.PacketEntityFactory;
 import org.by1337.blib.factory.PacketFactory;
-import org.by1337.blib.inventory.FakeTitleFactory;
 import org.by1337.blib.inventory.InventoryUtil;
 import org.by1337.blib.inventory.ItemStackSerialize;
 import org.by1337.blib.nbt.ParseCompoundTag;
@@ -29,12 +28,16 @@ import org.by1337.blib.nms.V1_21_3.inventory.InventoryUtilV1_21_3;
 import org.by1337.blib.nms.V1_21_4.inventory.InventoryUtilV1_21_4;
 import org.by1337.blib.nms.V1_21_5.inventory.InventoryUtilV1_21_5;
 import org.by1337.blib.nms.v1_16_5.inventory.InventoryUtilV1_16_5;
+import org.by1337.blib.nms.v1_16_5.registry.RegistryCreatorV1165;
 import org.by1337.blib.nms.v1_17_1.inventory.InventoryUtilV1_17_1;
+import org.by1337.blib.nms.v1_17_1.registry.RegistryCreatorV1171;
 import org.by1337.blib.nms.v1_18_2.inventory.InventoryUtilV1_18_2;
+import org.by1337.blib.nms.v1_18_2.registry.RegistryCreatorV1182AndNewer;
 import org.by1337.blib.nms.v1_19_4.inventory.InventoryUtilV1_19_4;
 import org.by1337.blib.nms.v1_20_1.inventory.InventoryUtilV1_20_1;
 import org.by1337.blib.nms.v1_20_2.inventory.InventoryUtilV1_20_2;
 import org.by1337.blib.nms.v1_20_4.inventory.InventoryUtilV1_20_4;
+import org.by1337.blib.registry.RegistryCreator;
 import org.by1337.blib.text.ComponentToANSI;
 import org.by1337.blib.text.LegacyConvertor;
 import org.by1337.blib.translation.Translation;
@@ -180,5 +183,14 @@ public class BApi implements Api {
     @Override
     public @NotNull InventoryUtil getInventoryUtil() {
         return inventoryUtil;
+    }
+
+    @Override
+    public @NotNull RegistryCreator getRegistryCreator() {
+        return switch (Version.VERSION) {
+            case V1_16_5 -> new RegistryCreatorV1165();
+            case V1_17_1 -> new RegistryCreatorV1171();
+            default -> new RegistryCreatorV1182AndNewer();
+        };
     }
 }

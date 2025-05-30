@@ -10,6 +10,7 @@ import org.by1337.blib.inventory.FakeTitleFactory;
 import org.by1337.blib.inventory.InventoryUtil;
 import org.by1337.blib.inventory.ItemStackSerialize;
 import org.by1337.blib.nbt.ParseCompoundTag;
+import org.by1337.blib.registry.RegistryCreator;
 import org.by1337.blib.text.ComponentToANSI;
 import org.by1337.blib.text.LegacyConvertor;
 import org.by1337.blib.unsafe.BLibUnsafe;
@@ -51,4 +52,6 @@ public interface Api {
     @NotNull BLibUnsafe getUnsafe();
 
     @NotNull InventoryUtil getInventoryUtil();
+
+    @NotNull RegistryCreator getRegistryCreator();
 }
