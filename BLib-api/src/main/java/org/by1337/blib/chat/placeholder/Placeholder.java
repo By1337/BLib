@@ -22,6 +22,11 @@ public class Placeholder implements Placeholderable {
         placeholders.put(placeholder, supplier);
     }
 
+    public Placeholder register(@NotNull String placeholder, Supplier<Object> supplier) {
+        placeholders.put(placeholder, supplier);
+        return this;
+    }
+
     public void registerPlaceholders(Placeholder placeholder) {
         registerPlaceholders(placeholder.placeholders.entrySet());
     }

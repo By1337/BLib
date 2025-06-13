@@ -7,7 +7,7 @@
     <parent>
         <groupId>org.by1337.blib</groupId>
         <artifactId>Blib-parent</artifactId>
-        <version>1.5.4</version>
+        <version>1.6</version>
     </parent>
 
     <groupId>org.by1337.blib</groupId>
@@ -16,7 +16,7 @@
     <name>BLib-api</name>
 
     <properties>
-        <revision>1.5.4</revision>
+        <revision>1.6</revision>
         <target.version>16</target.version>
         <source.version>16</source.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -111,7 +111,7 @@
         <dependency>
             <groupId>org.by1337.blib.dfu</groupId>
             <artifactId>ShadedDFU</artifactId>
-            <version>1.5.4</version>
+            <version>1.6</version>
             <scope>compile</scope>
             <exclusions>
                 <exclusion>
@@ -148,7 +148,7 @@
         <dependency>
             <groupId>org.by1337.blib.nbt</groupId>
             <artifactId>BLib-Nbt</artifactId>
-            <version>1.5.4</version>
+            <version>1.6</version>
             <scope>compile</scope>
         </dependency>
 
