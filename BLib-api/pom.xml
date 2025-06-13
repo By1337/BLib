@@ -121,6 +121,12 @@
             </exclusions>
         </dependency>
         <dependency>
+            <groupId>dev.by1337.yaml</groupId>
+            <artifactId>byaml-bukkit</artifactId>
+            <version>1.0</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
             <groupId>com.destroystokyo.paper</groupId>
             <artifactId>paper-mojangapi</artifactId>
             <version>1.16.5-R0.1-SNAPSHOT</version>

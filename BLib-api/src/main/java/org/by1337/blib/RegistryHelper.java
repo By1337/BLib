@@ -2,6 +2,7 @@ package org.by1337.blib;
 
 import org.bukkit.Keyed;
 import org.bukkit.NamespacedKey;
+import org.bukkit.Particle;
 import org.bukkit.Registry;
 import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
@@ -15,6 +16,7 @@ import java.util.function.Function;
 
 public class RegistryHelper {
     public static final Registry<RegistryHelper.Holder<PotionEffectType>> MOB_EFFECT = BLib.getApi().getRegistryCreator().createPotionType();
+    public static final Registry<RegistryHelper.Holder<Particle>> PARTICLE_TYPE = BLib.getApi().getRegistryCreator().createParticleType();
 
 
     public static <T extends Keyed> Registry<Holder<T>> of(Iterator<T> iterator) {

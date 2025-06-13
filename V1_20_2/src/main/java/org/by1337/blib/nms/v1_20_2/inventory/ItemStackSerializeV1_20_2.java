@@ -32,7 +32,7 @@ public class ItemStackSerializeV1_20_2 implements ItemStackSerialize {
     @Override
     public @NotNull ItemStack deserialize(@NotNull String data) throws IllegalArgumentException {
         try {
-            return CraftItemStack.asBukkitCopy(
+            return CraftItemStack.asCraftMirror(
                     net.minecraft.world.item.ItemStack.of(TagParser.parseTag(new String(Base64.getDecoder().decode(data.getBytes(StandardCharsets.UTF_8)), StandardCharsets.UTF_8)))
             );
         } catch (Exception e) {

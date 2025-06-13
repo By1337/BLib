@@ -1,6 +1,8 @@
 package org.by1337.blib.nms.V1_20_6.inventory;
 
 import net.minecraft.core.HolderLookup;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.TagParser;
 import net.minecraft.server.MinecraftServer;
@@ -34,7 +36,7 @@ public class ItemStackSerializeV1_20_6 implements ItemStackSerialize {
     @Override
     public @NotNull ItemStack deserialize(@NotNull String data) throws IllegalArgumentException {
         try {
-            return CraftItemStack.asBukkitCopy(
+            return CraftItemStack.asCraftMirror(
                     net.minecraft.world.item.ItemStack.parse(
                             MinecraftServer.getServer().registryAccess(),
                             TagParser.parseTag(new String(Base64.getDecoder().decode(data.getBytes(StandardCharsets.UTF_8)), StandardCharsets.UTF_8))

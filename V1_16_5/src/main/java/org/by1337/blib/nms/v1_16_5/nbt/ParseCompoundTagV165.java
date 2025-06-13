@@ -46,8 +46,8 @@ public class ParseCompoundTagV165 implements ParseCompoundTag {
 
     public @NotNull ItemStack create(@NotNull CompoundTag compoundTag) {
         net.minecraft.nbt.CompoundTag nms = new net.minecraft.nbt.CompoundTag();
-        this.copyAsNms(compoundTag, nms);
-        return CraftItemStack.asBukkitCopy(net.minecraft.world.item.ItemStack.of(nms));
+        copyAsNms(compoundTag, nms);
+        return CraftItemStack.asCraftMirror(net.minecraft.world.item.ItemStack.of(nms));
     }
 
     public CompletableFuture<CompoundTag> readOfflinePlayerData(@NotNull UUID player) {

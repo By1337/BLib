@@ -37,7 +37,7 @@ public class ParseCompoundTagV194 implements ParseCompoundTag {
     public @NotNull ItemStack create(org.by1337.blib.nbt.impl.@NotNull CompoundTag compoundTag) {
         var nms = new CompoundTag();
         copyAsNms(compoundTag, nms);
-        return CraftItemStack.asBukkitCopy(
+        return CraftItemStack.asCraftMirror(
                 net.minecraft.world.item.ItemStack.of(nms)
         );
     }

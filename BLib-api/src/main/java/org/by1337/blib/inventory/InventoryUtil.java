@@ -10,7 +10,5 @@ public interface InventoryUtil {
     void flushInv(Player player);
     void disableAutoFlush(Player player);
     void enableAutoFlush(Player player);
-    default void setPacketItem(Inventory inventory, Player player, ItemStack itemStack, int slot){
-        throw new UnsupportedOperationException();
-    }
+    void setItemStackWithoutCopy(Inventory to, ItemStack who, int index);
 }

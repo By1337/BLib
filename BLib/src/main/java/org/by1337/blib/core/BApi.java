@@ -32,10 +32,13 @@ import org.by1337.blib.nms.v1_16_5.registry.RegistryCreatorV1165;
 import org.by1337.blib.nms.v1_17_1.inventory.InventoryUtilV1_17_1;
 import org.by1337.blib.nms.v1_17_1.registry.RegistryCreatorV1171;
 import org.by1337.blib.nms.v1_18_2.inventory.InventoryUtilV1_18_2;
-import org.by1337.blib.nms.v1_18_2.registry.RegistryCreatorV1182AndNewer;
+import org.by1337.blib.nms.v1_18_2.registry.RegistryCreatorV1182;
 import org.by1337.blib.nms.v1_19_4.inventory.InventoryUtilV1_19_4;
+import org.by1337.blib.nms.v1_19_4.registry.RegistryCreatorV1194;
 import org.by1337.blib.nms.v1_20_1.inventory.InventoryUtilV1_20_1;
+import org.by1337.blib.nms.v1_20_1.registry.RegistryCreatorV1201;
 import org.by1337.blib.nms.v1_20_2.inventory.InventoryUtilV1_20_2;
+import org.by1337.blib.nms.v1_20_2.registry.RegistryCreatorV1202AndNewer;
 import org.by1337.blib.nms.v1_20_4.inventory.InventoryUtilV1_20_4;
 import org.by1337.blib.registry.RegistryCreator;
 import org.by1337.blib.text.ComponentToANSI;
@@ -190,7 +193,10 @@ public class BApi implements Api {
         return switch (Version.VERSION) {
             case V1_16_5 -> new RegistryCreatorV1165();
             case V1_17_1 -> new RegistryCreatorV1171();
-            default -> new RegistryCreatorV1182AndNewer();
+            case V1_18_2 -> new RegistryCreatorV1182();
+            case V1_19_4 -> new RegistryCreatorV1194();
+            case V1_20_1 -> new RegistryCreatorV1201();
+            default -> new RegistryCreatorV1202AndNewer();
         };
     }
 }
