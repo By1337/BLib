@@ -24,8 +24,10 @@ public class PluginClasspathUtilImpl implements PluginClasspathUtil {
 
 
     public void addUrl(Plugin plugin, File file) {
+
         try {
             addUrl(plugin, file.toPath().toUri().toURL());
+            URL url = URL.of(file.toPath().toUri(), null);
         } catch (MalformedURLException e) {
             throw new RuntimeException(e);
         }

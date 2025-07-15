@@ -5,6 +5,7 @@ import org.by1337.blib.world.BLocation;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+@Deprecated
 public interface CommandUtil {
     void summon(@NotNull String entityType, @NotNull BLocation location, @Nullable String nbt);
 

@@ -8,10 +8,13 @@ import org.bukkit.craftbukkit.inventory.CraftItemStack;
 import org.bukkit.craftbukkit.persistence.CraftPersistentDataContainer;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataContainer;
+import org.by1337.blib.inventory.LegacyFastItemMutator;
 import org.by1337.blib.nbt.NBT;
 import org.by1337.blib.nbt.ParseCompoundTag;
 import org.by1337.blib.nbt.impl.CompoundTag;
 import org.by1337.blib.nbt.impl.*;
+import org.by1337.blib.nms.NMSAccessor;
+import org.by1337.blib.util.Version;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -20,6 +23,7 @@ import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Function;
 
+@NMSAccessor(forClazz = ParseCompoundTag.class, forVersions = Version.V1_16_5)
 public class ParseCompoundTagV165 implements ParseCompoundTag {
     private final PlayerDataStorage worldNBTStorage;
 
@@ -125,7 +129,7 @@ public class ParseCompoundTagV165 implements ParseCompoundTag {
         }
     }
 
-    private static NBT convertFromNms(Tag tag) {
+    public static NBT convertFromNms(Tag tag) {
         if (tag instanceof ByteArrayTag byteTags) {
             return new ByteArrNBT(byteTags.getBytes());
         } else if (tag instanceof IntArrayTag intTags) {

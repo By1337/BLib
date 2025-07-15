@@ -7,8 +7,11 @@ import org.bukkit.craftbukkit.v1_20_R1.CraftParticle;
 import org.bukkit.craftbukkit.v1_20_R1.util.CraftNamespacedKey;
 import org.bukkit.potion.PotionEffectType;
 import org.by1337.blib.RegistryHelper;
+import org.by1337.blib.nms.NMSAccessor;
 import org.by1337.blib.registry.RegistryCreator;
+import org.by1337.blib.util.Version;
 
+@NMSAccessor(forClazz = RegistryCreator.class, forVersions = Version.V1_20_1)
 public class RegistryCreatorV1201 implements RegistryCreator {
     @Override
     public Registry<RegistryHelper.Holder<PotionEffectType>> createPotionType() {

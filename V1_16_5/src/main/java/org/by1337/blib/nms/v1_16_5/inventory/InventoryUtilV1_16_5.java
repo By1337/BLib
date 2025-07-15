@@ -13,7 +13,10 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
+import org.by1337.blib.command.SummonCommand;
 import org.by1337.blib.inventory.InventoryUtil;
+import org.by1337.blib.nms.NMSAccessor;
+import org.by1337.blib.util.Version;
 import org.by1337.blib.util.invoke.LambdaMetafactoryUtil;
 
 import java.lang.reflect.Field;
@@ -21,6 +24,7 @@ import java.util.ArrayList;
 import java.util.Objects;
 import java.util.function.BiConsumer;
 
+@NMSAccessor(forClazz = InventoryUtil.class, forVersions = Version.V1_16_5)
 public class InventoryUtilV1_16_5 implements InventoryUtil {
     private static final BiConsumer<ServerPlayer, Integer> CONTAINER_UPDATE_DELAY;
 

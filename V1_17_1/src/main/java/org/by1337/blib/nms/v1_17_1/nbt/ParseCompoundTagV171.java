@@ -12,15 +12,17 @@ import org.bukkit.persistence.PersistentDataContainer;
 import org.by1337.blib.nbt.NBT;
 import org.by1337.blib.nbt.ParseCompoundTag;
 import org.by1337.blib.nbt.impl.*;
+import org.by1337.blib.nms.NMSAccessor;
+import org.by1337.blib.util.Version;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.lang.reflect.Field;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Function;
 
+@NMSAccessor(forClazz = ParseCompoundTag.class, forVersions = Version.V1_17_1)
 public class ParseCompoundTagV171 implements ParseCompoundTag {
 
     @Override
@@ -41,9 +43,10 @@ public class ParseCompoundTagV171 implements ParseCompoundTag {
                 net.minecraft.world.item.ItemStack.of(nms)
         );
     }
+
     @Override
     public @NotNull org.by1337.blib.nbt.impl.CompoundTag pdcToCompoundTag(@NotNull PersistentDataContainer persistentDataContainer) {
-        if (persistentDataContainer instanceof CraftPersistentDataContainer pdc){
+        if (persistentDataContainer instanceof CraftPersistentDataContainer pdc) {
             return (org.by1337.blib.nbt.impl.CompoundTag) convertFromNms(pdc.toTagCompound());
         }
         return new org.by1337.blib.nbt.impl.CompoundTag();
@@ -68,12 +71,14 @@ public class ParseCompoundTagV171 implements ParseCompoundTag {
     }
 
     private final PlayerDataStorage worldNBTStorage = ((CraftServer) Bukkit.getServer()).getServer().playerDataStorage;
+
     @Override
     public CompletableFuture<org.by1337.blib.nbt.impl.CompoundTag> readOfflinePlayerData(@NotNull UUID player) {
         return CompletableFuture.supplyAsync(() ->
                 applyIfNotNull(worldNBTStorage.getPlayerData(player.toString()), nbt -> (org.by1337.blib.nbt.impl.CompoundTag) convertFromNms(nbt))
         );
     }
+
     @Nullable
     private <T, R> R applyIfNotNull(@Nullable T raw, Function<T, R> function) {
         if (raw == null) return null;

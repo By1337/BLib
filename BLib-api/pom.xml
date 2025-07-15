@@ -7,7 +7,7 @@
     <parent>
         <groupId>org.by1337.blib</groupId>
         <artifactId>Blib-parent</artifactId>
-        <version>1.6</version>
+        <version>1.7</version>
     </parent>
 
     <groupId>org.by1337.blib</groupId>
@@ -16,7 +16,7 @@
     <name>BLib-api</name>
 
     <properties>
-        <revision>1.6</revision>
+        <revision>1.7</revision>
         <target.version>16</target.version>
         <source.version>16</source.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -80,7 +80,7 @@
         </repository>
         <repository>
             <id>papermc</id>
-            <url>https://papermc.io/repo/repository/maven-public/</url>
+            <url>https://repo.papermc.io/repository/maven-public/</url>
         </repository>
         <repository>
             <id>sonatype</id>
@@ -99,6 +99,10 @@
             <name>Minecraft Libraries</name>
             <url>https://libraries.minecraft.net</url>
         </repository>
+        <repository>
+            <id>by1337-repo</id>
+            <url>https://repo.by1337.space/repository/maven-releases/</url>
+        </repository>
     </repositories>
 
     <dependencies>
@@ -111,7 +115,7 @@
         <dependency>
             <groupId>org.by1337.blib.dfu</groupId>
             <artifactId>ShadedDFU</artifactId>
-            <version>1.6</version>
+            <version>1.7</version>
             <scope>compile</scope>
             <exclusions>
                 <exclusion>
@@ -148,7 +152,7 @@
         <dependency>
             <groupId>org.by1337.blib.nbt</groupId>
             <artifactId>BLib-Nbt</artifactId>
-            <version>1.6</version>
+            <version>1.7</version>
             <scope>compile</scope>
         </dependency>
 
@@ -167,7 +171,7 @@
         <dependency>
             <groupId>org.jetbrains</groupId>
             <artifactId>annotations</artifactId>
-            <version>RELEASE</version>
+            <version>24.1.0</version>
             <scope>provided</scope>
         </dependency>
         <dependency>

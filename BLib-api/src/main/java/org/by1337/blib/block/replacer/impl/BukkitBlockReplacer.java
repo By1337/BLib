@@ -7,8 +7,10 @@ import org.by1337.blib.block.replacer.BlockReplaceFlags;
 import org.by1337.blib.block.replacer.BlockReplacer;
 import org.by1337.blib.block.replacer.ReplaceTask;
 import org.by1337.blib.geom.Vec3i;
+import org.by1337.blib.nms.NMSAccessor;
+import org.by1337.blib.util.Version;
 
-
+@NMSAccessor(forClazz = BlockReplacer.class, forVersions = Version.UNKNOWN)
 public class BukkitBlockReplacer implements BlockReplacer {
     @Override
     public Block replace(Vec3i pos, BlockData blockData, ReplaceTask task, World world, int flag) {

@@ -5,8 +5,7 @@ api-version: '1.16'
 author: "By1337"
 depend:
   - WorldEdit
-softdepend:
-  - 'PlaceholderAPI'
+  - PlaceholderAPI
 #commands:
 #  blib:
 #    aliases: lib

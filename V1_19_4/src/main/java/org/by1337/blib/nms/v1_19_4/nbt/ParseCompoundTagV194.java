@@ -1,7 +1,7 @@
 package org.by1337.blib.nms.v1_19_4.nbt;
 
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.*;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.storage.PlayerDataStorage;
 import org.bukkit.Bukkit;
 import org.bukkit.craftbukkit.v1_19_R3.CraftServer;
@@ -12,15 +12,17 @@ import org.bukkit.persistence.PersistentDataContainer;
 import org.by1337.blib.nbt.NBT;
 import org.by1337.blib.nbt.ParseCompoundTag;
 import org.by1337.blib.nbt.impl.*;
+import org.by1337.blib.nms.NMSAccessor;
+import org.by1337.blib.util.Version;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.lang.reflect.Field;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Function;
 
+@NMSAccessor(forClazz = ParseCompoundTag.class, forVersions = Version.V1_19_4)
 public class ParseCompoundTagV194 implements ParseCompoundTag {
 
     @Override

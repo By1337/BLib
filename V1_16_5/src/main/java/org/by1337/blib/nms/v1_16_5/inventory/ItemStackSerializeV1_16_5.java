@@ -11,9 +11,13 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.TagParser;
 import org.bukkit.craftbukkit.inventory.CraftItemStack;
 import org.bukkit.inventory.ItemStack;
+import org.by1337.blib.inventory.InventoryUtil;
 import org.by1337.blib.inventory.ItemStackSerialize;
+import org.by1337.blib.nms.NMSAccessor;
+import org.by1337.blib.util.Version;
 import org.jetbrains.annotations.NotNull;
 
+@NMSAccessor(forClazz = ItemStackSerialize.class, forVersions = Version.V1_16_5)
 public class ItemStackSerializeV1_16_5 implements ItemStackSerialize {
     @NotNull
     public String serialize(@NotNull ItemStack itemStack) throws IllegalArgumentException {

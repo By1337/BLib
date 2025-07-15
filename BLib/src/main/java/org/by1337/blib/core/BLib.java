@@ -13,11 +13,15 @@ import org.by1337.blib.block.custom.registry.WorldRegistry;
 import org.by1337.blib.command.Command;
 import org.by1337.blib.command.CommandWrapper;
 import org.by1337.blib.command.argument.ArgumentBoolean;
+import org.by1337.blib.command.argument.ArgumentEnumValue;
 import org.by1337.blib.command.argument.ArgumentPlayer;
 import org.by1337.blib.command.argument.ArgumentSetList;
 import org.by1337.blib.command.requires.RequiresPermission;
 import org.by1337.blib.core.block.CustomBlockManager;
 import org.by1337.blib.core.fastutil.FastUtilCommands;
+import org.by1337.blib.core.nms.NMSBootstrap;
+import org.by1337.blib.core.nms.NMSTests;
+import org.by1337.blib.core.nms.NmsFactory;
 import org.by1337.blib.core.test.CommandTests;
 import org.by1337.blib.lang.Lang;
 import org.by1337.blib.translation.Translation;
@@ -43,14 +47,17 @@ public class BLib extends JavaPlugin {
 
     @Override
     public void onLoad() {
+        instance = this;
         File libraries = new File(getDataFolder(), "libraries");
         if (!libraries.exists()) {
             getSLF4JLogger().info("Downloading libraries...");
             libraries.mkdirs();
         }
         LibLoader.load(libraries.toPath(), this);
+        NMSBootstrap.bootstrap();
+        System.out.println(NmsFactory.get());
 
-        instance = this;
+
         api = new BApi();
         org.by1337.blib.BLib.setApi(api);
         customBlockManager = new CustomBlockManager();
@@ -114,6 +121,15 @@ public class BLib extends JavaPlugin {
                         .argument(new ArgumentBoolean<>("enable"))
                         .executor(((sender, args) -> {
                             DEBUG = (boolean) args.getOrDefault("enable", !DEBUG);
+                        }))
+                ).addSubCommand(new Command<CommandSender>("nms_test")
+                        .argument(new ArgumentEnumValue<CommandSender>("ver", Version.class))
+                        .executor(((sender, args) -> {
+                            Player player = (Player) sender;
+                            Version version = (Version) args.get("ver");
+                            System.out.println(
+                                    NMSTests.run(player, version == null ? Version.VERSION : version)
+                            );
                         }))
                 ).addSubCommand(new Command<CommandSender>("cb")
                         .requires(new RequiresPermission<>("blib.cb"))

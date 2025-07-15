@@ -15,6 +15,7 @@ import org.by1337.blib.text.ComponentToANSI;
 import org.by1337.blib.text.LegacyConvertor;
 import org.by1337.blib.unsafe.BLibUnsafe;
 import org.by1337.blib.util.AsyncCatcher;
+import org.by1337.blib.world.BlockUtil;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.logging.Logger;
@@ -54,4 +55,5 @@ public interface Api {
     @NotNull InventoryUtil getInventoryUtil();
 
     @NotNull RegistryCreator getRegistryCreator();
+    @NotNull BlockUtil getBlockUtil();
 }

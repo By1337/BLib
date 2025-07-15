@@ -13,13 +13,14 @@ import net.minecraft.world.entity.MobSpawnType;
 import org.bukkit.Location;
 import org.bukkit.craftbukkit.v1_17_R1.CraftWorld;
 import org.by1337.blib.command.SummonCommand;
+import org.by1337.blib.nms.NMSAccessor;
+import org.by1337.blib.util.Version;
 import org.by1337.blib.world.BLocation;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
+@NMSAccessor(forClazz = SummonCommand.class, forVersions = Version.V1_17_1)
 public class SummonCommandV1_17_1 implements SummonCommand {
     @Override
-    public void spawn(@NotNull String entityType, @NotNull BLocation location, @Nullable String nbt) {
+    public void spawn(String entityType, BLocation location, String nbt) {
         try {
             CompoundTag entityData = new CompoundTag();
             if (nbt != null) {

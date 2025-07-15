@@ -7,7 +7,7 @@
     <parent>
         <groupId>org.by1337.blib</groupId>
         <artifactId>Blib-parent</artifactId>
-        <version>1.6</version>
+        <version>1.7</version>
     </parent>
 
     <groupId>org.by1337.blib.nms</groupId>
@@ -24,7 +24,7 @@
     </pluginRepositories>
 
     <properties>
-        <revision>1.6</revision>
+        <revision>1.7</revision>
         <target.version>21</target.version>
         <source.version>21</source.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -61,7 +61,7 @@
             <plugin>
                 <groupId>ca.bkaw</groupId>
                 <artifactId>paper-nms-maven-plugin</artifactId>
-                <version>1.4.7</version>
+                <version>1.4.8</version>
             </plugin>
         </plugins>
         <resources>
@@ -126,7 +126,7 @@
         <dependency>
             <groupId>org.jetbrains</groupId>
             <artifactId>annotations</artifactId>
-            <version>RELEASE</version>
+            <version>24.1.0</version>
             <scope>provided</scope>
         </dependency>
     </dependencies>

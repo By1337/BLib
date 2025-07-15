@@ -5,7 +5,10 @@ import net.minecraft.nbt.TagParser;
 import net.minecraft.server.MinecraftServer;
 import org.bukkit.craftbukkit.inventory.CraftItemStack;
 import org.bukkit.inventory.ItemStack;
+import org.by1337.blib.inventory.InventoryUtil;
 import org.by1337.blib.inventory.ItemStackSerialize;
+import org.by1337.blib.nms.NMSAccessor;
+import org.by1337.blib.util.Version;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.ByteArrayInputStream;
@@ -15,7 +18,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
-
+@NMSAccessor(forClazz = ItemStackSerialize.class, forVersions = Version.V1_21_1)
 public class ItemStackSerializeV1_21_1 implements ItemStackSerialize {
     @Override
     public @NotNull String serialize(@NotNull ItemStack itemStack) throws IllegalArgumentException {

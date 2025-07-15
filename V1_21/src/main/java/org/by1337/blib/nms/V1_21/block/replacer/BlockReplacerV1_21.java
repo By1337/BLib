@@ -22,9 +22,12 @@ import org.by1337.blib.block.replacer.type.impl.BlockDataBlock;
 import org.by1337.blib.block.replacer.type.impl.MaterialBlock;
 import org.by1337.blib.block.replacer.type.impl.WeBlockStateBlock;
 import org.by1337.blib.geom.Vec3i;
+import org.by1337.blib.nbt.ParseCompoundTag;
+import org.by1337.blib.nms.NMSAccessor;
+import org.by1337.blib.util.Version;
 
 import java.util.Objects;
-
+@NMSAccessor(forClazz = BlockReplacer.class, forVersions = Version.V1_21)
 public class BlockReplacerV1_21 implements BlockReplacer {
     @Override
     public Block replace(Vec3i pos0, BlockData data, ReplaceTask task, World world, int flag) {

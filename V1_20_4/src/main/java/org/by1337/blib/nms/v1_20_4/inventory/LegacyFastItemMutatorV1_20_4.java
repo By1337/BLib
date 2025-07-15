@@ -3,13 +3,16 @@ package org.by1337.blib.nms.v1_20_4.inventory;
 import net.minecraft.nbt.Tag;
 import org.bukkit.craftbukkit.v1_20_R3.inventory.CraftItemStack;
 import org.bukkit.inventory.ItemStack;
+import org.by1337.blib.inventory.ItemStackSerialize;
 import org.by1337.blib.inventory.LegacyFastItemMutator;
 import org.by1337.blib.nbt.NBT;
 import org.by1337.blib.nbt.ParseCompoundTag;
+import org.by1337.blib.nms.NMSAccessor;
 import org.by1337.blib.nms.v1_20_4.nbt.ParseCompoundTagV204;
+import org.by1337.blib.util.Version;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
+@NMSAccessor(forClazz = LegacyFastItemMutator.class, forVersions = {Version.V1_20_4, Version.V1_20_3})
 public class LegacyFastItemMutatorV1_20_4 implements LegacyFastItemMutator {
     private static final ParseCompoundTag PDC_UTIL = new ParseCompoundTagV204();
 

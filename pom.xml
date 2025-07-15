@@ -4,7 +4,7 @@
     <groupId>org.by1337.blib</groupId>
     <artifactId>Blib-parent</artifactId>
     <packaging>pom</packaging>
-    <version>1.6</version>
+    <version>1.7</version>
     <name>Blib-parent</name>
     <modules>
         <module>BLib</module>
@@ -22,6 +22,7 @@
         <module>V1_21_3</module>
         <module>V1_21_4</module>
         <module>V1_21_5</module>
+        <module>V1_21_7</module>
         <module>MinimessageSupport</module>
         <module>BLib-Nbt</module>
         <module>ShadedDFU</module>

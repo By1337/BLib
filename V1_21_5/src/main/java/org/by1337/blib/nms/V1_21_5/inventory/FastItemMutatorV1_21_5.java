@@ -8,14 +8,17 @@ import net.minecraft.util.Unit;
 import net.minecraft.world.item.component.ItemLore;
 import org.bukkit.craftbukkit.inventory.CraftItemStack;
 import org.bukkit.inventory.ItemStack;
+import org.by1337.blib.command.SummonCommand;
 import org.by1337.blib.inventory.FastItemMutator;
+import org.by1337.blib.nms.NMSAccessor;
+import org.by1337.blib.util.Version;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-
+@NMSAccessor(forClazz = FastItemMutator.class, forVersions = {Version.V1_21_5})
 public class FastItemMutatorV1_21_5 implements FastItemMutator {
     private static final Map<String, DataComponentType<?>> DATA_COMPONENTS;
 

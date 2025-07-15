@@ -13,10 +13,13 @@ import net.minecraft.world.entity.MobSpawnType;
 import org.bukkit.Location;
 import org.bukkit.craftbukkit.v1_19_R3.CraftWorld;
 import org.by1337.blib.command.SummonCommand;
+import org.by1337.blib.nms.NMSAccessor;
+import org.by1337.blib.util.Version;
 import org.by1337.blib.world.BLocation;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+@NMSAccessor(forClazz = SummonCommand.class, forVersions = Version.V1_19_4)
 public class SummonCommandV1_19_4 implements SummonCommand {
     @Override
     public void spawn(@NotNull String entityType, @NotNull BLocation location, @Nullable String nbt) {

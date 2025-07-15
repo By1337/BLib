@@ -8,12 +8,10 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BaseEntityBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.LevelChunk;
-import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.craftbukkit.CraftWorld;
-import org.bukkit.craftbukkit.block.CraftBlock;
 import org.bukkit.craftbukkit.block.CraftBlockState;
 import org.bukkit.craftbukkit.block.data.CraftBlockData;
 import org.bukkit.event.block.BlockPhysicsEvent;
@@ -21,9 +19,12 @@ import org.by1337.blib.block.replacer.BlockReplaceFlags;
 import org.by1337.blib.block.replacer.BlockReplacer;
 import org.by1337.blib.block.replacer.ReplaceTask;
 import org.by1337.blib.geom.Vec3i;
+import org.by1337.blib.nms.NMSAccessor;
+import org.by1337.blib.util.Version;
 
 import java.util.Objects;
 
+@NMSAccessor(forClazz = BlockReplacer.class, forVersions = Version.V1_16_5)
 public class BlockReplacerV165 implements BlockReplacer {
 
     @Override

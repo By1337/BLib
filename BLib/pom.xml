@@ -7,7 +7,7 @@
     <parent>
         <groupId>org.by1337.blib</groupId>
         <artifactId>Blib-parent</artifactId>
-        <version>1.6</version>
+        <version>1.7</version>
     </parent>
 
     <artifactId>BLib</artifactId>
@@ -16,7 +16,7 @@
     <name>BLib</name>
 
     <properties>
-        <revision>1.6</revision>
+        <revision>1.7</revision>
         <java.version>16</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
@@ -45,12 +45,6 @@
                         </goals>
                         <configuration>
                             <createDependencyReducedPom>false</createDependencyReducedPom>
-                            <!--                            <relocations>-->
-                            <!--                                <relocation>-->
-                            <!--                                    <pattern>net.kyori.adventure.text.serializer</pattern>-->
-                            <!--                                    <shadedPattern>org.by1337.blib.libs.net.kyori.adventure.text.serializer</shadedPattern>-->
-                            <!--                                </relocation>-->
-                            <!--                            </relocations>-->
                         </configuration>
                     </execution>
                 </executions>
@@ -84,7 +78,7 @@
             <plugin>
                 <groupId>org.by1337.blib.asm</groupId>
                 <artifactId>blib-maven-plugin</artifactId>
-                <version>1.6</version>
+                <version>1.7</version>
                 <executions>
                     <execution>
                         <phase>package</phase>
@@ -104,6 +98,10 @@
     </build>
 
     <repositories>
+        <repository>
+            <id>papermc</id>
+            <url>https://repo.papermc.io/repository/maven-public/</url>
+        </repository>
         <repository>
             <id>spigotmc-repo</id>
             <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
@@ -274,6 +272,12 @@
         <dependency>
             <groupId>org.by1337.blib.nms</groupId>
             <artifactId>V1_21_5</artifactId>
+            <version>${revision}</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.by1337.blib.nms</groupId>
+            <artifactId>V1_21_7</artifactId>
             <version>${revision}</version>
             <scope>compile</scope>
         </dependency>

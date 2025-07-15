@@ -12,6 +12,7 @@ public class MultiArgument<T> extends Argument<T> {
 
     private final Argument<T>[] arguments;
 
+    @SafeVarargs
     public MultiArgument(String name, Argument<T>... arguments) {
         super(name);
         this.arguments = arguments;
