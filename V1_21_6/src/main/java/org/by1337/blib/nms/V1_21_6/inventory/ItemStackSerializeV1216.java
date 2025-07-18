@@ -1,6 +1,8 @@
 package org.by1337.blib.nms.V1_21_6.inventory;
 
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import io.papermc.paper.plugin.entrypoint.classloader.PaperPluginClassLoader;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.nbt.TagParser;
 import net.minecraft.server.MinecraftServer;
@@ -12,9 +14,13 @@ import org.by1337.blib.nms.V1_21_5.inventory.ItemStackSerializeV1215;
 import org.by1337.blib.util.Version;
 import org.jetbrains.annotations.NotNull;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
+import java.util.zip.GZIPInputStream;
+import java.util.zip.GZIPOutputStream;
 
 @NMSAccessor(forClazz = ItemStackSerialize.class, from = Version.V1_21_6, to = Version.V1_21_8)
 public class ItemStackSerializeV1216 implements ItemStackSerialize {
@@ -48,8 +54,28 @@ public class ItemStackSerializeV1216 implements ItemStackSerialize {
     }
 
     @Override
+    public @NotNull String serialize(@NotNull ItemStack itemStack) throws IllegalArgumentException {
+        try {
+            net.minecraft.world.item.ItemStack item = CraftItemStack.asNMSCopy(itemStack);
+            CompoundTag tag = save(item);
+            String serialize = tag.toString();
+            return new String(Base64.getEncoder().encode(serialize.getBytes(StandardCharsets.UTF_8)), StandardCharsets.UTF_8);
+        } catch (Exception e) {
+            throw new IllegalArgumentException("Failed to serialize ItemStack", e);
+        }
+    }
+
+
+
+    @Override
     public @NotNull String serializeAndCompress(@NotNull ItemStack itemStack) throws IllegalArgumentException {
-        return nms.serializeAndCompress(itemStack);
+        try {
+            net.minecraft.world.item.ItemStack item = CraftItemStack.asNMSCopy(itemStack);
+            CompoundTag tag = save(item);
+            return compress(tag.toString());
+        } catch (Exception e) {
+            throw new IllegalArgumentException("Failed to serialize ItemStack", e);
+        }
     }
 
     @Override
@@ -62,8 +88,11 @@ public class ItemStackSerializeV1216 implements ItemStackSerialize {
         return nms.decompress(raw);
     }
 
-    @Override
-    public @NotNull String serialize(@NotNull ItemStack itemStack) throws IllegalArgumentException {
-        return nms.serialize(itemStack);
+    private CompoundTag save(net.minecraft.world.item.ItemStack itemStack) {
+        return (CompoundTag) net.minecraft.world.item.ItemStack.CODEC.encodeStart(
+                MinecraftServer.getServer().registryAccess().createSerializationContext(NbtOps.INSTANCE),
+                itemStack
+        ).getOrThrow();
     }
+
 }

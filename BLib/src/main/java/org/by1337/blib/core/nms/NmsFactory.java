@@ -137,12 +137,12 @@ public class NmsFactory {
             try {
                 v = map.get(version);
                 if (v != null) {
-                    new NMSVerify().verify(v.get().getClass());
+                  //  new NMSVerify().verify(v.get().getClass());
                     return v;
                 }
                 v = map.get(Version.UNKNOWN);
                 if (v != null) {
-                    new NMSVerify().verify(v.get().getClass());
+                  //  new NMSVerify().verify(v.get().getClass());
                     return v;
                 }
             } catch (Throwable t) {

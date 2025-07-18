@@ -1,6 +1,5 @@
 package org.by1337.blib.core.nms.verify;
 
-import org.bukkit.plugin.java.PluginClassLoader;
 import org.by1337.blib.util.collection.IdentityHashSet;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.Type;
@@ -51,11 +50,11 @@ public class NMSVerify {
                         if (!isValidInvoke(classNode, invoke)) {
                             throw new NMSVerifyException("Attempted to invoke method " + invoke.owner + "#" + invoke.name + invoke.desc + ", but the method does not exist!");
                         }
-                        if (isPluginClass(cl)) {
+                        if (classNode.name.startsWith("org/by1337/")) { //todo
                             MethodNode methodNode = findMethod(classNode, invoke);
                             if (methodNode == null)
                                 throw new NMSVerifyException("Method not found: " + invoke.owner + "#" + invoke.name + invoke.desc);
-                            if (methodNode != currentMethod && !(methodNode.name.equals(currentMethod.name) && methodNode.desc.equals(currentMethod.desc))) {
+                            if (methodNode != currentMethod) {
                                 verifyMethod(classNode, methodNode);
                             }
                         }
@@ -87,14 +86,34 @@ public class NMSVerify {
     }
 
     private MethodNode findMethod(ClassNode node, MethodInsnNode invoke) throws NMSVerifyException {
-        var v = findMethod(node, true, invoke);
-        return v == null ? findMethod(node, false, invoke) : v;
+        ClassNode currunt = node;
+        MethodNode methodNode = null;
+        while (methodNode == null) {
+            methodNode = getMethod(currunt, invoke);
+            if (methodNode != null) break;
+            for (String anInterface : currunt.interfaces) {
+                methodNode = findMethod(read(find(anInterface)), invoke);
+                if (methodNode != null) break;
+            }
+            if (currunt.superName == null) break;
+            currunt = read(find(currunt.superName));
+        }
+        return methodNode;
+    }
+
+    private MethodNode getMethod(ClassNode node, MethodInsnNode invoke) throws NMSVerifyException {
+        MethodNode methodNode = findMethod(node, true, invoke);
+        if (methodNode == null) {
+            return findMethod(node, false, invoke);
+        }
+        return methodNode;
     }
 
     private MethodNode findMethod(ClassNode node, boolean descCheck, MethodInsnNode invoke) throws NMSVerifyException {
         for (MethodNode method : node.methods) {
             if (method.name.equals(invoke.name)) {
                 if (descCheck && method.desc.equals(invoke.desc)) return method;
+                if (descCheck) continue;
                 Type type = Type.getType(invoke.desc);
                 Type type2 = Type.getType(method.desc);
                 if (type.getArgumentTypes().length == type2.getArgumentTypes().length) {
@@ -106,10 +125,6 @@ public class NMSVerify {
             return findMethod(read(find(node.superName)), descCheck, invoke);
         }
         return null;
-    }
-
-    private boolean isPluginClass(Class<?> cl) {
-        return (cl.getClassLoader() instanceof PluginClassLoader);
     }
 
     private boolean isDoSkip(Class<?> cl) {

@@ -61,7 +61,7 @@ public class ParseCompoundTagV1215 implements ParseCompoundTag {
         return convertFromNms((Tag) nmsObj);
     }
 
-    private void copyAsNms(org.by1337.blib.nbt.impl.CompoundTag compoundTag, CompoundTag nms) {
+    public void copyAsNms(org.by1337.blib.nbt.impl.CompoundTag compoundTag, CompoundTag nms) {
         for (Map.Entry<String, NBT> entry : compoundTag.entrySet()) {
             NBT nbt = entry.getValue();
             String key = entry.getKey();

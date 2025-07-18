@@ -1,5 +1,6 @@
 package org.by1337.blib.nms.V1_21_6.nbt;
 
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import net.minecraft.nbt.*;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.MinecraftServer;
@@ -15,6 +16,8 @@ import org.by1337.blib.util.Version;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.nio.charset.StandardCharsets;
+import java.util.Base64;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
@@ -38,10 +41,35 @@ public class ParseCompoundTagV1216 implements ParseCompoundTag {
         ).getOrThrow();
     }
 
+
     @Override
     public @NotNull ItemStack create(org.by1337.blib.nbt.impl.@NotNull CompoundTag compoundTag) {
-        return nms.create(compoundTag);
+        var nms = new CompoundTag();
+        this.nms.copyAsNms(compoundTag, nms);
+        try {
+            return parse(nms);
+        } catch (CommandSyntaxException e) {
+            throw new RuntimeException(e);
+        }
     }
+
+    private ItemStack parse(Tag data) throws CommandSyntaxException {
+        var nms = net.minecraft.world.item.ItemStack.CODEC
+                .parse(
+                        MinecraftServer.getServer().registryAccess().createSerializationContext(NbtOps.INSTANCE),
+                        data
+                ).getOrThrow();
+        return CraftItemStack.asCraftMirror(nms);
+    }
+    private ItemStack parse(String data) throws CommandSyntaxException {
+        var nms = net.minecraft.world.item.ItemStack.CODEC
+                .parse(
+                        MinecraftServer.getServer().registryAccess().createSerializationContext(NbtOps.INSTANCE),
+                        TagParser.parseCompoundFully(new String(Base64.getDecoder().decode(data.getBytes(StandardCharsets.UTF_8)), StandardCharsets.UTF_8))
+                ).getOrThrow();
+        return CraftItemStack.asCraftMirror(nms);
+    }
+
 
     @Override
     public CompletableFuture<org.by1337.blib.nbt.impl.@Nullable CompoundTag> readOfflinePlayerData(@NotNull UUID player) {
