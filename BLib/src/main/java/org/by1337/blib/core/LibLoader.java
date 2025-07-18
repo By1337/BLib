@@ -2,6 +2,7 @@ package org.by1337.blib.core;
 
 import org.bukkit.plugin.Plugin;
 import org.by1337.blib.core.unsafe.BLibUnsafeImpl;
+import org.by1337.blib.core.unsafe.PluginClasspathUtilImpl;
 import org.by1337.blib.net.RepositoryUtil;
 
 import java.nio.file.Path;
@@ -21,7 +22,7 @@ public class LibLoader {
         if (!isClassExist("org.joml.Vector3f")) {
             files.add(RepositoryUtil.downloadIfNotExist(MAVEN_REPO, "org.joml", "joml", "1.10.8", libraries));
         }
-        var pathUtil = BLibUnsafeImpl.INSTANCE.getPluginClasspathUtil();
+        var pathUtil = new PluginClasspathUtilImpl();
         for (Path file : files) {
             pathUtil.addUrl(plugin, file.toFile());
         }

@@ -1,5 +1,8 @@
 package org.by1337.blib.core;
 
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.format.TextColor;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -12,29 +15,32 @@ import org.by1337.blib.block.custom.registry.BlockRegistry;
 import org.by1337.blib.block.custom.registry.WorldRegistry;
 import org.by1337.blib.command.Command;
 import org.by1337.blib.command.CommandWrapper;
-import org.by1337.blib.command.argument.ArgumentBoolean;
-import org.by1337.blib.command.argument.ArgumentEnumValue;
-import org.by1337.blib.command.argument.ArgumentPlayer;
-import org.by1337.blib.command.argument.ArgumentSetList;
+import org.by1337.blib.command.argument.*;
 import org.by1337.blib.command.requires.RequiresPermission;
 import org.by1337.blib.core.block.CustomBlockManager;
 import org.by1337.blib.core.fastutil.FastUtilCommands;
 import org.by1337.blib.core.nms.NMSBootstrap;
 import org.by1337.blib.core.nms.NMSTests;
 import org.by1337.blib.core.nms.NmsFactory;
+import org.by1337.blib.core.nms.verify.NMSVerify;
 import org.by1337.blib.core.test.CommandTests;
 import org.by1337.blib.lang.Lang;
 import org.by1337.blib.translation.Translation;
 import org.by1337.blib.util.SpacedNameKey;
 import org.by1337.blib.util.Version;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 
 public class BLib extends JavaPlugin {
+    private static final Logger log = LoggerFactory.getLogger(BLib.class);
     private static Plugin instance;
     private BApi api;
     public static boolean DEBUG = false;
@@ -54,9 +60,6 @@ public class BLib extends JavaPlugin {
             libraries.mkdirs();
         }
         LibLoader.load(libraries.toPath(), this);
-        NMSBootstrap.bootstrap();
-        System.out.println(NmsFactory.get());
-
 
         api = new BApi();
         org.by1337.blib.BLib.setApi(api);
@@ -122,15 +125,6 @@ public class BLib extends JavaPlugin {
                         .executor(((sender, args) -> {
                             DEBUG = (boolean) args.getOrDefault("enable", !DEBUG);
                         }))
-                ).addSubCommand(new Command<CommandSender>("nms_test")
-                        .argument(new ArgumentEnumValue<CommandSender>("ver", Version.class))
-                        .executor(((sender, args) -> {
-                            Player player = (Player) sender;
-                            Version version = (Version) args.get("ver");
-                            System.out.println(
-                                    NMSTests.run(player, version == null ? Version.VERSION : version)
-                            );
-                        }))
                 ).addSubCommand(new Command<CommandSender>("cb")
                         .requires(new RequiresPermission<>("blib.cb"))
                         .addSubCommand(new Command<CommandSender>("list")
@@ -167,6 +161,42 @@ public class BLib extends JavaPlugin {
                 .executor((sender, args) -> {
                     api.getMessage().sendTranslatable(sender, "hello-message", getDescription().getVersion());
                 })
+                .addSubCommand(new Command<CommandSender>("nms")
+                        .requires(new RequiresPermission<>("blib.nms"))
+                        .addSubCommand(new Command<CommandSender>("nms_test")
+                                .requires(new RequiresPermission<>("blib.nms_test"))
+                                .argument(new ArgumentEnumValue<CommandSender>("ver", Version.class))
+                                .executor(((sender, args) -> {
+                                    Player player = (Player) sender;
+                                    Version version = (Version) args.get("ver");
+                                    System.out.println(
+                                            NMSTests.run(player, version == null ? Version.VERSION : version)
+                                    );
+                                }))
+                        ).addSubCommand(new Command<CommandSender>("nms_verify")
+                                .requires(new RequiresPermission<>("blib.nms_verify"))
+                                .argument(new MultiArgument<>("clazz",
+                                        new ArgumentChoice<>("clazz", NmsFactory.get().nmsSuppliers().keySet().stream().toList()),
+                                        new ArgumentString<>("clazz")
+                                        ))
+                                .executor(((sender, args) -> {
+                                    String clazz = (String) args.getOrThrow("clazz", "Use: /blib nms_verify <class>");
+                                    for (String key : NmsFactory.get().nmsSuppliers().keySet()) {
+                                        if (wildcardMatch(key, clazz)){
+                                            try {
+                                                Object creator = NmsFactory.get().nmsSuppliers().get(key).get();
+                                                new NMSVerify().verify(creator.getClass());
+                                            } catch (Throwable throwable) {
+                                                log.error("Failed lo verify nms class {}, on version {}", key, Version.VERSION.getVer(), throwable);
+                                                sender.sendMessage(Component.text("Not valid: " + key).color(NamedTextColor.RED));
+                                                continue;
+                                            }
+                                            sender.sendMessage(Component.text("Valid: " + key).color(NamedTextColor.GREEN));
+                                        }
+                                    }
+                                }))
+                        )
+                )
         ;
 
         command.addSubCommand(new Command<CommandSender>("test")
@@ -182,5 +212,19 @@ public class BLib extends JavaPlugin {
                 .addSubCommand(CommandTests.gc())
         );
 
+    }
+    public static boolean wildcardMatch(String text, String pattern) {
+        StringBuilder sb = new StringBuilder();
+        for (char c : pattern.toCharArray()) {
+            switch (c) {
+                case '*': sb.append(".*"); break;
+                case '?': sb.append('.'); break;
+                case '.': sb.append("\\."); break;
+                default:
+                    if ("\\+()^${}|[]".indexOf(c) >= 0) sb.append('\\');
+                    sb.append(c);
+            }
+        }
+        return text.matches(sb.toString());
     }
 }

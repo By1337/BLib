@@ -20,6 +20,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.logging.Logger;
 
+@SuppressWarnings({"removal"})
 public interface Api {
     @NotNull PacketEntityFactory getPacketEntityFactory();
 
@@ -27,7 +28,10 @@ public interface Api {
 
     @NotNull PacketFactory getPacketFactory();
 
-    @NotNull CommandUtil getCommandUtil();
+    @NotNull
+    default CommandUtil getCommandUtil() {
+        return CommandUtil.INSTANCE;
+    }
 
     @NotNull AsyncCatcher getAsyncCatcher();
 
@@ -55,5 +59,6 @@ public interface Api {
     @NotNull InventoryUtil getInventoryUtil();
 
     @NotNull RegistryCreator getRegistryCreator();
-    @NotNull BlockUtil getBlockUtil();
+
+    //@NotNull BlockUtil getBlockUtil();
 }

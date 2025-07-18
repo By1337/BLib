@@ -2,7 +2,6 @@ package org.by1337.blib.core.unsafe;
 
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.plugin.java.PluginClassLoader;
 import org.by1337.blib.unsafe.PluginClasspathUtil;
 import org.by1337.blib.util.invoke.LambdaMetafactoryUtil;
 import sun.misc.Unsafe;
@@ -14,7 +13,6 @@ import java.lang.invoke.MethodType;
 import java.lang.reflect.Field;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.net.URLClassLoader;
 import java.util.function.Function;
 
 public class PluginClasspathUtilImpl implements PluginClasspathUtil {
@@ -27,7 +25,6 @@ public class PluginClasspathUtilImpl implements PluginClasspathUtil {
 
         try {
             addUrl(plugin, file.toPath().toUri().toURL());
-            URL url = URL.of(file.toPath().toUri(), null);
         } catch (MalformedURLException e) {
             throw new RuntimeException(e);
         }

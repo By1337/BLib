@@ -22,6 +22,7 @@
         <source.version>17</source.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <server.version>1.19.4-R0.1-SNAPSHOT</server.version>
+        <paper-nms.plugin.version>1.4.8</paper-nms.plugin.version>
     </properties>
 
     <pluginRepositories>
@@ -62,7 +63,7 @@
             <plugin>
                 <groupId>ca.bkaw</groupId>
                 <artifactId>paper-nms-maven-plugin</artifactId>
-                <version>1.4.4</version>
+                <version>${paper-nms.plugin.version}</version>
                 <executions>
                     <execution>
                         <phase>process-classes</phase>

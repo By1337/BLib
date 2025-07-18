@@ -9,20 +9,16 @@
     <modules>
         <module>BLib</module>
         <module>BLib-api</module>
-        <module>V1_16_5</module><!--LTS-->
-        <module>V1_17_1</module><!--LTS-->
-        <module>V1_18_2</module><!--LTS-->
-        <module>V1_19_4</module><!--LTS-->
+        <module>V1_16_5</module>
+        <module>V1_17_1</module>
+        <module>V1_18_2</module>
+        <module>V1_19_4</module>
         <module>V1_20_1</module>
         <module>V1_20_2</module>
         <module>V1_20_4</module>
         <module>V1_20_6</module><!--LTS-->
-        <module>V1_21</module><!--LTS-->
-        <module>V1_21_1</module>
-        <module>V1_21_3</module>
-        <module>V1_21_4</module>
         <module>V1_21_5</module>
-        <module>V1_21_7</module>
+        <module>V1_21_6</module>
         <module>MinimessageSupport</module>
         <module>BLib-Nbt</module>
         <module>ShadedDFU</module>

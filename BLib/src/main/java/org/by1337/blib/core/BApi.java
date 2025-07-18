@@ -5,8 +5,6 @@ import org.by1337.blib.block.replacer.BlockReplacer;
 import org.by1337.blib.block.replacer.PooledBlockReplacer;
 import org.by1337.blib.chat.util.Message;
 import org.by1337.blib.command.BukkitCommandRegister;
-import org.by1337.blib.command.CommandUtil;
-import org.by1337.blib.core.command.BCommandUtil;
 import org.by1337.blib.core.factory.AbstractPacketFactory;
 import org.by1337.blib.core.factory.BPacketEntityFactory;
 import org.by1337.blib.core.nms.NmsFactory;
@@ -38,7 +36,6 @@ import java.util.logging.Logger;
 public class BApi implements Api {
     private static final BPacketEntityFactory entityFactory = new BPacketEntityFactory();
     private static final PacketFactory packetFactory = AbstractPacketFactory.create();
-    private static final CommandUtil commandUtil = new BCommandUtil();
     private final Message message;
     private final AsyncCatcher asyncCatcher = new AsyncCatcher() {
         @Override
@@ -55,7 +52,7 @@ public class BApi implements Api {
     private final PooledBlockReplacer pooledBlockReplacer;
     private final ParseCompoundTag parseCompoundTag = NmsFactory.get().get(ParseCompoundTag.class);
     private final RegistryCreator registryCreator = NmsFactory.get().get(RegistryCreator.class);
-    private final BlockUtil blockUtil = NmsFactory.get().get(BlockUtil.class);
+    private final BlockUtil blockUtil = null;//NmsFactory.get().get(BlockUtil.class);
 
     public BApi() {
         if (NativeLegacyConvertor.isAvailable()) {
@@ -99,11 +96,6 @@ public class BApi implements Api {
     @Deprecated
     public @NotNull PacketFactory getPacketFactory() {
         return packetFactory;
-    }
-
-    @Override
-    public @NotNull CommandUtil getCommandUtil() {
-        return commandUtil;
     }
 
     @Override
@@ -164,7 +156,7 @@ public class BApi implements Api {
     }
 
 
-    @Override
+    //@Override
     public @NotNull BlockUtil getBlockUtil() {
         return blockUtil;
     }

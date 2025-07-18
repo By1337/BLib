@@ -9,8 +9,7 @@ import org.bukkit.craftbukkit.block.CraftBlock;
 import org.bukkit.craftbukkit.block.data.CraftBlockData;
 import org.by1337.blib.nbt.impl.CompoundTag;
 import org.by1337.blib.nms.NMSAccessor;
-import org.by1337.blib.nms.v1_16_5.nbt.ParseCompoundTagV165;
-import org.by1337.blib.registry.RegistryCreator;
+import org.by1337.blib.nms.v1_16_5.nbt.ParseCompoundTagV1165;
 import org.by1337.blib.util.Version;
 import org.by1337.blib.world.BlockUtil;
 import org.jetbrains.annotations.Nullable;
@@ -24,7 +23,7 @@ public class BlockUtil165 implements BlockUtil {
         if (entity == null) return null;
         net.minecraft.nbt.CompoundTag tag = new net.minecraft.nbt.CompoundTag();
         entity.save(tag);
-        return (CompoundTag) ParseCompoundTagV165.convertFromNms(tag);
+        return (CompoundTag) ParseCompoundTagV1165.convertFromNms(tag);
     }
 
     public void setBlockData(BlockData blockData, Location location, boolean applyPhysics) {
@@ -36,7 +35,7 @@ public class BlockUtil165 implements BlockUtil {
         CraftBlock cb = (CraftBlock) location.getBlock();
         BlockEntity entity = cb.getCraftWorld().getHandle().getTileEntity(cb.getPosition());
         if (entity == null) return;
-        entity.load(cb.getNMS(), (net.minecraft.nbt.CompoundTag) ParseCompoundTagV165.convert(data));
+        entity.load(cb.getNMS(), (net.minecraft.nbt.CompoundTag) ParseCompoundTagV1165.convert(data));
     }
 
     @Override
@@ -46,7 +45,7 @@ public class BlockUtil165 implements BlockUtil {
         CompoundTag data;
         BlockEntity entity = cb.getCraftWorld().getHandle().getTileEntity(cb.getPosition());
         if (entity != null) {
-            data = (CompoundTag) ParseCompoundTagV165.convertFromNms(entity.save(new net.minecraft.nbt.CompoundTag()));
+            data = (CompoundTag) ParseCompoundTagV1165.convertFromNms(entity.save(new net.minecraft.nbt.CompoundTag()));
         } else {
             data = null;
         }
@@ -69,7 +68,7 @@ public class BlockUtil165 implements BlockUtil {
         if (cb.setTypeAndData(Block.REGISTRY_ID.fromId(blockId), applyPhysics)) {
             BlockEntity entity = cb.getCraftWorld().getHandle().getTileEntity(cb.getPosition());
             if (entity != null) {
-                entity.load(cb.getNMS(), (net.minecraft.nbt.CompoundTag) ParseCompoundTagV165.convert(blockEntity));
+                entity.load(cb.getNMS(), (net.minecraft.nbt.CompoundTag) ParseCompoundTagV1165.convert(blockEntity));
                 if (!entity.getPosition().equals(cb.getPosition())) {
                     entity.setPosition(cb.getPosition());
                 }

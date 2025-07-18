@@ -71,18 +71,11 @@ public class MojoApply extends AbstractMojo {
                             }
                         }
                         AnnotationNode nms;
-                        if (classNode.invisibleAnnotations != null && (nms = classNode.invisibleAnnotations.stream().filter(a -> a.desc.contains("NMSAccessor")).findFirst().orElse(null)) != null) {
+                        if (classNode.visibleAnnotations != null && (nms = classNode.visibleAnnotations.stream().filter(a -> a.desc.contains("NMSAccessor")).findFirst().orElse(null)) != null) {
+                            System.out.println(classNode.name);
                             nmsClasses.append(classNode.name.replace("/", ".")).append(" ");
                             String clazz = ((Type)nms.values.get(1)).getClassName();
-                            nmsClasses.append(((Type)nms.values.get(1)).getClassName()).append(" ");
-                            List<Object> arr = (List<Object>) nms.values.get(3);
-                            if (!arr.isEmpty()) {
-                                for (Object o : arr) {
-                                    Object[] array = (Object[]) o;
-                                    nmsClasses.append(array[1]).append(" ");
-                                }
-                                nmsClasses.setLength(nmsClasses.length() - 1);
-                            }
+                            nmsClasses.append(((Type)nms.values.get(1)).getClassName());
                             nmsClasses.append("\n");
                             if (classNode.interfaces == null || !classNode.interfaces.contains(clazz.replace(".", "/"))){
                                 throw new RuntimeException("Class " + classNode.name + " is not impl class " + clazz);

@@ -27,7 +27,7 @@ public interface BlockUtil {
 
     record BlockInfo(int id, @Nullable CompoundTag blockEntity) {
         public void place(Location location, boolean applyPhysics) {
-            BLib.getApi().getBlockUtil().setBlock(location, this, applyPhysics);
+           // BLib.getApi().getBlockUtil().setBlock(location, this, applyPhysics);
         }
     }
 }

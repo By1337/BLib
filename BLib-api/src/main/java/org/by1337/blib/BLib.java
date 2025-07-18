@@ -1,5 +1,6 @@
 package org.by1337.blib;
 
+import org.bukkit.Bukkit;
 import org.by1337.blib.command.CommandUtil;
 import org.by1337.blib.factory.PacketEntityFactory;
 import org.by1337.blib.factory.PacketFactory;
@@ -52,7 +53,9 @@ public final class BLib {
     }
 
     public static void catchOp(@NotNull String identifier) {
-        api.getAsyncCatcher().catchOp(identifier);
+        if (!Bukkit.isPrimaryThread()) {
+            throw new IllegalStateException("Asynchronous " + identifier + "!");
+        }
     }
     @NotNull
     public static Api getApi() {

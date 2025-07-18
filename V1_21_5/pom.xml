@@ -28,6 +28,7 @@
         <target.version>21</target.version>
         <source.version>21</source.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <paper-nms.plugin.version>1.4.8</paper-nms.plugin.version>
     </properties>
 
     <build>
@@ -61,7 +62,7 @@
             <plugin>
                 <groupId>ca.bkaw</groupId>
                 <artifactId>paper-nms-maven-plugin</artifactId>
-                <version>1.4.8</version>
+                <version>${paper-nms.plugin.version}</version>
             </plugin>
         </plugins>
         <resources>
@@ -95,7 +96,18 @@
             <version>1.21.5-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
-
+        <dependency>
+            <groupId>org.by1337.blib.nms</groupId>
+            <artifactId>V1_20_6</artifactId>
+            <scope>provided</scope>
+            <version>${revision}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>ca.bkaw</groupId>
+                    <artifactId>paper-nms</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
         <dependency>
             <groupId>com.sk89q.worldedit</groupId>
             <artifactId>worldedit-bukkit</artifactId>

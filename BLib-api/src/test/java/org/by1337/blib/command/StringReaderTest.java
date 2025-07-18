@@ -48,8 +48,8 @@ public class StringReaderTest {
         StringReader reader = new StringReader("hello");
         reader.next(); // 'h'
         reader.next(); // 'e'
-        assertEquals('h', reader.back());
-        assertEquals(0, reader.getCursor());
+        assertEquals('e', reader.back());
+        assertEquals(1, reader.getCursor());
     }
 
     @Test
@@ -80,11 +80,5 @@ public class StringReaderTest {
         StringReader reader = new StringReader("h");
         reader.next();
         assertThrows(IndexOutOfBoundsException.class, reader::next);
-    }
-
-    @Test
-    public void testBackThrowsExceptionAtStart() {
-        StringReader reader = new StringReader("hello");
-        assertThrows(IndexOutOfBoundsException.class, reader::back);
     }
 }

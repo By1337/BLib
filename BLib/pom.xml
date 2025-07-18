@@ -247,41 +247,16 @@
         </dependency>
         <dependency>
             <groupId>org.by1337.blib.nms</groupId>
-            <artifactId>V1_21</artifactId>
-            <version>${revision}</version>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.by1337.blib.nms</groupId>
-            <artifactId>V1_21_1</artifactId>
-            <version>${revision}</version>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.by1337.blib.nms</groupId>
-            <artifactId>V1_21_3</artifactId>
-            <version>${revision}</version>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.by1337.blib.nms</groupId>
-            <artifactId>V1_21_4</artifactId>
-            <version>${revision}</version>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.by1337.blib.nms</groupId>
             <artifactId>V1_21_5</artifactId>
             <version>${revision}</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>org.by1337.blib.nms</groupId>
-            <artifactId>V1_21_7</artifactId>
+            <artifactId>V1_21_6</artifactId>
             <version>${revision}</version>
             <scope>compile</scope>
         </dependency>
-        <!-- tests -->
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>

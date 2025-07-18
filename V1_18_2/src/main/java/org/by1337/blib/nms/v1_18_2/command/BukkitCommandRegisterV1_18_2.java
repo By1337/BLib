@@ -6,7 +6,7 @@ import org.by1337.blib.command.BukkitCommandRegister;
 import org.by1337.blib.nms.NMSAccessor;
 import org.by1337.blib.util.Version;
 
-@NMSAccessor(forClazz = BukkitCommandRegister.class, forVersions = Version.V1_18_2)
+@NMSAccessor(forClazz = BukkitCommandRegister.class, from = Version.V1_18_2)
 public class BukkitCommandRegisterV1_18_2 implements BukkitCommandRegister {
 
     @Override
