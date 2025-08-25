@@ -3,7 +3,7 @@ package org.by1337.blib.util;
 import org.by1337.blib.test.util.SetServer;
 import org.junit.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class VersionTest {
     @Test

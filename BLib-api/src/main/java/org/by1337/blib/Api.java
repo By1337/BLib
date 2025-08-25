@@ -60,5 +60,5 @@ public interface Api {
 
     @NotNull RegistryCreator getRegistryCreator();
 
-    //@NotNull BlockUtil getBlockUtil();
+    @NotNull BlockUtil getBlockUtil();
 }

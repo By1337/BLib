@@ -1,6 +1,7 @@
 package org.by1337.blib.core.test;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Registry;
 import org.bukkit.Sound;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -55,6 +56,14 @@ public class CommandTests {
                         .executor(((sender, args) -> {
                             BLib.getApi().getMessage().sendMsg(sender, args.getOrDefault("s", "null").toString());
                             BLib.getApi().getMessage().sendMsg(sender, args.getOrDefault("s1", "null").toString());
+                        }))
+                )
+                .addSubCommand(new Command<CommandSender>("Registry#MATERIAL")
+                        .argument(new ArgumentRegistry<>("v", Registry.MATERIAL))
+                        .argument(new ArgumentRegistry<>("v1", Registry.MATERIAL))
+                        .executor(((sender, args) -> {
+                            BLib.getApi().getMessage().sendMsg(sender, args.getOrDefault("v", "null").toString());
+                            BLib.getApi().getMessage().sendMsg(sender, args.getOrDefault("v1", "null").toString());
                         }))
                 )
                 .addSubCommand(new Command<CommandSender>("OldEnum")

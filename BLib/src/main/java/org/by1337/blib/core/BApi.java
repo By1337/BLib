@@ -52,7 +52,7 @@ public class BApi implements Api {
     private final PooledBlockReplacer pooledBlockReplacer;
     private final ParseCompoundTag parseCompoundTag = NmsFactory.get().get(ParseCompoundTag.class);
     private final RegistryCreator registryCreator = NmsFactory.get().get(RegistryCreator.class);
-    private final BlockUtil blockUtil = null;//NmsFactory.get().get(BlockUtil.class);
+    private final BlockUtil blockUtil = NmsFactory.get().get(BlockUtil.class);
 
     public BApi() {
         if (NativeLegacyConvertor.isAvailable()) {
@@ -155,8 +155,7 @@ public class BApi implements Api {
         return registryCreator;
     }
 
-
-    //@Override
+    @Override
     public @NotNull BlockUtil getBlockUtil() {
         return blockUtil;
     }

@@ -36,18 +36,6 @@ public class NMSTests {
         report.append("NMS version: ").append(version).append("\n");
         report.append("Server version: ").append(Version.VERSION).append("\n");
 
-
-        run(() -> {
-            report.append("Test SummonCommand\n");
-            SummonCommand summonCommand = factory.get(SummonCommand.class, version);
-            if (summonCommand == null) {
-                report.append("SummonCommand impl not found\n");
-                return;
-            }
-            report.append("SummonCommand impl: ").append(summonCommand.getClass().getCanonicalName()).append("\n");
-            new NMSVerify().verify(summonCommand.getClass());
-            report.append("init only\n");
-        }, report);
         run(() -> {
             report.append("Test BukkitCommandRegister\n");
             BukkitCommandRegister register = factory.get(BukkitCommandRegister.class, version);

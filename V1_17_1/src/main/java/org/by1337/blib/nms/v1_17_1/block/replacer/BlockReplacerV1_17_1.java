@@ -27,101 +27,19 @@ import java.util.Objects;
 public class BlockReplacerV1_17_1 implements BlockReplacer {
     @Override
     public Block replace(Vec3i pos0, BlockData data, ReplaceTask task, World world, int flag) {
-
         ServerLevel nmsWorld = ((CraftWorld) world).getHandle();
-        BlockPos blockposition = toNMS(pos0);
-        if (nmsWorld.isOutsideBuildHeight(blockposition)) return null;
+        BlockPos pos = toNMS(pos0);
+        if (nmsWorld.isOutsideBuildHeight(pos.getY())) return null;
         if (nmsWorld.captureTreeGeneration) return null;
 
-
-        Block bukkitBlock = world.getBlockAt(pos0.getX(), pos0.getY(), pos0.getZ());
-
-        BlockState oldBlock = nmsWorld.getBlockState(blockposition);
-        BlockState iblockdata = ((CraftBlockData) data).getState();
-        if (Objects.equals(oldBlock, iblockdata)) return bukkitBlock;
-
-        if (oldBlock.hasBlockEntity() && oldBlock.getBlock() != iblockdata.getBlock()) {
-            nmsWorld.removeBlockEntity(blockposition);
+        BlockState state = ((CraftBlockData) data).getState();
+        if (nmsWorld.setBlock(pos, state, flag, task.getUpdateLimit())) {
+            return new CraftBlock(nmsWorld, pos);
         }
-
-        LevelChunk chunk = nmsWorld.getChunkAt(blockposition);
-
-        boolean captured = false;
-        if (nmsWorld.captureBlockStates && !nmsWorld.capturedBlockStates.containsKey(blockposition)) {
-            CapturedBlockState blockstate = CapturedBlockState.getBlockState(nmsWorld, blockposition, flag);
-            nmsWorld.capturedBlockStates.put(blockposition.immutable(), blockstate);
-            captured = true;
-        }
-
-        BlockState iblockdata1 = chunk.setType(blockposition, iblockdata, (flag & 64) != 0, (flag & 1024) == 0);
-        if (iblockdata1 == null) {
-            if (nmsWorld.captureBlockStates && captured) {
-                nmsWorld.capturedBlockStates.remove(blockposition);
-            }
-
-            return null;
-        } else {
-            BlockState iblockdata2 = nmsWorld.getBlockState(blockposition);
-            if ((flag & 128) == 0 && iblockdata2 != iblockdata1 && (iblockdata2.getLightBlock(nmsWorld, blockposition) != iblockdata1.getLightBlock(nmsWorld, blockposition) || iblockdata2.getLightEmission() != iblockdata1.getLightEmission() || iblockdata2.useShapeForLightOcclusion() || iblockdata1.useShapeForLightOcclusion())) {
-                nmsWorld.getProfiler().push("queueCheckLight");
-                nmsWorld.getChunkSource().getLightEngine().checkBlock(blockposition);
-                nmsWorld.getProfiler().pop();
-            }
-
-            if (!nmsWorld.captureBlockStates) {
-                try {
-                    notifyAndUpdatePhysics(blockposition, chunk, iblockdata1, iblockdata, iblockdata2, flag, task.getUpdateLimit(), nmsWorld);
-                } catch (StackOverflowError var11) {
-                    Level.lastPhysicsProblem = new BlockPos(blockposition);
-                }
-            }
-
-            return bukkitBlock;
-        }
+        return null;
     }
 
-    public void notifyAndUpdatePhysics(BlockPos blockposition, LevelChunk chunk, BlockState oldBlock, BlockState newBlock, BlockState actualBlock, int i, int j, Level level) {
-        if (actualBlock == newBlock) {
-            if (oldBlock != actualBlock) {
-                level.setBlocksDirty(blockposition, oldBlock, actualBlock);
-            }
-
-            if ((i & 2) != 0 && (!level.isClientSide || (i & 4) == 0) && (level.isClientSide || chunk == null || chunk.getFullStatus() != null && chunk.getFullStatus().isOrAfter(ChunkHolder.FullChunkStatus.TICKING))) {
-                //level.sendBlockUpdated(blockposition, oldBlock, newBlock, i); disable update navigatingMobs
-                ((ServerLevel) level).getChunkSource().blockChanged(blockposition);
-            }
-
-            if ((i & 1) != 0) {
-                level.blockUpdated(blockposition, oldBlock.getBlock());
-                if (!level.isClientSide && newBlock.hasAnalogOutputSignal()) {
-                    level.updateNeighbourForOutputSignal(blockposition, newBlock.getBlock());
-                }
-            }
-
-            if ((i & 16) == 0 && j > 0) {
-                int k = i & -(BlockReplaceFlags.UPDATE_CLIENTS /*+ BlockReplaceFlags.UPDATE_SUPPRESS_DROPS*/); // disable unset UPDATE_SUPPRESS_DROPS;
-                oldBlock.updateIndirectNeighbourShapes(level, blockposition, k, j - 1);
-                CraftWorld world = ((ServerLevel)level).getWorld();
-                if (world != null) {
-                    BlockPhysicsEvent event = new BlockPhysicsEvent(world.getBlockAt(blockposition.getX(), blockposition.getY(), blockposition.getZ()), CraftBlockData.fromData(newBlock));
-                    level.getCraftServer().getPluginManager().callEvent(event);
-                    if (event.isCancelled()) {
-                        return;
-                    }
-                }
-
-                newBlock.updateNeighbourShapes(level, blockposition, k, j - 1);
-                newBlock.updateIndirectNeighbourShapes(level, blockposition, k, j - 1);
-            }
-
-            if (!level.preventPoiUpdated) {
-                level.onBlockStateChange(blockposition, oldBlock, actualBlock);
-            }
-        }
-    }
-
-
-    private BlockPos toNMS(Vec3i pos) {
+    public BlockPos toNMS(Vec3i pos) {
         return new BlockPos(pos.getX(), pos.getY(), pos.getZ());
     }
 }

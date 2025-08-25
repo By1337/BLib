@@ -50,7 +50,9 @@ public class NMSVerify {
                         if (!isValidInvoke(classNode, invoke)) {
                             throw new NMSVerifyException("Attempted to invoke method " + invoke.owner + "#" + invoke.name + invoke.desc + ", but the method does not exist!");
                         }
-                        if (classNode.name.startsWith("org/by1337/")) { //todo
+                        if (classNode.name.startsWith("org/by1337/")) {
+                            // TODO: add a check to verify that the class was loaded by a plugin (either this one or any other).
+                            // In newer versions, `cl.getClassLoader() instanceof PluginClassLoader` will not work.
                             MethodNode methodNode = findMethod(classNode, invoke);
                             if (methodNode == null)
                                 throw new NMSVerifyException("Method not found: " + invoke.owner + "#" + invoke.name + invoke.desc);
@@ -171,7 +173,7 @@ public class NMSVerify {
         }
     }
 
-    private boolean isValidInvoke(ClassNode node, MethodInsnNode invoke) throws NMSVerifyException {
+    private boolean isValidInvoke(ClassNode node, MethodInsnNode invoke) throws NMSVerifyException { // TODO: check access modifier
         for (MethodNode method : node.methods) {
             if (method.name.equals(invoke.name)) {
                 Type type = Type.getType(invoke.desc);
@@ -194,7 +196,7 @@ public class NMSVerify {
         return false;
     }
 
-    private boolean isValidField(ClassNode node, FieldInsnNode field) throws NMSVerifyException {
+    private boolean isValidField(ClassNode node, FieldInsnNode field) throws NMSVerifyException { // TODO: check access modifier
         for (FieldNode fieldNode : node.fields) {
             if (field.name.equals(fieldNode.name)) return true;
         }

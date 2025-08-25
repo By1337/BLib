@@ -4,6 +4,7 @@ import org.by1337.blib.BLib;
 import org.by1337.blib.lang.Lang;
 import org.by1337.blib.text.MessageFormatter;
 
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.util.List;
 import java.util.Objects;
@@ -11,6 +12,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class DoubleMathParser extends AbstractMathParser<Double> {
+    private static final DecimalFormat DECIMAL_FORMAT = new DecimalFormat("#.##");
     private static final DoubleMathParser INSTANCE = new DoubleMathParser();
     private static final double TRUE = 1;
     private static final double FALSE = 0;
@@ -64,7 +66,7 @@ public class DoubleMathParser extends AbstractMathParser<Double> {
         s = s.replace(" ", "");
         List<Lexeme> list = INSTANCE.parseExp(s);
         LexemeBuffer buffer = new LexemeBuffer(list);
-        return input.replace(input, String.valueOf(INSTANCE.analyze(buffer)));
+        return input.replace(input, DECIMAL_FORMAT.format(INSTANCE.analyze(buffer)));
     }
 
     public static String replaceStrings(String s) {
