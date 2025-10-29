@@ -1,6 +1,9 @@
 package org.by1337.blib.command.argument;
 
+import com.mojang.brigadier.suggestion.SuggestionsBuilder;
+import org.bukkit.Sound;
 import org.by1337.blib.command.CommandSyntaxError;
+import org.by1337.blib.command.StringReader;
 import org.by1337.blib.util.OldEnumFixer;
 import org.jetbrains.annotations.Nullable;
 
@@ -12,21 +15,40 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 public class ArgumentEnumValue<T> extends ArgumentSetList<T> {
-    private final Map<String, Object> values;
+    private final Map<String, ?> values;
+    private final ArgumentSound<T> sound;
 
     public <E extends Enum<E>> ArgumentEnumValue(String name, Class<E> anEnum, Predicate<E> filter) {
         super(name, process(anEnum, filter));
-        values = nameToValueMap(anEnum);
+        if (anEnum == Sound.class) {
+            values = ArgumentSound.LOOKUP_BY_NAME;
+            sound = new ArgumentSound<>(name);
+        } else {
+            values = nameToValueMap(anEnum);
+            sound = null;
+        }
     }
 
     public ArgumentEnumValue(String name, Class<? extends Enum<?>> anEnum) {
         super(name, process(anEnum, null));
-        values = nameToValueMap(anEnum);
+        if (anEnum == Sound.class) {
+            values = ArgumentSound.LOOKUP_BY_NAME;
+            sound = new ArgumentSound<>(name);
+        } else {
+            values = nameToValueMap(anEnum);
+            sound = null;
+        }
     }
 
     public ArgumentEnumValue(String name, List<String> exx, Class<? extends Enum<?>> anEnum) {
         super(name, exx, process(anEnum, null));
-        values = nameToValueMap(anEnum);
+        if (anEnum == Sound.class) {
+            values = ArgumentSound.LOOKUP_BY_NAME;
+            sound = new ArgumentSound<>(name);
+        } else {
+            values = nameToValueMap(anEnum);
+            sound = null;
+        }
     }
 
     @SuppressWarnings("unchecked")
@@ -56,6 +78,25 @@ public class ArgumentEnumValue<T> extends ArgumentSetList<T> {
         String val = (String) super.process(sender, str);
         if (val == null || val.isEmpty()) return null;
         return values.get(val);
+    }
+
+    @Override
+    public void process(T sender, StringReader reader, ArgumentMap<String, Object> argumentMap) throws CommandSyntaxError {
+        if (sound != null) {
+            sound.process(sender, reader, argumentMap);
+        } else {
+            super.process(sender, reader, argumentMap);
+        }
+
+    }
+
+    @Override
+    public void tabCompleter(T sender, StringReader reader, ArgumentMap<String, Object> argumentMap, SuggestionsBuilder builder) throws CommandSyntaxError {
+        if (sound != null) {
+            sound.tabCompleter(sender, reader, argumentMap, builder);
+        } else {
+            super.tabCompleter(sender, reader, argumentMap, builder);
+        }
     }
 
     public boolean allowAsync() {

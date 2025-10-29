@@ -58,6 +58,14 @@ public class CommandTests {
                             BLib.getApi().getMessage().sendMsg(sender, args.getOrDefault("s1", "null").toString());
                         }))
                 )
+                .addSubCommand(new Command<CommandSender>("legacy_sound")
+                        .argument(new ArgumentEnumValue<>("s", Sound.class))
+                        .argument(new ArgumentEnumValue<>("s1", Sound.class))
+                        .executor(((sender, args) -> {
+                            BLib.getApi().getMessage().sendMsg(sender, args.getOrDefault("s", "null").toString());
+                            BLib.getApi().getMessage().sendMsg(sender, args.getOrDefault("s1", "null").toString());
+                        }))
+                )
                 .addSubCommand(new Command<CommandSender>("Registry#MATERIAL")
                         .argument(new ArgumentRegistry<>("v", Registry.MATERIAL))
                         .argument(new ArgumentRegistry<>("v1", Registry.MATERIAL))

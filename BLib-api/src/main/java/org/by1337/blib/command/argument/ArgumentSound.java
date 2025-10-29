@@ -11,7 +11,7 @@ import java.lang.reflect.Modifier;
 import java.util.*;
 
 public class ArgumentSound<T> extends Argument<T> {
-    private static final Map<String, Sound> LOOKUP_BY_NAME;
+    public static final Map<String, Sound> LOOKUP_BY_NAME;
     private static final List<String> KEYS_LIST;
     private static final List<String> FIRST_TWENTY_ITEMS;
 
