@@ -2,6 +2,7 @@ package org.by1337.blib.nms.V1_21_6.inventory;
 
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import io.papermc.paper.plugin.entrypoint.classloader.PaperPluginClassLoader;
+import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.nbt.TagParser;
@@ -22,8 +23,9 @@ import java.util.Base64;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
-@NMSAccessor(forClazz = ItemStackSerialize.class, from = Version.V1_21_6, to = Version.V1_21_8)
+@NMSAccessor(forClazz = ItemStackSerialize.class, from = Version.V1_21_6)
 public class ItemStackSerializeV1216 implements ItemStackSerialize {
+
     private final ItemStackSerializeV1215 nms = new ItemStackSerializeV1215();
 
     @Override

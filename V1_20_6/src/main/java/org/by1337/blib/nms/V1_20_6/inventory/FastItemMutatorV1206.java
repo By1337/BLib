@@ -90,7 +90,7 @@ public class FastItemMutatorV1206 implements FastItemMutator {
     }
 
     @SuppressWarnings("unchecked")
-    private <T> DataComponentType<T> getDataComponentType(@NotNull String key) {
+    public  <T> DataComponentType<T> getDataComponentType(@NotNull String key) {
         return (DataComponentType<T>) Objects.requireNonNull(DATA_COMPONENTS.get(key), "Unknown data component " + key);
     }
 

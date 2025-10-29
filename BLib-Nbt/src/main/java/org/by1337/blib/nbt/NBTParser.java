@@ -206,8 +206,11 @@ public class NBTParser {
             }
         }
 
-        if (list.isEmpty() && type == null)
-            return new ListNBT(list, context.isAllowMultipleTypeInList());
+        if (list.isEmpty() && type == null) {
+            ListNBT result = new ListNBT(new ArrayList<>(list.size()), context.isAllowMultipleTypeInList());
+            list.forEach(result::addAndUnwrap);
+            return result;
+        }
 
         if (!list.isEmpty() && !context.isAllowMultipleTypeInList()) {
             final Class<?> clazz = list.get(0).getClass();
@@ -217,8 +220,11 @@ public class NBTParser {
                 }
             }
         }
-        if (context.isDoNotConvertListToArray())
-            return new ListNBT(list, context.isAllowMultipleTypeInList());
+        if (context.isDoNotConvertListToArray()) {
+            ListNBT result = new ListNBT(new ArrayList<>(list.size()), context.isAllowMultipleTypeInList());
+            list.forEach(result::addAndUnwrap);
+            return result;
+        }
 
         if (type == LexemeType.TYPE_BYTE) {
             byte[] arr = new byte[list.size()];
@@ -245,7 +251,9 @@ public class NBTParser {
             }
             return new IntArrNBT(arr);
         }
-        return new ListNBT(list, context.isAllowMultipleTypeInList());
+        ListNBT result = new ListNBT(new ArrayList<>(list.size()), context.isAllowMultipleTypeInList());
+        list.forEach(result::addAndUnwrap);
+        return result;
     }
 
     static List<Lexeme> parseExp(String expText) throws ParseException {

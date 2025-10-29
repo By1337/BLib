@@ -15,7 +15,7 @@ import org.by1337.blib.geom.Vec3i;
 import org.by1337.blib.nms.NMSAccessor;
 import org.by1337.blib.util.Version;
 
-@NMSAccessor(forClazz = BlockReplacer.class, from = Version.V1_20_6, to = Version.V1_21_8)
+@NMSAccessor(forClazz = BlockReplacer.class, from = Version.V1_20_6)
 public class BlockReplacerV1206 implements BlockReplacer {
     @Override
     public Block replace(Vec3i pos0, BlockData data, ReplaceTask task, World world, int flag) {
@@ -26,7 +26,7 @@ public class BlockReplacerV1206 implements BlockReplacer {
 
         BlockState state = ((CraftBlockData) data).getState();
         if (nmsWorld.setBlock(pos, state, flag, task.getUpdateLimit())) {
-            return new CraftBlock(nmsWorld, pos);
+            return CraftBlock.at(nmsWorld, pos);
         }
         return null;
     }

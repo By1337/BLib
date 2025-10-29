@@ -7,6 +7,8 @@ import org.bukkit.Location;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.craftbukkit.block.CraftBlock;
 import org.bukkit.craftbukkit.block.data.CraftBlockData;
+import org.bukkit.craftbukkit.entity.CraftPlayer;
+import org.bukkit.entity.Player;
 import org.by1337.blib.nbt.impl.CompoundTag;
 import org.by1337.blib.nms.NMSAccessor;
 import org.by1337.blib.nms.v1_16_5.nbt.ParseCompoundTagV1165;
@@ -67,7 +69,7 @@ public class BlockUtil165 implements BlockUtil {
         CraftBlock cb = (CraftBlock) location.getBlock();
         if (cb.setTypeAndData(Block.REGISTRY_ID.fromId(blockId), applyPhysics)) {
             BlockEntity entity = cb.getCraftWorld().getHandle().getTileEntity(cb.getPosition());
-            if (entity != null) {
+            if (entity != null && blockEntity != null) {
                 entity.load(cb.getNMS(), (net.minecraft.nbt.CompoundTag) ParseCompoundTagV1165.convert(blockEntity));
                 if (!entity.getPosition().equals(cb.getPosition())) {
                     entity.setPosition(cb.getPosition());

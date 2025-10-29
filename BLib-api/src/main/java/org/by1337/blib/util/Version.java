@@ -70,8 +70,10 @@ public enum Version {
     V1_21_6("1.21.6",771,4435),
     V1_21_7("1.21.7",772,4438),
     V1_21_8("1.21.8",772,4440),
+    V1_21_9("1.21.9",773,4440),
+    V1_21_10("1.21.10",773,4556),
     ;
-    public static final Version LAST_VERSION = V1_21_8;
+    public static final Version LAST_VERSION = V1_21_10;
 
     public static final Codec<Version> CODEC = DefaultCodecs.createEnumCodec(Version.class);
     private static final Logger LOGGER = LoggerFactory.getLogger("BLib#Version");
@@ -110,29 +112,21 @@ public enum Version {
                 VERSION = valueOf(version);
             }
         } else {
-            Version detectedVer;
             try (InputStream stream = Bukkit.getServer().getClass().getResourceAsStream("/version.json")) {
                 if (stream == null) {
                     Bukkit.getLogger().log(Level.WARNING, "[BLib] Missing version information!");
-                    throw new FileNotFoundException();
+                    throw new FileNotFoundException("not found version.json file!");
                 } else {
                     try (InputStreamReader reader = new InputStreamReader(stream, StandardCharsets.UTF_8)) {
                         Gson gson = new Gson();
                         JsonReader jsonReader = new JsonReader(reader);
                         gameVersion = new BGameVersion(gson.getAdapter(JsonObject.class).read(jsonReader));
                     }
-                    detectedVer = getVersion(gameVersion);
+                    VERSION = getVersion(gameVersion);
                 }
             } catch (IOException | UnsupportedVersionException e) {
-                try {
-                    detectedVer = getVersion(Bukkit.getVersion(), Bukkit.getBukkitVersion(), Bukkit.getServer().getClass().getPackage().getName());
-                } catch (UnsupportedVersionException ex) {
-                    throw new RuntimeException(new UnsupportedVersionException("Cannot be detected server version! " + "Version info: Bukkit.getVersion()='" + Bukkit.getVersion() +
-                            "', Bukkit.getBukkitVersion()='" + Bukkit.getBukkitVersion() +
-                            "', Bukkit.getServer().getClass().getPackage().getName()='" + Bukkit.getServer().getClass().getPackage().getName() + "'" + ", gameVersion='" + gameVersion + "'"));
-                }
+                throw new  RuntimeException(e);
             }
-            VERSION = detectedVer;
         }
         for (Version value : values()) {
             BY_ID.put(value.ver, value);
@@ -153,76 +147,6 @@ public enum Version {
             }
         }
         throw new UnsupportedVersionException(Lang.getMessage("unsupported-version"), gameVersion);
-    }
-
-    /**
-     * Gets the {@link Version} based on the server, Bukkit, and server package versions.
-     *
-     * @param version       The server version.
-     * @param bukkitVersion The Bukkit version.
-     * @param serverPackage The server package version.
-     * @return The corresponding {@link Version}.
-     * @throws UnsupportedVersionException If the server version is not supported.
-     */
-    public static Version getVersion(String version, String bukkitVersion, String serverPackage) throws UnsupportedVersionException {
-        String ver = detectServerVersion(version, bukkitVersion, serverPackage);
-        for (Version value : values()) {
-            if (ver.endsWith(".0") && value.ver.split("\\.").length == 2) {
-                if (ver.equals(value.ver.substring(2) + ".0")) {
-                    return value;
-                }
-            } else if (ver.equals(value.ver.substring(2))) {
-                return value;
-            }
-        }
-        throw new UnsupportedVersionException(Lang.getMessage("unsupported-version"), version);
-    }
-
-    /**
-     * Detects the server version based on the input parameters.
-     *
-     * @param version       The server version.
-     * @param bukkitVersion The Bukkit version.
-     * @param serverPackage The server package version.
-     * @return The detected server version as a string.
-     */
-    private static String detectServerVersion(String version, String bukkitVersion, String serverPackage) {
-        int majorVersion;
-        int minorVersion;
-        try {
-            Pattern versionPattern = Pattern.compile("\\(MC: (\\d)\\.(\\d+)\\.?(\\d+?)?\\)");
-            Matcher matcher = versionPattern.matcher(version);
-
-            if (matcher.find()) {
-                MatchResult matchResult = matcher.toMatchResult();
-                majorVersion = Integer.parseInt(matchResult.group(2), 10);
-                if (matchResult.groupCount() >= 3) {
-                    minorVersion = Integer.parseInt(matchResult.group(3), 10);
-                    return majorVersion + "." + minorVersion;
-                }
-            } else {
-                throw new IllegalStateException();
-            }
-
-        } catch (Exception e) {
-            try {
-                String[] split = bukkitVersion.split("-")[0].split("\\.");
-                majorVersion = Integer.parseInt(split[1]);
-                if (split.length == 3) {
-                    minorVersion = Integer.parseInt(split[2]);
-                    return majorVersion + "." + minorVersion;
-                }
-            } catch (Exception e2) {
-                try {
-                    String[] split = serverPackage.split("\\.")[3].split("_");
-                    majorVersion = Integer.parseInt(split[1]);
-                    return majorVersion + ".0";
-                } catch (Exception e3) {
-                    return "UNKNOWN";
-                }
-            }
-        }
-        return majorVersion + ".0";
     }
 
     @Nullable
@@ -580,6 +504,31 @@ public enum Version {
 
     public static boolean is1_21_8() {
         return VERSION == V1_21_8;
+    }
+
+    public static boolean is1_21_9orNewer() {
+        return VERSION.newerThanOrEqual(V1_21_9);
+    }
+
+    public static boolean is1_21_9orOlder() {
+        return VERSION.olderThanOrEqual(V1_21_9);
+    }
+
+    public static boolean is1_21_9() {
+        return VERSION == V1_21_9;
+    }
+
+
+    public static boolean is1_21_10orNewer() {
+        return VERSION.newerThanOrEqual(V1_21_10);
+    }
+
+    public static boolean is1_21_10orOlder() {
+        return VERSION.olderThanOrEqual(V1_21_10);
+    }
+
+    public static boolean is1_21_10() {
+        return VERSION == V1_21_10;
     }
 
     /**

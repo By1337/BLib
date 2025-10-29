@@ -151,7 +151,6 @@ public abstract class AbstractMathParser<T> {
                 T value = logical(buffer);
                 lexeme = buffer.next();
                 if (lexeme.type != LexemeType.CLOSE_BRACKET) {
-
                     throw new ParseException(MessageFormatter.apply(Lang.getMessage("unexpected-token"), lexeme.type), buffer.pos);
                 }
                 return value;

@@ -6,12 +6,18 @@ import org.objectweb.asm.Type;
 import org.objectweb.asm.tree.*;
 
 import java.io.InputStream;
+import java.lang.invoke.MethodHandle;
 import java.util.*;
 
 public class NMSVerify {
     private static final ClassLoader LOADER = NMSVerify.class.getClassLoader();
     private final Map<String, ClassNode> nodes = new HashMap<>();
     private final Set<String> visited = new HashSet<>();
+    private final String verifyPackage;
+
+    public NMSVerify(String verifyPackage) {
+        this.verifyPackage = verifyPackage;
+    }
 
     private void verify(ClassNode current) throws NMSVerifyException {
         if (visited.contains(current.name)) return;
@@ -33,7 +39,7 @@ public class NMSVerify {
     private void verifyMethod(ClassNode current, MethodNode currentMethod) throws NMSVerifyException {
         if (verifiedMethods.contains(currentMethod)) return;
         verifiedMethods.add(currentMethod);
-        //System.out.println("Verifying method " + current.name + "#" + currentMethod.name);
+
         Queue<String> queue = new LinkedList<>();
         int pos = 0;
         try {
@@ -50,9 +56,7 @@ public class NMSVerify {
                         if (!isValidInvoke(classNode, invoke)) {
                             throw new NMSVerifyException("Attempted to invoke method " + invoke.owner + "#" + invoke.name + invoke.desc + ", but the method does not exist!");
                         }
-                        if (classNode.name.startsWith("org/by1337/")) {
-                            // TODO: add a check to verify that the class was loaded by a plugin (either this one or any other).
-                            // In newer versions, `cl.getClassLoader() instanceof PluginClassLoader` will not work.
+                        if (classNode.name.startsWith(verifyPackage)) {
                             MethodNode methodNode = findMethod(classNode, invoke);
                             if (methodNode == null)
                                 throw new NMSVerifyException("Method not found: " + invoke.owner + "#" + invoke.name + invoke.desc);
@@ -114,8 +118,9 @@ public class NMSVerify {
     private MethodNode findMethod(ClassNode node, boolean descCheck, MethodInsnNode invoke) throws NMSVerifyException {
         for (MethodNode method : node.methods) {
             if (method.name.equals(invoke.name)) {
-                if (descCheck && method.desc.equals(invoke.desc)) return method;
-                if (descCheck) continue;
+                if (isPolymorphic(method)) return method;
+                if (!descCheck) return method;
+                if (method.desc.equals(invoke.desc)) return method;
                 Type type = Type.getType(invoke.desc);
                 Type type2 = Type.getType(method.desc);
                 if (type.getArgumentTypes().length == type2.getArgumentTypes().length) {
@@ -173,12 +178,21 @@ public class NMSVerify {
         }
     }
 
-    private boolean isValidInvoke(ClassNode node, MethodInsnNode invoke) throws NMSVerifyException { // TODO: check access modifier
+    private boolean isValidInvoke(ClassNode node, MethodInsnNode invoke) throws NMSVerifyException {
         for (MethodNode method : node.methods) {
             if (method.name.equals(invoke.name)) {
-                Type type = Type.getType(invoke.desc);
-                Type type2 = Type.getType(method.desc);
-                if (type.getArgumentTypes().length == type2.getArgumentTypes().length) {
+                if (isPolymorphic(method)) return true;
+                Type[] type = Type.getType(invoke.desc).getArgumentTypes();
+                Type[] type2 = Type.getType(method.desc).getArgumentTypes();
+                check:
+                if (type.length == type2.length) {
+                    for (int i = 0; i < type.length; i++) {
+                        Type t = type[i];
+                        Type t2 = type2[i];
+                        if (t.getSort() != t2.getSort()) {
+                            break check;
+                        }
+                    }
                     return true;
                 }
             }
@@ -192,6 +206,16 @@ public class NMSVerify {
         if (node.superName != null) {
             ClassNode superNode = read(find(node.superName));
             return isValidInvoke(superNode, invoke);
+        }
+        return false;
+    }
+
+    private boolean isPolymorphic(MethodNode method) {
+        if (method.visibleAnnotations == null) return false;
+        for (AnnotationNode ann : method.visibleAnnotations) {
+            if (ann.desc.equals("Ljava/lang/invoke/MethodHandle$PolymorphicSignature;")) {
+                return true;
+            }
         }
         return false;
     }

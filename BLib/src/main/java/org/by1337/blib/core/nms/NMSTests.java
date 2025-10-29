@@ -8,7 +8,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.by1337.blib.block.replacer.BlockReplacer;
 import org.by1337.blib.command.BukkitCommandRegister;
-import org.by1337.blib.command.SummonCommand;
 import org.by1337.blib.core.nms.verify.NMSVerify;
 import org.by1337.blib.inventory.InventoryUtil;
 import org.by1337.blib.inventory.ItemStackSerialize;
@@ -44,7 +43,7 @@ public class NMSTests {
                 return;
             }
             report.append("BukkitCommandRegister impl: ").append(register.getClass().getCanonicalName()).append("\n");
-            new NMSVerify().verify(register.getClass());
+            new NMSVerify("org/by1337/").verify(register.getClass());
             AtomicBoolean done = new AtomicBoolean(false);
             BukkitCommand cmd = new BukkitCommand("blib_test_command") {
                 @Override
@@ -71,7 +70,7 @@ public class NMSTests {
                 return;
             }
             report.append("ParseCompoundTag impl: ").append(pdc.getClass().getCanonicalName()).append("\n");
-            new NMSVerify().verify(pdc.getClass());
+            new NMSVerify("org/by1337/").verify(pdc.getClass());
             ItemStack itemStack = new ItemStack(Material.ACACIA_BOAT);
             if (!itemStack.equals(pdc.create(pdc.copy(itemStack)))) {
                 throw new IllegalStateException("Failed to test ParseCompoundTag#create & ParseCompoundTag#copy");
@@ -91,7 +90,7 @@ public class NMSTests {
                 return;
             }
             report.append("ItemStackSerialize impl: ").append(serialize.getClass().getCanonicalName()).append("\n");
-            new NMSVerify().verify(serialize.getClass());
+            new NMSVerify("org/by1337/").verify(serialize.getClass());
             ItemStack itemStack = new ItemStack(Material.ACACIA_BOAT);
             if (!serialize.deserialize(serialize.serialize(itemStack)).equals(itemStack)) {
                 throw new IllegalStateException("Failed to test ItemStackSerialize#serialize & ItemStackSerialize#deserialize");
@@ -106,7 +105,7 @@ public class NMSTests {
                 return;
             }
             report.append("InventoryUtil impl: ").append(invUtil.getClass().getCanonicalName()).append("\n");
-            new NMSVerify().verify(invUtil.getClass());
+            new NMSVerify("org/by1337/").verify(invUtil.getClass());
             report.append("init only\n");
         }, report);
 
@@ -119,7 +118,7 @@ public class NMSTests {
                 return;
             }
             report.append("BlockReplacer impl: ").append(replacer.getClass().getCanonicalName()).append("\n");
-            new NMSVerify().verify(replacer.getClass());
+            new NMSVerify("org/by1337/").verify(replacer.getClass());
             report.append("init only\n");
         }, report);
 
@@ -132,7 +131,7 @@ public class NMSTests {
                 return;
             }
             report.append("BlockUtil impl: ").append(blockUtil.getClass().getCanonicalName()).append("\n");
-            new NMSVerify().verify(blockUtil.getClass());
+            new NMSVerify("org/by1337/").verify(blockUtil.getClass());
             blockUtil.setBlockData(Material.STONE.createBlockData(), who.getLocation(), false);
             blockUtil.setBlockData(Material.AIR.createBlockData(), who.getLocation(), false);
         }, report);
@@ -145,7 +144,7 @@ public class NMSTests {
                 return;
             }
             report.append("LegacyFastItemMutator impl: ").append(legacyFastItemMutator.getClass().getCanonicalName()).append("\n");
-            new NMSVerify().verify(legacyFastItemMutator.getClass());
+            new NMSVerify("org/by1337/").verify(legacyFastItemMutator.getClass());
             report.append("init only\n");
         }, report);
 
@@ -158,7 +157,7 @@ public class NMSTests {
                 return;
             }
             report.append("RegistryCreator impl: ").append(registryCreator.getClass().getCanonicalName()).append("\n");
-            new NMSVerify().verify(registryCreator.getClass());
+            new NMSVerify("org/by1337/").verify(registryCreator.getClass());
             if (registryCreator.createPotionType() == null) {
                 report.append("Failed RegistryCreator#createPotionType\n");
             }

@@ -91,7 +91,11 @@ public class NmsFactory {
         NMSBootstrap.bootstrap();
     }
 
-    private static class LazyLoad<T> implements Supplier<T> {
+    public Map<Class<?>, ByVersionHolder> creators() {
+        return creators;
+    }
+
+    public static class LazyLoad<T> implements Supplier<T> {
         private final Supplier<@NotNull T> supplier;
         private T value;
 
@@ -119,7 +123,7 @@ public class NmsFactory {
         }
     }
 
-    private static class ByVersionHolder {
+    public static class ByVersionHolder {
         private static final Version[] VALUES = Version.values();
         private final EnumMap<Version, LazyLoad<?>> map = new EnumMap<>(Version.class);
         private final Class<?> nms;
@@ -156,7 +160,7 @@ public class NmsFactory {
                 try {
                     Object obj = v.get();
                     if (obj == null) throw new NullPointerException();
-                    new NMSVerify().verify(obj.getClass());
+                    new NMSVerify("org/by1337/").verify(obj.getClass());
                 } catch (Throwable t) {
                     log.warn(t.getMessage(), t);
                     continue;
@@ -178,6 +182,10 @@ public class NmsFactory {
             }
             sb.delete(sb.length() - 2, sb.length());
             return sb.toString();
+        }
+
+        public Class<?> nms() {
+            return nms;
         }
     }
 }

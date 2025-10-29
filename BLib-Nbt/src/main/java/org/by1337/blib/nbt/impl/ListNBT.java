@@ -11,7 +11,7 @@ public class ListNBT extends NBT implements Collection<NBT> {
 
     private final List<NBT> list;
     private NbtType innerType;
-    private boolean allowMultipleType = false;
+    private boolean allowMultipleType = true;
 
     public ListNBT() {
         this(new ArrayList<>());
@@ -44,6 +44,16 @@ public class ListNBT extends NBT implements Collection<NBT> {
         }
         list.add(nbt);
         return true;
+    }
+    public void addAndUnwrap(NBT nbt){
+        if (nbt instanceof CompoundTag ct){
+            NBT n = ct.get("");
+            if (ct.getTagCount() == 1 && n != null) {
+                add(n);
+                return;
+            }
+        }
+        add(nbt);
     }
 
     @Override

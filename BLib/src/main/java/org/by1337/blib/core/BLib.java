@@ -185,14 +185,33 @@ public class BLib extends JavaPlugin {
                                         if (wildcardMatch(key, clazz)){
                                             try {
                                                 Object creator = NmsFactory.get().nmsSuppliers().get(key).get();
-                                                new NMSVerify().verify(creator.getClass());
+                                                new NMSVerify("org/by1337/").verify(creator.getClass());
                                             } catch (Throwable throwable) {
-                                                log.error("Failed lo verify nms class {}, on version {}", key, Version.VERSION.getVer(), throwable);
+                                                log.error("Failed to verify nms class {}, on version {}", key, Version.VERSION.getVer(), throwable);
                                                 sender.sendMessage(Component.text("Not valid: " + key).color(NamedTextColor.RED));
                                                 continue;
                                             }
                                             sender.sendMessage(Component.text("Valid: " + key).color(NamedTextColor.GREEN));
                                         }
+                                    }
+                                }))
+                        )
+                        .addSubCommand(new Command<CommandSender>("nms_verify_current")
+                                .requires(new RequiresPermission<>("blib.nms_verify"))
+                                .executor(((sender, args) -> {
+                                    for (NmsFactory.ByVersionHolder holder : NmsFactory.get().creators().values()) {
+                                        Class<?> cl = holder.nms();
+                                        try {
+                                            Object creator = holder.findFor(Version.VERSION).get();
+                                            cl = creator.getClass();
+                                            new NMSVerify("org/by1337/").verify(creator.getClass());
+                                        } catch (Throwable throwable) {
+                                            log.error("Failed to verify nms class {}, on version {}", cl,   Version.VERSION.getVer(), throwable);
+                                            sender.sendMessage(Component.text("Not valid: " + cl).color(NamedTextColor.RED));
+                                            continue;
+                                        }
+                                        sender.sendMessage(Component.text("Valid: " + cl).color(NamedTextColor.GREEN));
+
                                     }
                                 }))
                         )

@@ -22,7 +22,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.function.BiConsumer;
 
-@NMSAccessor(forClazz = InventoryUtil.class, from = Version.V1_20_6, to = Version.V1_21_8)
+@NMSAccessor(forClazz = InventoryUtil.class, from = Version.V1_20_6)
 public class InventoryUtilV1206 implements InventoryUtil {
     private static final BiConsumer<ServerPlayer, Integer> CONTAINER_UPDATE_DELAY;
 

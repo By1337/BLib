@@ -258,6 +258,12 @@
             <scope>compile</scope>
         </dependency>
         <dependency>
+            <groupId>org.by1337.blib.nms</groupId>
+            <artifactId>V1_21_9</artifactId>
+            <version>${revision}</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <version>4.13.2</version>
