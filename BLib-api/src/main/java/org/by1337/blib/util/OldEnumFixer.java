@@ -8,7 +8,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.IdentityHashMap;
 import java.util.Map;
-
+//todo в paper обещает удалить OldEnum в версии 1.22...
 @ApiStatus.Internal
 public class OldEnumFixer {
     private static final Class<?> OLD_ENUM;
@@ -34,6 +34,7 @@ public class OldEnumFixer {
     public static <T> Map<String, T> getNameToValueMap(Class<T> cl) {
         return getData(cl).lookupByName;
     }
+
     public static <T> Map<T, String> getValueToNameMap(Class<T> cl) {
         return getData(cl).toName;
     }
@@ -92,12 +93,16 @@ public class OldEnumFixer {
                     throw new NoSuchMethodException(clazz.getCanonicalName() + ".values()");
                 }
                 method.setAccessible(true);
+                Method nameMethod = OLD_ENUM.getMethod("name");
+                nameMethod.setAccessible(true);
+
                 values = (T[]) method.invoke(null);
                 for (T value : values) {
-                    lookupByName0.put(value.toString(), value);
-                    toName0.put(value, value.toString());
+                    String name = (String) nameMethod.invoke(value);
+                    lookupByName0.put(name, value);
+                    toName0.put(value, name);
                 }
-            } catch (Throwable e) {
+            } catch (Exception e) {
                 throw new RuntimeException(e);
             }
             lookupByName = Collections.unmodifiableMap(lookupByName0);
