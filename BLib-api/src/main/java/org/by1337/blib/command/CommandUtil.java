@@ -1,5 +1,6 @@
 package org.by1337.blib.command;
 
+import io.papermc.paper.text.PaperComponents;
 import org.bukkit.entity.Player;
 import org.by1337.blib.world.BLocation;
 import org.jetbrains.annotations.NotNull;
@@ -15,6 +16,6 @@ public interface CommandUtil {
     }
 
     default void tellRaw(@NotNull String message, @NotNull Player player) {
-        player.sendRawMessage(message);
+        player.sendMessage(PaperComponents.gsonSerializer().deserialize(message));
     }
 }

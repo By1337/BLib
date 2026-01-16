@@ -1,5 +1,7 @@
 package org.by1337.blib.world;
 
+import dev.by1337.core.BCore;
+import dev.by1337.core.bridge.world.BlockEntityUtil;
 import org.bukkit.Location;
 import org.bukkit.block.data.BlockData;
 import org.by1337.blib.BLib;

@@ -8,6 +8,8 @@ import org.jetbrains.annotations.NotNull;
  */
 @Deprecated
 public interface AsyncCatcher {
+    AsyncCatcher INSTANCE = new AsyncCatcher() {
+    };
     /**
      * Handles catching an asynchronous operation with the given identifier.
      *

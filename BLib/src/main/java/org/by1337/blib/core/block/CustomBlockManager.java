@@ -2,7 +2,6 @@ package org.by1337.blib.core.block;
 
 import org.by1337.blib.block.custom.data.CustomBlockData;
 import org.by1337.blib.block.custom.registry.WorldRegistry;
-import org.by1337.blib.core.BLib;
 import org.by1337.blib.nbt.DefaultNbtByteBuffer;
 import org.by1337.blib.nbt.NBT;
 import org.by1337.blib.nbt.NbtType;
@@ -17,6 +16,12 @@ import java.nio.file.Files;
 import java.util.List;
 
 public class CustomBlockManager {
+    private final File dataFolder;
+
+    public CustomBlockManager(File dataFolder) {
+        this.dataFolder = dataFolder;
+    }
+
     public void save() {
         ListNBT listNBT = new ListNBT();
         for (List<Pair<BlockPosition, CustomBlockData>> value : WorldRegistry.CUSTOM_BLOCK_REGISTRY.getAll().values()) {
@@ -25,7 +30,7 @@ public class CustomBlockManager {
             }
         }
         try {
-            File file = new File(BLib.getInstance().getDataFolder(), "customBlocks.bnbt");
+            File file = new File(dataFolder, "customBlocks.bnbt");
             DefaultNbtByteBuffer buffer = new DefaultNbtByteBuffer();
             listNBT.write(buffer);
 
@@ -34,9 +39,10 @@ public class CustomBlockManager {
             org.by1337.blib.BLib.getApi().getMessage().error("Failed to save custom blocks!", e);
         }
     }
+
     public void load() {
         try {
-            File file = new File(BLib.getInstance().getDataFolder(), "customBlocks.bnbt");
+            File file = new File(dataFolder, "customBlocks.bnbt");
             if (!file.exists()) return;
             DefaultNbtByteBuffer buffer = new DefaultNbtByteBuffer(Files.readAllBytes(file.toPath()));
 

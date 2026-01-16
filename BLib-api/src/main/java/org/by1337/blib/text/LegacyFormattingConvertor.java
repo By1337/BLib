@@ -1,5 +1,7 @@
 package org.by1337.blib.text;
 
+import dev.by1337.core.util.text.minimessage.Legacy2MiniMessage;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -9,8 +11,7 @@ public class LegacyFormattingConvertor {
     private static final Pattern hexPattern = Pattern.compile("[a-f0-9]{6}", Pattern.CASE_INSENSITIVE);
 
     public static String convert(String str) {
-        LexemeBuffer buffer = new LexemeBuffer(parseExp(str.replace("&", "§")));
-        return convert(buffer).replace("§", "&");
+        return Legacy2MiniMessage.convert(str);
     }
 
     private static String convert(LexemeBuffer buffer) {

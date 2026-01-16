@@ -6,6 +6,7 @@ import org.bukkit.block.Block;
 import org.bukkit.block.data.BlockData;
 import org.by1337.blib.block.custom.data.CustomBlockData;
 import org.by1337.blib.block.custom.registry.WorldRegistry;
+import org.by1337.blib.block.replacer.impl.BukkitBlockReplacer;
 import org.by1337.blib.block.replacer.type.ReplaceBlock;
 import org.by1337.blib.block.replacer.type.impl.BlockDataBlock;
 import org.by1337.blib.block.replacer.type.impl.CustomBlockReplace;
@@ -14,6 +15,7 @@ import org.by1337.blib.block.replacer.type.impl.WeBlockStateBlock;
 import org.by1337.blib.geom.Vec3i;
 
 public interface BlockReplacer {
+    BlockReplacer INSTANCE = new BukkitBlockReplacer();
     default Block replace(Vec3i pos, ReplaceBlock replaceBlock, ReplaceTask task, World world) {
         BlockData data;
         int flag = replaceBlock.getFlag() == -1 ? task.getFlag() : replaceBlock.getFlag();

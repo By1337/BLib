@@ -7,6 +7,7 @@ import org.by1337.blib.BLib;
 /// @deprecated use {@link InventoryUtil}
 @Deprecated(since = "1.4.1")
 public interface FakeTitle {
+    FakeTitle INSTANCE = InventoryUtil.INSTANCE::sendFakeTitle;
 
     @Deprecated(since = "1.0.7")
     default void send(Inventory inventory, String newTitle) {

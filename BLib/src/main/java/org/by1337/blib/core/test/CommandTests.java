@@ -8,17 +8,12 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.by1337.blib.BLib;
 import org.by1337.blib.command.Command;
-import org.by1337.blib.command.CommandException;
 import org.by1337.blib.command.argument.*;
 import org.by1337.blib.configuration.YamlOps;
 import org.by1337.blib.configuration.YamlValue;
 import org.by1337.blib.configuration.serialization.BukkitCodecs;
 import org.by1337.blib.nbt.impl.CompoundTag;
-import org.by1337.blib.network.clientbound.entity.PacketAddEntity;
-import org.by1337.blib.network.clientbound.entity.PacketSetEntityData;
 import org.by1337.blib.util.Version;
-import org.by1337.blib.world.BLocation;
-import org.by1337.blib.world.entity.PacketArmorStand;
 
 import java.util.List;
 
@@ -112,33 +107,6 @@ public class CommandTests {
                     BLib.getApi().getMessage().log(
                             BLib.getApi().getMessage().componentBuilder((String) args.getOrDefault("msg", "123"))
                     );
-                }));
-    }
-
-    @SuppressWarnings("removal")
-    public static Command<CommandSender> packetArmorStandTest() {
-        return new Command<CommandSender>("armor_stand_spawn_test")
-                .argument(new ArgumentStrings<>("name"))
-                .executor(((sender, args) -> {
-                    if (!(sender instanceof Player player)) throw new CommandException("only for players!");
-                    PacketArmorStand armorStand = BLib.createPacketEntity(new BLocation(player.getLocation()), PacketArmorStand.class);
-                    armorStand.setCustomName(BLib.getApi().getMessage().messageBuilder((String) args.getOrDefault("name", "&cCustomArmorStand")));
-                    armorStand.setCustomNameVisible(true);
-                    armorStand.setSmall(true);
-                    armorStand.setInvisible(true);
-                    armorStand.setNoBasePlate(true);
-                    armorStand.setSilent(true);
-                    armorStand.setNoGravity(true);
-                    armorStand.setMarker(true);
-                    armorStand.setGlowing(true);
-                    player.sendMessage("§fCreate PacketAddEntity");
-                    PacketAddEntity packet = PacketAddEntity.newInstance(armorStand);
-                    player.sendMessage("§fCreate PacketSetEntityData");
-                    PacketSetEntityData packet1 = PacketSetEntityData.newInstance(armorStand);
-                    player.sendMessage("§fSend PacketAddEntity");
-                    packet.send(player);
-                    player.sendMessage("§fSend PacketSetEntityData");
-                    packet1.send(player);
                 }));
     }
 

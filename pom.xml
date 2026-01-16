@@ -4,12 +4,12 @@
     <groupId>org.by1337.blib</groupId>
     <artifactId>Blib-parent</artifactId>
     <packaging>pom</packaging>
-    <version>1.7.2</version>
+    <version>1.8</version>
     <name>Blib-parent</name>
     <modules>
         <module>BLib</module>
         <module>BLib-api</module>
-        <module>V1_16_5</module>
+<!--        <module>V1_16_5</module>
         <module>V1_17_1</module>
         <module>V1_18_2</module>
         <module>V1_19_4</module>
@@ -19,11 +19,10 @@
         <module>V1_20_6</module>
         <module>V1_21_5</module>
         <module>V1_21_6</module>
-        <module>V1_21_9</module>
+        <module>V1_21_9</module>-->
         <module>MinimessageSupport</module>
         <module>BLib-Nbt</module>
         <module>ShadedDFU</module>
-        <module>asm</module>
     </modules>
     <build>
         <defaultGoal>clean install</defaultGoal>

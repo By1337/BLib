@@ -1,5 +1,6 @@
 package org.by1337.blib;
 
+import dev.by1337.core.bridge.registry.LegacyRegistryBridge;
 import org.bukkit.Keyed;
 import org.bukkit.NamespacedKey;
 import org.bukkit.Particle;
@@ -15,8 +16,21 @@ import java.util.Map;
 import java.util.function.Function;
 
 public class RegistryHelper {
-    public static final Registry<RegistryHelper.Holder<PotionEffectType>> MOB_EFFECT = BLib.getApi().getRegistryCreator().createPotionType();
-    public static final Registry<RegistryHelper.Holder<Particle>> PARTICLE_TYPE = BLib.getApi().getRegistryCreator().createParticleType();
+    public static final Registry<RegistryHelper.Holder<PotionEffectType>> MOB_EFFECT;
+    public static final Registry<RegistryHelper.Holder<Particle>> PARTICLE_TYPE;
+
+    static {
+        MOB_EFFECT = of(
+                LegacyRegistryBridge.MOB_EFFECT.iterator(),
+                LegacyRegistryBridge.Holder::value,
+                LegacyRegistryBridge.Holder::getKey
+        );
+        PARTICLE_TYPE = of(
+                LegacyRegistryBridge.PARTICLE_TYPE.iterator(),
+                LegacyRegistryBridge.Holder::value,
+                LegacyRegistryBridge.Holder::getKey
+        );
+    }
 
 
     public static <T extends Keyed> Registry<Holder<T>> of(Iterator<T> iterator) {

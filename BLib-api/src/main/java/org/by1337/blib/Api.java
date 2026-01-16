@@ -1,11 +1,10 @@
 package org.by1337.blib;
 
+import org.bukkit.Bukkit;
 import org.by1337.blib.block.replacer.PooledBlockReplacer;
 import org.by1337.blib.chat.util.Message;
 import org.by1337.blib.command.BukkitCommandRegister;
 import org.by1337.blib.command.CommandUtil;
-import org.by1337.blib.factory.PacketEntityFactory;
-import org.by1337.blib.factory.PacketFactory;
 import org.by1337.blib.inventory.FakeTitleFactory;
 import org.by1337.blib.inventory.InventoryUtil;
 import org.by1337.blib.inventory.ItemStackSerialize;
@@ -22,43 +21,77 @@ import java.util.logging.Logger;
 
 @SuppressWarnings({"removal"})
 public interface Api {
-    @NotNull PacketEntityFactory getPacketEntityFactory();
-
-    @NotNull Logger getLogger();
-
-    @NotNull PacketFactory getPacketFactory();
+   default @NotNull Logger getLogger(){
+       return LoggerHolder.logger;
+   }
 
     @NotNull
     default CommandUtil getCommandUtil() {
         return CommandUtil.INSTANCE;
     }
 
-    @NotNull AsyncCatcher getAsyncCatcher();
+   default @NotNull AsyncCatcher getAsyncCatcher(){
+        return AsyncCatcher.INSTANCE;
+   }
 
-    @NotNull Message getMessage();
+   default @NotNull Message getMessage(){
+      return LoggerHolder.messaage; //todo
+   }
 
-    @NotNull ItemStackSerialize getItemStackSerialize();
+    default @NotNull ItemStackSerialize getItemStackSerialize() {
+        return ItemStackSerialize.INSTANCE;
+    }
 
     @Deprecated
     default @NotNull FakeTitleFactory getFakeTitleFactory() {
-        return () -> getInventoryUtil()::sendFakeTitle;
+        return FakeTitleFactory.INSTANCE;
     }
 
-    @NotNull BukkitCommandRegister getBukkitCommandRegister();
+    default @NotNull BukkitCommandRegister getBukkitCommandRegister() {
+        return BukkitCommandRegister.INSTANCE;
+    }
 
-    @NotNull ParseCompoundTag getParseCompoundTag();
+    default @NotNull ParseCompoundTag getParseCompoundTag() {
+        return ParseCompoundTag.INSTANCE;
+    }
 
-    @NotNull LegacyConvertor getLegacyConvertor();
+    default @NotNull LegacyConvertor getLegacyConvertor() {
+        return LegacyConvertor.INSTANCE;
+    }
 
-    @NotNull ComponentToANSI getComponentToANSI();
+   default @NotNull ComponentToANSI getComponentToANSI(){
+       return ComponentToANSI.INSTANCE;
+   }
 
     @NotNull PooledBlockReplacer getPooledBlockReplacer();
 
-    @NotNull BLibUnsafe getUnsafe();
+   default @NotNull BLibUnsafe getUnsafe(){
+       return BLibUnsafe.INSTANCE;
+   }
 
-    @NotNull InventoryUtil getInventoryUtil();
+    default @NotNull InventoryUtil getInventoryUtil() {
+        return InventoryUtil.INSTANCE;
+    }
 
-    @NotNull RegistryCreator getRegistryCreator();
+    default @NotNull RegistryCreator getRegistryCreator() {
+        return RegistryCreator.INSTANCE;
+    }
 
-    @NotNull BlockUtil getBlockUtil();
+    default @NotNull BlockUtil getBlockUtil() {
+        throw new UnsupportedOperationException();
+    }
+
+    class LoggerHolder{
+        static final Logger logger;
+        static final Message messaage;
+        static {
+           var plug = Bukkit.getPluginManager().getPlugin("BDevCore");
+           if (plug != null){
+               logger = plug.getLogger();
+           }else {
+               logger = Logger.getLogger("BDevCore");
+           }
+            messaage = new Message(logger);
+        }
+    }
 }

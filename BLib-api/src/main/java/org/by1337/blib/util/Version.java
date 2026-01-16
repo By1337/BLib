@@ -146,7 +146,8 @@ public enum Version {
                 return version;
             }
         }
-        throw new UnsupportedVersionException(Lang.getMessage("unsupported-version"), gameVersion);
+        return UNKNOWN;
+        //throw new UnsupportedVersionException(Lang.getMessage("unsupported-version"), gameVersion);
     }
 
     @Nullable

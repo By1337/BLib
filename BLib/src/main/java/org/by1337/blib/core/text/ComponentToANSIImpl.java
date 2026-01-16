@@ -1,3 +1,4 @@
+/*
 package org.by1337.blib.core.text;
 
 import net.kyori.adventure.text.Component;
@@ -16,3 +17,4 @@ public class ComponentToANSIImpl implements ComponentToANSI {
         return JsonComponentToANSI.buildAndConvert(legacy);
     }
 }
+*/

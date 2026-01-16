@@ -4,24 +4,17 @@
     <parent>
         <groupId>org.by1337.blib</groupId>
         <artifactId>Blib-parent</artifactId>
-        <version>1.7.2</version>
+        <version>1.8</version>
     </parent>
     <groupId>org.by1337.blib.nbt</groupId>
     <artifactId>BLib-Nbt</artifactId>
     <properties>
-        <revision>1.7.2</revision>
+        <revision>1.8</revision>
         <target.version>16</target.version>
         <source.version>16</source.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <server.version>1.17.1-R0.1-SNAPSHOT</server.version>
     </properties>
-
-    <pluginRepositories>
-        <pluginRepository>
-            <id>bytecode.space</id>
-            <url>https://repo.bytecode.space/repository/maven-public/</url>
-        </pluginRepository>
-    </pluginRepositories>
 
     <build>
         <defaultGoal>clean install</defaultGoal>
@@ -65,19 +58,6 @@
                     </execution>
                 </executions>
             </plugin>
-            <plugin>
-                <groupId>ca.bkaw</groupId>
-                <artifactId>paper-nms-maven-plugin</artifactId>
-                <version>1.4.4</version>
-                <executions>
-                    <execution>
-                        <phase>process-classes</phase>
-                        <goals>
-                            <goal>remap</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
         </plugins>
         <resources>
             <resource>
@@ -111,12 +91,6 @@
             <groupId>org.mockito</groupId>
             <artifactId>mockito-core</artifactId>
             <version>5.5.0</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>ca.bkaw</groupId>
-            <artifactId>paper-nms</artifactId>
-            <version>1.17.1-SNAPSHOT</version>
             <scope>test</scope>
         </dependency>
     </dependencies>

@@ -1,8 +1,7 @@
-package org.by1337.blib.core.unsafe;
+package org.by1337.blib.unsafe;
 
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.by1337.blib.unsafe.PluginClasspathUtil;
 import org.by1337.blib.util.invoke.LambdaMetafactoryUtil;
 import sun.misc.Unsafe;
 
