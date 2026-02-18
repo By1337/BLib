@@ -12,12 +12,12 @@ public interface BLibUnsafe {
 
         @Override
         public LegacyFastItemMutator getLegacyFastItemMutator() {
-            throw new UnsupportedOperationException();
+            throw null;
         }
 
         @Override
         public FastItemMutator getFastItemMutator() {
-            throw new UnsupportedOperationException();
+            return FastItemMutator.INSTANCE;
         }
     };
     PluginClasspathUtil getPluginClasspathUtil();

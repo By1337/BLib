@@ -13,7 +13,8 @@ public class NBTParserContext {
      * @return true if multiple types are allowed, otherwise false.
      */
     public boolean isAllowMultipleTypeInList() {
-        return allowMultipleTypeInList;
+        return true;
+        //return allowMultipleTypeInList;
     }
 
     /**

@@ -7,8 +7,80 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
+import java.util.Objects;
 
 public interface FastItemMutator {
+    FastItemMutator INSTANCE = new FastItemMutator() {
+        @Override
+        public ItemStack asBukkitMirror(@NotNull Object itemStack) {
+            return (ItemStack) itemStack;
+        }
+
+        @Override
+        public Object asNMSCopyItemStack(@NotNull ItemStack itemStack) {
+            return itemStack;
+        }
+
+        @Override
+        public Object cloneNMSItemStack(@NotNull Object itemStack) {
+            return ((ItemStack)itemStack).clone();
+        }
+
+        @Override
+        public void setCount(int count, Object itemStack) {
+            ((ItemStack)itemStack).setAmount(count);
+        }
+
+        @Override
+        public void setPopTime(int time, Object itemStack) {
+
+        }
+
+        @Override
+        public void remove(String key, Object itemStack) {
+
+        }
+
+        @Override
+        public void setInt(String key, int value, Object itemStack) {
+
+        }
+
+        @Override
+        public void setComponent(String key, Component value, Object itemStack) {
+            ((ItemStack)itemStack).editMeta(m -> m.displayName(value));
+        }
+
+        @Override
+        public void setItemLore(String key, List<Component> value, Object itemStack) {
+            ((ItemStack)itemStack).editMeta(m -> m.lore(value));
+        }
+
+        @Override
+        public void setUnit(String key, Object itemStack) {
+
+        }
+
+        @Override
+        public @Nullable Integer getInt(String key, Object itemStack) {
+            return 0;
+        }
+
+        @Override
+        public @NotNull Component getComponent(String key, Object itemStack) {
+            return Objects.requireNonNullElse(((ItemStack)itemStack).getItemMeta().displayName(), Component.empty());
+        }
+
+        @Override
+        public @Nullable List<Component> getItemLore(String key, Object itemStack) {
+            return ((ItemStack)itemStack).getItemMeta().lore();
+        }
+
+        @Override
+        public boolean has(String key, Object itemStack) {
+            return false;
+        }
+    };
     // Int
     String MAX_STACK_SIZE = "max_stack_size";
     String MAX_DAMAGE = "max_damage";

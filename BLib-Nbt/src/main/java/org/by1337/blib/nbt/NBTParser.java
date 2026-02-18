@@ -169,6 +169,7 @@ public class NBTParser {
         }
         List<NBT> list = new ArrayList<>();
         LexemeType type = null;
+        boolean oneType = true;
         main:
         while (true) {
             Lexeme lexeme = buffer.next();
@@ -193,6 +194,9 @@ public class NBTParser {
                         TYPE_LONG,
                         TYPE_SHORT,
                         TYPE_FLOAT -> {
+                    if (type !=  lexeme.type && oneType){
+                        oneType = false;
+                    }
                     type = lexeme.type;
                     Lexeme next = buffer.next();
                     if (next.type != LexemeType.ARR_TYPE_SEPARATOR) {
@@ -205,12 +209,16 @@ public class NBTParser {
                 }
             }
         }
+        if (!oneType){
+            type = null;
+        }
 
         if (list.isEmpty() && type == null) {
             ListNBT result = new ListNBT(new ArrayList<>(list.size()), context.isAllowMultipleTypeInList());
             list.forEach(result::addAndUnwrap);
             return result;
         }
+
 
         if (!list.isEmpty() && !context.isAllowMultipleTypeInList()) {
             final Class<?> clazz = list.get(0).getClass();
