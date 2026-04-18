@@ -22,60 +22,51 @@ public interface ItemStackSerialize {
 
     @NotNull
     default String serialize(@NotNull ItemStack itemStack) throws IllegalArgumentException {
-        String snbt = bridge.toSNbt(itemStack, null);
-        return Base64.getEncoder().encodeToString(snbt.getBytes(StandardCharsets.UTF_8));
+        // String snbt = bridge.toSNbt(itemStack, null);
+        return Base64.getEncoder().encodeToString(toByteArray(itemStack));
     }
 
     @NotNull
     default String serializeAndCompress(@NotNull ItemStack itemStack) throws IllegalArgumentException {
-        try {
-            return Base64.getEncoder().encodeToString(compress(bridge.toSNbt(itemStack, null).getBytes(StandardCharsets.UTF_8)));
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        return serialize(itemStack);
     }
-
 
     @NotNull
     default ItemStack deserialize(@NotNull String data) throws IllegalArgumentException {
-        return bridge.fromSNbt(new String(
-                Base64.getDecoder().decode(data),
-                StandardCharsets.UTF_8
-        ));
+        try {
+            return fromByteArray(Base64.getDecoder().decode(data));
+        } catch (Exception e) {
+            try {
+                return bridge.fromSNbt(new String(
+                        Base64.getDecoder().decode(data),
+                        StandardCharsets.UTF_8
+                ));
+            } catch (Exception e1) {
+                e1.addSuppressed(e);
+                try {
+                    //maybe gzip
+                    byte[] gzip = decompress(Base64.getDecoder().decode(data.getBytes(StandardCharsets.UTF_8)));
+                    return bridge.fromSNbt(new String(gzip, StandardCharsets.UTF_8));
+                } catch (Exception e2) {
+                    e2.addSuppressed(e1);
+                    throw new IllegalArgumentException("bad data! " + data, e2);
+                }
+            }
+        }
+
     }
 
     @NotNull
     default ItemStack decompressAndDeserialize(@NotNull String data) throws IllegalArgumentException {
-        try {
-            return bridge.fromSNbt(new String(
-                    Base64.getDecoder().decode(decompress(data.getBytes(StandardCharsets.UTF_8))),
-                    StandardCharsets.UTF_8
-            ));
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        return deserialize(data);
     }
 
-    default String compress(String raw) throws IOException {
-        try (ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-             GZIPOutputStream gzipOutputStream = new GZIPOutputStream(outputStream)) {
-            gzipOutputStream.write(raw.getBytes(StandardCharsets.UTF_8));
-            gzipOutputStream.finish();
-            return new String(Base64.getEncoder().encode(outputStream.toByteArray()), StandardCharsets.UTF_8);
-        }
+    default byte[] toByteArray(@NotNull ItemStack itemStack) {
+        return BCore.getItemStackSerializer().serialize(itemStack, null);
     }
 
-    default String decompress(String raw) throws IOException {
-        try (ByteArrayInputStream inputStream = new ByteArrayInputStream(Base64.getDecoder().decode(raw.getBytes(StandardCharsets.UTF_8)));
-             GZIPInputStream gzipInputStream = new GZIPInputStream(inputStream);
-             ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
-            byte[] buffer = new byte[1024];
-            int bytesRead;
-            while ((bytesRead = gzipInputStream.read(buffer)) != -1) {
-                outputStream.write(buffer, 0, bytesRead);
-            }
-            return outputStream.toString(StandardCharsets.UTF_8);
-        }
+    default ItemStack fromByteArray(@NotNull byte[] bytes) {
+        return BCore.getItemStackSerializer().deserialize(bytes, null);
     }
 
     default byte[] compress(byte[] array) throws IOException {
@@ -98,6 +89,28 @@ public interface ItemStackSerialize {
                 outputStream.write(buffer, 0, bytesRead);
             }
             return outputStream.toByteArray();
+        }
+    }
+
+    default String compress(String raw) throws IOException {
+        try (ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+             GZIPOutputStream gzipOutputStream = new GZIPOutputStream(outputStream)) {
+            gzipOutputStream.write(raw.getBytes(StandardCharsets.UTF_8));
+            gzipOutputStream.finish();
+            return new String(Base64.getEncoder().encode(outputStream.toByteArray()), StandardCharsets.UTF_8);
+        }
+    }
+
+    default String decompress(String raw) throws IOException {
+        try (ByteArrayInputStream inputStream = new ByteArrayInputStream(Base64.getDecoder().decode(raw.getBytes(StandardCharsets.UTF_8)));
+             GZIPInputStream gzipInputStream = new GZIPInputStream(inputStream);
+             ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
+            byte[] buffer = new byte[1024];
+            int bytesRead;
+            while ((bytesRead = gzipInputStream.read(buffer)) != -1) {
+                outputStream.write(buffer, 0, bytesRead);
+            }
+            return outputStream.toString(StandardCharsets.UTF_8);
         }
     }
 }

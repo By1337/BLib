@@ -2,8 +2,10 @@ package org.by1337.blib.configuration.adapter;
 
 import com.google.errorprone.annotations.CanIgnoreReturnValue;
 import org.bukkit.Color;
+import org.bukkit.Registry;
 import org.bukkit.configuration.MemorySection;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
 import org.by1337.blib.configuration.YamlContext;
@@ -322,5 +324,117 @@ public class AdapterRegistry {
 
         registerAdapter(YamlContext.class, new YamlContextAdapter());
         registerAdapter(MemorySection.class, new MemorySectionAdapter());
+
+        registerPrimitiveAdapter(org.bukkit.scoreboard.DisplaySlot.class, new PrimitiveAdapter<org.bukkit.scoreboard.DisplaySlot>() {
+            @Override
+            public org.bukkit.scoreboard.DisplaySlot deserialize(Object src) {
+                if (src instanceof org.bukkit.scoreboard.DisplaySlot b) {
+                    return b;
+                }
+                return org.bukkit.scoreboard.DisplaySlot.valueOf(String.valueOf(src).toUpperCase());
+            }
+        });
+        registerPrimitiveAdapter(org.bukkit.block.banner.PatternType.class, new PrimitiveAdapter<org.bukkit.block.banner.PatternType>() {
+            @Override
+            public org.bukkit.block.banner.PatternType deserialize(Object src) {
+                if (src instanceof org.bukkit.block.banner.PatternType b) {
+                    return b;
+                }
+                return org.bukkit.block.banner.PatternType.valueOf(String.valueOf(src).toUpperCase());
+            }
+        });
+        registerPrimitiveAdapter(org.bukkit.block.Biome.class, new PrimitiveAdapter<org.bukkit.block.Biome>() {
+            @Override
+            public org.bukkit.block.Biome deserialize(Object src) {
+                if (src instanceof org.bukkit.block.Biome b) {
+                    return b;
+                }
+                return org.bukkit.block.Biome.valueOf(String.valueOf(src).toUpperCase());
+            }
+        });
+        registerPrimitiveAdapter(org.bukkit.entity.EntityType.class, new PrimitiveAdapter<org.bukkit.entity.EntityType>() {
+            @Override
+            public org.bukkit.entity.EntityType deserialize(Object src) {
+                if (src instanceof org.bukkit.entity.EntityType b) {
+                    return b;
+                }
+                return org.bukkit.entity.EntityType.valueOf(String.valueOf(src).toUpperCase());
+            }
+        });
+        registerPrimitiveAdapter(org.bukkit.potion.PotionType.class, new PrimitiveAdapter<org.bukkit.potion.PotionType>() {
+            @Override
+            public org.bukkit.potion.PotionType deserialize(Object src) {
+                if (src instanceof org.bukkit.potion.PotionType b) {
+                    return b;
+                }
+                return org.bukkit.potion.PotionType.valueOf(String.valueOf(src).toUpperCase());
+            }
+        });
+
+        registerPrimitiveAdapter(org.bukkit.enchantments.Enchantment.class, new PrimitiveAdapter<org.bukkit.enchantments.Enchantment>() {
+            @Override
+            public org.bukkit.enchantments.Enchantment deserialize(Object src) {
+                if (src instanceof org.bukkit.enchantments.Enchantment b) {
+                    return b;
+                }
+                return org.bukkit.enchantments.Enchantment.getByName(String.valueOf(src));
+            }
+        });
+        registerPrimitiveAdapter(org.bukkit.potion.PotionEffectType.class, new PrimitiveAdapter<org.bukkit.potion.PotionEffectType>() {
+            @Override
+            public org.bukkit.potion.PotionEffectType deserialize(Object src) {
+                if (src instanceof org.bukkit.potion.PotionEffectType b) {
+                    return b;
+                }
+                return org.bukkit.potion.PotionEffectType.getByName(String.valueOf(src));
+            }
+        });
+        registerPrimitiveAdapter(org.bukkit.Particle.class, new PrimitiveAdapter<org.bukkit.Particle>() {
+            @Override
+            public org.bukkit.Particle deserialize(Object src) {
+                if (src instanceof org.bukkit.Particle b) {
+                    return b;
+                }
+                return org.bukkit.Particle.valueOf(String.valueOf(src).toUpperCase());
+            }
+        });
+        registerPrimitiveAdapter(org.bukkit.loot.LootTables.class, new PrimitiveAdapter<org.bukkit.loot.LootTables>() {
+            @Override
+            public org.bukkit.loot.LootTables deserialize(Object src) {
+                if (src instanceof org.bukkit.loot.LootTables b) {
+                    return b;
+                }
+                return org.bukkit.loot.LootTables.valueOf(String.valueOf(src).toUpperCase());
+            }
+        });
+        registerPrimitiveAdapter(org.bukkit.attribute.Attribute.class, new PrimitiveAdapter<org.bukkit.attribute.Attribute>() {
+            @Override
+            public org.bukkit.attribute.Attribute deserialize(Object src) {
+                if (src instanceof org.bukkit.attribute.Attribute b) {
+                    return b;
+                }
+                return org.bukkit.attribute.Attribute.valueOf(String.valueOf(src).toUpperCase());
+            }
+        });
+        registerPrimitiveAdapter(org.bukkit.map.MapCursor.Type.class, new PrimitiveAdapter<org.bukkit.map.MapCursor.Type>() {
+            @Override
+            public org.bukkit.map.MapCursor.Type deserialize(Object src) {
+                if (src instanceof org.bukkit.map.MapCursor.Type b) {
+                    return b;
+                }
+                return org.bukkit.map.MapCursor.Type.valueOf(String.valueOf(src).toUpperCase());
+            }
+        });
+        registerPrimitiveAdapter(org.bukkit.inventory.ItemFlag.class, new PrimitiveAdapter<org.bukkit.inventory.ItemFlag>() {
+            @Override
+            public org.bukkit.inventory.ItemFlag deserialize(Object src) {
+                if (src instanceof org.bukkit.inventory.ItemFlag b) {
+                    return b;
+                }
+                return org.bukkit.inventory.ItemFlag.valueOf(String.valueOf(src).toUpperCase());
+            }
+        });
+
+
     }
 }

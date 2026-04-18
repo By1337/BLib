@@ -17,6 +17,7 @@ import org.bukkit.potion.PotionType;
 import org.bukkit.util.Vector;
 import org.by1337.blib.BLib;
 import org.by1337.blib.chat.ChatColor;
+import org.by1337.blib.command.argument.ArgumentSound;
 import org.by1337.blib.text.MessageFormatter;
 
 import java.util.Optional;
@@ -102,6 +103,22 @@ public class BukkitCodecs {
         }
     };
 
+    public static final PrimitiveCodec<Sound> SOUND = new PrimitiveCodec<>() {
+        @Override
+        public <T> DataResult<Sound> read(DynamicOps<T> ops, T t) {
+            return ops.getStringValue(t).flatMap(s -> {
+                var v = ArgumentSound.LOOKUP_BY_NAME.get(s.toLowerCase());
+                if (v == null) return DataResult.error(() -> "Unknown sound: " + s);
+                return DataResult.success(v);
+            });
+        }
+
+        @Override
+        public <T> T write(DynamicOps<T> ops, Sound sound) {
+            return ops.createString(sound.getKey().toString());
+        }
+    };
+
     public static final PrimitiveCodec<Material> MATERIAL = DefaultCodecs.createAnyEnumCodec(Material.class);
     public static final PrimitiveCodec<Biome> BIOME = DefaultCodecs.createAnyEnumCodec(Biome.class);
     public static final PrimitiveCodec<DyeColor> DYE_COLOR = DefaultCodecs.createAnyEnumCodec(DyeColor.class);
@@ -112,6 +129,10 @@ public class BukkitCodecs {
     public static final PrimitiveCodec<InventoryType> INVENTORY_TYPE = DefaultCodecs.createAnyEnumCodec(InventoryType.class);
 
     public static <T extends Enum<T>> PrimitiveCodec<T> createEnumCodec(final Class<T> type) {
+        if (type == Sound.class){
+            //noinspection unchecked,rawtypes
+            return (PrimitiveCodec)SOUND;
+        }
         return DefaultCodecs.createEnumCodec(type);
     }
 
