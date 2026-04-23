@@ -194,7 +194,7 @@ public class NBTParser {
                         TYPE_LONG,
                         TYPE_SHORT,
                         TYPE_FLOAT -> {
-                    if (type !=  lexeme.type && oneType){
+                    if (type != null &&  type != lexeme.type && oneType){
                         oneType = false;
                     }
                     type = lexeme.type;

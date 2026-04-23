@@ -7,7 +7,7 @@
     <parent>
         <groupId>org.by1337.blib</groupId>
         <artifactId>Blib-parent</artifactId>
-        <version>1.9.5</version>
+        <version>1.9.6</version>
     </parent>
 
     <artifactId>BLib</artifactId>
@@ -16,7 +16,7 @@
     <name>BLib</name>
 
     <properties>
-        <revision>1.9.5</revision>
+        <revision>1.9.6</revision>
         <java.version>16</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
@@ -181,7 +181,7 @@
         <dependency>
             <groupId>org.by1337.blib</groupId>
             <artifactId>Blib-api</artifactId>
-            <version>1.9.5</version>
+            <version>1.9.6</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
