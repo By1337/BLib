@@ -21,9 +21,9 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.Reader;
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
@@ -97,6 +97,7 @@ public class Message {
     public void sendMsg(@NotNull CommandSender sender, @NotNull TranslatableComponent msg, Object... objects) {
         sender.sendMessage(buildTranslatableAndTranslate(msg, sender instanceof OfflinePlayer offlinePlayer ? offlinePlayer : null, objects));
     }
+
     public void sendTranslatable(@NotNull CommandSender sender, @NotNull String msg, Object... objects) {
         sender.sendMessage(buildTranslatableAndTranslate(Component.translatable(msg), sender instanceof OfflinePlayer offlinePlayer ? offlinePlayer : null, objects));
     }
@@ -188,7 +189,7 @@ public class Message {
     }
 
 
-    //// error start
+    /// / error start
     public void error(@Nullable Throwable t) {
         logger.log(Level.SEVERE, "", t);
     }
@@ -224,7 +225,8 @@ public class Message {
     public void error(@NotNull TranslatableComponent msg, Object... objects) {
         error(buildTranslatableAndTranslate(msg, objects));
     }
-    //// error end
+
+    /// / error end
 
 
     @NotNull
@@ -241,7 +243,7 @@ public class Message {
     }
 
 
-    //// log start
+    /// / log start
     public void log(@Nullable Throwable t) {
         logger.log(Level.INFO, "", t);
     }
@@ -279,7 +281,7 @@ public class Message {
     }
     //// log end
 
-    //// warning start
+    /// / warning start
     public void warning(@Nullable Throwable t) {
         logger.log(Level.WARNING, "", t);
     }
@@ -381,16 +383,28 @@ public class Message {
         sendTitle(pl, componentBuilder(title), componentBuilder(subTitle), fadeIn, stay, fadeOut);
     }
 
+    private static final boolean HAS_TIMES_METHOD;
+
     public void sendTitle(@NotNull Player pl, @NotNull Component title, @NotNull Component subTitle, int fadeIn, int stay, int fadeOut) {
+        Title.Times times;
+        if (HAS_TIMES_METHOD) {
+            times = Title.Times.times(
+                    Ticks.duration(fadeIn),
+                    Ticks.duration(stay),
+                    Ticks.duration(fadeOut)
+            );
+        } else {
+            times = Title.Times.of(
+                    Ticks.duration(fadeIn),
+                    Ticks.duration(stay),
+                    Ticks.duration(fadeOut)
+            );
+        }
         pl.showTitle(
                 Title.title(
                         translate(title, pl),
                         translate(subTitle, pl),
-                        Title.Times.of(
-                                Ticks.duration(fadeIn),
-                                Ticks.duration(stay),
-                                Ticks.duration(fadeOut)
-                        )
+                        times
                 )
         );
     }
@@ -602,5 +616,15 @@ public class Message {
     @Deprecated(since = "1.0.7.1")
     public void setLogLevel(LogLevel logLevel) {
         this.logLevel = logLevel;
+    }
+
+    static {
+        boolean v = false;
+        try {
+            Title.Times.class.getDeclaredMethod("times", Duration.class, Duration.class, Duration.class);
+            v = true;
+        } catch (Exception e) {
+        }
+        HAS_TIMES_METHOD = v;
     }
 }
