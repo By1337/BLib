@@ -168,7 +168,7 @@ public class BApi implements Api {
                                 throw new RuntimeException(e);
                             }
                             Lang.loadTranslations(message.getTranslation());
-                            sender.sendMessage(Lang.getMessage("reload"));
+                            message.sendMsg(sender, Lang.getMessage("reload"));
                         }))
                 ).addSubCommand(new Command<CommandSender>("cb")
                         .requires(new RequiresPermission<>("blib.cb"))
