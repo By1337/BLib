@@ -4,28 +4,49 @@
     <groupId>org.by1337.blib</groupId>
     <artifactId>Blib-parent</artifactId>
     <packaging>pom</packaging>
-    <version>1.9.7</version>
+    <version>${revision}</version>
     <name>Blib-parent</name>
+
+    <properties>
+        <revision>1.9.8</revision>
+    </properties>
+
     <modules>
         <module>BLib</module>
         <module>BLib-api</module>
-<!--        <module>V1_16_5</module>
-        <module>V1_17_1</module>
-        <module>V1_18_2</module>
-        <module>V1_19_4</module>
-        <module>V1_20_1</module>
-        <module>V1_20_2</module>
-        <module>V1_20_4</module>
-        <module>V1_20_6</module>
-        <module>V1_21_5</module>
-        <module>V1_21_6</module>
-        <module>V1_21_9</module>-->
         <module>MinimessageSupport</module>
         <module>BLib-Nbt</module>
         <module>ShadedDFU</module>
     </modules>
     <build>
         <defaultGoal>clean install</defaultGoal>
+        <plugins>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>flatten-maven-plugin</artifactId>
+                <version>1.6.0</version>
+                <configuration>
+                    <updatePomFile>true</updatePomFile>
+                    <flattenMode>resolveCiFriendliesOnly</flattenMode>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>flatten</id>
+                        <phase>process-resources</phase>
+                        <goals>
+                            <goal>flatten</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>flatten.clean</id>
+                        <phase>clean</phase>
+                        <goals>
+                            <goal>clean</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
     </build>
     <distributionManagement>
         <repository>

@@ -29,8 +29,14 @@ public class CustomBlockManager {
                 listNBT.add(pair.getRight().getData());
             }
         }
+        File file = new File(dataFolder, "customBlocks.bnbt");
+        if (listNBT.isEmpty()){
+            if (file.exists()){
+                file.delete();
+            }
+            return;
+        }
         try {
-            File file = new File(dataFolder, "customBlocks.bnbt");
             DefaultNbtByteBuffer buffer = new DefaultNbtByteBuffer();
             listNBT.write(buffer);
 

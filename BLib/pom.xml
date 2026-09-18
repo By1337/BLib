@@ -7,7 +7,7 @@
     <parent>
         <groupId>org.by1337.blib</groupId>
         <artifactId>Blib-parent</artifactId>
-        <version>1.9.7</version>
+        <version>${revision}</version>
     </parent>
 
     <artifactId>BLib</artifactId>
@@ -16,7 +16,6 @@
     <name>BLib</name>
 
     <properties>
-        <revision>1.9.7</revision>
         <java.version>16</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
@@ -124,7 +123,7 @@
 <!--        <dependency>
             <groupId>org.by1337.blib.minimessage</groupId>
             <artifactId>MinimessageSupport</artifactId>
-            <version>${revision}</version>
+            <version>${project.version}</version>
             <scope>compile</scope>
             <exclusions>
                 <exclusion>
@@ -181,7 +180,7 @@
         <dependency>
             <groupId>org.by1337.blib</groupId>
             <artifactId>Blib-api</artifactId>
-            <version>1.9.7</version>
+            <version>${project.version}</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
