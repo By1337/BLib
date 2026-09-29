@@ -24,6 +24,7 @@ import java.io.Reader;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
@@ -234,12 +235,17 @@ public class Message {
         return buildTranslatableAndTranslate(msg, null, objects);
     }
 
+    private static final boolean HAS_ARGS_METHOD = test(() -> Objects.requireNonNull(TranslatableComponent.class.getDeclaredMethod("args", List.class)));
+
     public Component buildTranslatableAndTranslate(@NotNull TranslatableComponent msg, @Nullable OfflinePlayer player, Object... objects) {
         List<Component> components = new ArrayList<>();
         for (Object object : objects) {
             components.add(Component.text(String.valueOf(object)));
         }
-        return translate(msg.args(components), player);
+        if (HAS_ARGS_METHOD) {
+            return translate(msg.args(components), player);
+        }
+        return translate(msg.arguments(components), player);
     }
 
 
@@ -383,7 +389,7 @@ public class Message {
         sendTitle(pl, componentBuilder(title), componentBuilder(subTitle), fadeIn, stay, fadeOut);
     }
 
-    private static final boolean HAS_TIMES_METHOD;
+    private static final boolean HAS_TIMES_METHOD = test(() -> Objects.requireNonNull(Title.Times.class.getDeclaredMethod("times", Duration.class, Duration.class, Duration.class)));
 
     public void sendTitle(@NotNull Player pl, @NotNull Component title, @NotNull Component subTitle, int fadeIn, int stay, int fadeOut) {
         Title.Times times;
@@ -618,13 +624,17 @@ public class Message {
         this.logLevel = logLevel;
     }
 
-    static {
-        boolean v = false;
+    public static boolean test(ERunnable s) {
         try {
-            Title.Times.class.getDeclaredMethod("times", Duration.class, Duration.class, Duration.class);
-            v = true;
+            s.run();
+            return true;
         } catch (Exception e) {
+            return false;
         }
-        HAS_TIMES_METHOD = v;
+    }
+
+    @FunctionalInterface
+    public interface ERunnable {
+        void run() throws Exception;
     }
 }
