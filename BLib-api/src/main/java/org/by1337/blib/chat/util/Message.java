@@ -3,6 +3,7 @@ package org.by1337.blib.chat.util;
 import me.clip.placeholderapi.PlaceholderAPI;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TranslatableComponent;
+import net.kyori.adventure.text.TranslationArgument;
 import net.kyori.adventure.title.Title;
 import net.kyori.adventure.util.Ticks;
 import net.md_5.bungee.api.ChatColor;
@@ -603,6 +604,9 @@ public class Message {
         return ChatColor.translateAlternateColorCodes('&', message);
     }
 
+    public String getContent(TranslationArgument component) {
+        return getContent(component.asComponent());
+    }
     public String getContent(Component component) {
         if (!(component instanceof net.kyori.adventure.text.TextComponent textComponent)) return "";
         StringBuilder sb = new StringBuilder();

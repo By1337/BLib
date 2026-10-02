@@ -1,7 +1,6 @@
 package org.by1337.blib.translation;
 
 import com.google.gson.*;
-import com.google.gson.reflect.TypeToken;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TranslatableComponent;
 import org.bukkit.OfflinePlayer;
@@ -118,6 +117,8 @@ public class Translation {
         return translate(component, null, null);
     }
 
+    private static final boolean HAS_ARGS_METHOD = test(() -> Objects.requireNonNull(TranslatableComponent.class.getDeclaredMethod("args")));
+
     @NotNull
     public Component translate(@NotNull Component component, @Nullable Locale locale, @Nullable OfflinePlayer player) {
         Component component0;
@@ -125,7 +126,12 @@ public class Translation {
             String key = translatable.key();
             String translation = translate(key, locale);
             if (translation != null) {
-                Object[] args = translatable.args().stream().map(message::getContent).toArray();
+                Object[] args;
+                if (HAS_ARGS_METHOD) {
+                    args = translatable.args().stream().map(message::getContent).toArray();
+                } else {
+                    args = translatable.arguments().stream().map(message::getContent).toArray();
+                }
                 if (args.length != 0) {
                     component0 = message.componentBuilderNoTranslate(MessageFormatter.apply(translation, args), player);
                 } else {
@@ -187,7 +193,6 @@ public class Translation {
             }
 
 
-
             Locale useLocale;
             if (!rawUseLocale.equals("auto-detect")) {
                 String[] arr = rawUseLocale.split("_");
@@ -214,7 +219,7 @@ public class Translation {
         }
     }
 
-    public Locale getUseLocale() {
+    public @Nullable Locale getUseLocale() {
         return useLocale;
     }
 
@@ -232,5 +237,19 @@ public class Translation {
 
     public Message getMessage() {
         return message;
+    }
+
+    public static boolean test(Message.ERunnable s) {
+        try {
+            s.run();
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    @FunctionalInterface
+    public interface ERunnable {
+        void run() throws Exception;
     }
 }

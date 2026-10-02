@@ -8,7 +8,7 @@
     <name>Blib-parent</name>
 
     <properties>
-        <revision>1.9.9</revision>
+        <revision>1.9.10</revision>
     </properties>
 
     <modules>
